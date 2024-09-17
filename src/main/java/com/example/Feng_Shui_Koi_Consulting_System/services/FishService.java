@@ -17,6 +17,9 @@ public class FishService {
     public KoiFish createFish(FishCreationRequest request){
         KoiFish fish = new KoiFish();
 
+        if(fishRepo.existsByFishName(request.getName()))
+            throw new RuntimeException("Fish has already existed");
+
         fish.setName(request.getName());
         fish.setColor(request.getColor());
         fish.setSize(request.getSize());

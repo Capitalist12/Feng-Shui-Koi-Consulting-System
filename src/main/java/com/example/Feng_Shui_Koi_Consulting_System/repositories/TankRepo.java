@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TankRepo extends JpaRepository<Tank, String> {
+    boolean existsByShape(String shape);
 }

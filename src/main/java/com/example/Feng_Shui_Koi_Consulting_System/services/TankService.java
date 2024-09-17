@@ -17,6 +17,9 @@ public class TankService {
     public Tank createTank(TankCreationRequest request){
         Tank tank = new Tank();
 
+        if(tankRepo.existsByShape(request.getShape()))
+            throw new RuntimeException("Tank has already existed");
+
         tank.setShape(request.getShape());
         tank.setPosition(request.getPosition());
         tank.setDirectionId(request.getDirectionId());

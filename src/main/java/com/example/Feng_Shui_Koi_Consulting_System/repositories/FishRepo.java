@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FishRepo extends JpaRepository<KoiFish, String> {
+    boolean existsByFishName(String name);
 }
