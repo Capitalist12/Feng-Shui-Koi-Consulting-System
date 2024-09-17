@@ -7,3 +7,7 @@ spring:
     url: "jdbc:mysql://localhost:3307/feng-shui-koi"
     username: root
     password: 12345
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

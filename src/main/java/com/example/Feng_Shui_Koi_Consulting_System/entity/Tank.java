@@ -1,4 +1,4 @@
-package com.example.Feng_Shui_Koi_Consulting_System.Entity;
+package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
