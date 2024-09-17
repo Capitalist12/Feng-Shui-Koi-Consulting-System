@@ -1,12 +1,8 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Tank;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.Tank;
-import com.example.Feng_Shui_Koi_Consulting_System.services.FishService;
 import com.example.Feng_Shui_Koi_Consulting_System.services.TankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
