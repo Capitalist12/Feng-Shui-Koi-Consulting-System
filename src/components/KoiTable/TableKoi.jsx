@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Space, Table, Tag } from 'antd';
 import { OPTIONS } from '../../utils/constant';
+import KoiDrawer from './KoiDrawer';
 
 
 const { Column } = Table;
@@ -90,6 +91,7 @@ const TableKoi = (props) => {
                 />
             </Table>
 
+            <KoiDrawer open={open} onClose={onClose} data={selectedKoi} getMatchedOptions={getMatchedOptions}/>
         </>
     );
 
