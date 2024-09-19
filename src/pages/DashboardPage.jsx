@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme, Row, Col, Avatar } from 'antd';
 import FormModal from '../components/CreateKoiForm/FormModal';
+import TableKoi from '../components/KoiTable/TableKoi';
 import { getAllKoiFish } from '../services/apiService';
 import '../styles/DashboardPage.scss';
 
@@ -96,6 +97,9 @@ const DashboardPage = () => {
                 >
                     <div>
                         <FormModal fetchAPI={fetchAPI}/>
+                    </div>
+                    <div>
+                        <TableKoi data={data}/>
                     </div>
                 </Content>
             </Layout>
