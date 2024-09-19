@@ -1,8 +1,13 @@
+import { toast } from "react-toastify";
 import axios from "../utils/axiosConfig";
 
 const getAllKoiFish = async() => {
-    const response = await axios.get('koi');
-    return response;
+    try {
+        const response = await axios.get('koi');
+        return response;
+    } catch (err) {
+        toast.error(err.message);
+    }
 }
 
 export { getAllKoiFish };

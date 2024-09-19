@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Button,
     Form,
@@ -10,42 +10,47 @@ import {
 } from 'antd';
 import MultiSelectElement from './MultiSelectElement';
 import UploadImage from './UploadImage';
-import uploadFile from '../../utils/file.js'
+import uploadFile from '../../utils/file';
 import { useForm } from 'antd/es/form/Form.js';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { getAllKoiFish } from '../../services/apiService.js';
 
 const InputForm = (props) => {
-    const { close, save } = props;
+    const { close, save, fetchAPI } = props;
     const [form] = useForm();
 
     const onFinish = async (values) => {
-        console.log(values);
+
         if (values && values.images.length > 0) {
-            const url = await uploadFile(values.images[0].originFileObj);
+            const url = await Promise.all(
+                values.images.map(async (image) => {
+                    return await uploadFile(image.originFileObj); // Upload từng hình ảnh
+                })
+            );
+
             console.log('>>> check image url', url);
 
             try {
-                const response = await axios.post("http://localhost:8080/api/koi", {
-                    "name": values.name,
-                    "size": values.size,
-                    "weight": values.weight,
-                    "type": values.type,
-                    "element": Array.isArray(values.element) ? values.element : [values.element],
-                    "gender": values.gender,
-                    "image": url
-            });
+                    const response = await axios.post("http://localhost:8080/api/koi", {
+                        "name": values.name,
+                        "size": values.size,
+                        "weight": values.weight,
+                        "type": values.type,
+                        "element": Array.isArray(values.element) ? values.element : [values.element],
+                        "gender": values.gender,
+                        "image": Array.isArray(url) ? url : [url]
+                });
 
-                console.log(">>> check response", response);
-                console.log(">>> check element", values.element);
-                toast.success("Successfully!");
+                    console.log(">>> check response", response);
+                    console.log(">>> check element", values.element);
+                    toast.success("Successfully!");
 
             } catch (err) {
                 toast.error(err);
             } finally {
                 // clear old data
                 form.resetFields();
+                await fetchAPI();
                 save();
             }
         }

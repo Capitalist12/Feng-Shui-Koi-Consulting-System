@@ -1,15 +1,11 @@
 import { useState } from 'react'
 import './App.css'
-import FormModal from './components/CreateKoiForm/FormModal'
+import DashboardPage from './pages/DashboardPage';
 
 const App = () => {
 
   return (
-    <>
-      <div>
-      <FormModal />
-      </div>
-    </>
+      <DashboardPage />
   )
 }
 

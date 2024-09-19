@@ -6,7 +6,7 @@ import '../../styles/FormModalStyle.scss';
 
 
 //Modal for input new KOI fish
-const FormModal = () => {
+const FormModal = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -36,6 +36,7 @@ const FormModal = () => {
         }}
         open={isModalOpen}
         okText="Create"
+        // onOk={handleOk}
         onCancel={handleCancel}
         centered
         maskClosable={false}
@@ -44,6 +45,7 @@ const FormModal = () => {
         <InputForm
           close={handleCancel}
           save={handleOk}
+          fetchAPI={props.fetchAPI}
         />
       </Modal>
     </>
