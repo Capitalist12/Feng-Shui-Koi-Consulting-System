@@ -1,0 +1,143 @@
+// UserManagement.scss
+
+$primary-color: #1890ff;
+$secondary-color: #f5f5f5;
+$text-color: #333;
+$border-radius: 8px;
+
+.user-management {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  h1 {
+    color: $primary-color;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .create-user-button {
+    margin-bottom: 1rem;
+    background-color: $primary-color;
+    border-color: $primary-color;
+    font-weight: bold;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      border-color: darken($primary-color, 10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .ant-table {
+    background-color: white;
+    border-radius: $border-radius;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .ant-table-thead > tr > th {
+      background-color: $secondary-color;
+      color: $text-color;
+      font-weight: bold;
+    }
+
+    .ant-table-tbody > tr > td {
+      transition: background-color 0.3s ease;
+    }
+
+    .ant-table-tbody > tr:hover > td {
+      background-color: lighten($secondary-color, 5%);
+    }
+  }
+
+  .ant-btn {
+    border-radius: $border-radius;
+    font-weight: 500;
+
+    &.ant-btn-primary {
+      background-color: $primary-color;
+      border-color: $primary-color;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+        border-color: darken($primary-color, 10%);
+      }
+    }
+
+    &.ant-btn-danger {
+      background-color: #ff4d4f;
+      border-color: #ff4d4f;
+
+      &:hover {
+        background-color: darken(#ff4d4f, 10%);
+        border-color: darken(#ff4d4f, 10%);
+      }
+    }
+  }
+
+  .ant-modal {
+    .ant-modal-content {
+      border-radius: $border-radius;
+      overflow: hidden;
+    }
+
+    .ant-modal-header {
+      background-color: $primary-color;
+      border-bottom: none;
+      padding: 16px 24px;
+
+      .ant-modal-title {
+        color: white;
+        font-weight: bold;
+      }
+    }
+
+    .ant-modal-body {
+      padding: 24px;
+    }
+
+    .ant-form-item-label > label {
+      font-weight: 500;
+    }
+
+    .ant-input,
+    .ant-input-password,
+    .ant-input-number,
+    .ant-select-selector {
+      border-radius: $border-radius;
+    }
+  }
+
+  .user-profile-modal {
+    .user-info {
+      margin-bottom: 1rem;
+
+      p {
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        color: $text-color;
+
+        strong {
+          font-weight: 600;
+          margin-right: 0.5rem;
+        }
+      }
+    }
+
+    .user-avatar {
+      text-align: center;
+      margin-top: 1rem;
+
+      img {
+        border-radius: 50%;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
