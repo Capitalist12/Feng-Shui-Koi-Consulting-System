@@ -6,6 +6,8 @@ import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -35,5 +37,14 @@ public class UserService {
     private String generateUserID() {
         // Implement a method to generate a unique user ID of length 10
         return "U" + String.format("%09d", System.nanoTime() % 1000000000);
+    }
+
+    public List<User> geUsers(){
+        return userRepository.findAll();
+    }
+
+    public User getUserByID(String id){
+        return userRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("User not found!"));
     }
 }

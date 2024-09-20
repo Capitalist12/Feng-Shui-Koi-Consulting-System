@@ -4,9 +4,9 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationReque
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -18,4 +18,13 @@ public class UserController {
         return userService.createUser(request);
     }
 
+    @GetMapping("/users")
+    List<User> geUsers(){
+        return userService.geUsers();
+    }
+
+    @GetMapping("/{userID}")
+    User getUserByID(@PathVariable String userID){
+        return userService.getUserByID(userID);
+    }
 }
