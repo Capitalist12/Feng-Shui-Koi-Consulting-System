@@ -1,19 +1,14 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 
 @Entity
+@Table(name = "`User`")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,14 +16,38 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    @Column(name = "UserID", length = 10)
+    String userID;
+
+    @Column(name = "UserName", length = 50, nullable = false)
     String username;
+
+    @Column(name = "Password", length = 255, nullable = false)
     String password;
+
+    @Column(name = "DateOfBirth")
+    LocalDate dateOfBirth;
+
+    @Column(name = "Email", length = 100)
     String email;
-    LocalDate dob;
-    String role;
+
+    @Column(name = "Status")
     boolean status;
 
+    @Column(name = "ImageID", length = 50)
+    String imageID;
 
+    @Column(name = "RoleID")
+    Integer roleID;
+
+    @Column(name = "PlanID", length = 50)
+    String planID;
+
+    @Column(name = "ElementID")
+    Integer elementID;
+
+    @Column(name = "DeleteStatus")
+    boolean deleteStatus;
+
+    // Lombok will generate getters and setters
 }
