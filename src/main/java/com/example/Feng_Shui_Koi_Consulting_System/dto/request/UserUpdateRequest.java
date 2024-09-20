@@ -4,42 +4,20 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public class UserCreationRequest {
-    String userID;
-    @Size(min = 4, max = 12)
-    String username;
+public class UserUpdateRequest {
     @Size(min = 5, max = 20)
     String password;
     String email;
     LocalDate dob;
-    Integer roleID;
     Integer elementID;
     String imageID;
     String planID;
-    boolean status;
-    boolean deleteStatus;
 
-    public String getUserID() {
-        return userID;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
+    public @Size(min = 5, max = 20) String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(@Size(min = 5, max = 20) String password) {
         this.password = password;
     }
 
@@ -57,14 +35,6 @@ public class UserCreationRequest {
 
     public void setDob(LocalDate dob) {
         this.dob = dob;
-    }
-
-    public Integer getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(Integer roleID) {
-        this.roleID = roleID;
     }
 
     public Integer getElementID() {
@@ -89,21 +59,5 @@ public class UserCreationRequest {
 
     public void setPlanID(String planID) {
         this.planID = planID;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public boolean isDeleteStatus() {
-        return deleteStatus;
-    }
-
-    public void setDeleteStatus(boolean deleteStatus) {
-        this.deleteStatus = deleteStatus;
     }
 }

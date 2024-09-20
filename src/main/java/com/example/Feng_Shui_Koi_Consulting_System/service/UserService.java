@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,21 @@ public class UserService {
     public User getUserByID(String id){
         return userRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("User not found!"));
+    }
+
+    public User updateUser(String userID, UserUpdateRequest request){
+        User user = getUserByID(userID);
+        user.setPassword(request.getPassword());
+        user.setEmail(request.getEmail());
+        user.setDateOfBirth(request.getDob());
+        user.setElementID(request.getElementID());
+        user.setImageID(null);
+        user.setPlanID(null);
+
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(String userID){
+        userRepository.deleteById(userID);
     }
 }
