@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -12,8 +13,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenRequest {
     @NotBlank
+    @Email
     @Size(min = 3, max = 20)
-    String username;
+    String email;
     @NotBlank
     @Size(min = 6, max = 40)
     String password;

@@ -10,4 +10,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenResponse {
     boolean authenticated;
+    String token;
 }

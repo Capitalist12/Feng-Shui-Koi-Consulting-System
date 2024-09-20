@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Builder
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-//@RequestMapping("/auth")
+@RequestMapping("/auth")
 public class AuthenticationAPI {
     AuthenticationServices authenticationServices;
 
@@ -29,7 +29,7 @@ public class AuthenticationAPI {
     }
 
 
-    @PostMapping("/singin")
+    @PostMapping("/login")
     APIResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) {
         var result = authenticationServices.loginUser(request);
         return APIResponse.<AuthenResponse>builder()
@@ -37,16 +37,6 @@ public class AuthenticationAPI {
                 .build();
     }
 
-
-    @GetMapping("/")
-    public String home() {
-        return "Hello, Home!";
-    }
-
-    @GetMapping("/secured")
-    public String secured() {
-        return "Hello, Secured!";
-    }
 
 
 }
