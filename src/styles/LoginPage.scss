@@ -1,0 +1,58 @@
+@font-face {
+    font-family: 'Japan-Wave'; /* Name your font family */
+    src: url('../assets/font/Japan\ wave.ttf'); /* Locate the .ttf file within your directory*/
+  }
+  
+  body {
+    font-family: 'Japan-Wave', sans-serif; /* Use the font family */
+  }
+
+  .main-title{
+    font-size: 5em;
+    font-weight: bold;
+    position: absolute;
+    top: 40%;
+    left: 0.5em;
+  }
+
+.ripple {
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    position: fixed;
+    border-radius: 50%;
+    border: 1px solid #ffffff59;
+}
+
+@keyframes ripple-effect {
+    to {
+        transform: scale(15);
+        opacity: 0.05;
+    }
+}
+
+.login-form{
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    padding: 6em 2em 2em 2em;
+    border-radius: 1em;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: center;
+    // align-items: center;
+    right: 7em;
+    top: 20%;
+    .login-btn {
+        margin-bottom: 0.7em;
+        border-radius: 2em;
+    }
+}
+
+video {
+    width: 100vw;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+}
