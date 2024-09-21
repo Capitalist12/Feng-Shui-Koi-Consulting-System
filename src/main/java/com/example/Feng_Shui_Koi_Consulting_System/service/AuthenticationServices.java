@@ -54,11 +54,13 @@ public class AuthenticationServices {
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXITST);
         User user = userMapper.toUser(request);
-        user.setId(generateUserID());
+        user.setUserID(generateUserID());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
-        user.setRole(String.valueOf(Roles.USER));
-        user.setStatus(false);
+        user.setRoleName(String.valueOf(Roles.USER));
+        user.setPlanID("1");
+        user.setElementID(null);
+        user.setDeleteStatus(false);
         return userMapper.toSignUpResponse(userRepository.save(user));
 
     }
@@ -116,7 +118,7 @@ public class AuthenticationServices {
     }
 
     private String buildScope(User user) {
-        return user.getRole() != null ? user.getRole() : "";
+        return user.getRoleName() != null ? user.getRoleName() : "";
     }
 
     private String generateUserID() {
