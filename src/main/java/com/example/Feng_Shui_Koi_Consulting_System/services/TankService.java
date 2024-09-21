@@ -17,13 +17,10 @@ public class TankService {
     public Tank createTank(TankCreationRequest request){
         Tank tank = new Tank();
 
-        if(tankRepo.existsByShape(request.getShape()))
-            throw new RuntimeException("Tank has already existed");
-
+        tank.setTankId(generateTankID());
         tank.setShape(request.getShape());
-        tank.setPosition(request.getPosition());
-        tank.setDirectionId(request.getDirectionId());
         tank.setElementId(request.getElementId());
+        tank.setImageId(request.getImageId());
 
         return tankRepo.save(tank);
     }
@@ -41,14 +38,17 @@ public class TankService {
         Tank tank = getTank(tankId);
 
         tank.setShape(request.getShape());
-        tank.setDirectionId(request.getDirectionId());
         tank.setElementId(request.getElementId());
-        tank.setPosition(request.getPosition());
+        tank.setImageId(request.getImageId());
 
         return tankRepo.save(tank);
     }
 
     public void deleteFish(String tankId){
         tankRepo.deleteById(tankId);
+    }
+
+    public String generateTankID(){
+        return "TA" + String.format("%05d", System.nanoTime() % 100000);
     }
 }

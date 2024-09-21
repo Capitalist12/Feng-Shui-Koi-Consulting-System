@@ -1,9 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,10 +12,12 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Tank {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    @Column(name = "TankID")
+    String tankId;
+    @Column(name = "Shape")
     String shape;
-    String position;
-    String directionId;
+    @Column(name = "ElementID")
     String elementId;
+    @Column(name = "ImageID")
+    String imageId;
 }

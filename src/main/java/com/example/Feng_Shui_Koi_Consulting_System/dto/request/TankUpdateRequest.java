@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
 
+import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,8 +10,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TankUpdateRequest {
+    @Column(name = "Shape")
     String shape;
-    String position;
-    String directionId;
+    @Column(name = "ElementID")
     String elementId;
+    @Column(name = "ImageID")
+    String imageId;
 }

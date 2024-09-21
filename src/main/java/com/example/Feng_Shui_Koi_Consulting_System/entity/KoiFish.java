@@ -1,9 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,14 +12,20 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KoiFish {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "KoiID")
     String id;
+    @Column(name = "Name")
     String name;
-    String color;
+    @Column(name = "Size")
     float size;
+    @Column(name = "Weight")
     float weight;
-    String elementId;
-    String typeId;
+    @Column(name = "Color")
+    String color;
+    @Column(name = "Description")
     String description;
-    String gender;
+    @Column(name = "ImageID")
+    String imageId;
+    @Column(name = "KoiTypeID")
+    String koiTypeId;
 }

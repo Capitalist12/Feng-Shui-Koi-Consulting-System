@@ -20,13 +20,14 @@ public class FishService {
         if(fishRepo.existsByName(request.getName()))
             throw new RuntimeException("Fish has already existed");
 
+        fish.setId(generateKoiID());
         fish.setName(request.getName());
-        fish.setColor(request.getColor());
         fish.setSize(request.getSize());
         fish.setWeight(request.getWeight());
-        fish.setTypeId(request.getTypeId());
+        fish.setColor(request.getColor());
         fish.setDescription(request.getDescription());
-        fish.setGender(request.getGender());
+        fish.setImageId(request.getImageId());
+        fish.setKoiTypeId(request.getKoiTypeId());
 
         return fishRepo.save(fish);
     }
@@ -43,17 +44,21 @@ public class FishService {
         KoiFish fish = getFish(fishId);
 
         fish.setName(request.getName());
-        fish.setColor(request.getColor());
         fish.setSize(request.getSize());
         fish.setWeight(request.getWeight());
-        fish.setTypeId(request.getTypeId());
+        fish.setColor(request.getColor());
         fish.setDescription(request.getDescription());
-        fish.setGender(request.getGender());
+        fish.setImageId(request.getImageId());
+        fish.setKoiTypeId(request.getKoiTypeId());
 
         return fishRepo.save(fish);
     }
 
     public void deleteFish(String fishId){
         fishRepo.deleteById(fishId);
+    }
+
+    public String generateKoiID(){
+        return "KF" + String.format("%05d", System.nanoTime() % 100000);
     }
 }

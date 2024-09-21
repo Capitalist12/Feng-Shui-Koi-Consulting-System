@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
 
+import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,12 +10,18 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FishCreationRequest {
+    @Column(name = "Name")
     String name;
-    String color;
+    @Column(name = "Size")
     float size;
+    @Column(name = "Weight")
     float weight;
-    String elementId;
-    String typeId;
+    @Column(name = "Color")
+    String color;
+    @Column(name = "Description")
     String description;
-    String gender;
+    @Column(name = "ImageID")
+    String imageId;
+    @Column(name = "KoiTypeID")
+    String koiTypeId;
 }
