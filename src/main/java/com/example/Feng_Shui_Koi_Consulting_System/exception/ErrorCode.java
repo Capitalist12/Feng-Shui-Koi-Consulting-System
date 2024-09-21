@@ -10,7 +10,7 @@ public enum ErrorCode {
     USER_EXIST(1001,"User existed"),
     EMAIL_EXITST(1002,"Email existed"),
     USER_NOT_EXIST(1003,"User not exist"),
-    EMAIL_NOT_EXIST(1004,"User not exist"),
+    EMAIL_NOT_EXIST(1004,"Email not exist"),
     UNAUTHENTICATED(1005,"Unauthenticated")
     ;
 
