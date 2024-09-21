@@ -13,11 +13,11 @@ public class UserUpdateRequest {
     String imageID;
     String planID;
 
-    public @Size(min = 5, max = 20) String getPassword() {
+    public @Size(min = 5, max = 20, message = "PASSWORD_INVALID") String getPassword() {
         return password;
     }
 
-    public void setPassword(@Size(min = 5, max = 20) String password) {
+    public void setPassword(@Size(min = 5, max = 20, message = "PASSWORD_INVALID") String password) {
         this.password = password;
     }
 
