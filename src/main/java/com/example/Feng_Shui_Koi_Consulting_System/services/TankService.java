@@ -3,6 +3,8 @@ package com.example.Feng_Shui_Koi_Consulting_System.services;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Tank;
+import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
+import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.repositories.TankRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class TankService {
 
     public Tank createTank(TankCreationRequest request){
         Tank tank = new Tank();
+
+        if(tankRepo.existsByShape(request.getShape()))
+            throw new AppException(ErrorCode.TANK_EXISTED);
 
         tank.setTankId(generateTankID());
         tank.setShape(request.getShape());
@@ -31,11 +36,13 @@ public class TankService {
     }
 
     public Tank getTank(String id){
-        return tankRepo.findById(id).orElseThrow(() -> new RuntimeException("Tank not found"));
+        return tankRepo.findById(id).orElseThrow(()
+                -> new AppException(ErrorCode.TANK_NOT_FOUND));
     }
 
     public Tank updateTank(String tankId, TankUpdateRequest request){
-        Tank tank = getTank(tankId);
+        Tank tank = tankRepo.findById(tankId).orElseThrow(()
+                -> new AppException(ErrorCode.TANK_NOT_FOUND));
 
         tank.setShape(request.getShape());
         tank.setElementId(request.getElementId());
@@ -45,6 +52,8 @@ public class TankService {
     }
 
     public void deleteFish(String tankId){
+        Tank tank = tankRepo.findById(tankId).orElseThrow(
+                () -> new AppException(ErrorCode.TANK_NOT_FOUND));
         tankRepo.deleteById(tankId);
     }
 

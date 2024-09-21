@@ -1,7 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.exception;
 
-public class Exception extends RuntimeException {
-    public Exception(ErrorCode errorCode){
+public class AppException extends RuntimeException {
+    public AppException(ErrorCode errorCode){
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
