@@ -2,6 +2,7 @@ import React from 'react';
 import { Col, Divider, Drawer, Image, Row, Tag } from 'antd';
 import { OPTIONS } from '../../utils/constant';
 import '../../styles/KoiDrawer.scss';
+import { DeleteOutlined } from '@ant-design/icons';
 import ImageCarousel from './ImageCarousel';
 
 const DescriptionItem = ({ title, content }) => (
@@ -29,6 +30,7 @@ const KoiDrawer = (props) => {
       >
         Koi Profile
       </p>
+      <div><DeleteOutlined /></div>
       <Row>
         <Col span={24} style={{ textAlign: 'center', marginBottom: '1em' }}>
           <ImageCarousel images={data.images}/>
