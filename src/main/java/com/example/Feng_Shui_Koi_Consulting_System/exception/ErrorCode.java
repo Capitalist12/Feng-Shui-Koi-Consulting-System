@@ -1,15 +1,21 @@
 package com.example.Feng_Shui_Koi_Consulting_System.exception;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
+
+
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public enum ErrorCode {
-    UNKNOWN_EXCEPTION(999,"Uknown error!"),
-    USER_EXISTED(1001,"User Existed!"),
-    USERNAME_INVALID(1002,"Username must be at least 4 and maximum 12 characters!"),
-    PASSWORD_INVALID(1003,"Password must be at least 5 and maximum 20 characters!"),
-    ENUMKEY_INVALID(1004,"Invalid Enum Key!"),
-    NAME_INVALID(1005,"Name can not be blanked!")
+    USER_EXIST(1001,"User existed"),
+    EMAIL_EXITST(1002,"Email existed"),
+    USER_NOT_EXIST(1003,"User not exist"),
+    EMAIL_NOT_EXIST(1004,"Email not exist"),
+    UNAUTHENTICATED(1005,"Unauthenticated")
     ;
-    private int code;
-    private String message;
+
+    int code;
+    String message;
 
     ErrorCode(int code, String message) {
         this.code = code;
@@ -20,7 +26,15 @@ public enum ErrorCode {
         return code;
     }
 
+    public void setCode(int code) {
+        this.code = code;
+    }
+
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
