@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 public class UserUpdateRequest {
-    @Size(min = 5, max = 20)
+    @Size(min = 5, max = 20, message = "PASSWORD_INVALID")
     String password;
     String email;
     LocalDate dob;

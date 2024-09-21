@@ -14,6 +14,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+
+
 public class User {
     @Id
     @Column(name = "UserID", length = 10)
@@ -31,14 +33,11 @@ public class User {
     @Column(name = "Email", length = 100)
     String email;
 
-    @Column(name = "Status")
-    boolean status;
-
     @Column(name = "ImageID", length = 50)
     String imageID;
 
-    @Column(name = "RoleID")
-    Integer roleID;
+    @Column(name = "RoleName")
+    String roleName;
 
     @Column(name = "PlanID", length = 50)
     String planID;

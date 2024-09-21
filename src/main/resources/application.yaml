@@ -5,7 +5,7 @@ server:
 
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB"
+    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB3"
     username: root
     password: 123456
   jpa:

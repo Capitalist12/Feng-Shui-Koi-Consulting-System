@@ -3,6 +3,8 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
+import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
+import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,14 +13,14 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     public User createUser(UserCreationRequest request) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
+
         User user = new User();
         user.setUserID(generateUserID()); // Implement this method to generate a unique ID
         user.setUsername(request.getUsername());
@@ -26,10 +28,9 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setDateOfBirth(request.getDob());
         user.setElementID(request.getElementID());
-        user.setRoleID(3); // Default to 3 as per your original code
+        user.setRoleName("User"); // Default to 3 as per your original code
         user.setImageID(null);
         user.setPlanID(null);
-        user.setStatus(true); // Set to true for active users
         user.setDeleteStatus(false); // Set to false for non-deleted users
 
         return userRepository.save(user);
@@ -64,4 +65,5 @@ public class UserService {
     public void deleteUser(String userID){
         userRepository.deleteById(userID);
     }
+
 }

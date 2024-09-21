@@ -6,13 +6,13 @@ import java.time.LocalDate;
 
 public class UserCreationRequest {
     String userID;
-    @Size(min = 4, max = 12)
+    @Size(min = 4, max = 12, message = "USERNAME_INVALID")
     String username;
-    @Size(min = 5, max = 20)
+    @Size(min = 5, max = 20, message = "PASSWORD_INVALID")
     String password;
     String email;
     LocalDate dob;
-    Integer roleID;
+    String roleName;
     Integer elementID;
     String imageID;
     String planID;
@@ -59,12 +59,12 @@ public class UserCreationRequest {
         this.dob = dob;
     }
 
-    public Integer getRoleID() {
-        return roleID;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setRoleID(Integer roleID) {
-        this.roleID = roleID;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public Integer getElementID() {
