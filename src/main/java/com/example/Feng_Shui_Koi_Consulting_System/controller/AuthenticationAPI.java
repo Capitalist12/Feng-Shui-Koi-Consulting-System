@@ -3,7 +3,7 @@ package com.example.Feng_Shui_Koi_Consulting_System.controller;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AuthenRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.IntrospectResquest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.SignUpRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.APIResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
@@ -26,8 +26,8 @@ public class AuthenticationAPI {
     AuthenticationServices authenticationServices;
 
     @PostMapping("/signup")
-    APIResponse<SignUpResponse> registerUser( @RequestBody @Valid SignUpRequest request) {
-        return APIResponse.<SignUpResponse>builder()
+    ApiResponse<SignUpResponse> registerUser( @RequestBody @Valid SignUpRequest request) {
+        return ApiResponse.<SignUpResponse>builder()
                 .result(authenticationServices.registerUser(request))
                 .build();
 
@@ -35,17 +35,17 @@ public class AuthenticationAPI {
 
 
     @PostMapping("/login")
-    APIResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) {
+    ApiResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) {
         var result = authenticationServices.loginUser(request);
-        return APIResponse.<AuthenResponse>builder()
+        return ApiResponse.<AuthenResponse>builder()
                 .result(result)
                 .build();
     }
 
     @PostMapping("/introspect")
-    APIResponse<IntrospectResponse> introspect(@RequestBody IntrospectResquest resquest) throws ParseException, JOSEException {
+    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectResquest resquest) throws ParseException, JOSEException {
         var valid = authenticationServices.introspected(resquest);
-        return APIResponse.<IntrospectResponse>builder()
+        return ApiResponse.<IntrospectResponse>builder()
                 .result(valid)
                 .build();
     }
