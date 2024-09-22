@@ -29,7 +29,7 @@ public class UserService {
         user.setDateOfBirth(request.getDob());
         user.setElementID(request.getElementID());
         user.setRoleName("User"); // Default to 3 as per your original code
-        user.setImageID(null);
+        user.setImageLink(null);
         user.setPlanID(null);
         user.setDeleteStatus(false); // Set to false for non-deleted users
 
@@ -56,7 +56,7 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setDateOfBirth(request.getDob());
         user.setElementID(request.getElementID());
-        user.setImageID(null);
+        user.setImageLink(null);
         user.setPlanID(null);
 
         return userRepository.save(user);
