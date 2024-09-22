@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import AuthenTemplate from "../../components/authen-template/index";
 import { Form, Input, Button, InputNumber } from "antd";
 import { useNavigate } from "react-router-dom";
