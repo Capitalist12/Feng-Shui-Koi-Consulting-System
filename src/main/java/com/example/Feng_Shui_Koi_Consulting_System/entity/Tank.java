@@ -16,8 +16,8 @@ public class Tank {
     String tankId;
     @Column(name = "Shape")
     String shape;
-    @Column(name = "ElementID")
-    String elementId;
     @Column(name = "ImageID")
     String imageId;
+    @Column(name = "ElementID")
+    int elementId;
 }

@@ -13,7 +13,7 @@ public class TankUpdateRequest {
     @Column(name = "Shape")
     String shape;
     @Column(name = "ElementID")
-    String elementId;
+    int elementId;
     @Column(name = "ImageID")
     String imageId;
 }

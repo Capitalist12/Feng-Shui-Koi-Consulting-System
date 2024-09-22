@@ -56,6 +56,7 @@ public class AuthenticationServices {
         User user = userMapper.toUser(request);
         user.setUserID(generateUserID());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
         user.setRoleName(String.valueOf(Roles.USER));
         user.setPlanID("1");

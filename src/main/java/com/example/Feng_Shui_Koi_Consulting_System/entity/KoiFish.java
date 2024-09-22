@@ -17,9 +17,9 @@ public class KoiFish {
     @Column(name = "Name")
     String name;
     @Column(name = "Size")
-    float size;
+    String size;
     @Column(name = "Weight")
-    float weight;
+    String weight;
     @Column(name = "Color")
     String color;
     @Column(name = "Description")
