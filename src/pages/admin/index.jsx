@@ -12,11 +12,11 @@ import {
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { PlusOutlined } from "@ant-design/icons";
 import uploadFile from "../../utils/file";
-import "./index.scss";
+import "../../styles/admin.scss";
 
 function UserManagement() {
   const [users, setUsers] = useState([]);
@@ -132,8 +132,8 @@ function UserManagement() {
       await axios.delete(`${api}/${id}`);
       fetchUser();
       toast.success("Delete successfully");
-    } catch (ex) {
-      toast.error("Failed to delete student");
+    } catch (err) {
+      toast.error(err);
     }
   };
 
@@ -316,13 +316,10 @@ function UserManagement() {
                 <strong>Gmail:</strong> {selectedUser.gmail}
               </p>
               <p>
-                <strong>Name:</strong> {selectedUser.name}
+                <strong>Username:</strong> {selectedUser.username}
               </p>
               <p>
                 <strong>Year of Birth:</strong> {selectedUser.yearOfBirth}
-              </p>
-              <p>
-                <strong>Age:</strong> {selectedUser.age}
               </p>
               <p>
                 <strong>Element:</strong> {selectedUser.elementId}

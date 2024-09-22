@@ -6,7 +6,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme, Row, Col, Avatar } from "antd";
-import UserManagement from "../admin/index";
+import UserManagement from "../../pages/admin/index";
 import React, { useState } from "react";
 import "./index.scss";
 
