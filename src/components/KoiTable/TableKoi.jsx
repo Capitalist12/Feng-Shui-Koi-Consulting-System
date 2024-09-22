@@ -33,17 +33,17 @@ const TableKoi = (props) => {
         <>
             <Table dataSource={data} rowKey="id">
                 <Column
-                    title="Index"
+                    title="STT"
                     render={(text, record, index) => index + 1} // Display index
                     key="index"
                 />
-                <Column title="Name" dataIndex="name" />
-                <Column title="Size" dataIndex="size" />
-                <Column title="Weight" dataIndex="weight" />
-                <Column title="Gender" dataIndex="gender" />
-                <Column title="Type" dataIndex="type" />
+                <Column title="Tên" dataIndex="name" />
+                <Column title="Kích thước" dataIndex="size" />
+                <Column title="Cân nặng" dataIndex="weight" />
+                <Column title="Giới tính" dataIndex="gender" />
+                <Column title="Giống" dataIndex="type" />
                 <Column
-                    title="Elements"
+                    title="Mệnh"
                     dataIndex="elements"
                     key="elements"
                     render={(elements) => {
@@ -79,12 +79,12 @@ const TableKoi = (props) => {
                 />
 
                 <Column
-                    title="Action"
+                    title="Thêm"
                     key="action"
                     render={(_, record) => (
                         <Space size="middle">
                             <a onClick={() => showDrawer(record)} key={record.id}>
-                                View more
+                                Xem thêm
                             </a>
                         </Space>
                     )}

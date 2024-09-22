@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react';
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    UploadOutlined,
     UserOutlined,
-    VideoCameraOutlined,
+    LineChartOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme, Row, Col, Avatar } from 'antd';
 import FormModal from '../components/CreateKoiForm/FormModal';
 import TableKoi from '../components/KoiTable/TableKoi';
-import { getAllKoiFish } from '../services/apiService';
+import { getAllKoiFish } from '../services/koiAPIService';
 import '../styles/DashboardPage.scss';
 
 const { Header, Sider, Content } = Layout;
@@ -43,17 +42,17 @@ const DashboardPage = () => {
                         {
                             key: '1',
                             icon: <UserOutlined />,
-                            label: 'nav 1',
+                            label: 'Quản lý cá koi',
                         },
                         {
                             key: '2',
-                            icon: <VideoCameraOutlined />,
-                            label: 'nav 2',
+                            icon: <UserOutlined />,
+                            label: 'Quản lý người dùng',
                         },
                         {
                             key: '3',
-                            icon: <UploadOutlined />,
-                            label: 'nav 3',
+                            icon: <LineChartOutlined />,
+                            label: 'Bảng thống kê',
                         },
                     ]}
                 />

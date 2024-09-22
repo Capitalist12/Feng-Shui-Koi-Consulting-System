@@ -53,10 +53,10 @@ const UploadImage = ({ value = [], onChange }) => {
         return new Promise((resolve, reject) => {
             if (file.size > MAX_SIZE) {
                 reject(`${file.name} size too big!`);
-                message.error(`${file.name} size too big!`);
+                message.error(`${file.name} kích thước quá lớn!`);
             } else {
                 resolve("Successfully!");
-                message.success("Success!");
+                message.success("Thành công!");
             }
         })
     }

@@ -23,3 +23,56 @@
   opacity: 0;
   background-color: transparent !important;
 }
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+
+  p {
+    font-size: 2em !important;
+  }
+
+  .delete-btn {
+    color: red;
+    font-size: 2.3em;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .confirm-delete {
+    font-weight: normal;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1em;
+    gap: 1.1em;
+
+    .confirm-yes{
+      color: #49ca3e;
+      cursor: pointer;
+      padding: 0.3em;
+      border-radius: 0.3em;
+      transition: all 0.2s ease;
+
+      &:hover{
+        background-color: #e7e4e4;
+      }
+    }
+
+    .confirm-cancel{
+      color: #d33726;
+      border: 1px solid #d33726;
+      padding: 0.3em;
+      cursor: pointer;
+      border-radius: 0.3em;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: #d33726;
+        color: white;
+
+      }
+    }
+  }
+}

@@ -25,11 +25,11 @@ const FormModal = (props) => {
     <>
       <Button type="primary" onClick={showModal}>
         <IoMdAdd />
-        Add new KOI
+        Thêm cá Koi
       </Button>
       <Modal
         className='modal-comp'
-        title="KOI infomation"
+        title="Thông tin cá Koi"
         width='100%'
         style={{
           maxWidth: 800

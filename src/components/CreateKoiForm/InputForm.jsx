@@ -12,7 +12,7 @@ import MultiSelectElement from './MultiSelectElement';
 import UploadImage from './UploadImage';
 import uploadFile from '../../utils/file';
 import { useForm } from 'antd/es/form/Form.js';
-import axios from 'axios';
+import { createKoiFish } from '../../services/koiAPIService';
 import { toast } from 'react-toastify';
 
 const InputForm = (props) => {
@@ -28,22 +28,19 @@ const InputForm = (props) => {
                 })
             );
 
-            console.log('>>> check image url', url);
-
             try {
-                    const response = await axios.post("http://localhost:8080/api/koi", {
-                        "name": values.name,
-                        "size": values.size,
-                        "weight": values.weight,
-                        "type": values.type,
-                        "element": Array.isArray(values.element) ? values.element : [values.element],
-                        "gender": values.gender,
-                        "image": Array.isArray(url) ? url : [url]
+                const response = await createKoiFish({
+                    "name": values.name,
+                    "size": values.size,
+                    "weight": values.weight,
+                    "type": values.type,
+                    "element": Array.isArray(values.element) ? values.element : [values.element],
+                    "gender": values.gender,
+                    "image": Array.isArray(url) ? url : [url]
                 });
 
-                    console.log(">>> check response", response);
-                    console.log(">>> check element", values.element);
-                    toast.success("Successfully!");
+                console.log(">>> check response", response);
+                toast.success("Successfully!");
 
             } catch (err) {
                 toast.error(err);
@@ -66,30 +63,30 @@ const InputForm = (props) => {
             onFinish={onFinish}
         >
             <Form.Item
-                label="Name"
+                label="Tên"
                 name='name'
                 rules={[{
                     required: true,
-                    message: 'Name cannot blank!'
+                    message: 'Tên không được để trống!'
                 }]}
             >
                 <Input />
             </Form.Item>
 
-            <Form.Item label="Size">
+            <Form.Item label="Kích thước">
                 <Form.Item
                     noStyle
                     name="size"
                     rules={[
                         {
                             required: true,
-                            message: 'Size is required', // Custom error message
+                            message: 'Vui lòng nhập kích thước!', // Custom error message
                         },
                     ]}
                 >
                     <InputNumber
                         min={1}
-                        max={10}
+                        max={100}
                         step={0.5}
                     />
                 </Form.Item>
@@ -99,25 +96,25 @@ const InputForm = (props) => {
                         marginInlineStart: 8,
                     }}
                 >
-                    cm <font style={{ color: '#ccc', marginLeft: '1.5em' }}>Size is between 1cm to 10cm</font>
+                    cm <font style={{ color: '#ccc', marginLeft: '1.5em' }}>Kích thước cho phép từ 1cm đến 100cm</font>
                 </span>
             </Form.Item>
 
 
-            <Form.Item label="Weight" name="weight">
+            <Form.Item label="Cân nặng">
                 <Form.Item
                     noStyle
                     name="weight"
                     rules={[
                         {
                             required: true,
-                            message: 'Weight is required', // Custom error message
+                            message: 'Vui lòng nhập cân nặng!', // Custom error message
                         },
                     ]}
                 >
                     <InputNumber
                         min={0.1}
-                        max={10}
+                        max={100}
                         step={0.5}
                         noStyle
                     />
@@ -128,53 +125,53 @@ const InputForm = (props) => {
                         marginInlineStart: 8,
                     }}
                 >
-                    kg <font style={{ color: '#ccc', marginLeft: '1.5em' }}>Weight is between 0.1kg to 10kg</font>
+                    kg <font style={{ color: '#ccc', marginLeft: '1.5em' }}>Cân nặng cho phép từ 0.1kg đến 100kg</font>
                 </span>
             </Form.Item>
 
-            <Form.Item label="Type" name='type'>
+            <Form.Item label="Giống" name='type'>
                 <Select>
                     <Select.Option value="demo">Demo</Select.Option>
                 </Select>
             </Form.Item>
 
             <Form.Item
-                label="Element"
+                label="Mệnh"
                 name="element"
                 rules={[
                     {
                         required: true,
-                        message: 'Please select at least one element',
+                        message: 'Vui lòng chọn ít nhất một mệnh!',
                         validator: (_, value) =>
                             value && value.length > 0
                                 ? Promise.resolve()
-                                : Promise.reject(new Error('Please select at least one element')),
+                                : Promise.reject(new Error('Vui lòng chọn ít nhất một mệnh!')),
                     },
                 ]}
             >
                 <MultiSelectElement />
             </Form.Item>
 
-            <Form.Item label="Gender" name='gender'>
+            <Form.Item label="Giới tính" name='gender'>
                 <Radio.Group>
-                    <Radio value="male"> Male </Radio>
-                    <Radio value="female"> Female </Radio>
+                    <Radio value="male"> Đực </Radio>
+                    <Radio value="female"> Cái </Radio>
                 </Radio.Group>
             </Form.Item>
 
             <Form.Item
                 className='upload-image-section'
+                label="Hình ảnh"
                 name="images"
-                label="Images"
                 style={{ width: '100%' }}
                 rules={[
                     {
                         required: true,
-                        message: 'Please select at least one element',
+                        message: 'Vui lòng chọn ít nhất một ảnh!',
                         validator: (_, value) =>
                             value && value.length > 0
                                 ? Promise.resolve()
-                                : Promise.reject(new Error('Please select at least one element')),
+                                : Promise.reject(new Error('Vui lòng chọn ít nhất một ảnh!')),
                     }
                 ]}
             >
@@ -184,10 +181,10 @@ const InputForm = (props) => {
             <Form.Item style={{ textAlign: 'right' }}>
                 <Space>
                     <Button htmlType="button" onClick={close}>
-                        Cancel
+                        Hủy bỏ
                     </Button>
                     <Button htmlType="submit" type="primary">
-                        Create
+                        Tạo mới
                     </Button>
                 </Space>
             </Form.Item>

@@ -30,6 +30,7 @@ const LoginForm = () => {
           },
         ]}
       >
+        Email
         <Input prefix={<MailOutlined />} placeholder="Email" />
       </Form.Item>
       <Form.Item
@@ -41,6 +42,7 @@ const LoginForm = () => {
           },
         ]}
       >
+        Mật khẩu
         <Input prefix={<LockOutlined />} type="password" placeholder="Mật khẩu" />
       </Form.Item>
       <Form.Item>
