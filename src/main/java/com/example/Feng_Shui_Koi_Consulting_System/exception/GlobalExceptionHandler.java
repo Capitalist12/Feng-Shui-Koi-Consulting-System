@@ -1,22 +1,22 @@
 package com.example.Feng_Shui_Koi_Consulting_System.exception;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-//    ResponseEntity<String> handLingRuntimeException(RuntimeException exception){
-//        return ResponseEntity.badRequest().body(exception.getMessage());
-//    }
     ResponseEntity<ApiResponse> handLingRuntimeException(Exception exception){
+        log.error("Exception: ",exception);
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(ErrorCode.UNKNOWN_EXCEPTION.getCode());
-        apiResponse.setMessage(ErrorCode.UNKNOWN_EXCEPTION.getMessage());
+        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
+        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
 

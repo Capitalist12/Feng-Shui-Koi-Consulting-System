@@ -2,38 +2,43 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
+import com.example.Feng_Shui_Koi_Consulting_System.mapper.UserMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+     UserRepository userRepository;
+     UserMapper userMapper;
 
-    public User createUser(UserCreationRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
+    public UserResponse createUser(UserCreationRequest request) {
+
+        if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXIST);
-        }
-
-        User user = new User();
-        user.setUserID(generateUserID()); // Implement this method to generate a unique ID
-        user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
-        user.setEmail(request.getEmail());
-        user.setDateOfBirth(request.getDob());
-        user.setElementID(request.getElementID());
-        user.setRoleName("User"); // Default to 3 as per your original code
-        user.setImageID(null);
-        user.setPlanID(null);
-        user.setDeleteStatus(false); // Set to false for non-deleted users
-
-        return userRepository.save(user);
+        if (userRepository.existsByEmail(request.getEmail()))
+            throw new AppException(ErrorCode.EMAIL_EXITST);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        User user = userMapper.toUser(request);
+        user.setUserID(generateUserID());
+        user.setRoleName(String.valueOf(Roles.USER));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     private String generateUserID() {
@@ -41,8 +46,9 @@ public class UserService {
         return "U" + String.format("%09d", System.nanoTime() % 1000000000);
     }
 
-    public List<User> geUsers(){
-        return userRepository.findAll();
+    public List<UserResponse> geUsers(){
+        return userRepository.findAll().stream()
+                .map(userMapper :: toUserResponse).collect(Collectors.toList());
     }
 
     public User getUserByID(String id){
@@ -50,16 +56,22 @@ public class UserService {
                 .orElseThrow(()-> new RuntimeException("User not found!"));
     }
 
-    public User updateUser(String userID, UserUpdateRequest request){
-        User user = getUserByID(userID);
-        user.setPassword(request.getPassword());
-        user.setEmail(request.getEmail());
-        user.setDateOfBirth(request.getDob());
-        user.setElementID(request.getElementID());
-        user.setImageID(null);
-        user.setPlanID(null);
+    public UserResponse updateUser(String userID, UserUpdateRequest request){
+//        User user = getUserByID(userID);
+//        user.setPassword(request.getPassword());
+//        user.setEmail(request.getEmail());
+//        user.setDateOfBirth(request.getDateOfBirth());
+//        user.setElementID(request.getElementID());
+//        user.setImageLink(request.getImageLink());
+//        user.setPlanID(null);
+        User user = userRepository.findById(userID)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+        userMapper.updateUser(user, request);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setDeleteStatus(request.isDeleteStatus());
+        return userMapper.toUserResponse(userRepository.save(user));
 
-        return userRepository.save(user);
     }
 
     public void deleteUser(String userID){

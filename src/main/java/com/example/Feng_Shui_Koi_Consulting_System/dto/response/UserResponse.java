@@ -1,26 +1,25 @@
-package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
+package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
 
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateRequest {
-    @Size(min = 5, max = 20, message = "PASSWORD_INVALID")
+public class UserResponse {
+    String userID;
+    String username;
     String password;
-    @Size(min = 5, max = 20, message = "EMAIL_INVALID")
     String email;
     LocalDate dateOfBirth;
+    String roleName;
     Integer elementID;
     String imageLink;
-    String roleName;
     String planID;
     boolean deleteStatus;
-
-
 }
