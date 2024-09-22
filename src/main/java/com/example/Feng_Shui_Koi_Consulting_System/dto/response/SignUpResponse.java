@@ -11,11 +11,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SignUpResponse {
-    String id;
+    String userID;
     String username;
     String password;
+    LocalDate dateOfBirth;
     String email;
-    LocalDate dob;
-    String role;
-    boolean status;
+    String imageLink;
+    String roleName;
+    String planID;
+    Integer elementID;
+    boolean deleteStatus;
 }
