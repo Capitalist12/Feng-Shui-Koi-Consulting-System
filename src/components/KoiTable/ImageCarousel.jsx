@@ -9,7 +9,7 @@ const contentStyle = {
     lineHeight: '100%',
     textAlign: 'center',
     background: 'transparent',
-    display: 'flex', 
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
 };
@@ -17,7 +17,7 @@ const contentStyle = {
 const imageStyle = {
     width: '100%',
     height: '500px',
-    objectFit: 'contain' 
+    objectFit: 'contain'
 };
 
 const ImageCarousel = ({ images }) => (
@@ -31,11 +31,9 @@ const ImageCarousel = ({ images }) => (
         {images && images.length > 0 &&
             images.map((item, index) => {
                 return (
-                    <>
-                        <div style={contentStyle} key={index}>
-                            <Image preview={false} style={imageStyle} src={item.url} key={item.id} />
-                        </div>
-                    </>
+                    <div style={contentStyle} key={item.id || index}>
+                        <Image preview={false} style={imageStyle} src={item.url} />
+                    </div>
                 )
             })
 
