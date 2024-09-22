@@ -1,6 +1,8 @@
 import './App.css'
 import DashboardPage from './pages/DashboardPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import RegisterPage from './pages/register/index'
+import UserManagement from './pages/admin/index'
 import LoginPage from './pages/LoginPage';
 import Admin from './components/AdminRoute/Admin';
 import HomePage from './pages/HomePage';
@@ -9,11 +11,15 @@ const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <HomePage/>,
+      element: <HomePage />,
     },
     {
       path: "login",
-      element: <LoginPage/>
+      element: <LoginPage />
+    },
+    {
+      path: "register",
+      element: <RegisterPage />,
     },
     {
       path: "admin",
@@ -22,6 +28,10 @@ const App = () => {
         {
           path: "dashboard",
           element: <DashboardPage />
+        },
+        {
+          path: "user",
+          element: <UserManagement />,
         }
       ]
     }
