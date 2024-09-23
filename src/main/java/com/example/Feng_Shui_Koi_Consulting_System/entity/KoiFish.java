@@ -4,16 +4,21 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "KoiFish")
 public class KoiFish {
     @Id
     @Column(name = "KoiID")
-    String id;
+    String KoiId;
     @Column(name = "Name")
     String name;
     @Column(name = "Size")
@@ -28,4 +33,16 @@ public class KoiFish {
     String imageId;
     @Column(name = "KoiTypeID")
     String koiTypeId;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "Koi_Element",
+            joinColumns = @JoinColumn(name = "KoiID"),
+            inverseJoinColumns = @JoinColumn(name = "ElementID")
+    )
+    Collection<KoiElement> element;
+//    public List<String> getElementNames() {
+//        return element.stream()
+//                .map(KoiElement::getElementName)
+//                .collect(Collectors.toList());
+//    }
 }

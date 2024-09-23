@@ -22,7 +22,7 @@ public class FishService {
         if(fishRepo.existsByName(request.getName()))
             throw new AppException(ErrorCode.FISH_EXISTED);
         else {
-            fish.setId(generateKoiID());
+            fish.setKoiId(generateKoiID());
             fish.setName(request.getName());
             fish.setSize(request.getSize());
             fish.setWeight(request.getWeight());
