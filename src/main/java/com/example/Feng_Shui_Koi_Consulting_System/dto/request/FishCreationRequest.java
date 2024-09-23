@@ -24,4 +24,5 @@ public class FishCreationRequest {
     String imageId;
     @Column(name = "KoiTypeID")
     String koiTypeId;
+
 }

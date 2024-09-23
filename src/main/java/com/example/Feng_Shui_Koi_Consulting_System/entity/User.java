@@ -18,28 +18,28 @@ import java.time.LocalDate;
 
 public class User {
     @Id
-    @Column(name = "UserID", length = 10)
+    @Column(name = "UserID")
     String userID;
 
-    @Column(name = "UserName", length = 50, nullable = false)
+    @Column(name = "UserName")
     String username;
 
-    @Column(name = "Password", length = 255, nullable = false)
+    @Column(name = "Password")
     String password;
 
     @Column(name = "DateOfBirth")
     LocalDate dateOfBirth;
 
-    @Column(name = "Email", length = 100)
+    @Column(name = "Email")
     String email;
 
-    @Column(name = "ImageLink", length = 50)
+    @Column(name = "ImageLink")
     String imageLink;
 
     @Column(name = "RoleName")
     String roleName;
 
-    @Column(name = "PlanID", length = 50)
+    @Column(name = "PlanID")
     String planID;
 
     @Column(name = "ElementID")

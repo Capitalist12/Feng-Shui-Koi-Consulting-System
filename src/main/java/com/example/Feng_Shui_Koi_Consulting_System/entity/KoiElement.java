@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -15,7 +16,9 @@ import java.util.List;
 public class KoiElement {
     @Id
     @Column(name = "ElementID")
-    String elementId;
+    Integer elementId;
     @Column(name = "ElementName")
     String elementName;
+//    @ManyToMany(mappedBy = "elements")
+//    private Set<KoiFish> koiFish;
 }
