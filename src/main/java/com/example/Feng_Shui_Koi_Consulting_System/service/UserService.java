@@ -12,7 +12,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ public class UserService {
         // Implement a method to generate a unique user ID of length 10
         return "U" + String.format("%09d", System.nanoTime() % 1000000000);
     }
-
+//@PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> geUsers(){
         return userRepository.findAll().stream()
                 .map(userMapper :: toUserResponse).collect(Collectors.toList());
@@ -57,13 +57,6 @@ public class UserService {
     }
 
     public UserResponse updateUser(String userID, UserUpdateRequest request){
-//        User user = getUserByID(userID);
-//        user.setPassword(request.getPassword());
-//        user.setEmail(request.getEmail());
-//        user.setDateOfBirth(request.getDateOfBirth());
-//        user.setElementID(request.getElementID());
-//        user.setImageLink(request.getImageLink());
-//        user.setPlanID(null);
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
         userMapper.updateUser(user, request);

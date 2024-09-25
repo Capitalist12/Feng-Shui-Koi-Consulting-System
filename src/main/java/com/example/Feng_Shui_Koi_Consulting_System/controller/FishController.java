@@ -1,28 +1,38 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiFishResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
 import com.example.Feng_Shui_Koi_Consulting_System.service.FishService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/fish")
 public class FishController {
-    @Autowired
-    private FishService fishService;
+
+     FishService fishService;
 
     @PostMapping
-    KoiFish createFish(@RequestBody FishCreationRequest request){
-        return fishService.createFish(request);
+    ApiResponse<KoiFishResponse> createFish(@RequestBody FishCreationRequest request){
+        return ApiResponse.<KoiFishResponse>builder()
+                .result(fishService.createFish(request))
+                .build();
     }
 
     @GetMapping
-    List<KoiFish> getFish(){
-        return fishService.getFish();
+    ApiResponse<List<KoiFishResponse>> getFish(){
+        return ApiResponse.<List<KoiFishResponse>>builder()
+                .result(fishService.getFish())
+                .build();
     }
 
     @GetMapping("/{fishId}")
@@ -31,8 +41,10 @@ public class FishController {
     }
 
     @PutMapping("/{fishId}")
-    KoiFish updateFish(@PathVariable String fishId ,@RequestBody FishUpdateRequest request){
-        return fishService.updateFish(fishId, request);
+    ApiResponse<KoiFishResponse> updateFish(@PathVariable String fishId , @RequestBody FishUpdateRequest request){
+        return ApiResponse.<KoiFishResponse>builder()
+                .result(fishService.updateFish(fishId, request))
+                .build();
     }
 
     @DeleteMapping("/{fishId}")

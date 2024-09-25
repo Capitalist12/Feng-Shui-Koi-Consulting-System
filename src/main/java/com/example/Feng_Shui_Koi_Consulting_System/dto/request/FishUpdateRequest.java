@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +17,7 @@ public class FishUpdateRequest {
     String weight;
     String color;
     String description;
-    String imageId;
-    String koiTypeId;
-    Integer elementID;
+    Set<String> imagesURL;
+    String koiTypeName;
+    Set<String> elements;
 }

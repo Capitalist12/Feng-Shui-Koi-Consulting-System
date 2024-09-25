@@ -4,16 +4,15 @@ import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TankUpdateRequest {
-    @Column(name = "Shape")
     String shape;
-    @Column(name = "ElementID")
-    int elementId;
-    @Column(name = "ImageID")
-    String imageId;
+    String element;
+    String imageURL;
 }

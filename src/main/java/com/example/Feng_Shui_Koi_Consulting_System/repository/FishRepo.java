@@ -10,5 +10,4 @@ import java.util.Set;
 @Repository
 public interface FishRepo extends JpaRepository<KoiFish, String> {
     boolean existsByName(String fishName);
-    Set<KoiElement> findAllById(Set<Integer> elementIds);
 }

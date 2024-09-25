@@ -1,6 +1,6 @@
-package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
+package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
 
-import jakarta.persistence.Column;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Koi_Image;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,14 +11,15 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FishCreationRequest {
+public class KoiFishResponse {
+    String id;
     String name;
     String size;
     String weight;
     String color;
     String description;
-    Set<String> imagesURL;
-    String koiTypeName;
-    Set<String> elements;
+    KoiTypesResponse koiTypes;
+    Set<Koi_Image> imagesFish;
+    Set<ElementResponse> elements;
 
 }

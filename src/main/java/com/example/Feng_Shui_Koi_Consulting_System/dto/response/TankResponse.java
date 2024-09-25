@@ -1,6 +1,6 @@
-package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
+package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
 
-import jakarta.persistence.Column;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,8 +11,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TankCreationRequest {
+public class TankResponse {
+    String tankId;
     String shape;
-    String element;
     String imageURL;
+    Element elementTank;
+
 }
