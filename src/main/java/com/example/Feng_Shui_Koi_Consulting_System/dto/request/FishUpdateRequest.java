@@ -10,18 +10,12 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FishUpdateRequest {
-    @Column(name = "Name")
     String name;
-    @Column(name = "Size")
     String size;
-    @Column(name = "Weight")
     String weight;
-    @Column(name = "Color")
     String color;
-    @Column(name = "Description")
     String description;
-    @Column(name = "ImageID")
     String imageId;
-    @Column(name = "KoiTypeID")
     String koiTypeId;
+    Integer elementID;
 }

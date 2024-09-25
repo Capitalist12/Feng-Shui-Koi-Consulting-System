@@ -2,6 +2,7 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiElement;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class FishService {
@@ -30,7 +32,8 @@ public class FishService {
             fish.setDescription(request.getDescription());
             fish.setImageId(request.getImageId());
             fish.setKoiTypeId(request.getKoiTypeId());
-
+            Set<KoiElement> elements = fishRepo.findAllById(request.getElementIds());
+            fish.setElements(elements);
             return fishRepo.save(fish);
         }
     }

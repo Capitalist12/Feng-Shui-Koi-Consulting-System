@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Entity
 @Data
@@ -18,7 +16,7 @@ import java.util.stream.Collectors;
 public class KoiFish {
     @Id
     @Column(name = "KoiID")
-    String KoiId;
+    String koiId;
     @Column(name = "Name")
     String name;
     @Column(name = "Size")
@@ -39,7 +37,7 @@ public class KoiFish {
             joinColumns = @JoinColumn(name = "KoiID"),
             inverseJoinColumns = @JoinColumn(name = "ElementID")
     )
-    Collection<KoiElement> element;
+    Set<KoiElement> elements;
 //    public List<String> getElementNames() {
 //        return element.stream()
 //                .map(KoiElement::getElementName)
