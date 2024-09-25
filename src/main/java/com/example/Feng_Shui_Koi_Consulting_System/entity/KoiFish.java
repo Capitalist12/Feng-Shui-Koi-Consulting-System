@@ -1,8 +1,16 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Data
@@ -10,6 +18,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class KoiFish {
     @Id
     @Column(name = "KoiID")
@@ -22,10 +32,37 @@ public class KoiFish {
     String weight;
     @Column(name = "Color")
     String color;
-    @Column(name = "Description")
+    @Column(name = "Description", length = 1000)
     String description;
-    @Column(name = "ImageID")
-    String imageId;
-    @Column(name = "KoiTypeID")
-    String koiTypeId;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "KoiTypeID", nullable = false, referencedColumnName = "KoiTypeID")
+    @JsonBackReference
+    KoiTypes koiTypes;
+
+    @OneToMany(mappedBy = "koiFish", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    Set<Koi_Image> imagesFish = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "Koi_Element",
+            joinColumns = @JoinColumn(name = "KoiID"),
+    inverseJoinColumns = @JoinColumn(name = "ElementID"))
+    @JsonManagedReference
+    Set<Element> elements;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof KoiFish)) return false;
+        KoiFish koiFish = (KoiFish) o;
+        return Objects.equals(id, koiFish.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

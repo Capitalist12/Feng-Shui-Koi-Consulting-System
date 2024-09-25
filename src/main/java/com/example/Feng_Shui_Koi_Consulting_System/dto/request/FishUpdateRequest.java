@@ -4,24 +4,20 @@ import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FishUpdateRequest {
-    @Column(name = "Name")
     String name;
-    @Column(name = "Size")
     String size;
-    @Column(name = "Weight")
     String weight;
-    @Column(name = "Color")
     String color;
-    @Column(name = "Description")
     String description;
-    @Column(name = "ImageID")
-    String imageId;
-    @Column(name = "KoiTypeID")
-    String koiTypeId;
+    Set<String> imagesURL;
+    String koiTypeName;
+    Set<String> elements;
 }

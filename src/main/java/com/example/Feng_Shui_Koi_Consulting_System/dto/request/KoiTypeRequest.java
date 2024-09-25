@@ -4,15 +4,12 @@ import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TankCreationRequest {
-    String shape;
-    String element;
-    String imageURL;
+public class KoiTypeRequest {
+    String TypeName;
+    String Description;
 }

@@ -3,6 +3,7 @@ package com.example.Feng_Shui_Koi_Consulting_System.exception;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,10 +15,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handLingRuntimeException(Exception exception){
         log.error("Exception: ",exception);
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
-        return ResponseEntity.badRequest().body(apiResponse);
+        ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(errorCode.getMessage())
+                        .build());
     }
 
     @ExceptionHandler(value = AppException.class)
@@ -29,7 +32,7 @@ public class GlobalExceptionHandler {
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getMessage());
 
-        return ResponseEntity.badRequest().body(apiResponse);
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(apiResponse);
     }
 
     //Su dung enum key de dinh danh Exception
@@ -44,11 +47,22 @@ public class GlobalExceptionHandler {
         }
         catch (IllegalArgumentException e){}
 
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(errorCode.getMessage())
+                        .build());
+    }
 
-        return ResponseEntity.badRequest().body(apiResponse);
+
+    @ExceptionHandler(value = AuthorizationDeniedException.class)
+    ResponseEntity<ApiResponse> handlingAuthorizationDeniedException(AuthorizationDeniedException exception) {
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(errorCode.getMessage())
+                        .build());
     }
 
 }
