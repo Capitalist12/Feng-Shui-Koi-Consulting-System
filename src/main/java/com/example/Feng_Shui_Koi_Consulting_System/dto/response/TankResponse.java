@@ -15,6 +15,6 @@ public class TankResponse {
     String tankId;
     String shape;
     String imageURL;
-    Element elementTank;
+    ElementResponse elementTank;
 
 }
