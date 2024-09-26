@@ -51,7 +51,7 @@ public class TankService {
         return tankRepo.save(tank);
     }
 
-    public void deleteFish(String tankId){
+    public void deleteTank(String tankId){
         Tank tank = tankRepo.findById(tankId).orElseThrow(
                 () -> new AppException(ErrorCode.TANK_NOT_FOUND));
         tankRepo.deleteById(tankId);

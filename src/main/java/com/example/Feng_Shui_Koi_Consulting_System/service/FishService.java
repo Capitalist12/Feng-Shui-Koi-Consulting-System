@@ -3,6 +3,7 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiImage;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.FishRepo;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class FishService {
@@ -18,7 +20,6 @@ public class FishService {
 
     public KoiFish createFish(FishCreationRequest request){
         KoiFish fish = new KoiFish();
-
         if(fishRepo.existsByName(request.getName()))
             throw new AppException(ErrorCode.FISH_EXISTED);
         else {
@@ -28,7 +29,6 @@ public class FishService {
             fish.setWeight(request.getWeight());
             fish.setColor(request.getColor());
             fish.setDescription(request.getDescription());
-            fish.setImageId(request.getImageId());
             fish.setKoiTypeId(request.getKoiTypeId());
 
             return fishRepo.save(fish);
@@ -53,7 +53,6 @@ public class FishService {
         fish.setWeight(request.getWeight());
         fish.setColor(request.getColor());
         fish.setDescription(request.getDescription());
-        fish.setImageId(request.getImageId());
         fish.setKoiTypeId(request.getKoiTypeId());
 
         return fishRepo.save(fish);

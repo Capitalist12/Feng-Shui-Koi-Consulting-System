@@ -45,6 +45,9 @@ public class User {
     @Column(name = "ElementID")
     Integer elementID;
 
+    @OneToOne(mappedBy = "user")
+    ForgotPassword forgotPassword;
+
     @Column(name = "DeleteStatus")
     boolean deleteStatus;
 

@@ -26,18 +26,18 @@ public class TankController {
     }
 
     @GetMapping("/{tankId}")
-    Tank getFish(@PathVariable("tankId") String tankId){
+    Tank getTank(@PathVariable("tankId") String tankId){
         return tankService.getTank(tankId);
     }
 
     @PutMapping("/{tankId}")
-    Tank updateFish(@PathVariable String tankId ,@RequestBody TankUpdateRequest request){
+    Tank updateTank(@PathVariable String tankId ,@RequestBody TankUpdateRequest request){
         return tankService.updateTank(tankId, request);
     }
 
     @DeleteMapping("/{tankId}")
     String deleteTank(@PathVariable String tankId){
-        tankService.deleteFish(tankId);
+        tankService.deleteTank(tankId);
         return "Tank has been delete";
     }
 }
