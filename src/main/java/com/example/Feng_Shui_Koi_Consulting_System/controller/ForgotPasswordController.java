@@ -33,9 +33,6 @@ public class ForgotPasswordController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    private final
-
-
     @PostMapping("/verifyMail/{email}")
     public ResponseEntity<String> verifyEmail(@PathVariable String email){
         User user = userRepository.findByEmail(email)
