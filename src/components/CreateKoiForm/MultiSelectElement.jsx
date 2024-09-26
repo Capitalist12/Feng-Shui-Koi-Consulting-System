@@ -26,7 +26,7 @@ const MultiSelectElement = ({ value = [], onChange }) => {
             mode="multiple"
             value={value}
             onChange={onChange}
-            placeholder="Select element"
+            placeholder="Chọn mệnh"
             style={{ width: '100%' }}
             tagRender={(props) => <TagRender {...props} options={OPTIONS} />} // Use the existing TagRender component
             suffixIcon={suffix}

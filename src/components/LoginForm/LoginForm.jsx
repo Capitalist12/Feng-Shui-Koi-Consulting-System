@@ -3,15 +3,19 @@ import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
+import { login } from "../../services/AuthAPIService";
 
 const LoginForm = () => {
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
+    const { email, password } = values;
     console.log('Received values of form: ', values);
+    const response = await login({email, password});
+
   };
 
   return (
     <Form
-    className='login-form'
+      className='login-form'
       name="login"
       initialValues={{
         remember: true,
@@ -21,6 +25,7 @@ const LoginForm = () => {
       }}
       onFinish={onFinish}
     >
+      <label htmlFor="email">Email</label>
       <Form.Item
         name="email"
         rules={[
@@ -30,9 +35,9 @@ const LoginForm = () => {
           },
         ]}
       >
-        Email
-        <Input prefix={<MailOutlined />} placeholder="Email" />
+        <Input prefix={<MailOutlined />} type='email' placeholder="Email" />
       </Form.Item>
+      <label htmlFor="password">Mật khẩu</label>
       <Form.Item
         name="password"
         rules={[
@@ -42,8 +47,7 @@ const LoginForm = () => {
           },
         ]}
       >
-        Mật khẩu
-        <Input prefix={<LockOutlined />} type="password" placeholder="Mật khẩu" />
+        <Input.Password prefix={<LockOutlined />} placeholder="Mật khẩu" />
       </Form.Item>
       <Form.Item>
         <Flex justify="space-between" align="center">

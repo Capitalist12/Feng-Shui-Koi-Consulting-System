@@ -3,7 +3,7 @@ import axios from "../utils/axiosConfig";
 
 const getAllKoiFish = async () => {
     try {
-        const response = await axios.get('koi');
+        const response = await axios.get('fish');
         return response;
     } catch (err) {
         toast.error(err.message);

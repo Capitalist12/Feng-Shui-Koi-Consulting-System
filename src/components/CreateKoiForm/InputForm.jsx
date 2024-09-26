@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Button,
     Form,
@@ -14,9 +14,11 @@ import uploadFile from '../../utils/file';
 import { useForm } from 'antd/es/form/Form.js';
 import { createKoiFish } from '../../services/koiAPIService';
 import { toast } from 'react-toastify';
+import { PlusOutlined } from '@ant-design/icons';
 
 const InputForm = (props) => {
     const { close, save, fetchAPI } = props;
+    const [addType, setAddType] = useState(false);
     const [form] = useForm();
 
     const onFinish = async (values) => {
@@ -130,9 +132,28 @@ const InputForm = (props) => {
             </Form.Item>
 
             <Form.Item label="Giống" name='type'>
-                <Select>
-                    <Select.Option value="demo">Demo</Select.Option>
-                </Select>
+                {addType ?
+                    <Input autoFocus suffix={<PlusOutlined onClick={() => console.log("click")}/>}></Input>
+                    :
+                    <Select showSearch placeholder="Chọn giống cá">
+                        <Select.Option value="test">Test</Select.Option>
+                        <Select.Option value="demo1">Demo1</Select.Option>
+                        <Select.Option disabled>
+                            <Button
+                                type="dashed"
+                                onClick={() => setAddType(!addType)}
+                                style={{
+                                    width: '100%',
+                                }}
+                                icon={<PlusOutlined />}
+                            >
+                                Thêm giống cá mới
+                            </Button>
+                        </Select.Option>
+
+
+                    </Select>
+                }
             </Form.Item>
 
             <Form.Item
