@@ -1,3 +1,75 @@
-.ant-layout {
-    min-height: 100vh;
+// DashboardPage.scss  
+
+@font-face {  
+    font-family: 'Japan-Wave';  
+    src: url('../assets/font/Japan\ wave.ttf');  
+}  
+
+body {  
+    font-family: 'Japan-Wave', sans-serif;  
+}  
+
+// Layout configurations  
+.dashboard-layout {  
+    display: flex;  
+    height: 100vh; // Full height for the dashboard layout  
+}  
+
+.dashboard-sider {  
+    width: 250px; // Set a consistent width for the sidebar  
+    background: #001529; // Dark background for the sidebar  
+}  
+
+.dashboard-header {  
+    padding: 0 16px;  
+    background: #f0f2f5; // Light background for the header  
+    display: flex;  
+    justify-content: space-between;  
+    align-items: center;  
+    height: 64px; // Align with Ant Design layout  
+}  
+
+.dashboard-content {  
+    margin: 0; // Remove margin to utilize full space  
+    padding: 24px; // Padding for content area  
+    background: #ffffff; // White background for the content  
+    border-radius: 0px 16px 16px 0px; // Rounded corners on the right  
+    overflow: auto; // Handle overflow of content  
+}  
+
+// Title styling within the dashboard  
+.main-title {  
+    font-size: 3rem; // Large title font size  
+    font-weight: bold;  
+    text-align: center; // Center title  
+    margin-bottom: 16px; // Space below title  
+}  
+
+// Add styles specific to forms or tables  
+.dashboard-table, .dashboard-form {  
+    margin-top: 20px; // Space above tables and forms  
+    border-radius: 8px; // Rounded corners  
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); // Soft shadow  
+    padding: 16px; // Padding for table/form content  
+    background: #fff; // Ensure white background  
+}  
+
+// Responsive adjustments  
+@media (max-width: 768px) {  
+    .dashboard-layout {  
+        flex-direction: column; // Stack layout on smaller screens  
+    }  
+
+    .dashboard-sider {  
+        width: 100%; // Full width sidebar on small screens  
+        height: auto; // Ensure it wraps around content  
+    }  
+
+    .dashboard-header {  
+        flex-direction: column; // Change header layout for small screens  
+    }  
+
+    .dashboard-content {  
+        padding: 12px; // Adjust padding for smaller screens  
+    }  
 }

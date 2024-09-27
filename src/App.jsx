@@ -1,7 +1,7 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DashboardPage from "./pages/admin/dashboard/DashboardPage";
-import RegisterPage from "./pages/register/index";
+import RegisterPage from "./pages/register/RegisterPage";
 import UserManagement from "./pages/admin/user-management/index";
 import LoginPage from "./pages/login/LoginPage";
 import Admin from "./components/AdminRoute/Admin";
