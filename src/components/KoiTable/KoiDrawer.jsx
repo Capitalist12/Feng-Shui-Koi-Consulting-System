@@ -4,6 +4,8 @@ import { OPTIONS } from '../../utils/constant';
 import '../../styles/KoiDrawer.scss';
 import { DeleteOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import ImageCarousel from './ImageCarousel';
+import { deleteKoiFish } from '../../services/koiAPIService';
+import { toast } from 'react-toastify';
 
 const drawerSize = 640;
 const charWidth = 15;
@@ -17,7 +19,7 @@ const DescriptionItem = ({ title, content }) => (
 );
 
 const KoiDrawer = (props) => {
-  const { open, onClose, data, getMatchedOptions } = props;
+  const { open, onClose, data, getMatchedOptions, fetchAPI } = props;
   const [isConfirm, setIsConfirm] = useState(false);
   const [isEdit, setIsEdit] = useState({
     name: false,
@@ -33,6 +35,16 @@ const KoiDrawer = (props) => {
     setIsConfirm(!isConfirm);
   }
 
+  const deleteKoi = async (id) => {
+    // const response = await deleteKoiFish(id);
+    const response = await deleteKoiFish(id);
+    if(response.code === 1002) return;
+
+    setIsConfirm(!isConfirm);
+    toast.success("Xóa thành công!");
+    onClose();
+    fetchAPI();
+  }
 
   const toggleEditable = (field) => {
     setIsEdit({
@@ -55,7 +67,7 @@ const KoiDrawer = (props) => {
         {isConfirm ?
           <div className='confirm-delete'>
             Xác nhận xóa?
-            <div className='confirm-yes'>
+            <div className='confirm-yes' onClick={() => deleteKoi(data.id)}>
               <CheckOutlined color='green' />
               Có
             </div>
@@ -68,9 +80,10 @@ const KoiDrawer = (props) => {
           <DeleteOutlined title='Xóa' className='delete-btn' onClick={toggleConfirmDelete} />
         }
       </div>
+
       <Row>
         <Col span={24} style={{ textAlign: 'center', marginBottom: '1em', backgroundColor: '#f5f5f5', borderRadius: '5px' }}>
-          <ImageCarousel images={data.images} />
+          <ImageCarousel images={data.imagesFish} />
         </Col>
         <Col span={24} onClick={(event) => toggleEditable('name')}>
           {isEdit.name ?
@@ -93,7 +106,7 @@ const KoiDrawer = (props) => {
               }
             />
             :
-            <DescriptionItem title="Kích thước" content={data.size} onClick={() => toggleEditable('size')}/>
+            <DescriptionItem title="Kích thước" content={data.size ? data.size : "-"} onClick={() => toggleEditable('size')} />
           }
         </Col>
         <Col span={12} onClick={() => toggleEditable('weight')}>
@@ -105,13 +118,13 @@ const KoiDrawer = (props) => {
               }
             />
             :
-            <DescriptionItem title="Cân nặng" content={data.weight} />
+            <DescriptionItem title="Cân nặng" content={data.weight ? data.weight : "-"} />
           }
         </Col>
       </Row>
       <Row>
         <Col span={12}>
-          <DescriptionItem title="Giới tính" content={data.gender} />
+          <DescriptionItem title="Màu sắc" content={data.color} />
         </Col>
         <Col span={12}>
           <DescriptionItem
@@ -144,11 +157,14 @@ const KoiDrawer = (props) => {
           />
         </Col>
         <Col span={12}>
-          <DescriptionItem title="Giống" content={data.type} />
+          <DescriptionItem title="Giống" content={data.koiTypes.typeName} />
         </Col>
       </Row>
       <Divider />
       <p className="site-description-item-profile-p">Thông tin khác</p>
+      <Col span={24}>
+        {data.description}
+      </Col>
     </Drawer>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     Form,
@@ -14,12 +14,25 @@ import uploadFile from '../../utils/file';
 import { useForm } from 'antd/es/form/Form.js';
 import { createKoiFish } from '../../services/koiAPIService';
 import { toast } from 'react-toastify';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons';
+import { getAllKoiType, createNewKoiType } from '../../services/koiTypeService';
+import TextArea from 'antd/es/input/TextArea';
 
 const InputForm = (props) => {
     const { close, save, fetchAPI } = props;
     const [addType, setAddType] = useState(false);
+    const [koiType, setKoiType] = useState([]);
+    const [typeInput, setTypeInput] = useState("");
     const [form] = useForm();
+
+    const getAllTypes = async () => {
+        const response = await getAllKoiType();
+        (response && response.result.length > 0) ? setKoiType(response.result) : setKoiType([]);
+    }
+
+    useEffect(() => {
+        getAllTypes()
+    }, []);
 
     const onFinish = async (values) => {
 
@@ -35,24 +48,55 @@ const InputForm = (props) => {
                     "name": values.name,
                     "size": values.size,
                     "weight": values.weight,
-                    "type": values.type,
-                    "element": Array.isArray(values.element) ? values.element : [values.element],
-                    "gender": values.gender,
-                    "image": Array.isArray(url) ? url : [url]
+                    "color": values.color,
+                    "description": values.description,
+                    "imagesURL": Array.isArray(url) ? url : [url],
+                    "koiTypeName": values.type,
+                    "elements": Array.isArray(values.element) ? values.element : [values.element],
                 });
 
                 console.log(">>> check response", response);
                 toast.success("Successfully!");
 
             } catch (err) {
-                toast.error(err);
+                toast.error(err.message);
             } finally {
                 // clear old data
+                setTypeInput('');
                 form.resetFields();
                 await fetchAPI();
                 save();
             }
         }
+    }
+
+    const cancelForm = () => {
+        setAddType(false)
+        setTypeInput('');
+        form.resetFields();
+        save();
+    }
+
+    const cancelCreateKoiType = () => {
+        setAddType(false);
+        setTypeInput('');
+    }
+
+    const createKoiType = async (newType) => {
+        if (!newType) {
+            toast.error("Không được để trống!");
+            return;
+        }
+        const response = await createNewKoiType({
+            "typeName": newType,
+            "description": ""
+        });
+        response && getAllTypes()
+        setAddType(false);
+    }
+
+    const handleInputNewType = (event) => {
+        setTypeInput(event.target.value);
     }
 
     return (
@@ -75,73 +119,82 @@ const InputForm = (props) => {
                 <Input />
             </Form.Item>
 
-            <Form.Item label="Kích thước">
-                <Form.Item
-                    noStyle
-                    name="size"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Vui lòng nhập kích thước!', // Custom error message
-                        },
-                    ]}
-                >
-                    <InputNumber
-                        min={1}
-                        max={100}
-                        step={0.5}
-                    />
-                </Form.Item>
-                <span
-                    className="ant-form-text"
-                    style={{
-                        marginInlineStart: 8,
-                    }}
-                >
-                    cm <font style={{ color: '#ccc', marginLeft: '1.5em' }}>Kích thước cho phép từ 1cm đến 100cm</font>
-                </span>
+            <Form.Item
+                label="Màu sắc"
+                name='color'
+                rules={[{
+                    required: true,
+                    message: 'Vui lòng nhập màu sắc!'
+                }]}
+            >
+                <Input />
+            </Form.Item>
+
+            <Form.Item
+                label="Kích thước"
+                name="size"
+                rules={[{
+                    required: true,
+                    message: 'Vui lòng chọn kích thước!'
+                }]}
+            >
+                <Select showSearch placeholder="Chọn kích thước">
+                    <Select.Option value="< 20 cm">&lt; 20 cm</Select.Option>
+                    <Select.Option value="20-40 cm">20-40 cm</Select.Option>
+                    <Select.Option value="40-60 cm">40-60 cm</Select.Option>
+                    <Select.Option value="60-80 cm">60-80 cm</Select.Option>
+                    <Select.Option value="80-90 cm">80-90 cm</Select.Option>
+                    <Select.Option value="> 90 cm">&gt; 90 cm</Select.Option>
+                </Select>
             </Form.Item>
 
 
-            <Form.Item label="Cân nặng">
-                <Form.Item
-                    noStyle
-                    name="weight"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Vui lòng nhập cân nặng!', // Custom error message
-                        },
-                    ]}
-                >
-                    <InputNumber
-                        min={0.1}
-                        max={100}
-                        step={0.5}
-                        noStyle
-                    />
-                </Form.Item>
-                <span
-                    className="ant-form-text"
-                    style={{
-                        marginInlineStart: 8,
-                    }}
-                >
-                    kg <font style={{ color: '#ccc', marginLeft: '1.5em' }}>Cân nặng cho phép từ 0.1kg đến 100kg</font>
-                </span>
+            <Form.Item
+                label="Cân nặng"
+                name="weight"
+                rules={[{
+                    required: true,
+                    message: 'Vui lòng chọn cân nặng!'
+                }]}
+            >
+                <Select showSearch placeholder="Chọn cân nặng">
+                    <Select.Option value="< 1 kg">&lt; 1 kg</Select.Option>
+                    <Select.Option value="1-3 kg">1-3 kg</Select.Option>
+                    <Select.Option value="3-5 kg">3-5 kg</Select.Option>
+                    <Select.Option value="5-7 kg">5-7 kg</Select.Option>
+                    <Select.Option value="7-9 kg">7-9 kg</Select.Option>
+                    <Select.Option value="> 9 kg">&gt; 9 kg</Select.Option>
+                </Select>
             </Form.Item>
 
-            <Form.Item label="Giống" name='type'>
+            <Form.Item
+                label="Giống"
+                name='type'
+                rules={[{
+                    required: true,
+                    message: 'Vui lòng chọn giống cá!'
+                }]}
+            >
                 {addType ?
-                    <Input autoFocus suffix={<PlusOutlined onClick={() => console.log("click")}/>}></Input>
+                    <Input
+                        autoComplete='off'
+                        autoFocus
+                        value={typeInput}
+                        placeholder='Nhập giống cá mới'
+                        onChange={(event) => handleInputNewType(event)}
+                        suffix={
+                            <Space>
+                                <CheckOutlined style={{ color: '#49ca3e' }} onClick={() => createKoiType(typeInput)} />
+                                <CloseOutlined style={{ color: '#d33726' }} onClick={() => cancelCreateKoiType()} />
+                            </Space>
+                        }
+                    />
                     :
                     <Select showSearch placeholder="Chọn giống cá">
-                        <Select.Option value="test">Test</Select.Option>
-                        <Select.Option value="demo1">Demo1</Select.Option>
-                        <Select.Option disabled>
+                        <Select.Option disabled value="them">
                             <Button
                                 type="dashed"
-                                onClick={() => setAddType(!addType)}
+                                onClick={(event) => { setAddType(!addType); console.log(event) }}
                                 style={{
                                     width: '100%',
                                 }}
@@ -151,6 +204,11 @@ const InputForm = (props) => {
                             </Button>
                         </Select.Option>
 
+                        {koiType && koiType.length > 0 &&
+                            koiType.map((item, index) => (
+                                <Select.Option key={index + 1} value={item.typeName}>{item.typeName}</Select.Option>
+                            ))
+                        }
 
                     </Select>
                 }
@@ -173,11 +231,16 @@ const InputForm = (props) => {
                 <MultiSelectElement />
             </Form.Item>
 
-            <Form.Item label="Giới tính" name='gender'>
-                <Radio.Group>
-                    <Radio value="male"> Đực </Radio>
-                    <Radio value="female"> Cái </Radio>
-                </Radio.Group>
+            <Form.Item label="Thông tin" name="description">
+                <TextArea
+                    showCount
+                    maxLength={300}
+                    placeholder="Thông tin thêm"
+                    style={{
+                        height: 120,
+                        resize: 'none',
+                    }}
+                />
             </Form.Item>
 
             <Form.Item
@@ -201,7 +264,7 @@ const InputForm = (props) => {
 
             <Form.Item style={{ textAlign: 'right' }}>
                 <Space>
-                    <Button htmlType="button" onClick={close}>
+                    <Button htmlType="button" onClick={cancelForm}>
                         Hủy bỏ
                     </Button>
                     <Button htmlType="submit" type="primary">
@@ -209,7 +272,7 @@ const InputForm = (props) => {
                     </Button>
                 </Space>
             </Form.Item>
-        </Form>
+        </Form >
     );
 };
 

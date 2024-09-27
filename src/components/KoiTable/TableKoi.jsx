@@ -25,7 +25,7 @@ const TableKoi = (props) => {
 
     const getMatchedOptions = (options, elements) => {
         return elements.map(element => {
-            return options.find(option => option.value === element.title);
+            return options.find(option => option.value === element.elementName);
         }).filter(option => option !== undefined); // Filter out any undefined values
     };
 
@@ -38,17 +38,16 @@ const TableKoi = (props) => {
                     key="index"
                 />
                 <Column title="Tên" dataIndex="name" />
-                <Column title="Kích thước" dataIndex="size" />
-                <Column title="Cân nặng" dataIndex="weight" />
-                <Column title="Giới tính" dataIndex="gender" />
-                <Column title="Giống" dataIndex="type" />
+                <Column title="Kích thước" render={(text, record) => record.size ? record.weight : "-"} />
+                <Column title="Cân nặng" render={(text, record) => record.weight ? record.weight : "-"} />
+                <Column title="Màu sắc" dataIndex="color" />
+                <Column title="Giống" render={(text, record) => record.koiTypes.typeName} />
                 <Column
                     title="Mệnh"
                     dataIndex="elements"
                     key="elements"
                     render={(elements) => {
                         const matchedOption = getMatchedOptions(OPTIONS, elements);
-                        console.log(matchedOption); // Find the matching element in OPTIONS
                         return (
                             <>
                                 {matchedOption && matchedOption.length > 0 &&
@@ -91,7 +90,7 @@ const TableKoi = (props) => {
                 />
             </Table>
 
-            <KoiDrawer open={open} onClose={onClose} data={selectedKoi} getMatchedOptions={getMatchedOptions}/>
+            <KoiDrawer open={open} onClose={onClose} data={selectedKoi} getMatchedOptions={getMatchedOptions} fetchAPI={props.fetchAPI}/>
         </>
     );
 

@@ -8,23 +8,31 @@ import {
 import { Button, Layout, Menu, theme, Row, Col, Avatar } from 'antd';
 import FormModal from '../components/CreateKoiForm/FormModal';
 import TableKoi from '../components/KoiTable/TableKoi';
+import UserManagement from '../pages/admin/index'
 import { getAllKoiFish } from '../services/koiAPIService';
 import '../styles/DashboardPage.scss';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
 
 const DashboardPage = () => {
     const [data, setData] = useState([]);
     const [collapsed, setCollapsed] = useState(false);
+    const currentPath = useLocation();
 
     const fetchAPI = async () => {
         const response = await getAllKoiFish();
-        (response && response.length > 0) ? setData(response) : setData([]);
+        (response && response.result.length > 0) ? setData(response.result) : setData([]);
     }
 
     useEffect(() => {
         fetchAPI();
     }, []);
+
+    const getPathEndpoint = (path) => {
+        const endpoint = path.pathname.split("/");
+        return endpoint[endpoint.length - 1];
+    }
 
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -42,12 +50,21 @@ const DashboardPage = () => {
                         {
                             key: '1',
                             icon: <UserOutlined />,
-                            label: 'Quản lý cá koi',
+                            label: (
+                                <NavLink to="/admin/dashboard/koi" className='nav-link'>
+                                    Quản lý cá Koi
+                                </NavLink>
+                            ),
                         },
                         {
                             key: '2',
                             icon: <UserOutlined />,
-                            label: 'Quản lý người dùng',
+                            label: (
+                                <NavLink to="/admin/dashboard/user" className='nav-link'>
+                                    Quản lý người dùng
+                                </NavLink>
+                            ),
+
                         },
                         {
                             key: '3',
@@ -94,12 +111,20 @@ const DashboardPage = () => {
                         borderRadius: borderRadiusLG,
                     }}
                 >
+                    {getPathEndpoint(currentPath) === 'koi' ?
                     <div>
-                        <FormModal fetchAPI={fetchAPI}/>
-                    </div>
+                        <div>
+                            <FormModal fetchAPI={fetchAPI} />
+                        </div>
+                        <div>
+                            <TableKoi data={data} fetchAPI={fetchAPI}/>
+                        </div>
+                    </div> 
+                    :
                     <div>
-                        <TableKoi data={data}/>
+                        <UserManagement/>
                     </div>
+                }
                 </Content>
             </Layout>
         </Layout>

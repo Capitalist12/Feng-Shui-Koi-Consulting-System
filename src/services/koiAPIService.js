@@ -11,7 +11,7 @@ const getAllKoiFish = async () => {
 }
 
 const createKoiFish = async (payload) => {
-    const response = await axios.post('koi', payload);
+    const response = await axios.post('fish', payload);
     return response;
 }
 
@@ -20,7 +20,12 @@ const updateKoiFish = async (payload) => {
 }
 
 const deleteKoiFish = async (id) => {
-    const response = await axios.delete();
+    try {
+        const response = await axios.delete(`fish/${id}`);
+        return response;
+    } catch (err) {
+        toast.error(err.message);
+    }
 }
 
-export { getAllKoiFish, createKoiFish };
+export { getAllKoiFish, createKoiFish, deleteKoiFish };

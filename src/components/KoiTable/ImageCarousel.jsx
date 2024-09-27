@@ -31,8 +31,8 @@ const ImageCarousel = ({ images }) => (
         {images && images.length > 0 &&
             images.map((item, index) => {
                 return (
-                    <div style={contentStyle} key={item.id || index}>
-                        <Image preview={false} style={imageStyle} src={item.url} />
+                    <div style={contentStyle} key={item.koiImageId || index}>
+                        <Image preview={false} style={imageStyle} src={item.imageURL} />
                     </div>
                 )
             })

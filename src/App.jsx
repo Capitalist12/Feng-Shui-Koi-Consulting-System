@@ -2,7 +2,6 @@ import './App.css'
 import DashboardPage from './pages/DashboardPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RegisterPage from './pages/register/index'
-import UserManagement from './pages/admin/index'
 import LoginPage from './pages/LoginPage';
 import Admin from './components/AdminRoute/Admin';
 import HomePage from './pages/HomePage';
@@ -26,12 +25,12 @@ const App = () => {
       element: <Admin />,
       children: [
         {
-          path: "dashboard",
+          path: "dashboard/koi",
           element: <DashboardPage />
         },
         {
-          path: "user",
-          element: <UserManagement />,
+          path: "dashboard/user",
+          element: <DashboardPage />,
         }
       ]
     }

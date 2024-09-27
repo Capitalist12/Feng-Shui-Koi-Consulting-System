@@ -7,35 +7,35 @@ import { IoIosWater } from "react-icons/io";
 const OPTIONS = [
     {
         label: 'Lửa',
-        value: 'fire',
+        value: 'Fire',
         emoji: <FaFire />,
         desc: 'Lửa (Hỏa)',
         color: '#f26d78'
     },
     {
         label: 'Đất',
-        value: 'earth',
+        value: 'Earth',
         emoji: <FaMountainSun />,
         desc: 'Đất (Thổ)',
         color: '#fece47'
     },
     {
         label: 'Kim',
-        value: 'metal',
+        value: 'Metal',
         emoji: <GiMetalBar />,
         desc: 'Kim',
         color: '#a1978d'
     },
     {
         label: 'Nước',
-        value: 'water',
+        value: 'Water',
         emoji: <IoIosWater />,
         desc: 'Nước (Thủy)',
         color: '#2c6db6'
     },
     {
         label: 'Mộc',
-        value: 'leaf',
+        value: 'Leaf',
         emoji: <FaLeaf />,
         desc: 'Cây (Mộc)',
         color: '#5aba47'
