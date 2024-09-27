@@ -1,27 +1,22 @@
 import { useState } from "react";
 import AuthenTemplate from "../../components/authen-template/index";
-import { Form, Input, Button, InputNumber } from "antd";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { Form, Input, Button, DatePicker } from "antd";
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import "../../styles/register.scss";
-
+import { UserOutlined, KeyOutlined, MailOutlined } from "@ant-design/icons";
+import instance from "../../utils/axiosConfig";
 function RegisterPage() {
   const [loading, setLoading] = useState(false); // to manage button loading state
   const navigate = useNavigate(); // to handle navigation
 
   const handleRegister = async (values) => {
-    setLoading(true);
     try {
-      const response = await axios.post(
-        "https://66dc4a9947d749b72acb34d3.mockapi.io/User",
-        {
-          username: values.username,
-          password: values.password,
-          yearOfBirth: values.yearOfBirth,
-          email: values.email,
-        }
-      );
+      values.role = "User";
+      setLoading(true);
+      const response = await instance.post("register", values);
+      toast.success("Successfully register new account!");
+      navigate("/login");
 
       if (response.status === 201 || response.status === 200) {
         toast.success("Registration successful! Redirecting to login...");
@@ -46,7 +41,7 @@ function RegisterPage() {
             name="username"
             rules={[{ required: true, message: "Username is required" }]}
           >
-            <Input />
+            <Input prefix={<UserOutlined />} />
           </Form.Item>
 
           <Form.Item
@@ -57,23 +52,15 @@ function RegisterPage() {
               { min: 8, message: "Password must be at least 8 characters" },
             ]}
           >
-            <Input.Password />
+            <Input.Password prefix={<KeyOutlined />} />
           </Form.Item>
 
           <Form.Item
-            label="Year of Birth"
-            name="yearOfBirth"
-            rules={[
-              { required: true, message: "Please input year of birth" },
-              {
-                type: "number",
-                min: 1930,
-                max: 2024,
-                message: "Please input yob in range 1930-2024!",
-              },
-            ]}
+            label="Ngày sinh"
+            name="dateOfBirth"
+            rules={[{ required: true, message: "Vui lòng nhập ngày sinh" }]}
           >
-            <InputNumber step={1} placeholder="1930-2024" />
+            <DatePicker style={{ width: "100%" }} />
           </Form.Item>
 
           <Form.Item
@@ -84,20 +71,16 @@ function RegisterPage() {
               { type: "email", message: "Please enter a valid email address" },
             ]}
           >
-            <Input />
+            <Input prefix={<MailOutlined />} />
           </Form.Item>
-
-          <Button
-            className="button"
-            size="large"
-            type="primary"
-            htmlType="submit"
-            loading={loading}
-          >
+          <div>
+            {" "}
+            <Link to="/login">Already have account? Login now !</Link>
+          </div>
+          <Button type="primary" htmlType="submit">
             Register
           </Button>
         </Form>
-        <ToastContainer /> {/* Toastify Container */}
       </div>
     </AuthenTemplate>
   );
