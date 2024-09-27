@@ -2,6 +2,7 @@ package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.KoiTypeRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KTResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiTypesResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.KoiTypeService;
 import lombok.AccessLevel;
@@ -24,24 +25,30 @@ public class KoiTypeController {
     KoiTypeService koiTypeService;
 
     @PostMapping
-    ApiResponse<KoiTypesResponse> createKoiType(@RequestBody KoiTypeRequest request){
-        return ApiResponse.<KoiTypesResponse>builder()
+    ApiResponse<KTResponse> createKoiType(@RequestBody KoiTypeRequest request){
+        return ApiResponse.<KTResponse>builder()
                 .result(koiTypeService.createKoiType(request))
                 .build();
     }
 
     @GetMapping
-    ApiResponse<List<KoiTypesResponse>>getKoiType(){
-        return ApiResponse.<List<KoiTypesResponse>>builder()
+    ApiResponse<List<KTResponse>>getKoiType(){
+        return ApiResponse.<List<KTResponse>>builder()
                 .result(koiTypeService.getKoiTypes())
                 .build();
     }
 
+    @PutMapping("/{koiTypeId}")
+    ApiResponse<KTResponse> updateKoiType(@PathVariable String koiTypeId, @RequestBody KoiTypeRequest request){
+        return ApiResponse.<KTResponse>builder()
+                .result(koiTypeService.updateKoiType(koiTypeId, request))
+                .build();
+    }
 
 
-    @DeleteMapping("/{KoiTypeId}")
-    String deleteUser(@PathVariable String KoiTypeId){
-        koiTypeService.deleteKoiType(KoiTypeId);
+    @DeleteMapping("/{koiTypeId}")
+    String deleteUser(@PathVariable String koiTypeId){
+        koiTypeService.deleteKoiType(koiTypeId);
         return "KoiType has been Deleted!";
     }
 

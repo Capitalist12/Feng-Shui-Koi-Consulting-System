@@ -1,6 +1,5 @@
-package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
+package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
 
-import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,7 +8,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class KoiTypeRequest {
+public class KTResponse {
+
+    String koiTypeId;
     String typeName;
     String description;
+
 }

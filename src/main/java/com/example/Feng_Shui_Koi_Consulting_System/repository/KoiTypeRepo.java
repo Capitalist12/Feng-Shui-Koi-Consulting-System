@@ -12,4 +12,5 @@ public interface KoiTypeRepo extends JpaRepository<KoiTypes, String> {
     Optional<KoiTypes> findByTypeName(String typeName);
 
 
+
 }
