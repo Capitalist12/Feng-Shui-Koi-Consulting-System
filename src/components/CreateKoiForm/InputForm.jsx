@@ -3,8 +3,6 @@ import {
     Button,
     Form,
     Input,
-    InputNumber,
-    Radio,
     Select,
     Space,
 } from 'antd';
@@ -16,18 +14,20 @@ import { createKoiFish } from '../../services/koiAPIService';
 import { toast } from 'react-toastify';
 import { PlusOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import { getAllKoiType, createNewKoiType } from '../../services/koiTypeService';
+import { SIZE_OPTIONS, WEIGHT_OPTIONS } from '../../utils/constant';
 import TextArea from 'antd/es/input/TextArea';
 
 const InputForm = (props) => {
     const { close, save, fetchAPI } = props;
     const [addType, setAddType] = useState(false);
     const [koiType, setKoiType] = useState([]);
+    const [selectedElement, setSelectedElement] = useState([]);
     const [typeInput, setTypeInput] = useState("");
     const [form] = useForm();
 
     const getAllTypes = async () => {
         const response = await getAllKoiType();
-        (response && response.result.length > 0) ? setKoiType(response.result) : setKoiType([]);
+        (response.code === 1000 && response.result.length > 0) ? setKoiType(response.result) : setKoiType([]);
     }
 
     useEffect(() => {
@@ -52,7 +52,7 @@ const InputForm = (props) => {
                     "description": values.description,
                     "imagesURL": Array.isArray(url) ? url : [url],
                     "koiTypeName": values.type,
-                    "elements": Array.isArray(values.element) ? values.element : [values.element],
+                    "elements": Array.isArray(selectedElement) ? selectedElement : [selectedElement],
                 });
 
                 console.log(">>> check response", response);
@@ -138,14 +138,7 @@ const InputForm = (props) => {
                     message: 'Vui lòng chọn kích thước!'
                 }]}
             >
-                <Select showSearch placeholder="Chọn kích thước">
-                    <Select.Option value="< 20 cm">&lt; 20 cm</Select.Option>
-                    <Select.Option value="20-40 cm">20-40 cm</Select.Option>
-                    <Select.Option value="40-60 cm">40-60 cm</Select.Option>
-                    <Select.Option value="60-80 cm">60-80 cm</Select.Option>
-                    <Select.Option value="80-90 cm">80-90 cm</Select.Option>
-                    <Select.Option value="> 90 cm">&gt; 90 cm</Select.Option>
-                </Select>
+                <Select showSearch placeholder="Chọn kích thước" options={SIZE_OPTIONS}/>
             </Form.Item>
 
 
@@ -157,14 +150,7 @@ const InputForm = (props) => {
                     message: 'Vui lòng chọn cân nặng!'
                 }]}
             >
-                <Select showSearch placeholder="Chọn cân nặng">
-                    <Select.Option value="< 1 kg">&lt; 1 kg</Select.Option>
-                    <Select.Option value="1-3 kg">1-3 kg</Select.Option>
-                    <Select.Option value="3-5 kg">3-5 kg</Select.Option>
-                    <Select.Option value="5-7 kg">5-7 kg</Select.Option>
-                    <Select.Option value="7-9 kg">7-9 kg</Select.Option>
-                    <Select.Option value="> 9 kg">&gt; 9 kg</Select.Option>
-                </Select>
+                <Select showSearch placeholder="Chọn cân nặng" options={WEIGHT_OPTIONS}/>
             </Form.Item>
 
             <Form.Item
@@ -228,7 +214,7 @@ const InputForm = (props) => {
                     },
                 ]}
             >
-                <MultiSelectElement />
+                <MultiSelectElement data={selectedElement} onChange={setSelectedElement} customeStyle={{width: '100%'}}/>
             </Form.Item>
 
             <Form.Item label="Thông tin" name="description">

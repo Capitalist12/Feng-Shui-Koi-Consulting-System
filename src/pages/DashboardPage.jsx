@@ -5,19 +5,21 @@ import {
     UserOutlined,
     LineChartOutlined,
 } from '@ant-design/icons';
-import { Button, Layout, Menu, theme, Row, Col, Avatar } from 'antd';
+import { Button, Layout, Menu, theme, Row, Col, Avatar, Tooltip } from 'antd';
 import FormModal from '../components/CreateKoiForm/FormModal';
 import TableKoi from '../components/KoiTable/TableKoi';
 import UserManagement from '../pages/admin/index'
 import { getAllKoiFish } from '../services/koiAPIService';
 import '../styles/DashboardPage.scss';
 import { NavLink, useLocation } from 'react-router-dom';
+import { TbLetterP, TbNumber1 } from 'react-icons/tb';
 
 const { Header, Sider, Content } = Layout;
 
 const DashboardPage = () => {
     const [data, setData] = useState([]);
     const [collapsed, setCollapsed] = useState(false);
+    const [isPaginate, setIsPaginate] = useState(false);
     const currentPath = useLocation();
 
     const fetchAPI = async () => {
@@ -34,6 +36,10 @@ const DashboardPage = () => {
         return endpoint[endpoint.length - 1];
     }
 
+    const togglePaginate = () => {
+        setIsPaginate(!isPaginate);
+    }
+
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -45,6 +51,10 @@ const DashboardPage = () => {
                 <Menu
                     theme="dark"
                     mode="inline"
+                    style={{
+                        position: 'sticky',
+                        top: 0
+                    }}
                     defaultSelectedKeys={['1']}
                     items={[
                         {
@@ -112,19 +122,29 @@ const DashboardPage = () => {
                     }}
                 >
                     {getPathEndpoint(currentPath) === 'koi' ?
-                    <div>
                         <div>
-                            <FormModal fetchAPI={fetchAPI} />
+                            <div className='content-header'>
+                                <div>
+                                    <FormModal fetchAPI={fetchAPI} />
+                                </div>
+                                <div>
+                                    Chế độ xem
+                                    <div className='page-break' onClick={togglePaginate}>
+                                        <Tooltip placement="bottomLeft" title={isPaginate ? "Phân trang" : "Một trang"}>
+                                            {isPaginate ? <TbLetterP /> : <TbNumber1 />}
+                                        </Tooltip>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <TableKoi data={data} fetchAPI={fetchAPI} isPaginate={isPaginate} />
+                            </div>
                         </div>
+                        :
                         <div>
-                            <TableKoi data={data} fetchAPI={fetchAPI}/>
+                            <UserManagement />
                         </div>
-                    </div> 
-                    :
-                    <div>
-                        <UserManagement/>
-                    </div>
-                }
+                    }
                 </Content>
             </Layout>
         </Layout>

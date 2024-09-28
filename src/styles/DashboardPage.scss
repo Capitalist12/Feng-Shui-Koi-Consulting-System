@@ -1,3 +1,23 @@
 .ant-layout {
     min-height: 100vh;
 }
+
+.content-header {
+    margin-bottom: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .page-break {
+        text-align: center;
+        font-size: 1.5em;
+        cursor: pointer;
+        border-radius: 50%;
+        max-width: 30px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: rgb(236, 230, 230);
+        }
+    }
+}

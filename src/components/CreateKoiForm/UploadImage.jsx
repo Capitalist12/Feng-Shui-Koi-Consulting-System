@@ -26,7 +26,7 @@ const UploadImage = ({ value = [], onChange }) => {
     };
 
     const handleChange = ({ fileList: newFileList }) => {
-        console.log(">>> check list: ", newFileList)
+        // console.log(">>> check list: ", newFileList)
         onChange?.(newFileList.filter(file => file.size <= MAX_SIZE)); // Use `onChange` to update form state
     };
 

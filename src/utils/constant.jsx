@@ -35,11 +35,29 @@ const OPTIONS = [
     },
     {
         label: 'Mộc',
-        value: 'Leaf',
+        value: 'Plant',
         emoji: <FaLeaf />,
         desc: 'Cây (Mộc)',
         color: '#5aba47'
     },
 ];
 
-export { OPTIONS };
+const SIZE_OPTIONS = [
+    { value: '< 20 cm', label: '< 20 cm' },
+    { value: '20-40 cm', label: '20-40 cm' },
+    { value: '40-60 cm', label: '40-60 cm' },
+    { value: '60-80 cm', label: '60-80 cm' },
+    { value: '80-90 cm', label: '80-90 cm' },
+    { value: '> 90 cm', label: '> 90 cm' }
+];
+
+const WEIGHT_OPTIONS =[
+    { value: '< 1 kg', label: '< 1 kg' },
+    { value: '1-3 kg', label: '1-3 kg' },
+    { value: '3-5 kg', label: '3-5 kg' },
+    { value: '5-7 kg', label: '5-7 kg' },
+    { value: '7-9 kg', label: '7-9 kg' },
+    { value: '> 9 kg', label: '> 9 kg' }
+];
+
+export { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS };
