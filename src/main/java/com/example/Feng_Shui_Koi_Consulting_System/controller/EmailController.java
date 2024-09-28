@@ -10,10 +10,9 @@ public class EmailController {
     private SendEmailService sendEmailService;
 
     @PostMapping("/sendEmail/{recipient}")
-    public String sendEmail(@PathVariable String recipient,
-                            @RequestParam String body,
-                            @RequestParam String subject){
-
+    public String sendEmail(@PathVariable String recipient){
+        String body = "This is your password that has been create: ";
+        String subject = "Password registered";
         sendEmailService.sendEmail(recipient, body, subject);
         return "Sent successfully";
     }
