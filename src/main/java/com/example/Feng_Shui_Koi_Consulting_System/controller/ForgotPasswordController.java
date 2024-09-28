@@ -43,7 +43,7 @@ public class ForgotPasswordController {
                 .expirationTime(new Date(System.currentTimeMillis() + 70 * 1000))
                 .user(user)
                 .build();
-        sendEmailService.sendEmail("tranhoangdinhk12adv@gmail.com", "Your OTP is: " + otp, "OTP for forgotten password");
+        sendEmailService.sendEmail(user.getEmail(), "Your OTP is: " + otp, "OTP for forgotten password");
         return ResponseEntity.ok("Email sent for verification");
     }
 
