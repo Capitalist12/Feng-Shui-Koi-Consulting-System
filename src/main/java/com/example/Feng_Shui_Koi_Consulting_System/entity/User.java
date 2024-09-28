@@ -33,7 +33,7 @@ public class User {
     @Column(name = "Email")
     String email;
 
-    @Column(name = "ImageLink")
+    @Column(name = "ImageURL")
     String imageLink;
 
     @Column(name = "RoleName")
