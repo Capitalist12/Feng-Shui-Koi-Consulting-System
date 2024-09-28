@@ -36,8 +36,10 @@ public class FishController {
     }
 
     @GetMapping("/{fishId}")
-    KoiFish getFish(@PathVariable("fishId") String fishId){
-        return fishService.getFish(fishId);
+    ApiResponse<KoiFishResponse> getFishByID(@PathVariable("fishId") String fishId){
+        return ApiResponse.<KoiFishResponse>builder()
+                .result(fishService.getFishById(fishId))
+                .build();
     }
 
     @PutMapping("/{fishId}")

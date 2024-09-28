@@ -10,6 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KoiTypeRequest {
-    String TypeName;
-    String Description;
+    String typeName;
+    String description;
 }

@@ -4,6 +4,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationReque
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ElementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiFishResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiFishResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiTypesResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Koi_Image;
@@ -156,34 +157,85 @@ public class FishService {
         }).collect(Collectors.toList());
     }
 
-    public KoiFish getFish(String id){
-        return fishRepo.findById(id).orElseThrow(()
+    public KoiFishResponse getFishById(String id){
+        KoiFish fish =  fishRepo.findById(id).orElseThrow(()
                 -> new AppException(ErrorCode.FISH_NOT_FOUND));
+        Set<ElementResponse> elementResponses = fish.getElements().stream()
+                .map(element -> ElementResponse.builder()
+                        .elementId(element.getElementId())
+                        .elementName(element.getElementName())
+                        .description(element.getDescription())
+                        .quantity(element.getQuantity())
+                        .direction(element.getDirection())
+                        .value(element.getValue())
+                        .build())
+                .collect(Collectors.toSet());
+
+        KoiTypesResponse koiTypesResponse = null;
+
+        var koiType = fish.getKoiTypes();
+        // Convert KoiTypes to KoiTypesResponse if needed
+        koiTypesResponse = KoiTypesResponse.builder()
+                .typeName(koiType.getTypeName())
+                .description(koiType.getDescription())
+                .build();
+
+        return KoiFishResponse.builder()
+                .id(fish.getId())
+                .name(fish.getName())
+                .size(fish.getSize())
+                .weight(fish.getWeight())
+                .color(fish.getColor())
+                .description(fish.getDescription())
+                .koiTypes(koiTypesResponse)  // Assuming KoiType is already mapped
+                .imagesFish(fish.getImagesFish())  // Converted Set<ImageResponse>
+                .elements(elementResponses)  // Assuming elements are already mapped
+                .build();
+
     }
 
 
-    public KoiFishResponse updateFish(String fishId, FishUpdateRequest request){
-        KoiFish fish = fishRepo.findById(fishId).orElseThrow(()
-                        -> new AppException(ErrorCode.FISH_NOT_FOUND));
+    public KoiFishResponse updateFish(String fishId, FishUpdateRequest request) {
+        // Find existing fish or throw an exception
+        KoiFish fish = fishRepo.findById(fishId)
+                .orElseThrow(() -> new AppException(ErrorCode.FISH_NOT_FOUND));
+
+        // Update basic fields
         fish.setName(request.getName());
         fish.setColor(request.getColor());
         fish.setSize(request.getSize());
         fish.setWeight(request.getWeight());
         fish.setDescription(request.getDescription());
 
+        // Handle koi images
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
-            Set<Koi_Image> koiImageEntities = request.getImagesURL().stream()
-                    .map(imageUrl -> {
-                        // Create new Image entities, linking them to the koiFish
-                        Koi_Image koiImage = new Koi_Image();
-                        koiImage.setImageURL(imageUrl);  // Set the image link from the request
-                        koiImage.setKoiFish(fish);        // Set the association to the koiFish
-                        // Handle Tank relationship here if needed, assuming the Tank is already available or from another part of the request
-                        // image.setTank(tank); // You can add tank reference if the Tank entity is required.
-                        return koiImage;
-                    })
-                    .collect(Collectors.toSet());
-            fish.setImagesFish(koiImageEntities); // Set the images in the KoiFish entity
+            Set<String> newImageUrls = new HashSet<>(request.getImagesURL());
+
+            // Get existing images
+            Set<Koi_Image> existingImages = fish.getImagesFish();
+
+            // Remove images that are no longer in the request
+            existingImages.removeIf(existingImage -> !newImageUrls.contains(existingImage.getImageURL()));
+
+            // Add new images
+            newImageUrls.forEach(imageUrl -> {
+                boolean exists = existingImages.stream()
+                        .anyMatch(existingImage -> existingImage.getImageURL().equals(imageUrl));
+
+                if (!exists) {
+                    // Create new image entity
+                    Koi_Image koiImage = new Koi_Image();
+                    koiImage.setKoiImageId(generateImage_Koi());  // You may want to ensure this generates unique IDs
+                    koiImage.setImageURL(imageUrl);
+                    koiImage.setKoiFish(fish);  // Maintain bidirectional relationship
+
+                    // Add new image to existing images
+                    existingImages.add(koiImage);
+                }
+            });
+
+            // Set updated images back to the fish entity
+            fish.setImagesFish(existingImages);
         }
 
         // Handle koiType
@@ -192,21 +244,26 @@ public class FishService {
             var koiType = koiTypeRepo.findByTypeName(request.getKoiTypeName())
                     .orElseThrow(() -> new AppException(ErrorCode.KOI_TYPE_NOT_EXIST));
 
-            // Convert KoiTypes to KoiTypesResponse if needed
+            // Update koiType in fish
+            fish.setKoiTypes(koiType);
+
+            // Convert KoiTypes to response
             koiTypesResponse = KoiTypesResponse.builder()
                     .typeName(koiType.getTypeName())
                     .description(koiType.getDescription())
                     .build();
-
-            fish.setKoiTypes(koiType);
         }
 
+        // Handle elements
         Set<ElementResponse> elementResponses = new HashSet<>();
         if (request.getElements() != null && !request.getElements().isEmpty()) {
             Set<Element> elements = request.getElements().stream()
                     .map(elementName -> elementRepo.findByElementName(elementName)
                             .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST)))
                     .collect(Collectors.toSet());
+
+            // Set elements in the fish entity
+            fish.setElements(elements);
 
             // Convert elements to ElementResponse
             elementResponses = elements.stream()
@@ -219,12 +276,10 @@ public class FishService {
                             .value(element.getValue())
                             .build())
                     .collect(Collectors.toSet());
-
-            // Set elements in the fish entity (optional, if needed for other processing)
-            fish.setElements(elements);
         }
 
-
+        // Save the updated fish entity
+        fishRepo.save(fish);
 
         // Return the response
         return KoiFishResponse.builder()
@@ -235,10 +290,9 @@ public class FishService {
                 .color(fish.getColor())
                 .description(fish.getDescription())
                 .koiTypes(koiTypesResponse)
-                .imagesFish(fish.getImagesFish())
+                .imagesFish(fish.getImagesFish())  // May need a converter for Set<Koi_Image> to a proper response type
                 .elements(elementResponses)
                 .build();
-
     }
 
     public void deleteFish(String fishId) {

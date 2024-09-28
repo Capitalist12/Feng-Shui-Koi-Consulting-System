@@ -40,8 +40,8 @@ public class KoiFish {
     @JsonBackReference
     KoiTypes koiTypes;
 
-    @OneToMany(mappedBy = "koiFish", cascade = CascadeType.ALL,
-            orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "koiFish", cascade = CascadeType.ALL
+            ,orphanRemoval = true)
     @JsonManagedReference
     Set<Koi_Image> imagesFish = new HashSet<>();
 

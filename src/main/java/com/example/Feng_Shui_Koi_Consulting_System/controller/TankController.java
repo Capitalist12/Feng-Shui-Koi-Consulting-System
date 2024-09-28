@@ -36,8 +36,10 @@ public class TankController {
     }
 
     @GetMapping("/{tankId}")
-    Tank getFish(@PathVariable("tankId") String tankId){
-        return tankService.getTank(tankId);
+    ApiResponse<TankResponse> getTank(@PathVariable("tankId") String tankId){
+        return ApiResponse.<TankResponse>builder()
+                .result(tankService.getTankByID(tankId))
+                .build();
     }
 
     @PutMapping("/{tankId}")
