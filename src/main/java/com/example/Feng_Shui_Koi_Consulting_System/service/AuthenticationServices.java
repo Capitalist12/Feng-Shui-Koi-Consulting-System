@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AuthenRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ExchangeTokenRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.IntrospectResquest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.SignUpRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
@@ -10,6 +11,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.UserMapper;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.OutboundIdentityClient;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -42,10 +44,27 @@ import java.util.Date;
 public class AuthenticationServices {
     UserRepository userRepository;
     UserMapper userMapper;
+    OutboundIdentityClient outboundIdentityClient;
 
     @NonFinal
     @Value("${jwt.singerKey}")
     protected String SIGNER_KEY;
+
+    @NonFinal
+    @Value("${outbound.fengshuikoi.client-id}")
+    protected String CLIENT_ID ;
+
+    @NonFinal
+    @Value("${outbound.fengshuikoi.client-secret}")
+    protected String CLIENT_SECRET ;
+
+    @NonFinal
+    @Value("${outbound.fengshuikoi.redirect-uri}")
+    protected String REDIRECT_URI ;
+
+    @NonFinal
+    protected String GRANT_TYPE = "authorization_code";
+
 
 //Method to registed user
     public SignUpResponse registerUser(SignUpRequest request) {
@@ -116,6 +135,23 @@ public class AuthenticationServices {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public AuthenResponse outboundAuthenticate(String code){
+        var response = outboundIdentityClient
+                .exchangeToken(ExchangeTokenRequest.builder()
+                        .code(code)
+                        .clientID(CLIENT_ID)
+                        .clientSecret(CLIENT_SECRET)
+                        .redirectUri(REDIRECT_URI)
+                        .grantType(GRANT_TYPE)
+                        .build());
+
+        log.info("TOKEN RESPONSE{}", response);
+
+        return  AuthenResponse.builder()
+                .token(response.getAccessToken())
+                .build();
     }
 
     private String buildScope(User user) {

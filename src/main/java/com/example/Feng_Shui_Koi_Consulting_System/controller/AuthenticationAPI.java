@@ -25,6 +25,14 @@ import java.text.ParseException;
 public class AuthenticationAPI {
     AuthenticationServices authenticationServices;
 
+    @PostMapping("/outbound/authentication")
+    ApiResponse<AuthenResponse> outboundAuthenticate(
+        @RequestParam("code") String code){
+        var result = authenticationServices.outboundAuthenticate(code);
+        return ApiResponse.<AuthenResponse>builder().result(result).build();
+
+    }
+
     @PostMapping("/signup")
     ApiResponse<SignUpResponse> registerUser( @RequestBody @Valid SignUpRequest request) {
         return ApiResponse.<SignUpResponse>builder()
