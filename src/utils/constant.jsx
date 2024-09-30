@@ -2,6 +2,11 @@ import { FaFire, FaLeaf } from "react-icons/fa";
 import { FaMountainSun } from "react-icons/fa6";
 import { GiMetalBar } from "react-icons/gi";
 import { IoIosWater } from "react-icons/io";
+import {
+    UserOutlined,
+    LineChartOutlined,
+} from '@ant-design/icons';
+import { NavLink } from 'react-router-dom';
 
 
 const OPTIONS = [
@@ -60,4 +65,40 @@ const WEIGHT_OPTIONS =[
     { value: '> 9 kg', label: '> 9 kg' }
 ];
 
-export { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS };
+const DASHBOARD_ITEMS = [
+    {
+        key: '1',
+        icon: <UserOutlined />,
+        label: (
+            <NavLink to="koi" className='nav-link'>
+                Quản lý cá Koi
+            </NavLink>
+        ),
+    },
+    {
+        key: '2',
+        icon: <UserOutlined />,
+        label: (
+            <NavLink to="user" className='nav-link'>
+                Quản lý người dùng
+            </NavLink>
+        ),
+
+    },
+    {
+        key: '3',
+        icon: <LineChartOutlined />,
+        label: (
+            <NavLink to="tank" className='nav-link'>
+                Quản lý hồ cá
+            </NavLink>
+        ),
+    },
+    {
+        key: '4',
+        icon: <LineChartOutlined />,
+        label: 'Bảng thống kê',
+    },
+];
+
+export { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS, DASHBOARD_ITEMS };

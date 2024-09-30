@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Col, Divider, Drawer, Input, Row, Select, Tag } from 'antd';
-import { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS } from '../../utils/constant';
-import '../../styles/KoiDrawer.scss';
+import { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS } from '../../../utils/constant';
+import '../../../styles/KoiDrawer.scss';
 import { DeleteOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import ImageCarousel from './ImageCarousel';
-import { deleteKoiFish } from '../../services/koiAPIService';
-import { getAllKoiType } from '../../services/koiTypeService';
+import { deleteKoiFish } from '../../../services/koiAPIService';
+import { getAllKoiType } from '../../../services/koiTypeService';
 import { toast } from 'react-toastify';
 import { FiEdit } from 'react-icons/fi';
 import TextArea from 'antd/es/input/TextArea';

@@ -1,7 +1,7 @@
 import { Select, Space } from 'antd';
 import TagRender from './TagRender';
 import { DownOutlined } from '@ant-design/icons';
-import { OPTIONS } from '../../utils/constant';
+import { OPTIONS } from '../../../utils/constant';
 import { useEffect, useState } from 'react';
 
 const MAX_COUNT = 3;

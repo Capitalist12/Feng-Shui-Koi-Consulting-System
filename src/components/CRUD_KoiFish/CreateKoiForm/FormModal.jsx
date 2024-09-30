@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import InputForm from './InputForm';
 import { IoMdAdd } from 'react-icons/io';
-import '../../styles/FormModalStyle.scss';
+import '../../../styles/FormModalStyle.scss';
 
 
 //Modal for input new KOI fish

@@ -1,5 +1,5 @@
-import { toast } from "react-toastify";
-import axios from "../utils/axiosConfig";
+import { toast } from "react-toastify";  
+import axios from "../config/axiosConfig";  
 
 const getAllKoiFish = async () => {
     try {
@@ -15,9 +15,14 @@ const createKoiFish = async (payload) => {
     return response;
 }
 
-const updateKoiFish = async (payload) => {
-    const response = await axios.put();
-}
+const updateKoiFish = async (id, payload) => {  
+    try {  
+        const response = await axios.put(`koi/${id}`, payload);  
+        return response;  
+    } catch (err) {  
+        toast.error(err.message);  
+    }  
+}  
 
 const deleteKoiFish = async (id) => {
     try {

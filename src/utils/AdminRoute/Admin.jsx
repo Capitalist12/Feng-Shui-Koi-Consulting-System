@@ -7,12 +7,14 @@ const Admin = () => {
     const navigation = useNavigate();
 
     useEffect(() => {
-        if(!isAdmin){
+        if (!isAdmin) {
             navigation("/login");
+        } else {
+            navigation('/dashboard');
         }
     }, []);
 
-    return <Outlet/>
+    return <Outlet />
 
 }
 

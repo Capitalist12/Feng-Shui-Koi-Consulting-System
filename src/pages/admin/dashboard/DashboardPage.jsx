@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { Button, Layout, Menu, theme, Row, Col, Avatar, Tooltip } from 'antd';
+import FormModal from '../../../components/CRUD_KoiFish/CreateKoiForm/FormModal.jsx';
+import TableKoi from '../../../components/CRUD_KoiFish/KoiTable/TableKoi.jsx';
+import UserManagement from '../../../components/CRUD_User/index.jsx'
+import { getAllKoiFish } from '../../../services/koiAPIService.js';
+import '../../../styles/DashboardPage.scss';
+import { useLocation } from 'react-router-dom';
+import { TbLetterP, TbNumber1 } from 'react-icons/tb';
+import TankManagement from '../../../components/CRUD_Tank/TankManagement.jsx';
+import { DASHBOARD_ITEMS } from '../../../utils/constant.jsx';
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    UserOutlined,
-    LineChartOutlined,
+    UserOutlined
 } from '@ant-design/icons';
-import { Button, Layout, Menu, theme, Row, Col, Avatar, Tooltip } from 'antd';
-import FormModal from '../components/CreateKoiForm/FormModal';
-import TableKoi from '../components/KoiTable/TableKoi';
-import UserManagement from '../pages/admin/index'
-import { getAllKoiFish } from '../services/koiAPIService';
-import '../styles/DashboardPage.scss';
-import { NavLink, useLocation } from 'react-router-dom';
-import { TbLetterP, TbNumber1 } from 'react-icons/tb';
 
 const { Header, Sider, Content } = Layout;
 
@@ -55,33 +56,7 @@ const DashboardPage = () => {
                         position: 'sticky',
                         top: 0
                     }}
-                    defaultSelectedKeys={['1']}
-                    items={[
-                        {
-                            key: '1',
-                            icon: <UserOutlined />,
-                            label: (
-                                <NavLink to="/admin/dashboard/koi" className='nav-link'>
-                                    Quản lý cá Koi
-                                </NavLink>
-                            ),
-                        },
-                        {
-                            key: '2',
-                            icon: <UserOutlined />,
-                            label: (
-                                <NavLink to="/admin/dashboard/user" className='nav-link'>
-                                    Quản lý người dùng
-                                </NavLink>
-                            ),
-
-                        },
-                        {
-                            key: '3',
-                            icon: <LineChartOutlined />,
-                            label: 'Bảng thống kê',
-                        },
-                    ]}
+                    items={DASHBOARD_ITEMS}
                 />
             </Sider>
             <Layout>
@@ -140,10 +115,18 @@ const DashboardPage = () => {
                                 <TableKoi data={data} fetchAPI={fetchAPI} isPaginate={isPaginate} />
                             </div>
                         </div>
-                        :
+                        : getPathEndpoint(currentPath) === 'user' ?
                         <div>
                             <UserManagement />
                         </div>
+                        : getPathEndpoint(currentPath) === 'tank' ?
+                        <div>
+                            <TankManagement/>
+                        </div>
+                        :
+                        <>
+                            Admin dashboard
+                        </>
                     }
                 </Content>
             </Layout>

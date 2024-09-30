@@ -4,6 +4,9 @@ import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import { login } from "../../services/AuthAPIService";
+import { Link, useNavigate } from "react-router-dom";
+import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth";
+import { googleProvider } from "../../config/firebase";
 
 const LoginForm = () => {
   const onFinish = async (values) => {
@@ -11,6 +14,28 @@ const LoginForm = () => {
     console.log('Received values of form: ', values);
     const response = await login({email, password});
 
+  };
+
+
+  const navigate = useNavigate();
+  
+  const handleLoginGoogle = () => {
+    const auth = getAuth();
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+
+        const user = result.user;
+        // login google thành công thì qua trang user
+        navigate("/user");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.customData.email;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+      });
   };
 
   return (
@@ -31,7 +56,7 @@ const LoginForm = () => {
         rules={[
           {
             required: true,
-            message: 'Vui lòng nhập email!',
+            message: "Vui lòng nhập email!",
           },
         ]}
       >
@@ -43,7 +68,7 @@ const LoginForm = () => {
         rules={[
           {
             required: true,
-            message: 'Vui lòng nhập mật khẩu!',
+            message: "Vui lòng nhập mật khẩu!",
           },
         ]}
       >
@@ -54,21 +79,17 @@ const LoginForm = () => {
           <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox>Ghi nhớ tôi</Checkbox>
           </Form.Item>
-          <a href="">Quên mật khẩu?</a>
+          <Link to="">Quên mật khẩu ?</Link>
         </Flex>
       </Form.Item>
-
       <Form.Item>
-        <Button className='login-btn' block type="primary" htmlType="submit">
+        <Button className="login-btn" block type="primary" htmlType="submit">
           Đăng nhập
         </Button>
-        <Button className='login-btn' block htmlType="submit">
+        <Button className="login-btn" onClick={handleLoginGoogle} block>
           Đăng nhập bằng Google <FcGoogle />
         </Button>
-        <Button className='login-btn' block htmlType="submit">
-          Đăng nhập bằng Facebook <FaFacebook color='#0865fe' />
-        </Button>
-        hoặc <a href="">Đăng ký ngay!</a>
+        hoặc <Link to="/register">Đăng kí ngay !</Link>
       </Form.Item>
     </Form>
   );

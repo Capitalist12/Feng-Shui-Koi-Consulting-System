@@ -1,4 +1,4 @@
-import axios from "../utils/axiosConfig.js";
+import axios from "../config/axiosConfig.js";
 import { toast } from "react-toastify";
 
 const getAllKoiType = async () => {

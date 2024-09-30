@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Space, Table, Tag } from 'antd';
-import { OPTIONS } from '../../utils/constant';
+import { OPTIONS } from '../../../utils/constant';
 import KoiDrawer from './KoiDrawer';
-import '../../styles/TableKoi.scss';
+import '../../../styles/TableKoi.scss';
 
 const { Column } = Table;
 

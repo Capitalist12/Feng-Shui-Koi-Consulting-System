@@ -8,13 +8,13 @@ import {
 } from 'antd';
 import MultiSelectElement from './MultiSelectElement';
 import UploadImage from './UploadImage';
-import uploadFile from '../../utils/file';
+import uploadFile from '../../../utils/file';
 import { useForm } from 'antd/es/form/Form.js';
-import { createKoiFish } from '../../services/koiAPIService';
+import { createKoiFish } from '../../../services/koiAPIService';
 import { toast } from 'react-toastify';
 import { PlusOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons';
-import { getAllKoiType, createNewKoiType } from '../../services/koiTypeService';
-import { SIZE_OPTIONS, WEIGHT_OPTIONS } from '../../utils/constant';
+import { getAllKoiType, createNewKoiType } from '../../../services/koiTypeService';
+import { SIZE_OPTIONS, WEIGHT_OPTIONS } from '../../../utils/constant';
 import TextArea from 'antd/es/input/TextArea';
 
 const InputForm = (props) => {

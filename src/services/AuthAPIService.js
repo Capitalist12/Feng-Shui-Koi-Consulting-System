@@ -1,4 +1,4 @@
-import axios from "../utils/axiosConfig";
+import axios from "../config/axiosConfig";
 
 const login = async (payload) => {
     try {
