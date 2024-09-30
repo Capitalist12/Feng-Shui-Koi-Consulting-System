@@ -1,9 +1,9 @@
 import { toast } from "react-toastify";  
-import axios from "../utils/axiosConfig";  
+import instance from "../config/axiosConfig";  
 
 const fetchTank = async () => {  
     try {  
-        const response = await axios.get('tank');  
+        const response = await instance.get('tank');  
         return response.data;  
     } catch (err) {  
         toast.error(err.response?.data?.message || err.message);  
@@ -12,7 +12,7 @@ const fetchTank = async () => {
 
 const createTank = async (payload) => {  
     try {  
-        const response = await axios.post('tank', payload);  
+        const response = await instance.post('tank', payload);  
         toast.success("Tank created successfully!");  
         return response.data;  
     } catch (err) {  
@@ -22,7 +22,7 @@ const createTank = async (payload) => {
 
 const updateTank = async (id, payload) => {  
     try {  
-        const response = await axios.put(`tank/${id}`, payload);  
+        const response = await instance.put(`tank/${id}`, payload);  
         toast.success("Tank updated successfully!");  
         return response.data;  
     } catch (err) {  
@@ -32,7 +32,7 @@ const updateTank = async (id, payload) => {
 
 const deleteTank = async (id) => {  
     try {  
-        const response = await axios.delete(`tank/${id}`);  
+        const response = await instance.delete(`tank/${id}`);  
         toast.success("Tank deleted successfully!"); 
         return response.data;  
     } catch (err) {  

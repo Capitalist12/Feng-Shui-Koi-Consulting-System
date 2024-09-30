@@ -1,16 +1,24 @@
-import React from "react";
-import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Flex } from "antd";
-import { FcGoogle } from "react-icons/fc";
+import React from 'react';
+import { LockOutlined, MailOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Flex } from 'antd';
+import { FcGoogle } from 'react-icons/fc';
+import { FaFacebook } from 'react-icons/fa';
+import { login } from "../../services/AuthAPIService";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth";
 import { googleProvider } from "../../config/firebase";
 
 const LoginForm = () => {
-  const navigate = useNavigate();
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const onFinish = async (values) => {
+    const { email, password } = values;
+    console.log('Received values of form: ', values);
+    const response = await login({email, password});
+
   };
+
+
+  const navigate = useNavigate();
+  
   const handleLoginGoogle = () => {
     const auth = getAuth();
     signInWithPopup(auth, googleProvider)
@@ -29,9 +37,10 @@ const LoginForm = () => {
         const credential = GoogleAuthProvider.credentialFromError(error);
       });
   };
+
   return (
     <Form
-      className="login-form"
+      className='login-form'
       name="login"
       initialValues={{
         remember: true,
@@ -41,7 +50,7 @@ const LoginForm = () => {
       }}
       onFinish={onFinish}
     >
-      <h2 className="login-title">LOGIN</h2>
+      <label htmlFor="email">Email</label>
       <Form.Item
         name="email"
         rules={[
@@ -51,9 +60,9 @@ const LoginForm = () => {
           },
         ]}
       >
-        Email
-        <Input prefix={<MailOutlined />} placeholder="Email" />
+        <Input prefix={<MailOutlined />} type='email' placeholder="Email" />
       </Form.Item>
+      <label htmlFor="password">Mật khẩu</label>
       <Form.Item
         name="password"
         rules={[
@@ -63,12 +72,7 @@ const LoginForm = () => {
           },
         ]}
       >
-        Mật khẩu
-        <Input
-          prefix={<LockOutlined />}
-          type="password"
-          placeholder="Mật khẩu"
-        />
+        <Input.Password prefix={<LockOutlined />} placeholder="Mật khẩu" />
       </Form.Item>
       <Form.Item>
         <Flex justify="space-between" align="center">

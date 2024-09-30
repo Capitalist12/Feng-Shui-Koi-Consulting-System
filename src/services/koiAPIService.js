@@ -1,23 +1,19 @@
 import { toast } from "react-toastify";  
-import axios from "../utils/axiosConfig";  
+import axios from "../config/axiosConfig";  
 
-const getAllKoiFish = async () => {  
-    try {  
-        const response = await axios.get('koi');  
-        return response;  
-    } catch (err) {  
-        toast.error(err.message);  
-    }  
-}  
+const getAllKoiFish = async () => {
+    try {
+        const response = await axios.get('fish');
+        return response;
+    } catch (err) {
+        toast.error(err.message);
+    }
+}
 
-const createKoiFish = async (payload) => {  
-    try {  
-        const response = await axios.post('koi', payload);  
-        return response;  
-    } catch (err) {  
-        toast.error(err.message);  
-    }  
-}  
+const createKoiFish = async (payload) => {
+    const response = await axios.post('fish', payload);
+    return response;
+}
 
 const updateKoiFish = async (id, payload) => {  
     try {  
@@ -28,13 +24,13 @@ const updateKoiFish = async (id, payload) => {
     }  
 }  
 
-const deleteKoiFish = async (id) => {  
-    try {  
-        const response = await axios.delete(`koi/${id}`);  
-        return response;  
-    } catch (err) {  
-        toast.error(err.message);  
-    }  
-}  
+const deleteKoiFish = async (id) => {
+    try {
+        const response = await axios.delete(`fish/${id}`);
+        return response;
+    } catch (err) {
+        toast.error(err.message);
+    }
+}
 
-export { getAllKoiFish, createKoiFish, updateKoiFish, deleteKoiFish };
+export { getAllKoiFish, createKoiFish, deleteKoiFish };

@@ -8,7 +8,7 @@ import {
 import { Button, Form, Input, DatePicker, Flex } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import instance from "../../utils/axiosConfig"; // Adjust the import according to your project structure
+import instance from "../../config/axiosConfig"; // Adjust the import according to your project structure
 
 const RegisterForm = () => {
   const [loading, setLoading] = useState(false);

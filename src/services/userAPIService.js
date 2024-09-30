@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";  
-import axios from "../utils/axiosConfig";  
+import axios from "../config/axiosConfig";  
 
 const fetchUsers = async () => {  
     try {  
