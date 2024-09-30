@@ -11,17 +11,23 @@ import {
   Popconfirm,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
-import axios from "axios";
+import {
+  fetchUsers,
+  deleteUser,
+  createUser,
+  updateUser,
+} from "../../../services/userAPIService";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { PlusOutlined } from "@ant-design/icons";
 import uploadFile from "../../../utils/file";
 import "../../../styles/admin.scss";
+import instance from "../../../utils/axiosConfig";
 
 function UserManagement() {
-  const [users, setUsers] = useState([]);
+  const [data, setData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState();
   const [form] = useForm();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -29,15 +35,13 @@ function UserManagement() {
   const [profileModalVisible, setProfileModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const api = "https://66dc4a9947d749b72acb34d3.mockapi.io/User";
-
-  const fetchUser = async () => {
-    const response = await axios.get(api);
-    setUsers(response.data);
+  const fetchAPI = async () => {
+    const response = await fetchUsers();
+    response && response.length > 0 ? setData(response) : setData([]);
   };
 
   useEffect(() => {
-    fetchUser();
+    fetchAPI();
   }, []);
 
   const columns = [
@@ -104,36 +108,34 @@ function UserManagement() {
     setOpenModal(false);
   };
 
-  const handleSubmitUser = async (user) => {
-    if (fileList.length > 0) {
-      const file = fileList[0];
-      console.log(file);
-      const url = await uploadFile(file.originFileObj);
-      user.image = url;
-    }
-
+  const handleSubmit = async (values) => {
     try {
-      setSubmitting(true);
-      const response = await axios.post(api, user);
-      toast.success("Successfully create new student");
-      handleCloseModal(true);
-
+      setLoading(true);
+      if (values.id) {
+        // => update
+        await updateUser(`category${values.id}`, values);
+      } else {
+        // => create
+        await createUser("category", values);
+      }
+      toast.success("Successfully saved");
+      fetchAPI(); // Update the data displayed
       form.resetFields();
-      fetchUser(response.data);
+      setOpenModal(false);
     } catch (err) {
-      toast.error(err);
+      toast.error(err.response ? err.response.data : "Error occurred");
     } finally {
-      setSubmitting(false);
+      setLoading(false);
     }
   };
 
   const handleDeleteUser = async (id) => {
     try {
-      await axios.delete(`${api}/${id}`);
-      fetchUser();
+      await deleteUser(`${instance}/${id}`);
+      fetchAPI(); // Should call fetchAPI here to update the UI
       toast.success("Delete successfully");
     } catch (err) {
-      toast.error(err);
+      toast.error(err.response ? err.response.data : "Error occurred");
     }
   };
 
@@ -183,15 +185,15 @@ function UserManagement() {
       <Button className="create-user-button" onClick={handleOpenModal}>
         Create New User
       </Button>
-      <Table columns={columns} dataSource={users} />
+      <Table columns={columns} dataSource={data} />
       <Modal
-        confirmLoading={submitting}
+        confirmLoading={loading}
         onOk={() => form.submit()}
         title="Create User"
         open={openModal}
         onCancel={handleCloseModal}
       >
-        <Form onFinish={handleSubmitUser} form={form}>
+        <Form onFinish={handleSubmit} form={form}>
           <Form.Item
             label="Gmail"
             name="gmail"

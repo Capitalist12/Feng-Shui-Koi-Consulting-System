@@ -4,10 +4,10 @@ import DashboardPage from "./pages/admin/dashboard/DashboardPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import UserManagement from "./pages/admin/user-management/index";
 import LoginPage from "./pages/login/LoginPage";
-import Admin from "./components/AdminRoute/Admin";
 import HomePage from "./pages/home/HomePage";
 import ProfilePage from "./pages/user/profile/ProfilePage";
 import UserPage from "./pages/user/UserPage";
+import TankManagement from "./pages/admin/tank-management/TankManagement";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -23,16 +23,16 @@ const App = () => {
       element: <RegisterPage />,
     },
     {
-      path: "admin",
-      element: <Admin />,
+      path: "dashboard",
+      element: <DashboardPage />,
       children: [
         {
-          path: "dashboard",
-          element: <DashboardPage />,
+          path: "user",
+          element: <UserManagement />,
         },
         {
-          path: "dashboard/user",
-          element: <UserManagement />,
+          path: "tank",
+          element: <TankManagement />,
         },
       ],
     },

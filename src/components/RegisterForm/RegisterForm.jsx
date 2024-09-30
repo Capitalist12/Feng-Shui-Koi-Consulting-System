@@ -85,6 +85,10 @@ const RegisterForm = () => {
             type: "email",
             message: "Email không hợp lệ!",
           },
+          {
+            pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            message: "Định dạng email không hợp lệ!",
+          },
         ]}
       >
         Email
