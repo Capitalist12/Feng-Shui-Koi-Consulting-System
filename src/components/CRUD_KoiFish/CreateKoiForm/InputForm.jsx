@@ -27,7 +27,7 @@ const InputForm = (props) => {
 
     const getAllTypes = async () => {
         const response = await getAllKoiType();
-        (response.code === 1000 && response.result.length > 0) ? setKoiType(response.result) : setKoiType([]);
+        (response.data.code === 1000 && response.data.result.length > 0) ? setKoiType(response.data.result) : setKoiType([]);
     }
 
     useEffect(() => {

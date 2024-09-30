@@ -1,13 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Layout, Menu, theme, Row, Col, Avatar, Tooltip } from 'antd';
-import FormModal from '../../../components/CRUD_KoiFish/CreateKoiForm/FormModal.jsx';
-import TableKoi from '../../../components/CRUD_KoiFish/KoiTable/TableKoi.jsx';
-import UserManagement from '../../../components/CRUD_User/index.jsx'
-import { getAllKoiFish } from '../../../services/koiAPIService.js';
+import React, { useState } from 'react';
+import { Button, Layout, Menu, theme, Row, Col, Avatar } from 'antd';
 import '../../../styles/DashboardPage.scss';
-import { useLocation } from 'react-router-dom';
-import { TbLetterP, TbNumber1 } from 'react-icons/tb';
-import TankManagement from '../../../components/CRUD_Tank/TankManagement.jsx';
+import { Outlet } from 'react-router-dom';
 import { DASHBOARD_ITEMS } from '../../../utils/constant.jsx';
 import {
     MenuFoldOutlined,
@@ -18,28 +12,7 @@ import {
 const { Header, Sider, Content } = Layout;
 
 const DashboardPage = () => {
-    const [data, setData] = useState([]);
     const [collapsed, setCollapsed] = useState(false);
-    const [isPaginate, setIsPaginate] = useState(false);
-    const currentPath = useLocation();
-
-    const fetchAPI = async () => {
-        const response = await getAllKoiFish();
-        (response && response.result.length > 0) ? setData(response.result) : setData([]);
-    }
-
-    useEffect(() => {
-        fetchAPI();
-    }, []);
-
-    const getPathEndpoint = (path) => {
-        const endpoint = path.pathname.split("/");
-        return endpoint[endpoint.length - 1];
-    }
-
-    const togglePaginate = () => {
-        setIsPaginate(!isPaginate);
-    }
 
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -96,38 +69,7 @@ const DashboardPage = () => {
                         borderRadius: borderRadiusLG,
                     }}
                 >
-                    {getPathEndpoint(currentPath) === 'koi' ?
-                        <div>
-                            <div className='content-header'>
-                                <div>
-                                    <FormModal fetchAPI={fetchAPI} />
-                                </div>
-                                <div>
-                                    Chế độ xem
-                                    <div className='page-break' onClick={togglePaginate}>
-                                        <Tooltip placement="bottomLeft" title={isPaginate ? "Phân trang" : "Một trang"}>
-                                            {isPaginate ? <TbLetterP /> : <TbNumber1 />}
-                                        </Tooltip>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <TableKoi data={data} fetchAPI={fetchAPI} isPaginate={isPaginate} />
-                            </div>
-                        </div>
-                        : getPathEndpoint(currentPath) === 'user' ?
-                        <div>
-                            <UserManagement />
-                        </div>
-                        : getPathEndpoint(currentPath) === 'tank' ?
-                        <div>
-                            <TankManagement/>
-                        </div>
-                        :
-                        <>
-                            Admin dashboard
-                        </>
-                    }
+                    <Outlet/>
                 </Content>
             </Layout>
         </Layout>

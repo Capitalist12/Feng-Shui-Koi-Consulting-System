@@ -59,7 +59,7 @@ const KoiDrawer = (props) => {
 
   const toggleEditable = async () => {
     const response = await getAllKoiType();
-    (response.code === 1000 && response.result.length > 0) ? setKoiTypeList(response.result) : setKoiTypeList([]);
+    (response.data.code === 1000 && response.data.result.length > 0) ? setKoiTypeList(response.data.result) : setKoiTypeList([]);
     setIsEdit(!isEdit);
   };
 
@@ -209,7 +209,7 @@ const KoiDrawer = (props) => {
 
 
       <Row>
-        <Col span={24} style={{ margin: '0.5em 0' }}>
+        <Col span={24} style={{ margin: '0.3em 0' }}>
           {isEdit ?
             <DescriptionItem
               title="Mệnh"
@@ -302,7 +302,7 @@ const KoiDrawer = (props) => {
         {isEdit ?
           <TextArea
             showCount
-            maxLength={300}
+            maxLength={400}
             value={koiDescription}
             placeholder="Thông tin thêm"
             style={{
