@@ -5,6 +5,7 @@ import RegisterPage from './pages/register/index'
 import LoginPage from './pages/LoginPage';
 import Admin from './components/AdminRoute/Admin';
 import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const App = () => {
     {
       path: "register",
       element: <RegisterPage />,
+    },
+    {
+      path: "userdetail",
+      element: <ProfilePage/>
     },
     {
       path: "admin",
