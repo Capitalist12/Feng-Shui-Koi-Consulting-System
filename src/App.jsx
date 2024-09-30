@@ -41,7 +41,7 @@ const App = () => {
       element: <UserPage />,
       children: [
         {
-          path: "user/profile",
+          path: "profile",
           element: <ProfilePage />,
         },
       ],
