@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang tư vấn</title>
+</head>
+<body>
+    <h1>Chọn mệnh của bạn để nhận tư vấn</h1>
+    <form action="/consult/fishAdvice" method="post">
+        <label for="elementName">Chọn mệnh của bạn:</label>
+        <select name="elementName" id="elementName">
+            <option value="Metal">Kim</option>
+            <option value="Plant">Mộc</option>
+            <option value="Water">Thủy</option>
+            <option value="Fire">Hỏa</option>
+            <option value="Earth">Thổ</option>
+        </select>
+        <button type="submit">Nhận tư vấn</button>
+    </form>
+</body>
+</html>

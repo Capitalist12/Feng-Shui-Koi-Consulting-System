@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tư vấn cá Koi phù hợp với mệnh</title>
+</head>
+<body>
+    <div>
+      <h1>Tư vấn cá Koi phù hợp với mệnh của bạn</h1>
+      <div th:if="${not #lists.isEmpty(koiFishList)}">
+        <ul>
+          <li th:each="koi : ${koiFishList}">
+            <div class="fish-card">
+              <img th:src="${koi.imageID}" alt="Cá Koi" class="fish-image" />
+              <h2 th:text="${koi.name}"></h2>
+<!--                <div th:text="${koi.Size}"></div>-->
+                <div th:text="${koi.description}"></div>
+                <div>Yếu tố phong thủy: <span th:text="${koi.element.elementName}"></span></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div th:if="${#lists.isEmpty(koiFishList)}">
+        <div>Không tìm thấy cá Koi phù hợp với mệnh của bạn.</div>
+      </div>
+    </div>
+</body>
+</html>

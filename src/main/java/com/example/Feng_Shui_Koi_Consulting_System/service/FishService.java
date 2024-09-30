@@ -64,6 +64,10 @@ public class FishService {
         fishRepo.deleteById(fishId);
     }
 
+    public List<KoiFish> getKoiFishByElement(String elementName){
+        return  fishRepo.findFishByElement(elementName);
+    }
+
     public String generateKoiID(){
         return "KF" + String.format("%05d", System.nanoTime() % 100000);
     }

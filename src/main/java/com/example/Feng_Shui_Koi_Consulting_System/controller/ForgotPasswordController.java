@@ -51,12 +51,15 @@ public class ForgotPasswordController {
     public ResponseEntity<String> verifyOtp(@PathVariable Integer otp, @PathVariable String email){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()->new UsernameNotFoundException("Please provide an valid email"));
+
         ForgotPassword fp = forgotPasswordRepo.findByOtpAndUser(otp, user)
                 .orElseThrow(() -> new RuntimeException("Invalid OTP for email: " + email));
+
         if(fp.getExpirationTime().before(Date.from(Instant.now()))){
             forgotPasswordRepo.deleteById(fp.getForgetPasswordId());
             return new ResponseEntity<>("OTP has expired", HttpStatus.EXPECTATION_FAILED);
         }
+
         return ResponseEntity.ok("OTP valid");
     }
 
