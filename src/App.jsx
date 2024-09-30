@@ -7,7 +7,6 @@ import LoginPage from "./pages/login/LoginPage";
 import HomePage from "./pages/home/HomePage";
 import ProfilePage from "./pages/user/profile/ProfilePage";
 import TankManagement from "./components/CRUD_Tank/TankManagement";
-import Admin from "./utils/AdminRoute/Admin";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -29,7 +28,7 @@ const App = () => {
       children: [
         {
           path: "koi",
-          element: <DashboardPage/>
+          element: <DashboardPage />,
         },
         {
           path: "user",
@@ -42,22 +41,9 @@ const App = () => {
       ],
     },
     {
-<<<<<<< HEAD
       path: "user",
-      element: <UserPage />,
-      children: [
-        {
-          path: "profile",
-          element: <ProfilePage />,
-        },
-      ],
+      element: <ProfilePage />,
     },
-=======
-      path: 'user',
-      element: <ProfilePage/>
-    }
-    
->>>>>>> ae44a6f9277a1fdd0c77b2944c8972fb7bbe6a1c
   ]);
 
   return <RouterProvider router={router} />;
