@@ -12,6 +12,9 @@ import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +29,9 @@ import java.util.stream.Collectors;
 public class UserService {
      UserRepository userRepository;
      UserMapper userMapper;
+     String fromEmailId;
+     JavaMailSender javaMailSender;
+     @Value("$(spring.mail.username)")
 
     public UserResponse createUser(UserCreationRequest request) {
 
@@ -38,6 +44,9 @@ public class UserService {
         user.setUserID(generateUserID());
         user.setRoleName(String.valueOf(Roles.USER));
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        sendEmail(user.getEmail(),
+                "Welcome " + user.getUsername() + "! Your password is: " + request.getPassword(),
+                "Account Creation Successful");
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
@@ -71,4 +80,13 @@ public class UserService {
         userRepository.deleteById(userID);
     }
 
+    public void sendEmail(String recipient, String body, String subject){
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom(fromEmailId);
+        simpleMailMessage.setTo(recipient);
+        simpleMailMessage.setText(body);
+        simpleMailMessage.setSubject(subject);
+
+        javaMailSender.send(simpleMailMessage);
+    }
 }
