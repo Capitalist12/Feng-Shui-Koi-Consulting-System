@@ -1,4 +1,4 @@
-package com.example.Feng_Shui_Koi_Consulting_System.repository;
+package com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ExchangeTokenRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ExchangeTokenResponse;
 import feign.QueryMap;

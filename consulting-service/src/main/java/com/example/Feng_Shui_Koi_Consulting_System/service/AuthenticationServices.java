@@ -11,12 +11,12 @@ import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.UserMapper;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.OutboundIdentityClient;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundIdentityClient;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundUserClient;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;
@@ -45,6 +45,7 @@ public class AuthenticationServices {
     UserRepository userRepository;
     UserMapper userMapper;
     OutboundIdentityClient outboundIdentityClient;
+    OutboundUserClient outboundUserClient;
 
     @NonFinal
     @Value("${jwt.singerKey}")
@@ -78,7 +79,7 @@ public class AuthenticationServices {
 
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
         user.setRoleName(String.valueOf(Roles.USER));
-        user.setPlanID("1");
+        user.setPlanID("PP005");
         user.setElementID(null);
         user.setDeleteStatus(false);
         return userMapper.toSignUpResponse(userRepository.save(user));
@@ -134,7 +135,6 @@ public class AuthenticationServices {
             log.error("Can create token",e);
             throw new RuntimeException(e);
         }
-
     }
 
     public AuthenResponse outboundAuthenticate(String code){
@@ -148,6 +148,19 @@ public class AuthenticationServices {
                         .build());
 
         log.info("TOKEN RESPONSE{}", response);
+
+        var userInfo = outboundUserClient.getUserInfo("json",response.getAccessToken());
+
+        log.info("User info{}:", userInfo);
+
+        var user = userRepository.findByUsername(userInfo.getEmail()).orElseGet(
+                ()-> userRepository.save(User.builder()
+                                .userID(generateUserID())
+                                .email(userInfo.getEmail())
+                                .username(userInfo.getName())
+                                .password(userInfo.getEmail())
+                                .roleName(String.valueOf(Roles.USER))
+                                .build()));
 
         return  AuthenResponse.builder()
                 .token(response.getAccessToken())
