@@ -29,9 +29,10 @@ import java.util.stream.Collectors;
 public class UserService {
      UserRepository userRepository;
      UserMapper userMapper;
-     String fromEmailId;
-     JavaMailSender javaMailSender;
-     @Value("$(spring.mail.username)")
+//    JavaMailSender javaMailSender;
+//    private String fromEmailId;
+
+//    @Value("$(spring.mail.username)")
 
     public UserResponse createUser(UserCreationRequest request) {
 
@@ -44,9 +45,10 @@ public class UserService {
         user.setUserID(generateUserID());
         user.setRoleName(String.valueOf(Roles.USER));
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        sendEmail(user.getEmail(),
-                "Welcome " + user.getUsername() + "! Your password is: " + request.getPassword(),
-                "Account Creation Successful");
+//        user.setEmail(request.getEmail());
+//        sendEmail(request.getEmail(),
+//                "Welcome " + request.getUsername() + "! Your password is: " + request.getPassword(),
+//                "Account Creation Successful");
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
@@ -55,7 +57,7 @@ public class UserService {
         return "U" + String.format("%09d", System.nanoTime() % 1000000000);
     }
 //@PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponse> geUsers(){
+    public List<UserResponse> getUsers(){
         return userRepository.findAll().stream()
                 .map(userMapper :: toUserResponse).collect(Collectors.toList());
     }
@@ -80,13 +82,13 @@ public class UserService {
         userRepository.deleteById(userID);
     }
 
-    public void sendEmail(String recipient, String body, String subject){
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(fromEmailId);
-        simpleMailMessage.setTo(recipient);
-        simpleMailMessage.setText(body);
-        simpleMailMessage.setSubject(subject);
-
-        javaMailSender.send(simpleMailMessage);
-    }
+//    public void sendEmail(String recipient, String body, String subject){
+//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+//        simpleMailMessage.setFrom(fromEmailId);
+//        simpleMailMessage.setTo(recipient);
+//        simpleMailMessage.setText(body);
+//        simpleMailMessage.setSubject(subject);
+//
+//        javaMailSender.send(simpleMailMessage);
+//    }
 }
