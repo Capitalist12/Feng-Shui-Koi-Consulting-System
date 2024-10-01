@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,9 +52,21 @@ public class UserService {
                 .map(userMapper :: toUserResponse).collect(Collectors.toList());
     }
 
-    public User getUserByID(String id){
-        return userRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("User not found!"));
+    public UserResponse getMyInfo(){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+        return userMapper.toUserResponse(user);
+    }
+
+
+    public UserResponse getUserById(String id) {
+        User user =  userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+        return userMapper.toUserResponse(user);
+
     }
 
     public UserResponse updateUser(String userID, UserUpdateRequest request){
