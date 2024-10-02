@@ -19,10 +19,5 @@ public class SwaggerConfig {
                 .description("Spring Boot Rest API")
                 .contact(new Contact().name("Thang111"))
                 .version("1.0.0"));
-
-
-
     }
-
-
 }

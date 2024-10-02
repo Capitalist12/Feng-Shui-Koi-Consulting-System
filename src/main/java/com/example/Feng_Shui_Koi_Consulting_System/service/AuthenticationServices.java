@@ -52,15 +52,15 @@ public class AuthenticationServices {
     protected String SIGNER_KEY;
 
     @NonFinal
-    @Value("${outbound.fengshuikoi.client-id}")
+    @Value("${outbound.client-id}")
     protected String CLIENT_ID ;
 
     @NonFinal
-    @Value("${outbound.fengshuikoi.client-secret}")
+    @Value("${outbound.client-secret}")
     protected String CLIENT_SECRET ;
 
     @NonFinal
-    @Value("${outbound.fengshuikoi.redirect-uri}")
+    @Value("${outbound.redirect-uri}")
     protected String REDIRECT_URI ;
 
     @NonFinal
@@ -79,7 +79,7 @@ public class AuthenticationServices {
 
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
         user.setRoleName(String.valueOf(Roles.USER));
-        user.setPlanID("PP005");
+//        user.setPlanID("PP005");
         user.setElementID(null);
         user.setDeleteStatus(false);
         return userMapper.toSignUpResponse(userRepository.save(user));
@@ -137,6 +137,21 @@ public class AuthenticationServices {
         }
     }
 
+    public AuthenResponse authenticate(AuthenRequest request) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        var user = userRepository
+                .findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+
+        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
+
+        if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        var token = generateToken(user);
+
+        return AuthenResponse.builder().token(token).authenticated(true).build();
+    }
+
     public AuthenResponse outboundAuthenticate(String code){
         var response = outboundIdentityClient
                 .exchangeToken(ExchangeTokenRequest.builder()
@@ -149,11 +164,13 @@ public class AuthenticationServices {
 
         log.info("TOKEN RESPONSE{}", response);
 
-        var userInfo = outboundUserClient.getUserInfo("json",response.getAccessToken());
+        // Get user info
+        var userInfo = outboundUserClient.getUserInfo("json", response.getAccessToken());
 
         log.info("User info{}:", userInfo);
 
-        var user = userRepository.findByUsername(userInfo.getEmail()).orElseGet(
+        //On board user
+        var user = userRepository.findByEmail(userInfo.getEmail()).orElseGet(
                 ()-> userRepository.save(User.builder()
                                 .userID(generateUserID())
                                 .email(userInfo.getEmail())
@@ -161,6 +178,7 @@ public class AuthenticationServices {
                                 .password(userInfo.getEmail())
                                 .roleName(String.valueOf(Roles.USER))
                                 .build()));
+
 
         return  AuthenResponse.builder()
                 .token(response.getAccessToken())

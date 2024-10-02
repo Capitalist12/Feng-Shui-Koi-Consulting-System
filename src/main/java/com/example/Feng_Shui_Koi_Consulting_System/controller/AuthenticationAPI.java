@@ -40,7 +40,11 @@ public class AuthenticationAPI {
                 .build();
 
     }
-
+    @PostMapping("/token")
+    ApiResponse<AuthenResponse> authenticate(@RequestBody AuthenRequest request) {
+        var result = authenticationServices.authenticate(request);
+        return ApiResponse.<AuthenResponse>builder().result(result).build();
+    }
 
     @PostMapping("/login")
     ApiResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) {
