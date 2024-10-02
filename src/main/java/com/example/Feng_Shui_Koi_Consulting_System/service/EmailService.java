@@ -18,9 +18,6 @@ public class EmailService {
     String fromEmailId;
 
     public void sendEmail(String recipient, String body, String subject){
-        if (!isValidEmail(recipient)) {
-            throw new RuntimeException("Invalid email format");
-        }
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(fromEmailId);
         simpleMailMessage.setTo(recipient);
@@ -28,10 +25,5 @@ public class EmailService {
         simpleMailMessage.setSubject(subject);
 
         javaMailSender.send(simpleMailMessage);
-    }
-
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        return email.matches(emailRegex);
     }
 }
