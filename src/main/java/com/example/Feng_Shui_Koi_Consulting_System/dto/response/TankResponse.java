@@ -16,5 +16,4 @@ public class TankResponse {
     String shape;
     String imageURL;
     ElementResponse elementTank;
-
 }

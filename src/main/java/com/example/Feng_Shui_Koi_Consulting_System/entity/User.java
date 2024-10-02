@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -8,7 +9,7 @@ import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "`User`")
+@Table(name = "User")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,6 +32,7 @@ public class User {
     LocalDate dateOfBirth;
 
     @Column(name = "Email")
+    @Email(message = "Invalid email format")
     String email;
 
     @Column(name = "ImageURL")

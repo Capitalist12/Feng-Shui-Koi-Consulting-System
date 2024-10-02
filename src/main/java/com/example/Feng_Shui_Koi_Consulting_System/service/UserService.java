@@ -12,10 +12,10 @@ import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,10 +29,6 @@ import java.util.stream.Collectors;
 public class UserService {
      UserRepository userRepository;
      UserMapper userMapper;
-//    JavaMailSender javaMailSender;
-//    private String fromEmailId;
-
-//    @Value("$(spring.mail.username)")
 
     public UserResponse createUser(UserCreationRequest request) {
 
@@ -45,10 +41,7 @@ public class UserService {
         user.setUserID(generateUserID());
         user.setRoleName(String.valueOf(Roles.USER));
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-//        user.setEmail(request.getEmail());
-//        sendEmail(request.getEmail(),
-//                "Welcome " + request.getUsername() + "! Your password is: " + request.getPassword(),
-//                "Account Creation Successful");
+        user.setEmail(request.getEmail().trim());
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
@@ -81,14 +74,4 @@ public class UserService {
     public void deleteUser(String userID){
         userRepository.deleteById(userID);
     }
-
-//    public void sendEmail(String recipient, String body, String subject){
-//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-//        simpleMailMessage.setFrom(fromEmailId);
-//        simpleMailMessage.setTo(recipient);
-//        simpleMailMessage.setText(body);
-//        simpleMailMessage.setSubject(subject);
-//
-//        javaMailSender.send(simpleMailMessage);
-//    }
 }

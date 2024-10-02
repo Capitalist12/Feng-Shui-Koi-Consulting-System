@@ -1,13 +1,12 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingFishResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ElementResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiFishResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiTypesResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
+import com.example.Feng_Shui_Koi_Consulting_System.mapper.ElementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.FishRepo;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.TankRepo;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +22,8 @@ import java.util.stream.Collectors;
 public class ConsultingService {
 
     FishRepo fishRepo;
+    TankRepo tankRepo;
+    ElementMapper elementMapper;
 
     public List<ConsultingFishResponse> koiFishList(Integer elementID){
         return fishRepo.findByElementID(elementID).stream().map(fish -> {
@@ -47,4 +48,17 @@ public class ConsultingService {
                     .build();
         }).collect(Collectors.toList());
     }
+
+//    public List<TankResponse> tankList(Integer elementID){
+//        return tankRepo.findAll().stream().map(tank -> {
+//            ElementResponse elementResponse = elementMapper
+//                    .toElementResponse(tank.getElementTank());
+//            return TankResponse.builder()
+//                    .tankId(tank.getTankId())
+//                    .shape(tank.getShape())
+//                    .imageURL(tank.getImageURL())
+//                    .elementTank(elementResponse)
+//                    .build();
+//        }).collect(Collectors.toList());
+//    }
 }

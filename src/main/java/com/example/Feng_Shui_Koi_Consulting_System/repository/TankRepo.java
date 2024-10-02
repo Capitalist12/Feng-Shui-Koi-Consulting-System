@@ -2,9 +2,14 @@ package com.example.Feng_Shui_Koi_Consulting_System.repository;
 
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Tank;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface TankRepo extends JpaRepository<Tank, String> {
     boolean existsByShape(String shape);
+//    @Query("SELECT ta FROM Tank ta JOIN ta.elementID e WHERE e.elementId = :elementID")
+//    List<Tank> findByElementId(String elementID);
 }

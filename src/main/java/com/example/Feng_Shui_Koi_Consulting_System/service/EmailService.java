@@ -8,21 +8,19 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Service
-public class SendEmailService {
+public class EmailService {
     @Autowired
     JavaMailSender javaMailSender;
 
-    @Value("$(spring.mail.username)")
-
-    private String fromEmailId;
+    @Value("${spring.mail.username}")
+    String fromEmailId;
 
     public void sendEmail(String recipient, String body, String subject){
+        if (!isValidEmail(recipient)) {
+            throw new RuntimeException("Invalid email format");
+        }
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(fromEmailId);
         simpleMailMessage.setTo(recipient);
@@ -30,5 +28,10 @@ public class SendEmailService {
         simpleMailMessage.setSubject(subject);
 
         javaMailSender.send(simpleMailMessage);
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(emailRegex);
     }
 }

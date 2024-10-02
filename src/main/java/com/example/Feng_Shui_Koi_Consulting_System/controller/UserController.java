@@ -5,13 +5,13 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationReque
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
+import com.example.Feng_Shui_Koi_Consulting_System.service.EmailService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,16 +24,27 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
      UserService userService;
+     EmailService emailService;
 
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
+        UserResponse userResponse = userService.createUser(request);
+        try {
+            emailService.sendEmail(
+                    request.getEmail().trim(),
+                    "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
+                    "Account Creation Successful"
+            );
+        } catch (Exception e) {
+            System.err.println("Error sending email: " + e.getMessage());
+        }
         return ApiResponse.<UserResponse>builder()
-                .result(userService.createUser(request))
+                .result(userResponse)
                 .build();
     }
 
     @GetMapping
-    ApiResponse<List<UserResponse>>geUsers(){
+    ApiResponse<List<UserResponse>>getUsers(){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username: {}", authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
