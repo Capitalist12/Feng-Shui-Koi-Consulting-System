@@ -43,8 +43,8 @@ public class AuthenticationAPI {
     }
 
     @PostMapping("/introspect")
-    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectResquest resquest) throws ParseException, JOSEException {
-        var valid = authenticationServices.introspected(resquest);
+    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectResquest request) throws ParseException, JOSEException {
+        var valid = authenticationServices.introspected(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(valid)
                 .build();

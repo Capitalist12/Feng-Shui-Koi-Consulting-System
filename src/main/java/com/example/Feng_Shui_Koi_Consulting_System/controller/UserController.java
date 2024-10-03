@@ -23,28 +23,23 @@ import java.util.List;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
-     UserService userService;
-     EmailService emailService;
+    UserService userService;
+    EmailService emailService;
 
     @PostMapping
-    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         UserResponse userResponse = userService.createUser(request);
-        try {
-            emailService.sendEmail(
-                    request.getEmail().trim(),
-                    "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
-                    "Account Creation Successful"
-            );
-        } catch (Exception e) {
-            System.err.println("Error sending email: " + e.getMessage());
-        }
+        emailService.sendEmail(
+                request.getEmail().trim(),
+                "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
+                "Account Creation Successful");
         return ApiResponse.<UserResponse>builder()
                 .result(userResponse)
                 .build();
     }
 
     @GetMapping
-    ApiResponse<List<UserResponse>>getUsers(){
+    ApiResponse<List<UserResponse>> getUsers() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username: {}", authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
@@ -54,19 +49,19 @@ public class UserController {
     }
 
     @GetMapping("/{userID}")
-    User getUserByID(@PathVariable String userID){
+    User getUserByID(@PathVariable String userID) {
         return userService.getUserByID(userID);
     }
 
     @PutMapping("/{userID}")
-    ApiResponse<UserResponse> updateUser(@PathVariable String userID, @RequestBody @Valid  UserUpdateRequest request){
+    ApiResponse<UserResponse> updateUser(@PathVariable String userID, @RequestBody @Valid UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
-                .result(userService.updateUser(userID,request))
+                .result(userService.updateUser(userID, request))
                 .build();
     }
 
     @DeleteMapping("/{userID}")
-    String deleteUser(@PathVariable String userID){
+    String deleteUser(@PathVariable String userID) {
         userService.deleteUser(userID);
         return "User has been Deleted!";
     }

@@ -18,6 +18,7 @@ import java.time.LocalDate;
 
 
 public class User {
+
     @Id
     @Column(name = "UserID")
     String userID;
@@ -32,7 +33,6 @@ public class User {
     LocalDate dateOfBirth;
 
     @Column(name = "Email")
-    @Email(message = "Invalid email format")
     String email;
 
     @Column(name = "ImageURL")

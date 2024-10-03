@@ -14,7 +14,7 @@ public enum ErrorCode {
     INVALID_KEY(1005, "Invalid message key", HttpStatus.BAD_REQUEST),
     UNCATEGORIZED_EXCEPTION(999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     USER_EXIST(1006,"User existed", HttpStatus.BAD_REQUEST),
-    EMAIL_EXITST(1007,"Email existed", HttpStatus.BAD_REQUEST),
+    EMAIL_EXIST(1007,"Email existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXIST(1008,"User not exist", HttpStatus.NOT_FOUND),
     EMAIL_NOT_EXIST(1009,"Email not exist", HttpStatus.NOT_FOUND),
     KOI_TYPE_NOT_EXIST(1010,"KoiType not exist", HttpStatus.NOT_FOUND),

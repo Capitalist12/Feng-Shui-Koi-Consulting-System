@@ -52,7 +52,7 @@ public class AuthenticationServices {
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXIST);
         if (userRepository.existsByEmail(request.getEmail()))
-            throw new AppException(ErrorCode.EMAIL_EXITST);
+            throw new AppException(ErrorCode.EMAIL_EXIST);
         User user = userMapper.toUser(request);
         user.setUserID(generateUserID());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
