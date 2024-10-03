@@ -24,17 +24,17 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
     UserService userService;
-    EmailService emailService;
+//    EmailService emailService;
 
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
-        UserResponse userResponse = userService.createUser(request);
-        emailService.sendEmail(
-                request.getEmail().trim(),
-                "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
-                "Account Creation Successful");
+//        UserResponse userResponse = userService.createUser(request);
+//        emailService.sendEmail(
+//                request.getEmail().trim(),
+//                "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
+//                "Account Creation Successful");
         return ApiResponse.<UserResponse>builder()
-                .result(userResponse)
+                .result(userService.createUser(request))
                 .build();
     }
 

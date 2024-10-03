@@ -8,6 +8,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AuthenticationServices;
+import com.example.Feng_Shui_Koi_Consulting_System.service.EmailService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -24,11 +25,17 @@ import java.text.ParseException;
 @RequestMapping("/auth")
 public class AuthenticationAPI {
     AuthenticationServices authenticationServices;
+    EmailService emailService;
 
     @PostMapping("/signup")
     ApiResponse<SignUpResponse> registerUser( @RequestBody @Valid SignUpRequest request) {
+        SignUpResponse registerUser = authenticationServices.registerUser(request);
+        emailService.sendEmail(
+                request.getEmail().trim(),
+                "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
+                "Account Creation Successful");
         return ApiResponse.<SignUpResponse>builder()
-                .result(authenticationServices.registerUser(request))
+                .result(registerUser)
                 .build();
 
     }

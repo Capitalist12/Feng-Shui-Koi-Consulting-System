@@ -41,7 +41,7 @@ public class UserService {
         user.setUserID(generateUserID());
         user.setRoleName(String.valueOf(Roles.USER));
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setEmail(request.getEmail().trim());
+//        user.setEmail(request.getEmail().trim());
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
