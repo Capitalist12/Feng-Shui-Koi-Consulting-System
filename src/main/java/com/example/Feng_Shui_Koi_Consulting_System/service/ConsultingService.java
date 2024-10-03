@@ -49,12 +49,12 @@ public class ConsultingService {
         }).collect(Collectors.toList());
     }
 
-    public List<TankResponse> tankList(Integer elementID)
+    public List<ConsultingTankResponse> tankList(Integer elementID)
     {
         return tankRepo.findByElementTank_ElementID(elementID).stream().map(tank -> {
             ElementResponse elementResponse = elementMapper
                     .toElementResponse(tank.getElementTank());
-            return TankResponse.builder()
+            return ConsultingTankResponse.builder()
                     .tankId(tank.getTankId())
                     .shape(tank.getShape())
                     .imageURL(tank.getImageURL())

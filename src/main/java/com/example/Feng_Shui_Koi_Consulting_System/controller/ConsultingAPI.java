@@ -2,6 +2,7 @@ package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingFishResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingTankResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.TankResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ConsultingService;
 import lombok.AccessLevel;
@@ -29,8 +30,8 @@ public class ConsultingAPI {
     }
 
     @GetMapping("/tank/{elementID}")
-    public ApiResponse<List<TankResponse>> getTankByElement(@PathVariable Integer elementID){
-        return ApiResponse.<List<TankResponse>>
+    public ApiResponse<List<ConsultingTankResponse>> getTankByElement(@PathVariable Integer elementID){
+        return ApiResponse.<List<ConsultingTankResponse>>
                 builder().result(consultingService.tankList(elementID)).build();
     }
 }
