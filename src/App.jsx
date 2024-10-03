@@ -2,7 +2,6 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DashboardPage from "./pages/admin/dashboard/DashboardPage";
 import RegisterPage from "./pages/register/RegisterPage";
-import UserManagement from "./components/CRUD_User/index";
 import LoginPage from "./pages/login/LoginPage";
 import HomePage from "./pages/home/HomePage";
 import ProfilePage from "./pages/user/profile/ProfilePage";
@@ -34,7 +33,7 @@ const App = () => {
         },
         {
           path: "user",
-          element: <UserManagement />,
+          element: <DashboardPage />,
         },
         {
           path: "tank",

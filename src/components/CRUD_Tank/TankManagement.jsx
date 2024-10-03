@@ -1,7 +1,7 @@
 import { Button, Form, Input, Upload } from "antd";
 
 import { UploadOutlined } from "@ant-design/icons";
-import CRUDTemplate from "../crud-template/CRUDTemplate";
+// import CRUDTemplate from "../crud-template/CRUDTemplate";
 import {
   fetchTank,
   createTank,
@@ -89,12 +89,12 @@ function TankManagement() {
 
   return (
     <div>
-      <CRUDTemplate
+      {/* <CRUDTemplate
         columns={columns}
         formItems={formItems}
         // theo api tren swagger
         path={"tank"}
-      />
+      /> */}
     </div>
   );
 }

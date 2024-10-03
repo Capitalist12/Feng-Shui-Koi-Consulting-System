@@ -4,6 +4,7 @@ import { Tooltip } from "antd";
 import { TbLetterP, TbNumber1 } from "react-icons/tb";
 import TableKoi from "./KoiTable/TableKoi";
 import { getAllKoiFish } from "../../services/koiAPIService";
+import BackToTopBtn from "../Utils/BackToTopBtn";
 
 const KoiContainer = () => {
     const [data, setData] = useState([]);
@@ -42,6 +43,7 @@ const KoiContainer = () => {
             <div>
                 <TableKoi data={data} fetchAPI={fetchAPI} isPaginate={isPaginate} />
             </div>
+            {!isPaginate && <BackToTopBtn/>}
         </div>
     );
 }
