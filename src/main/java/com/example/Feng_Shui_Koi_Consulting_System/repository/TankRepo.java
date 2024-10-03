@@ -10,6 +10,5 @@ import java.util.List;
 @Repository
 public interface TankRepo extends JpaRepository<Tank, String> {
     boolean existsByShape(String shape);
-//    @Query("SELECT ta FROM Tank ta JOIN ta.elementID e WHERE e.elementId = :elementID")
-//    List<Tank> findByElementId(String elementID);
+    List<Tank> findByElementTank_ElementID(Integer elementID);
 }

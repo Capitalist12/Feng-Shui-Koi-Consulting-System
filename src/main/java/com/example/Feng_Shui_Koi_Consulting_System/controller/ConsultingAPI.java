@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/consult")
-public class Consulting {
+public class ConsultingAPI {
 
     ConsultingService consultingService;
 
@@ -28,8 +28,9 @@ public class Consulting {
                 builder().result(consultingService.koiFishList(elementID)).build();
     }
 
-//    @GetMapping("/tank/{elementID}")
-//    public ApiResponse<List<TankResponse>> getTankByElement(@PathVariable Integer elementID){
-//        return ApiResponse.<List<TankResponse>>builder().result(consultingService.tankList(elementID)).build();
-//    }
+    @GetMapping("/tank/{elementID}")
+    public ApiResponse<List<TankResponse>> getTankByElement(@PathVariable Integer elementID){
+        return ApiResponse.<List<TankResponse>>
+                builder().result(consultingService.tankList(elementID)).build();
+    }
 }

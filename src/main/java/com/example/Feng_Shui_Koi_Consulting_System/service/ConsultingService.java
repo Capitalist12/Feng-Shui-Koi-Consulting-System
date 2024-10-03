@@ -49,16 +49,17 @@ public class ConsultingService {
         }).collect(Collectors.toList());
     }
 
-//    public List<TankResponse> tankList(Integer elementID){
-//        return tankRepo.findAll().stream().map(tank -> {
-//            ElementResponse elementResponse = elementMapper
-//                    .toElementResponse(tank.getElementTank());
-//            return TankResponse.builder()
-//                    .tankId(tank.getTankId())
-//                    .shape(tank.getShape())
-//                    .imageURL(tank.getImageURL())
-//                    .elementTank(elementResponse)
-//                    .build();
-//        }).collect(Collectors.toList());
-//    }
+    public List<TankResponse> tankList(Integer elementID)
+    {
+        return tankRepo.findByElementTank_ElementID(elementID).stream().map(tank -> {
+            ElementResponse elementResponse = elementMapper
+                    .toElementResponse(tank.getElementTank());
+            return TankResponse.builder()
+                    .tankId(tank.getTankId())
+                    .shape(tank.getShape())
+                    .imageURL(tank.getImageURL())
+                    .elementTank(elementResponse)
+                    .build();
+        }).collect(Collectors.toList());
+    }
 }
