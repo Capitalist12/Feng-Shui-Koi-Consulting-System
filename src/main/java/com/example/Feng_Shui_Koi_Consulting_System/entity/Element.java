@@ -29,6 +29,12 @@ public class Element {
     String direction;
     @Column(name = "Value")
     int value;
+    @Column(name = "Color")
+    String color;
+    @Column(name = "Generation") //Tuong sinh
+    String generation;
+    @Column(name = "Inhibition") //Tuong khac
+    String inhibition;
 
     @ManyToMany(mappedBy = "elements")
     @JsonManagedReference

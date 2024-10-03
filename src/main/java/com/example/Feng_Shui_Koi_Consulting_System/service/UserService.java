@@ -52,9 +52,13 @@ public class UserService {
                 .map(userMapper :: toUserResponse).collect(Collectors.toList());
     }
 
-    public User getUserByID(String id){
-        return userRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("User not found!"));
+
+
+    public UserResponse getUserById(String id) {
+        User user =  userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+        return userMapper.toUserResponse(user);
+
     }
 
     public UserResponse updateUser(String userID, UserUpdateRequest request){
