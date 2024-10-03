@@ -15,10 +15,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@Data
-@Builder
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/auth")

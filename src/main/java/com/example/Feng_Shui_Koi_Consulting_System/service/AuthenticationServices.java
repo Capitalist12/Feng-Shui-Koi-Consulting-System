@@ -117,7 +117,7 @@ public class AuthenticationServices {
     private String generateToken(User user) {
        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getUsername())
+                .subject(user.getEmail())
                 .issuer("Fengshui.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
@@ -179,9 +179,10 @@ public class AuthenticationServices {
                                 .roleName(String.valueOf(Roles.USER))
                                 .build()));
 
+        var token = generateToken(user);
 
         return  AuthenResponse.builder()
-                .token(response.getAccessToken())
+                .token(token)
                 .build();
     }
 
