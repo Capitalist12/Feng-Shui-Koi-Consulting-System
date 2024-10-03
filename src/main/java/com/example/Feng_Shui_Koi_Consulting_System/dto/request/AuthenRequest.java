@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 public class AuthenRequest {
     @NotBlank
     @Email
-    @Size(min = 3, max = 20, message = "EMAIL_INVALID")
+    @Size(min = 3, max = 50, message = "EMAIL_INVALID")
     String email;
     @NotBlank
     @Size(min = 6, max = 40, message = "PASSWORD_INVALID")
