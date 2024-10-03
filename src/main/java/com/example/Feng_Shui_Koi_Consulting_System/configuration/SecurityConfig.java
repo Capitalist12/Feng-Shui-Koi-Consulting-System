@@ -24,7 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig extends WebConfig {
+public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINT = {
             "/auth/login", "/auth/signup", "/auth/introspect", "/auth/outbound/authentication"
