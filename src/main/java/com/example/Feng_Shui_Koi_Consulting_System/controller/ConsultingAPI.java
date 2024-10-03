@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/element")
-public class ElementCalculationController {
+public class ConsultingAPI {
 
     ElementCalculationService elementCalculationService;
 

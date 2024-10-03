@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ElementCalculationService {
 
-    public Integer calculateElementId(int birthYear) {
+    public int calculateElementId(int birthYear) {
         try {
             int canNumber = calculateCanNumber(birthYear);
             int chiNumber = calculateChiNumber(birthYear);

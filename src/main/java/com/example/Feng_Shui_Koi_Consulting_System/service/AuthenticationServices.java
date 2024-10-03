@@ -76,11 +76,11 @@ public class AuthenticationServices {
         User user = userMapper.toUser(request);
         user.setUserID(generateUserID());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-
+        ElementCalculationService elementCalculationService = new ElementCalculationService();
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
         user.setRoleName(String.valueOf(Roles.USER));
 //        user.setPlanID("PP005");
-        user.setElementID(null);
+        user.setElementID(elementCalculationService.calculateElementId(2006));
         user.setDeleteStatus(false);
         return userMapper.toSignUpResponse(userRepository.save(user));
 

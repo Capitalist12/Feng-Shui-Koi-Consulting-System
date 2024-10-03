@@ -77,6 +77,7 @@ public class SecurityConfig {
 
         // Allow your frontend origin specifically for security purposes
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
+        corsConfiguration.addAllowedOrigin("http://localhost:5173");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowCredentials(true);  // Enable credentials if needed (e.g., with JWTs)
