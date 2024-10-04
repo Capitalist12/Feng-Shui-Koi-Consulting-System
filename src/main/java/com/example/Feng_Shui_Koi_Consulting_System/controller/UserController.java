@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.PasswordCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
@@ -29,6 +30,14 @@ public class UserController {
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
         return ApiResponse.<UserResponse>builder()
                 .result(userService.createUser(request))
+                .build();
+    }
+
+    @PostMapping("/create-password")
+    ApiResponse<Void> createPassword(@RequestBody @Valid PasswordCreationRequest request){
+        userService.createPassword(request);
+        return ApiResponse.<Void>builder()
+                .message("Password has been created, you can use it to login now!")
                 .build();
     }
 
