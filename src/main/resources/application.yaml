@@ -8,12 +8,12 @@ springdoc:
     enabled: true
     path: /koifish-docs/v3/api-docs
   swagger-ui:
-    path: /swagger-ui.html  # ???ng d?n cho Swagger UI
+    path: /swagger-ui.html  # Path for Swagger UI
     enabled: true
 
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB8"
+    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB9"
     username: root
     password: 123456
 
@@ -26,6 +26,13 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
+
+  ai:
+    openai:
+      api-key: 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
+      chat:
+        options:
+          model: gpt-3.5-turbo-0125
 
 outbound:
   client-id: "311482209289-pgh12mi0hos00orqsl2773ke1gdsdhjf.apps.googleusercontent.com"

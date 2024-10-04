@@ -26,8 +26,13 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINT = {
-            "/auth/login", "/auth/signup", "/auth/introspect", "/auth/outbound/authentication"
+
+    private final String[] PUBLIC_ENDPOINT = {"/auth/login","/auth/signup","/auth/introspect"
+    ,"/auth/outbound/authentication"};
+    private final String[] SWAGGER = {
+            "/koifish-docs/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-resources/**"
     };
 
     @Value("${jwt.singerKey}")
@@ -36,17 +41,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeHttpRequests(request ->
-                        request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()  // Public endpoint
+                        .requestMatchers(SWAGGER).permitAll()  // Permit access to Swagger
+                        .anyRequest().authenticated()  // All other requests require authentication
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        .jwt(jwtConfigurer -> jwtConfigurer
+                                .decoder(jwtDecoder())  // Configure JWT decoder
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())  // Set JWT converter
                         )
                 )
                 .cors(Customizer.withDefaults())  // Enable CORS
-                .csrf(AbstractHttpConfigurer::disable);  // Disable CSRF
+                .csrf(AbstractHttpConfigurer::disable);  // Disable CSRF for non-browser clients
 
         return httpSecurity.build();
     }

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 
 @RestController
+@Data
+@Builder
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/auth")
@@ -32,6 +34,7 @@ public class AuthenticationAPI {
         return ApiResponse.<AuthenResponse>builder().result(result).build();
 
     }
+
 
     @PostMapping("/signup")
     ApiResponse<SignUpResponse> registerUser( @RequestBody @Valid SignUpRequest request) {
