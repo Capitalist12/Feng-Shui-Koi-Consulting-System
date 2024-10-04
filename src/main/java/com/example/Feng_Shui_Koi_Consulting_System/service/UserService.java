@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.PasswordCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
@@ -9,6 +10,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.UserMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,7 +76,9 @@ public class UserService {
     }
 
     public void deleteUser(String userID){
+
         userRepository.deleteById(userID);
+
     }
 
     public UserResponse getMyInfo() {
@@ -82,6 +87,23 @@ public class UserService {
 
         User user = userRepository.findByEmail(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 
-        return userMapper.toUserResponse(user);
+        var userResponse = userMapper.toUserResponse(user);
+        userResponse.setNoPassword(!StringUtils.hasText(user.getPassword()));
+
+        return userResponse;
+    }
+
+    public void createPassword( PasswordCreationRequest request) {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+        User user = userRepository.findByEmail(name).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXIST));
+        if(StringUtils.hasText(user.getPassword()))
+            throw new AppException(ErrorCode.PASSWORD_EXIST);
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
     }
 }

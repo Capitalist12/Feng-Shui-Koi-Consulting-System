@@ -21,5 +21,6 @@ public class UserResponse {
     Integer elementID;
     String imageLink;
     String planID;
+    Boolean noPassword;
     boolean deleteStatus;
 }
