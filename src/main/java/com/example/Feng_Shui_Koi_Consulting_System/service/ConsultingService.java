@@ -94,43 +94,41 @@ public class ConsultingService {
 
         // Thay vì chia trung bình giữa cá và bể, bạn có thể dùng phép cộng
         double finalScore = (averageFishScore + tankScore); // Tổng điểm cá và bể
-        String advice = getAdvice(request, finalScore);
 
 
         return CompatibilityResponse.builder()
-                .advice(advice)
                 .calculateCompatibilityScore(Math.max(0, Math.min(100, finalScore)))
                 .build(); // Clamp score between 0 and 100
 
     }
 
 
-    public String getAdvice(CompatibilityRequest request,
-                            double calculateCompatibilityScore) {
-
-        if (request.getUserElement() == null || request.getTankShape() == null || request.getKoiFishColors() == null) {
-            throw new IllegalArgumentException("Missing required compatibility information.");
-        }
-
-        String koiFishColors = request.getKoiFishColors().stream()
-                .map(set -> String.join(", ", set))  // Chuyển mỗi Set<String> thành chuỗi với các phần tử phân cách bằng dấu phẩy
-                .collect(Collectors.joining("; "));  // Sau đó, kết hợp các chuỗi lại với nhau, phân cách bởi dấu chấm phẩy
-
-        // Gọi đến AI client để lấy tư vấn
-        String advice = chatClient.prompt()
-       .user(u -> u.text(String.format(" The user's element is %s, tank shape %s, and Compatibility between" +
-                       " user's element and Koi fish and tank characteristics is (%.2f%%). "
-                        + "The koi fish have the following colors: %s. "
-                        + "Please suggest optimal koi fish colors and a tank shape to improve compatibility.",
-                request.getUserElement(),
-                request.getTankShape(),
-                calculateCompatibilityScore,
-                koiFishColors)))
-                .call()
-                .entity(String.class);
-        return advice;
-
-    }
+//    public String getAdvice(CompatibilityRequest request,
+//                            double calculateCompatibilityScore) {
+//
+//        if (request.getUserElement() == null || request.getTankShape() == null || request.getKoiFishColors() == null) {
+//            throw new IllegalArgumentException("Missing required compatibility information.");
+//        }
+//
+//        String koiFishColors = request.getKoiFishColors().stream()
+//                .map(set -> String.join(", ", set))  // Chuyển mỗi Set<String> thành chuỗi với các phần tử phân cách bằng dấu phẩy
+//                .collect(Collectors.joining("; "));  // Sau đó, kết hợp các chuỗi lại với nhau, phân cách bởi dấu chấm phẩy
+//
+//        // Gọi đến AI client để lấy tư vấn
+//        String advice = chatClient.prompt()
+//       .user(u -> u.text(String.format(" The user's element is %s, tank shape %s, and Compatibility between" +
+//                       " user's element and Koi fish and tank characteristics is (%.2f%%). "
+//                        + "The koi fish have the following colors: %s. "
+//                        + "Please suggest optimal koi fish colors and a tank shape to improve compatibility.",
+//                request.getUserElement(),
+//                request.getTankShape(),
+//                calculateCompatibilityScore,
+//                koiFishColors)))
+//                .call()
+//                .entity(String.class);
+//        return advice;
+//
+//    }
 
 
 }

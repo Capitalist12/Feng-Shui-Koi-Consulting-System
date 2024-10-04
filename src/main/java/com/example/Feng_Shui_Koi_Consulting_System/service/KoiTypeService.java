@@ -50,7 +50,10 @@ public class KoiTypeService {
         return koiTypeMapper.toKTResponse(koiTypeRepo.save(koiTypes));
     }
 
-
+    public KoiTypes findByTypeName(String typeName) {
+        return koiTypeRepo.findByTypeName(typeName)
+                .orElseThrow(() -> new AppException(ErrorCode.KOI_TYPE_NOT_EXIST));
+    }
 
     public void deleteKoiType(String koiTypeId){
         koiTypeRepo.deleteById(koiTypeId);
