@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.configuration;
 
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -79,5 +80,12 @@ public class SecurityConfig {
 
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
+
+    @Bean
+    public ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
+        // Sử dụng Builder để tạo ChatClient
+        return chatClientBuilder.build();
+    }
+
 
 }

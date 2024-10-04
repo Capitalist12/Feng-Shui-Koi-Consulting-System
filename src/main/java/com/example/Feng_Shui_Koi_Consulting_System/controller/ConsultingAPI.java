@@ -37,7 +37,7 @@ public class ConsultingAPI {
                 .collect(Collectors.toSet());
         return ApiResponse.<CompatibilityResponse>builder()
                 .result(consultingService.compatibilityScore(userElement,
-                        tankElement, fishElements))
+                        tankElement, fishElements, request))
                 .build();
     }
 
