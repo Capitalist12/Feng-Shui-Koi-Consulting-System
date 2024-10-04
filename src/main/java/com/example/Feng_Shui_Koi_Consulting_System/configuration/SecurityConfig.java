@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()  // Public endpoint
                         .requestMatchers(SWAGGER).permitAll()  // Permit access to Swagger
                         .anyRequest().authenticated()  // All other requests require authentication
+                        //.anyrequest().permitAll()  // Permit all Request
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
