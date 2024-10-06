@@ -18,7 +18,6 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +43,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationServices {
     UserRepository userRepository;
     UserMapper userMapper;
@@ -62,42 +61,46 @@ public class AuthenticationServices {
 
     @NonFinal
     @Value("${outbound.client-id}")
-    protected String CLIENT_ID ;
+    protected String CLIENT_ID;
 
     @NonFinal
     @Value("${outbound.client-secret}")
-    protected String CLIENT_SECRET ;
+    protected String CLIENT_SECRET;
 
     @NonFinal
     @Value("${outbound.redirect-uri}")
-    protected String REDIRECT_URI ;
+    protected String REDIRECT_URI;
 
     @NonFinal
     protected String GRANT_TYPE = "authorization_code";
 
 
-//Method to registed user
-public SignUpResponse registerUser(SignUpRequest request) {
-    if (userRepository.existsByUsername(request.getUsername()))
-        throw new AppException(ErrorCode.USER_EXIST);
-    if (userRepository.existsByEmail(request.getEmail()))
-        throw new AppException(ErrorCode.EMAIL_EXITST);
-    int elementId = elementCalculationService
-            .calculateElementId(request.getDateOfBirth());
-    Element element = elementRepo.findById(elementId)
-            .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
-    User user = userMapper.toUser(request);
-    user.setUserID(generateUserID());
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-    user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
-    user.setRoleName(String.valueOf(Roles.USER));
+    //Method to registed user
+    public SignUpResponse registerUser(SignUpRequest request) {
+        if (userRepository.existsByUsername(request.getUsername()))
+            throw new AppException(ErrorCode.USER_EXIST);
+        if (userRepository.existsByEmail(request.getEmail()))
+            throw new AppException(ErrorCode.EMAIL_EXIST);
+        int elementId = elementCalculationService
+                .calculateElementId(request.getDateOfBirth());
+        Element element = elementRepo.findById(elementId)
+                .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+        User user = userMapper.toUser(request);
+        user.setUserID(generateUserID());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
+        user.setRoleName(String.valueOf(Roles.USER));
 //        user.setPlanID("PP005");
-    user.setElement(element);
-    user.setDeleteStatus(false);
-    return userMapper.toSignUpResponse(userRepository.save(user));
+        user.setElement(element);
+        user.setDeleteStatus(false);
+        emailService.sendEmail(request.getEmail(),
+                "This is your password: " + request.getPassword(),
+                "Create User Successful");
+        return userMapper.toSignUpResponse(userRepository.save(user));
 
     }
-//Method to login user
+
+    //Method to login user
     public AuthenResponse loginUser(AuthenRequest request) {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
@@ -117,14 +120,14 @@ public SignUpResponse registerUser(SignUpRequest request) {
     }
 
     public IntrospectResponse introspected(IntrospectResquest resquest) throws JOSEException, ParseException {
-        var token  = resquest.getToken();
+        var token = resquest.getToken();
 
         JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
-        Date expepityTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        Date expediteTime = signedJWT.getJWTClaimsSet().getExpirationTime();
         var verifier = signedJWT.verify(jwsVerifier);
         return IntrospectResponse.builder()
-                .valid(expepityTime.after(new Date()) && verifier)
+                .valid(expediteTime.after(new Date()) && verifier)
                 .build();
     }
 
@@ -161,34 +164,34 @@ public SignUpResponse registerUser(SignUpRequest request) {
         }
     }
 
-    public String generateOTP(){
+    public String generateOTP() {
         String CHARACTERS = "0123456789";
         int OTP_LENGTH = 6;
         SecureRandom random = new SecureRandom();
         StringBuilder otp = new StringBuilder(OTP_LENGTH);
-        for(int i = 0; i < OTP_LENGTH; i++){
+        for (int i = 0; i < OTP_LENGTH; i++) {
             otp.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         }
         return otp.toString();
     }
 
-    public void storeOTP(String email, String otp){
+    public void storeOTP(String email, String otp) {
         otpData.put(email, otp);
         otpExpiry.put(email, LocalDateTime.now().plusMinutes(5));
     }
 
-    public boolean validateOTP(String email, String inputOtp){
+    public boolean validateOTP(String email, String inputOtp) {
         String storedOTP = otpData.get(email);
         LocalDateTime expiryOTP = otpExpiry.get(email);
-        if(storedOTP == null || expiryOTP == null){
+        if (storedOTP == null || expiryOTP == null) {
             return false;
         }
-        if(expiryOTP.isBefore(LocalDateTime.now())){
+        if (expiryOTP.isBefore(LocalDateTime.now())) {
             otpData.remove(email);
             otpExpiry.remove(email);
             return false;
         }
-        if(storedOTP.equals(inputOtp)){
+        if (storedOTP.equals(inputOtp)) {
             otpData.remove(email);
             otpExpiry.remove(email);
             return true;
@@ -196,13 +199,13 @@ public SignUpResponse registerUser(SignUpRequest request) {
         return false;
     }
 
-    public void clearOTP(String email){
+    public void clearOTP(String email) {
         otpData.remove(email);
         otpExpiry.remove(email);
     }
 
     private String generateToken(User user) {
-       JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
                 .issuer("Fengshui.com")
@@ -210,16 +213,16 @@ public SignUpResponse registerUser(SignUpRequest request) {
                 .expirationTime(new Date(
                         Instant.now().plus(2, ChronoUnit.HOURS).toEpochMilli()
                 ))
-                .claim("scope",buildScope(user))
+                .claim("scope", buildScope(user))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
-        JWSObject jwsObject = new JWSObject(header,payload);
+        JWSObject jwsObject = new JWSObject(header, payload);
         try {
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
             return jwsObject.serialize();
-        }catch (JOSEException e) {
-            log.error("Can create token",e);
+        } catch (JOSEException e) {
+            log.error("Can create token", e);
             throw new RuntimeException(e);
         }
     }
@@ -239,7 +242,7 @@ public SignUpResponse registerUser(SignUpRequest request) {
         return AuthenResponse.builder().token(token).authenticated(true).build();
     }
 
-    public AuthenResponse outboundAuthenticate(String code){
+    public AuthenResponse outboundAuthenticate(String code) {
         var response = outboundIdentityClient
                 .exchangeToken(ExchangeTokenRequest.builder()
                         .code(code)
@@ -258,17 +261,17 @@ public SignUpResponse registerUser(SignUpRequest request) {
 
         //On board user
         var user = userRepository.findByEmail(userInfo.getEmail()).orElseGet(
-                ()-> userRepository.save(User.builder()
-                                .userID(generateUserID())
-                                .email(userInfo.getEmail())
-                                .username(userInfo.getName())
-                                .password(userInfo.getEmail())
-                                .roleName(String.valueOf(Roles.USER))
-                                .build()));
+                () -> userRepository.save(User.builder()
+                        .userID(generateUserID())
+                        .email(userInfo.getEmail())
+                        .username(userInfo.getName())
+                        .password(userInfo.getEmail())
+                        .roleName(String.valueOf(Roles.USER))
+                        .build()));
 
         var token = generateToken(user);
 
-        return  AuthenResponse.builder()
+        return AuthenResponse.builder()
                 .token(token)
                 .build();
     }

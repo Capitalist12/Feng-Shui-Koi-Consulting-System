@@ -2,6 +2,7 @@ package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CalculateElementRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ConsultingRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingFishResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingTankResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -65,9 +67,9 @@ public class ConsultingAPI {
     }
 
     @GetMapping("/all")
-    public ApiResponse<ConsultingResponse> getConsulting(@RequestBody String userID){
-        var koiFishList = consultingService.koiFishList(userID);
-        var tankList = consultingService.tankList(userID);
+    public ApiResponse<ConsultingResponse> getConsulting(@RequestBody ConsultingRequest request){
+        var koiFishList = consultingService.koiFishList(request.getUserID());
+        var tankList = consultingService.tankList(request.getUserID());
         ConsultingResponse consultingResponse = ConsultingResponse.builder()
                 .koiFishList(koiFishList)
                 .tankList(tankList)
