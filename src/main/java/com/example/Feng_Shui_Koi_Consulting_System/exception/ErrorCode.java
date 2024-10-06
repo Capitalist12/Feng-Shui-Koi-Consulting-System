@@ -25,11 +25,11 @@ public enum ErrorCode {
     EMAIL_INVALID(1015,"Invalid email", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED(1016,"You don't have permission", HttpStatus.FORBIDDEN),
     ELEMENT_NOT_EXIST(1017,"KoiType not exist", HttpStatus.NOT_FOUND),
-    KOI_TYPE_EXIST(1018,"KoiType existed", HttpStatus.BAD_REQUEST)
-
-
-
-    ;
+    KOI_TYPE_EXIST(1018,"KoiType existed", HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN(1019, "Token invalid", HttpStatus.BAD_REQUEST ),
+    EXPIRED_TOKEN(1020, "Token expired", HttpStatus.BAD_REQUEST),
+    SEND_MAIL_FAILED(1021, "Send mail failed", HttpStatus.BAD_REQUEST ),
+    OTP_NOT_FOUND(1022, "OTP not found", HttpStatus.BAD_REQUEST );
 
     private int code;
     private String message;

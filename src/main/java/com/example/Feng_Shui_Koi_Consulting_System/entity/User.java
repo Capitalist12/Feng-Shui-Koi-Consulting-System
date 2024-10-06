@@ -41,8 +41,8 @@ public class User {
     @Column(name = "RoleName")
     String roleName;
 
-    @Column(name = "PlanID")
-    String planID;
+//    @Column(name = "PlanID")
+//    String planID;
 
     @Column(name = "ElementID")
     Integer elementID;

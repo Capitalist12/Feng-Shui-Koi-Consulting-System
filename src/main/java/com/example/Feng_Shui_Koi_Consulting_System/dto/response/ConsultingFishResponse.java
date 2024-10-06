@@ -12,6 +12,7 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConsultingFishResponse {
+    String id;
     String name;
     String size;
     String weight;

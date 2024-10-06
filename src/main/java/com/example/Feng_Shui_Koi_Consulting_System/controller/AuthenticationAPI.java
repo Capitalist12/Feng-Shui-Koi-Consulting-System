@@ -1,9 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AuthenRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.IntrospectResquest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.SignUpRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
@@ -28,18 +25,17 @@ public class AuthenticationAPI {
     EmailService emailService;
 
     @PostMapping("/signup")
-    ApiResponse<SignUpResponse> registerUser( @RequestBody @Valid SignUpRequest request) {
-        SignUpResponse registerUser = authenticationServices.registerUser(request);
-        emailService.sendEmail(
-                request.getEmail().trim(),
-                "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
-                "Account Creation Successful");
-        return ApiResponse.<SignUpResponse>builder()
-                .result(registerUser)
-                .build();
+    ApiResponse<SignUpResponse> registerUser(@RequestBody @Valid SignUpRequest request) {
+            emailService.sendEmail(
+                    request.getEmail().trim(),
+                    "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
+                    "Account Creation Successful");
+            SignUpResponse registerUser = authenticationServices.registerUser(request);
 
+            return ApiResponse.<SignUpResponse>builder()
+                    .result(registerUser)
+                    .build();
     }
-
 
     @PostMapping("/login")
     ApiResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) {
@@ -57,6 +53,14 @@ public class AuthenticationAPI {
                 .build();
     }
 
+    @PostMapping("/forgot-password")
+    String forgotPassword(@RequestBody @Valid ForgotPasswordRequest request){
+        authenticationServices.forgotPassword(request);
+        return "An OTP has been sent to your email. Please verify it to reset your password.";
+    }
 
-
+    @PostMapping("/reset-password")
+    String resetPassword(@RequestBody @Valid ResetPasswordRequest request){
+        return authenticationServices.verifyOtpAndResetPassword(request);
+    }
 }

@@ -2,10 +2,11 @@ package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingFishResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingTankResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.TankResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ConsultingService;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,15 +24,27 @@ public class ConsultingAPI {
 
     ConsultingService consultingService;
 
-    @GetMapping("/koiFish/{elementID}")
-    public ApiResponse<List<ConsultingFishResponse>> getKoiFishByElement(@PathVariable Integer elementID) {
+    @GetMapping("/koiFish/{userID}")
+    public ApiResponse<List<ConsultingFishResponse>> getKoiFishByElement(@PathVariable String userID) {
         return ApiResponse.<List<ConsultingFishResponse>>
-                builder().result(consultingService.koiFishList(elementID)).build();
+                builder().result(consultingService.koiFishList(userID)).build();
     }
 
-    @GetMapping("/tank/{elementID}")
-    public ApiResponse<List<ConsultingTankResponse>> getTankByElement(@PathVariable Integer elementID){
+    @GetMapping("/tank/{userID}")
+    public ApiResponse<List<ConsultingTankResponse>> getTankByElement(@PathVariable String userID){
         return ApiResponse.<List<ConsultingTankResponse>>
-                builder().result(consultingService.tankList(elementID)).build();
+                builder().result(consultingService.tankList(userID)).build();
+    }
+
+    @GetMapping("/all/{userID}")
+    public ApiResponse<ConsultingResponse> getConsulting(@PathVariable String userID){
+        var koiFishList = consultingService.koiFishList(userID);
+        var tankList = consultingService.tankList(userID);
+        ConsultingResponse consultingResponse = ConsultingResponse.builder()
+                .koiFishList(koiFishList)
+                .tankList(tankList)
+                .build();
+        return ApiResponse.<ConsultingResponse>builder()
+                .result(consultingResponse).build();
     }
 }
