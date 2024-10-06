@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -43,5 +44,9 @@ public class Element {
     @OneToMany(mappedBy = "elementTank", cascade = CascadeType.ALL)
     @JsonManagedReference
     Set<Tank> tankShape;
+
+    @OneToMany(mappedBy = "element", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    Set<User> user ;
 
 }

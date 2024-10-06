@@ -7,10 +7,12 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.SignUpRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.UserMapper;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundIdentityClient;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundUserClient;
@@ -46,6 +48,8 @@ public class AuthenticationServices {
     UserMapper userMapper;
     OutboundIdentityClient outboundIdentityClient;
     OutboundUserClient outboundUserClient;
+    ElementCalculationService elementCalculationService;
+    ElementRepo elementRepo;
 
     @NonFinal
     @Value("${jwt.singerKey}")
@@ -73,14 +77,17 @@ public class AuthenticationServices {
             throw new AppException(ErrorCode.USER_EXIST);
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXITST);
+        int elementId = elementCalculationService
+                .calculateElementId(2006);
+        Element element = elementRepo.findById(elementId)
+                .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
         User user = userMapper.toUser(request);
         user.setUserID(generateUserID());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        ElementCalculationService elementCalculationService = new ElementCalculationService();
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
         user.setRoleName(String.valueOf(Roles.USER));
 //        user.setPlanID("PP005");
-        user.setElementID(elementCalculationService.calculateElementId(2006));
+        user.setElement(element);
         user.setDeleteStatus(false);
         return userMapper.toSignUpResponse(userRepository.save(user));
 

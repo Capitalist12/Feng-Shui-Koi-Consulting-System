@@ -17,7 +17,7 @@ public class UserCreationRequest {
     String password;
     String email;
     LocalDate dateOfBirth;
-    Integer elementID;
+    String element;
     String imageURL;
     String planID;
     boolean deleteStatus;

@@ -36,13 +36,13 @@ public class AuthenticationAPI {
     }
 
 
-    @PostMapping("/signup")
-    ApiResponse<SignUpResponse> registerUser( @RequestBody @Valid SignUpRequest request) {
-        return ApiResponse.<SignUpResponse>builder()
-                .result(authenticationServices.registerUser(request))
-                .build();
-
-    }
+//    @PostMapping("/signup")
+//    ApiResponse<SignUpResponse> registerUser( @RequestBody @Valid SignUpRequest request) {
+//        return ApiResponse.<SignUpResponse>builder()
+//                .result(authenticationServices.registerUser(request))
+//                .build();
+//
+//    }
     @PostMapping("/token")
     ApiResponse<AuthenResponse> authenticate(@RequestBody AuthenRequest request) {
         var result = authenticationServices.authenticate(request);

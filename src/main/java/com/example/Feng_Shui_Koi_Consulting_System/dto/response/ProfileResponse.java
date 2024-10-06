@@ -1,6 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
 
-import jakarta.validation.constraints.Size;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,15 +11,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-    String userID;
+public class ProfileResponse {
+
     String username;
-    String password;
     String email;
     LocalDate dateOfBirth;
     String roleName;
     String element;
     String imageLink;
-    String planID;
-    boolean deleteStatus;
+
 }

@@ -4,6 +4,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.PasswordCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ProfileResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.service.UserService;
@@ -42,8 +43,8 @@ public class UserController {
     }
 
     @GetMapping("/my-info")
-    ApiResponse<UserResponse> getMyInfo() {
-        return ApiResponse.<UserResponse>builder()
+    ApiResponse<ProfileResponse> getMyInfo() {
+        return ApiResponse.<ProfileResponse>builder()
                 .result(userService.getMyInfo())
                 .build();
     }

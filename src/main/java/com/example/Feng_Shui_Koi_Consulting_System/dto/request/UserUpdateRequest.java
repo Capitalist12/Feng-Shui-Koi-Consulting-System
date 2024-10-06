@@ -16,7 +16,7 @@ public class UserUpdateRequest {
     @Size(min = 5, max = 20, message = "EMAIL_INVALID")
     String email;
     LocalDate dateOfBirth;
-    Integer elementID;
+    String element;
     String imageLink;
     String roleName;
     String planID;

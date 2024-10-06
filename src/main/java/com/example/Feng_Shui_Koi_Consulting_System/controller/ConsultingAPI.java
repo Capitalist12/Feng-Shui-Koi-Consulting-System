@@ -4,7 +4,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ElementCalculationService;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CompatibilityRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CompatibilityResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.service.ConsultingService;
+import com.example.Feng_Shui_Koi_Consulting_System.service.CompatibilityService;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class ConsultingAPI {
 
     ElementCalculationService elementCalculationService;
-    ConsultingService consultingService;
+    CompatibilityService compatibilityService;
 
     @GetMapping("/calculate")
     public ApiResponse<Integer> calculateElementId(@RequestParam int birthYear) {
@@ -40,14 +40,14 @@ public class ConsultingAPI {
     ApiResponse<CompatibilityResponse> calculateCompatibilityScore
             (@RequestBody CompatibilityRequest request) {
         String userElement = request.getUserElement();
-        String tankElement = consultingService.elementFromShape(request.getTankShape());
+        String tankElement = compatibilityService.elementFromShape(request.getTankShape());
         Set<Set<String>> fishElements = request.getKoiFishColors().stream()
                 .map(colors -> colors.stream()
-                        .map(consultingService::elementFromColor)
+                        .map(compatibilityService::elementFromColor)
                         .collect(Collectors.toSet()))
                 .collect(Collectors.toSet());
         return ApiResponse.<CompatibilityResponse>builder()
-                .result(consultingService.compatibilityScore(userElement,
+                .result(compatibilityService.compatibilityScore(userElement,
                         tankElement, fishElements, request))
                 .build();
     }
