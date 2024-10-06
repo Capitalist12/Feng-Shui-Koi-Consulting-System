@@ -2,22 +2,33 @@ import React from 'react';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
-import { login } from "../../services/AuthAPIService";
+import { loginAuth } from "../../services/AuthAPIService";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth";
 import { googleProvider } from "../../config/firebase";
+import { useDispatch } from 'react-redux';
+import { login } from "../../redux/Slices/userSlice.js";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const onFinish = async (values) => {
     const { email, password } = values;
-    console.log('Received values of form: ', values);
-    const response = await login({email, password});
+    const response = await loginAuth({email, password});
+
+    if(response.status === 200 && response.data.code === 1000){
+      dispatch(login(response.data.result));
+
+      const role = response.data.result.roleName.toUpperCase();
+
+      (role !== "ADMIN") ? navigate("/") : navigate("/dashboard"); 
+
+    }
 
   };
 
 
-  const navigate = useNavigate();
   
   const handleLoginGoogle = () => {
     const auth = getAuth();

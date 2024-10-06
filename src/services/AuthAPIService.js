@@ -1,13 +1,14 @@
+import { toast } from "react-toastify";
 import axios from "../config/axiosConfig";
 
-const login = async (payload) => {
+const loginAuth = async (payload) => {
     try {
         const response = await axios.post("auth/login", payload);
-        console.log(">>>check login", response);
+        return response;
     } catch (err) {
-        console.log(">>> login err", err);
+        toast.error(err.message);
     }
 }
 
 
-export {login};
+export {loginAuth};

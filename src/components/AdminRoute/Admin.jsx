@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 
-const Admin = () => {
-    const [isAdmin, setIsAdmin] = useState(true);
-
+const Admin = ({ children }) => {
     const navigation = useNavigate();
+    const isAdmin = useSelector((store) => store?.user?.roleName)?.toUpperCase();
+
 
     useEffect(() => {
-        if (!isAdmin) {
+        if (isAdmin !== "ADMIN") {
             navigation("/login");
-        } else {
-            navigation('/dashboard');
         }
     }, []);
-
-    return <Outlet />
-
-}
+    
+    return children;
+};
 
 export default Admin;

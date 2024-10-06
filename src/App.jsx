@@ -6,8 +6,9 @@ import LoginPage from "./pages/login/LoginPage";
 import HomePage from "./pages/home/HomePage";
 import UserProfilePage from "./pages/user/profile/UserProfilePage";
 import TankManagement from "./components/CRUD_Tank/TankManagement";
-import Admin from "./utils/AdminRoute/Admin";
+import Admin from "./components/AdminRoute/Admin";
 import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
+import { useSelector } from "react-redux";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -25,11 +26,15 @@ const App = () => {
     },
     {
       path: "dashboard",
-      element: <DashboardPage />,
+      element: (
+        <Admin>
+          <DashboardPage />
+        </Admin>
+      ),
       children: [
         {
           path: "koi",
-          element: <KoiContainer/>
+          element: <KoiContainer />
         },
         {
           path: "user",
@@ -43,9 +48,9 @@ const App = () => {
     },
     {
       path: 'user',
-      element: <UserProfilePage/>
+      element: <UserProfilePage />
     }
-    
+
   ]);
 
   return <RouterProvider router={router} />;
