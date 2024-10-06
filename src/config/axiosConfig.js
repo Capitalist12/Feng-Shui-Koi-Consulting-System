@@ -13,15 +13,12 @@ api.defaults.baseURL = baseUrl;
 
 // handle before call API
 const handleBefore = (config) => {
-  //handle hanh dong trc khi call api
-  //lay ra cai token va dinh kem theo cai request
-
   const token = store.getState()?.user?.token;
 
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
   }
-  
+
   return config;
 };
 

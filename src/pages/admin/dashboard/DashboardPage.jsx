@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { Button, Layout, Menu, theme, Row, Col, Avatar } from 'antd';
+import { Button, Layout, Menu, theme, Row, Col } from 'antd';
 import '../../../styles/DashboardPage.scss';
 import { Outlet } from 'react-router-dom';
 import { DASHBOARD_ITEMS } from '../../../utils/constant.jsx';
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    UserOutlined
 } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import DropdownAvatar from '../../../components/Utils/DropdownAvatar.jsx';
 
 const { Header, Sider, Content } = Layout;
 
 const DashboardPage = () => {
     const [collapsed, setCollapsed] = useState(false);
+    const admin = useSelector((store) => store?.user);
 
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -54,8 +56,7 @@ const DashboardPage = () => {
                         </Col>
                         <Col md={6}>
                             <div>
-                                <Avatar size='default' icon={<UserOutlined />}></Avatar>
-                                Huynh Van Nghia
+                                <DropdownAvatar user={admin}/>
                             </div>
                         </Col>
                     </Row>

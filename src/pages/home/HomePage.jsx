@@ -10,6 +10,7 @@ import CustomeFooter from '../../components/HomePage/CustomeFooter';
 import { IoIosArrowDown } from 'react-icons/io';
 import BackToTopBtn from '../../components/Utils/BackToTopBtn';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
+import Navbar from '../../components/Utils/Navbar';
 // import '../../javaScript/HomePageScript.js'
 
 const HomePage = () => {
@@ -85,6 +86,10 @@ const HomePage = () => {
                 </div>
                 <div className='background'></div>
                 <div className='overlay'></div>
+            </section>
+
+            <section id='navbar-section'>
+                <Navbar />
             </section>
 
             <section id='inspec-section'>

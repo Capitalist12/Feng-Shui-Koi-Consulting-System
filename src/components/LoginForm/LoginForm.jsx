@@ -28,8 +28,6 @@ const LoginForm = () => {
 
   };
 
-
-  
   const handleLoginGoogle = () => {
     const auth = getAuth();
     signInWithPopup(auth, googleProvider)

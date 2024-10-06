@@ -7,6 +7,7 @@ import {
     LineChartOutlined,
 } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
+import DropdownAvatar from "../components/Utils/DropdownAvatar";
 
 
 const OPTIONS = [
@@ -101,4 +102,61 @@ const DASHBOARD_ITEMS = [
     },
 ];
 
-export { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS, DASHBOARD_ITEMS };
+const NAVBAR_ITEMS = [
+    {
+      label: 'TRANG CHỦ',
+      key: 'home',
+    //   icon: <MailOutlined />,
+    },
+    {
+      label: 'MUA / BÁN',
+      key: 'shop',
+    //   icon: <MailOutlined />,
+    },
+    {
+      label: 'BLOG & TIN TỨC',
+      key: 'blog',
+    //   icon: <AppstoreOutlined />,
+    },
+    {
+      label: 'Navigation Three - Submenu',
+      key: '2',
+    //   icon: <SettingOutlined />,
+      children: [
+        {
+          type: 'group',
+          label: 'Item 1',
+          children: [
+            {
+              label: 'Option 1',
+              key: 'setting:1',
+            },
+            {
+              label: 'Option 2',
+              key: 'setting:2',
+            },
+          ],
+        },
+        {
+          type: 'group',
+          label: 'Item 2',
+          children: [
+            {
+              label: 'Option 3',
+              key: 'setting:3',
+            },
+            {
+              label: 'Option 4',
+              key: 'setting:4',
+            },
+          ],
+        },
+      ],
+    },
+    {
+        label: <DropdownAvatar />,
+        key: "info",
+    }
+  ];
+
+export { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS, DASHBOARD_ITEMS, NAVBAR_ITEMS };

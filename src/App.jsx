@@ -8,7 +8,6 @@ import UserProfilePage from "./pages/user/profile/UserProfilePage";
 import TankManagement from "./components/CRUD_Tank/TankManagement";
 import Admin from "./components/AdminRoute/Admin";
 import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
-import { useSelector } from "react-redux";
 
 const App = () => {
   const router = createBrowserRouter([

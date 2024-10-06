@@ -1,6 +1,6 @@
 import React from "react";
 import { Footer } from "antd/es/layout/layout";
-import { Col, Divider, Row } from "antd";
+import { Col, Row } from "antd";
 import { Link } from "react-router-dom";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import Contributors from "./Contributors";
