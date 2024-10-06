@@ -24,7 +24,7 @@ public enum ErrorCode {
     PASSWORD_INVALID(1014,"Invalid password", HttpStatus.BAD_REQUEST),
     EMAIL_INVALID(1015,"Invalid email", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED(1016,"You don't have permission", HttpStatus.FORBIDDEN),
-    ELEMENT_NOT_EXIST(1017,"KoiType not exist", HttpStatus.NOT_FOUND),
+    ELEMENT_NOT_EXIST(1017,"Element not exist", HttpStatus.NOT_FOUND),
     KOI_TYPE_EXIST(1018,"KoiType existed", HttpStatus.BAD_REQUEST),
     PASSWORD_EXIST(1019,"Password existed", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN(1020, "Token invalid", HttpStatus.BAD_REQUEST ),

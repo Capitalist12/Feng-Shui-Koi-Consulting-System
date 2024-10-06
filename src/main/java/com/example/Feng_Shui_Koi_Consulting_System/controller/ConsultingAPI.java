@@ -5,25 +5,18 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CalculateElementR
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingFishResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingTankResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.service.ElementCalculationService;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CompatibilityRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CompatibilityResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ConsultingService;
+import com.example.Feng_Shui_Koi_Consulting_System.service.ElementCalculationService;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @Data

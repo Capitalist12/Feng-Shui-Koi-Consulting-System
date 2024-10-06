@@ -19,7 +19,7 @@ public class UserCreationRequest {
     @Email(message = "EMAIL_INVALID")
     String email;
     LocalDate dateOfBirth;
-    Integer elementID;
+    String element;
     String imageURL;
     String planID;
     boolean deleteStatus;

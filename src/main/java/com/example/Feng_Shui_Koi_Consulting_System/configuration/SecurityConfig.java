@@ -42,10 +42,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(request -> request
+
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()  // Public endpoint
                         .requestMatchers(SWAGGER).permitAll()  // Permit access to Swagger
                         .anyRequest().authenticated()  // All other requests require authentication
-                        //.anyrequest().permitAll()  // Permit all Request
+//                        request.anyRequest().permitAll()  // Permit all Request
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
@@ -53,8 +54,8 @@ public class SecurityConfig {
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter())  // Set JWT converter
                         )
                 )
-                .cors(Customizer.withDefaults())  // Enable CORS
-                .csrf(AbstractHttpConfigurer::disable);  // Disable CSRF for non-browser clients
+                        .cors(Customizer.withDefaults()) // Enable CORS
+                        .csrf(AbstractHttpConfigurer::disable);  // Disable CSRF for non-browser clients
 
         return httpSecurity.build();
     }

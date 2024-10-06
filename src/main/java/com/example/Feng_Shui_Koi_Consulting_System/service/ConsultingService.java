@@ -28,6 +28,7 @@ public class ConsultingService {
     ElementRepo elementRepo;
     UserRepository userRepository;
     ElementMapper elementMapper;
+    ElementCalculationService elementCalculationService;
 
     public List<ConsultingFishResponse> koiFishList(String userID){
         // Fetch the user
@@ -35,7 +36,8 @@ public class ConsultingService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 
         // Get the user's element ID
-        Integer elementID = user.getElementID();
+        int elementID = elementCalculationService
+                .calculateElementId(user.getDateOfBirth());
 
         // Fetch the Element entity by the elementID
         Element element = elementRepo.findById(elementID)
@@ -73,7 +75,7 @@ public class ConsultingService {
     {
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-        Integer elementID = user.getElementID();
+        Integer elementID = user.getElement().getElementId();
         return tankRepo.findByElementTank_ElementId(elementID).stream().map(tank -> {
             ElementResponse elementResponse = elementMapper
                     .toElementResponse(tank.getElementTank());
@@ -86,3 +88,4 @@ public class ConsultingService {
         }).collect(Collectors.toList());
     }
 }
+
