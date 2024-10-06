@@ -12,12 +12,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProfileResponse {
-
+    String userID;
     String username;
+    String password;
     String email;
     LocalDate dateOfBirth;
     String roleName;
     String element;
     String imageLink;
-
+    boolean noDob;
 }

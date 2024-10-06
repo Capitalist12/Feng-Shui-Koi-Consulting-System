@@ -258,13 +258,17 @@ public SignUpResponse registerUser(SignUpRequest request) {
         log.info("User info{}:", userInfo);
 
         //On board user
+        Element element = elementRepo.findById(6)
+                .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+
         var user = userRepository.findByEmail(userInfo.getEmail()).orElseGet(
                 ()-> userRepository.save(User.builder()
                                 .userID(generateUserID())
                                 .email(userInfo.getEmail())
                                 .username(userInfo.getName())
-                                .password(userInfo.getEmail())
                                 .roleName(String.valueOf(Roles.USER))
+                                .element(element)
+                                .password("")
                                 .build()));
 
         var token = generateToken(user);
