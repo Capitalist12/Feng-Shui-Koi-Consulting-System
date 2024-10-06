@@ -13,7 +13,7 @@ springdoc:
 
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB9"
+    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB10"
     username: root
     password: 123456
 

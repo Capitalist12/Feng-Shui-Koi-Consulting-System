@@ -98,6 +98,7 @@ public class AuthenticationServices {
         return AuthenResponse.builder()
                 .authenticated(true)
                 .username(user.getUsername())
+                .roleName(user.getRoleName())
                 .token(token)
                 .build();
 
