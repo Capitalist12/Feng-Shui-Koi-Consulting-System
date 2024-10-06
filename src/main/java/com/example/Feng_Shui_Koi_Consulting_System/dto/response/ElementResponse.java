@@ -19,4 +19,7 @@ public class ElementResponse {
     String quantity;
     String direction;
     int value;
+    String color;
+    String generation;
+    String inhibition;
 }

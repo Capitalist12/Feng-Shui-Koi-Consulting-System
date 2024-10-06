@@ -1,8 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
@@ -17,7 +16,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -27,33 +25,48 @@ public class ConsultingService {
 
     FishRepo fishRepo;
     TankRepo tankRepo;
+    ElementRepo elementRepo;
     UserRepository userRepository;
     ElementMapper elementMapper;
 
     public List<ConsultingFishResponse> koiFishList(String userID){
+        // Fetch the user
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-        Integer elementID = user.getElementID();
-        return fishRepo.findByElementID(elementID).stream().map(fish -> {
-            KoiTypesResponse koiTypesResponse = null;
-            var koiType = fish.getKoiTypes();
-            // Convert KoiTypes to KoiTypesResponse if needed
-            koiTypesResponse = KoiTypesResponse.builder()
-                    .typeName(koiType.getTypeName())
-                    .description(koiType.getDescription())
-                    .build();
 
-            return ConsultingFishResponse.builder()
-                    .id((fish.getId()))
-                    .name(fish.getName())
-                    .size(fish.getSize())
-                    .weight(fish.getWeight())
-                    .color(fish.getColor())
-                    .description(fish.getDescription())
-                    .koiTypes(koiTypesResponse)  // Assuming KoiType is already mapped
-                    .imagesFish(fish.getImagesFish())  // Converted Set<ImageResponse>
-                    .build();
-        }).collect(Collectors.toList());
+        // Get the user's element ID
+        Integer elementID = user.getElementID();
+
+        // Fetch the Element entity by the elementID
+        Element element = elementRepo.findById(elementID)
+                .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+
+        // Get the generation (element that supports this one)
+        String generation = element.getGeneration();
+
+        // Find KoiFish by elementID or supported generation name
+        return fishRepo.findByElementIDOrGeneration(elementID, generation).stream()
+                .map(fish -> {
+                    // Prepare KoiTypesResponse
+                    var koiType = fish.getKoiTypes();
+                    KoiTypesResponse koiTypesResponse = KoiTypesResponse.builder()
+                            .typeName(koiType.getTypeName())
+                            .description(koiType.getDescription())
+                            .build();
+
+                    // Build ConsultingFishResponse
+                    return ConsultingFishResponse.builder()
+                            .id(fish.getId())
+                            .name(fish.getName())
+                            .size(fish.getSize())
+                            .weight(fish.getWeight())
+                            .color(fish.getColor())
+                            .description(fish.getDescription())
+                            .koiTypes(koiTypesResponse)
+                            .imagesFish(fish.getImagesFish())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
     public List<ConsultingTankResponse> tankList(String userID)

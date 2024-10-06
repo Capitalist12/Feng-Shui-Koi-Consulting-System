@@ -95,6 +95,9 @@ public class FishService {
                             .quantity(element.getQuantity())
                             .direction(element.getDirection())
                             .value(element.getValue())
+                            .color(element.getColor())
+                            .generation(element.getGeneration())
+                            .inhibition(element.getInhibition())
                             .build())
                     .collect(Collectors.toSet());
 
@@ -131,6 +134,9 @@ public class FishService {
                             .quantity(element.getQuantity())
                             .direction(element.getDirection())
                             .value(element.getValue())
+                            .color(element.getColor())
+                            .generation(element.getGeneration())
+                            .inhibition(element.getInhibition())
                             .build())
                     .collect(Collectors.toSet());
 
@@ -168,6 +174,8 @@ public class FishService {
                         .quantity(element.getQuantity())
                         .direction(element.getDirection())
                         .value(element.getValue())
+                        .generation(element.getGeneration())
+                        .inhibition(element.getInhibition())
                         .build())
                 .collect(Collectors.toSet());
 
@@ -274,6 +282,9 @@ public class FishService {
                             .quantity(element.getQuantity())
                             .direction(element.getDirection())
                             .value(element.getValue())
+                            .color(element.getColor())
+                            .generation(element.getGeneration())
+                            .inhibition(element.getInhibition())
                             .build())
                     .collect(Collectors.toSet());
         }
