@@ -17,7 +17,7 @@ public class UserUpdateRequest {
     @Email(message = "EMAIL_INVALID")
     String email;
     LocalDate dateOfBirth;
-    Integer elementID;
+    String element;
     String imageLink;
     String roleName;
     String planID;

@@ -14,7 +14,7 @@ public enum ErrorCode {
     INVALID_KEY(1005, "Invalid message key", HttpStatus.BAD_REQUEST),
     UNCATEGORIZED_EXCEPTION(999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     USER_EXIST(1006,"User existed", HttpStatus.BAD_REQUEST),
-    EMAIL_EXIST(1007,"Email existed", HttpStatus.BAD_REQUEST),
+    EMAIL_EXITST(1007,"Email existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXIST(1008,"User not exist", HttpStatus.NOT_FOUND),
     EMAIL_NOT_EXIST(1009,"Email not exist", HttpStatus.NOT_FOUND),
     KOI_TYPE_NOT_EXIST(1010,"KoiType not exist", HttpStatus.NOT_FOUND),
@@ -24,12 +24,13 @@ public enum ErrorCode {
     PASSWORD_INVALID(1014,"Invalid password", HttpStatus.BAD_REQUEST),
     EMAIL_INVALID(1015,"Invalid email", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED(1016,"You don't have permission", HttpStatus.FORBIDDEN),
-    ELEMENT_NOT_EXIST(1017,"KoiType not exist", HttpStatus.NOT_FOUND),
+    ELEMENT_NOT_EXIST(1017,"Element not exist", HttpStatus.NOT_FOUND),
     KOI_TYPE_EXIST(1018,"KoiType existed", HttpStatus.BAD_REQUEST),
-    INVALID_TOKEN(1019, "Token invalid", HttpStatus.BAD_REQUEST ),
-    EXPIRED_TOKEN(1020, "Token expired", HttpStatus.BAD_REQUEST),
-    SEND_MAIL_FAILED(1021, "Send mail failed", HttpStatus.BAD_REQUEST ),
-    OTP_NOT_FOUND(1022, "OTP not found", HttpStatus.BAD_REQUEST );
+    PASSWORD_EXIST(1019,"Password existed", HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN(1020, "Token invalid", HttpStatus.BAD_REQUEST ),
+    EXPIRED_TOKEN(1021, "Token expired", HttpStatus.BAD_REQUEST),
+    SEND_MAIL_FAILED(1022, "Send mail failed", HttpStatus.BAD_REQUEST ),
+    OTP_NOT_FOUND(1023, "OTP not found", HttpStatus.BAD_REQUEST );
 
     private int code;
     private String message;

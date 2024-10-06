@@ -28,87 +28,35 @@ public class TankService {
      TankRepo tankRepo;
      TankMapper tankMapper;
      ElementRepo elementRepo;
-     ElementMapper elementMapper;
 
     public TankResponse createTank(TankCreationRequest request){
 
         if(tankRepo.existsByShape(request.getShape()))
             throw new AppException(ErrorCode.TANK_EXISTED);
-        Tank tank = new Tank();
+        Tank tank = tankMapper.toTank(request,
+                elementRepo);
         tank.setTankId(generateTankID());
-        tank.setShape(request.getShape());
-        tank.setImageURL(request.getImageURL());
-
-        ElementResponse elementResponse = new ElementResponse();
-        if (request.getElement() != null) {
-            var element = elementRepo.findByElementName(request.getElement())
-                    .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
-            tank.setElementTank(element);
-            elementResponse = elementMapper
-                    .toElementResponse(element);
-        }
-        tankRepo.save(tank);
-
-        return TankResponse.builder()
-                .tankId(tank.getTankId())
-                .shape(tank.getShape())
-                .imageURL(tank.getImageURL())
-                .elementTank(elementResponse)
-                .build();
-
+        return tankMapper.toTankResponse(tankRepo.save(tank));
     }
 
     public List<TankResponse> getTank()
     {
-        return tankRepo.findAll().stream().map(tank -> {
-            ElementResponse elementResponse = elementMapper
-                    .toElementResponse(tank.getElementTank());
-            return TankResponse.builder()
-                    .tankId(tank.getTankId())
-                    .shape(tank.getShape())
-                    .imageURL(tank.getImageURL())
-                    .elementTank(elementResponse)
-                    .build();
-        }).collect(Collectors.toList());
+        return tankRepo.findAll().stream().map(
+                tankMapper :: toTankResponse).collect(Collectors.toList());
     }
 
     public TankResponse getTankByID(String id){
         Tank tank =  tankRepo.findById(id).orElseThrow(()
                 -> new AppException(ErrorCode.TANK_NOT_FOUND));
-
-        ElementResponse elementResponse = elementMapper
-                .toElementResponse(tank.getElementTank());
-        return TankResponse.builder()
-                .tankId(tank.getTankId())
-                .shape(tank.getShape())
-                .imageURL(tank.getImageURL())
-                .elementTank(elementResponse)
-                .build();
-
+        return tankMapper.toTankResponse(tank);
     }
 
     public TankResponse updateTank(String tankId, TankUpdateRequest request){
         Tank tank = tankRepo.findById(tankId).orElseThrow(()
                 -> new AppException(ErrorCode.TANK_NOT_FOUND));
-        tank.setShape(request.getShape());
-        tank.setImageURL(request.getImageURL());
-
-        ElementResponse elementResponse = new ElementResponse();
-        if (request.getElement() != null) {
-            var element = elementRepo.findByElementName(request.getElement())
-                    .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
-            tank.setElementTank(element);
-            elementResponse = elementMapper
-                    .toElementResponse(element);
-        }
-        tankRepo.save(tank);
-
-        return TankResponse.builder()
-                .tankId(tank.getTankId())
-                .shape(tank.getShape())
-                .imageURL(tank.getImageURL())
-                .elementTank(elementResponse)
-                .build();
+        tankMapper.updateTank(tank, request,
+                elementRepo);
+        return tankMapper.toTankResponse(tankRepo.save(tank));
     }
 
     public void deleteTank(String tankId){

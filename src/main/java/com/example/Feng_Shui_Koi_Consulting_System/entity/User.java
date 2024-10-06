@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -44,11 +45,13 @@ public class User {
 //    @Column(name = "PlanID")
 //    String planID;
 
-    @Column(name = "ElementID")
-    Integer elementID;
-
     @Column(name = "DeleteStatus")
     boolean deleteStatus;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "ElementID", nullable = false, referencedColumnName = "ElementID")
+    @JsonBackReference
+    Element element;
 
     // Lombok will generate getters and setters
 }

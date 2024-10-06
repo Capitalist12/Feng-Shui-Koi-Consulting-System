@@ -22,11 +22,9 @@ public class SignUpRequest {
     @Size(min = 6, max = 40, message = "PASSWORD_INVALID")
     String password;
     @Email
-    @Size(min = 4, max = 40, message = "EMAIL_INVALID" )
+    @Size(min = 4, max = 50, message = "EMAIL_INVALID" )
     @NotBlank
     String email;
     LocalDate dateOfBirth;
-
-
 
 }

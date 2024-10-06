@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -31,9 +32,9 @@ public class Element {
     int value;
     @Column(name = "Color")
     String color;
-    @Column(name = "Generation")
+    @Column(name = "Generation") //Tuong sinh
     String generation;
-    @Column(name = "Inhibition")
+    @Column(name = "Inhibition") //Tuong khac
     String inhibition;
 
     @ManyToMany(mappedBy = "elements")
@@ -43,5 +44,9 @@ public class Element {
     @OneToMany(mappedBy = "elementTank", cascade = CascadeType.ALL)
     @JsonManagedReference
     Set<Tank> tankShape;
+
+    @OneToMany(mappedBy = "element", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    Set<User> user ;
 
 }
