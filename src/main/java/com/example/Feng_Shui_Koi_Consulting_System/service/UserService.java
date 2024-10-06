@@ -55,8 +55,6 @@ public class UserService {
                 .map(userMapper :: toUserResponse).collect(Collectors.toList());
     }
 
-
-
     public UserResponse getUserById(String id) {
         User user =  userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
