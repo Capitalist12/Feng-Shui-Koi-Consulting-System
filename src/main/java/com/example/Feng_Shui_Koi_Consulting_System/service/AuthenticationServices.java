@@ -44,8 +44,8 @@ public class AuthenticationServices {
     UserRepository userRepository;
     UserMapper userMapper;
     EmailService emailService;
-    private Map<String, String> otpData = new HashMap<>();
-    private Map<String, LocalDateTime> otpExpiry = new HashMap<>();
+    Map<String, String> otpData = new HashMap<>();
+    Map<String, LocalDateTime> otpExpiry = new HashMap<>();
 
     @NonFinal
     @Value("${jwt.singerKey}")

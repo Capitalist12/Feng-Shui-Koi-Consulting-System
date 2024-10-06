@@ -9,10 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,8 +33,8 @@ public class ConsultingAPI {
                 builder().result(consultingService.tankList(userID)).build();
     }
 
-    @GetMapping("/all/{userID}")
-    public ApiResponse<ConsultingResponse> getConsulting(@PathVariable String userID){
+    @GetMapping("/all")
+    public ApiResponse<ConsultingResponse> getConsulting(@RequestBody String userID){
         var koiFishList = consultingService.koiFishList(userID);
         var tankList = consultingService.tankList(userID);
         ConsultingResponse consultingResponse = ConsultingResponse.builder()
