@@ -4,7 +4,7 @@ import DashboardPage from "./pages/admin/dashboard/DashboardPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import LoginPage from "./pages/login/LoginPage";
 import HomePage from "./pages/home/HomePage";
-import ProfilePage from "./pages/user/profile/ProfilePage";
+import UserProfilePage from "./pages/user/profile/UserProfilePage";
 import TankManagement from "./components/CRUD_Tank/TankManagement";
 import Admin from "./utils/AdminRoute/Admin";
 import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
@@ -43,7 +43,7 @@ const App = () => {
     },
     {
       path: 'user',
-      element: <ProfilePage/>
+      element: <UserProfilePage/>
     }
     
   ]);

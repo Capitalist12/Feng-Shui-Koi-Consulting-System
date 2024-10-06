@@ -10,6 +10,7 @@ import CustomeFooter from '../../components/HomePage/CustomeFooter';
 import { IoIosArrowDown } from 'react-icons/io';
 import BackToTopBtn from '../../components/Utils/BackToTopBtn';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
+// import '../../javaScript/HomePageScript.js'
 
 const HomePage = () => {
     const [scrollProgress, setScrollProgress] = useState(0); // Để theo dõi quá trình cuộn
@@ -54,20 +55,21 @@ const HomePage = () => {
                         <Row>
                             <Col span={8} className='statistics-item' >
                                 <div>
-                                    <h2>999+</h2>
-                                    <p>Lorem testing swp391 content js react</p>
+                                    <h2 id=''>999+</h2>
+                                    <p>GIỐNG CÁ VÀ HỒ CÁ</p>
                                 </div>
                             </Col>
                             <Col span={8} className='statistics-item'>
                                 <div>
                                     <h2>999+</h2>
-                                    <p>Lorem testing swp391 content js react df sf dfdsf sdfdsf</p>
+                                    <p>BÀI ĐĂNG MUA BÁN</p>
                                 </div>
                             </Col>
                             <Col span={8} className='statistics-item'>
                                 <div>
                                     <h2>999+</h2>
-                                    <p>Lorem testing swp391 content js react</p>
+                                    <p>BÀI BLOG, KIẾN THỨC<br />
+                                        CHIA SẼ KINH NGHIỆM</p>
                                 </div>
                             </Col>
                         </Row>
