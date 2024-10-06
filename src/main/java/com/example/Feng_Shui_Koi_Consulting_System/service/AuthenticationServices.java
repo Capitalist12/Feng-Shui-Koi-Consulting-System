@@ -73,14 +73,18 @@ public class AuthenticationServices {
             throw new AppException(ErrorCode.USER_EXIST);
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXITST);
+
         User user = userMapper.toUser(request);
+
         user.setUserID(generateUserID());
+
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         ElementCalculationService elementCalculationService = new ElementCalculationService();
+
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
         user.setRoleName(String.valueOf(Roles.USER));
 //        user.setPlanID("PP005");
-        user.setElementID(elementCalculationService.calculateElementId(2006));
+        user.setElementID(elementCalculationService.calculateElementId(user.getDateOfBirth()));
         user.setDeleteStatus(false);
         return userMapper.toSignUpResponse(userRepository.save(user));
 

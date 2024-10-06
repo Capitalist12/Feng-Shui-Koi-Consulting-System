@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CalculateElementRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ElementCalculationService;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CompatibilityRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CompatibilityResponse;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,8 +32,8 @@ public class ConsultingAPI {
     ConsultingService consultingService;
 
     @GetMapping("/calculate")
-    public ApiResponse<Integer> calculateElementId(@RequestParam int birthYear) {
-        int elementId = elementCalculationService.calculateElementId(birthYear);
+    public ApiResponse<Integer> calculateElementId(@RequestBody CalculateElementRequest request) {
+        int elementId = elementCalculationService.calculateElementId(request.getDob());
         return ApiResponse.<Integer>builder()
                 .result(elementId)
                 .build();

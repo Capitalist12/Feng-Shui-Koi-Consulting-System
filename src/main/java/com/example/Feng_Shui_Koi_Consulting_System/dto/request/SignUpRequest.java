@@ -27,6 +27,4 @@ public class SignUpRequest {
     String email;
     LocalDate dateOfBirth;
 
-
-
 }
