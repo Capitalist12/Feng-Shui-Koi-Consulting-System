@@ -2,13 +2,12 @@
 server:
   port: 8080
 
-
 springdoc:
   api-docs:
     enabled: true
     path: /koifish-docs/v3/api-docs
   swagger-ui:
-    path: /swagger-ui.html  # Path for Swagger UI
+    path: /swagger-ui.html  # ???ng d?n cho Swagger UI
     enabled: true
 
 spring:
@@ -16,6 +15,17 @@ spring:
     url: "jdbc:mysql://localhost:3306/FengShuiKoiDB10"
     username: root
     password: 123456
+
+  application:
+    name: sendemail
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dinht1706@gmail.com
+    password: kjkv fiph rrze aiqc
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 
   jpa:
     hibernate:

@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TankResponse {
+public class ConsultingTankResponse {
     String tankId;
     String shape;
     String imageURL;

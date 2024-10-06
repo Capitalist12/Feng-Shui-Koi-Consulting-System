@@ -2,6 +2,9 @@ package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CalculateElementRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingFishResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingTankResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ElementCalculationService;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CompatibilityRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CompatibilityResponse;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,20 +43,43 @@ public class ConsultingAPI {
                 .build();
     }
 
-    @PostMapping("/compatibility")
-    ApiResponse<CompatibilityResponse> calculateCompatibilityScore
-            (@RequestBody CompatibilityRequest request) {
-        String userElement = request.getUserElement();
-        String tankElement = consultingService.elementFromShape(request.getTankShape());
-        Set<Set<String>> fishElements = request.getKoiFishColors().stream()
-                .map(colors -> colors.stream()
-                        .map(consultingService::elementFromColor)
-                        .collect(Collectors.toSet()))
-                .collect(Collectors.toSet());
-        return ApiResponse.<CompatibilityResponse>builder()
-                .result(consultingService.compatibilityScore(userElement,
-                        tankElement, fishElements, request))
-                .build();
+//    @PostMapping("/compatibility")
+//    ApiResponse<CompatibilityResponse> calculateCompatibilityScore
+//            (@RequestBody CompatibilityRequest request) {
+//        String userElement = request.getUserElement();
+//        String tankElement = consultingService.elementFromShape(request.getTankShape());
+//        Set<Set<String>> fishElements = request.getKoiFishColors().stream()
+//                .map(colors -> colors.stream()
+//                        .map(consultingService::elementFromColor)
+//                        .collect(Collectors.toSet()))
+//                .collect(Collectors.toSet());
+//        return ApiResponse.<CompatibilityResponse>builder()
+//                .result(consultingService.compatibilityScore(userElement,
+//                        tankElement, fishElements, request))
+//                .build();
+//    }
+
+    @GetMapping("/koiFish/{userID}")
+    public ApiResponse<List<ConsultingFishResponse>> getKoiFishByElement(@PathVariable String userID) {
+        return ApiResponse.<List<ConsultingFishResponse>>
+                builder().result(consultingService.koiFishList(userID)).build();
     }
 
+    @GetMapping("/tank/{userID}")
+    public ApiResponse<List<ConsultingTankResponse>> getTankByElement(@PathVariable String userID){
+        return ApiResponse.<List<ConsultingTankResponse>>
+                builder().result(consultingService.tankList(userID)).build();
+    }
+
+    @GetMapping("/all/{userID}")
+    public ApiResponse<ConsultingResponse> getConsulting(@PathVariable String userID){
+        var koiFishList = consultingService.koiFishList(userID);
+        var tankList = consultingService.tankList(userID);
+        ConsultingResponse consultingResponse = ConsultingResponse.builder()
+                .koiFishList(koiFishList)
+                .tankList(tankList)
+                .build();
+        return ApiResponse.<ConsultingResponse>builder()
+                .result(consultingResponse).build();
+    }
 }

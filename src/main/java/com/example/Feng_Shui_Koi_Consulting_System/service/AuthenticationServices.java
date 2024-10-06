@@ -1,9 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AuthenRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ExchangeTokenRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.IntrospectResquest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.SignUpRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
@@ -19,6 +16,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -31,10 +29,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Slf4j
@@ -46,6 +48,9 @@ public class AuthenticationServices {
     UserMapper userMapper;
     OutboundIdentityClient outboundIdentityClient;
     OutboundUserClient outboundUserClient;
+    EmailService emailService;
+    private Map<String, String> otpData = new HashMap<>();
+    private Map<String, LocalDateTime> otpExpiry = new HashMap<>();
 
     @NonFinal
     @Value("${jwt.singerKey}")
@@ -82,10 +87,15 @@ public class AuthenticationServices {
         ElementCalculationService elementCalculationService = new ElementCalculationService();
 
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
+        user.setEmail(request.getEmail());
         user.setRoleName(String.valueOf(Roles.USER));
 //        user.setPlanID("PP005");
         user.setElementID(elementCalculationService.calculateElementId(user.getDateOfBirth()));
         user.setDeleteStatus(false);
+        emailService.sendEmail(
+                request.getEmail().trim(),
+                "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
+                "Account Creation Successful");
         return userMapper.toSignUpResponse(userRepository.save(user));
 
     }
@@ -118,6 +128,79 @@ public class AuthenticationServices {
         return IntrospectResponse.builder()
                 .valid(expepityTime.after(new Date()) && verifier)
                 .build();
+    }
+
+    public void forgotPassword(ForgotPasswordRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+        String otp = generateOTP();
+        storeOTP(request.getEmail().trim(), otp);
+        emailService.sendEmail(request.getEmail().trim(),
+                "Your OTP Code: " + otp, "OTP for Password Reset");
+
+        System.out.println("OTP sent to: " + request.getEmail().trim());
+    }
+
+    public String verifyOtpAndResetPassword(ResetPasswordRequest request) {
+        boolean isOtpValid = validateOTP(request.getEmail().trim(), request.getOtp());
+
+        if (isOtpValid) {
+            User user = userRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            userRepository.save(user);
+            clearOTP(request.getEmail().trim());
+
+            emailService.sendEmail(request.getEmail().trim(),
+                    "Your password has been successfully changed.",
+                    "Password Change Confirmation");
+
+            return "Password has been successfully changed.";
+        } else {
+            return "Invalid or expired OTP. Please request a new OTP.";
+        }
+    }
+
+    public String generateOTP(){
+        String CHARACTERS = "0123456789";
+        int OTP_LENGTH = 6;
+        SecureRandom random = new SecureRandom();
+        StringBuilder otp = new StringBuilder(OTP_LENGTH);
+        for(int i = 0; i < OTP_LENGTH; i++){
+            otp.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
+        }
+        return otp.toString();
+    }
+
+    public void storeOTP(String email, String otp){
+        otpData.put(email, otp);
+        otpExpiry.put(email, LocalDateTime.now().plusMinutes(5));
+    }
+
+    public boolean validateOTP(String email, String inputOtp){
+        String storedOTP = otpData.get(email);
+        LocalDateTime expiryOTP = otpExpiry.get(email);
+        if(storedOTP == null || expiryOTP == null){
+            return false;
+        }
+        if(expiryOTP.isBefore(LocalDateTime.now())){
+            otpData.remove(email);
+            otpExpiry.remove(email);
+            return false;
+        }
+        if(storedOTP.equals(inputOtp)){
+            otpData.remove(email);
+            otpExpiry.remove(email);
+            return true;
+        }
+        return false;
+    }
+
+    public void clearOTP(String email){
+        otpData.remove(email);
+        otpExpiry.remove(email);
     }
 
     private String generateToken(User user) {
