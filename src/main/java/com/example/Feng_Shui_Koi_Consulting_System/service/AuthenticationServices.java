@@ -67,6 +67,10 @@ public class AuthenticationServices {
 //        user.setPlanID("1");
         user.setElementID(null);
         user.setDeleteStatus(false);
+        emailService.sendEmail(
+                request.getEmail().trim(),
+                "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
+                "Account Creation Successful");
         return userMapper.toSignUpResponse(userRepository.save(user));
 
     }

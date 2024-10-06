@@ -26,14 +26,8 @@ public class AuthenticationAPI {
 
     @PostMapping("/signup")
     ApiResponse<SignUpResponse> registerUser(@RequestBody @Valid SignUpRequest request) {
-            emailService.sendEmail(
-                    request.getEmail().trim(),
-                    "Welcome " + request.getUsername() + "!\nYour password is: " + request.getPassword(),
-                    "Account Creation Successful");
-            SignUpResponse registerUser = authenticationServices.registerUser(request);
-
             return ApiResponse.<SignUpResponse>builder()
-                    .result(registerUser)
+                    .result(authenticationServices.registerUser(request))
                     .build();
     }
 
