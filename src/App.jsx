@@ -2,11 +2,13 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DashboardPage from "./pages/admin/dashboard/DashboardPage";
 import RegisterPage from "./pages/register/RegisterPage";
-import UserManagement from "./components/CRUD_User/index";
 import LoginPage from "./pages/login/LoginPage";
 import HomePage from "./pages/home/HomePage";
 import ProfilePage from "./pages/user/profile/ProfilePage";
 import TankManagement from "./components/CRUD_Tank/TankManagement";
+import Admin from "./utils/AdminRoute/Admin";
+import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
+import UserManagement from "./components/CRUD_User/UserManagement";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -28,10 +30,10 @@ const App = () => {
       children: [
         {
           path: "koi",
-          element: <DashboardPage />,
+          element: <KoiContainer />,
         },
         {
-          path: "user",
+          path: "users",
           element: <UserManagement />,
         },
         {
