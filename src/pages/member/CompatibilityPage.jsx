@@ -1,117 +1,97 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Utils/Navbar";
+import { Layout, Table, Row, Col, Spin, Typography } from "antd";
+import { toast } from "react-toastify";
 import api from "../../config/axiosConfig";
-import { Table, Button, List, Typography } from "antd";
+import Navbar from "../../components/Utils/Navbar"; // Đảm bảo đường dẫn đúng với vị trí của Navbar
 
-const CompatibilityPage = () => {
-  const [koiFishes, setKoiFishes] = useState([]); // Dữ liệu cá koi
-  const [tanks, setTanks] = useState([]); // Dữ liệu hồ
-  const [selectedKoi, setSelectedKoi] = useState([]); // Cá koi đã chọn
-  const [selectedTank, setSelectedTank] = useState(null); // Hồ đã chọn
+const { Title } = Typography;
+const { Content } = Layout;
 
-  useEffect(() => {
-    // Gọi API để lấy dữ liệu cá koi
-    const fetchKoiFishes = async () => {
-      try {
-        const response = await api.get("fish");
-        console.log("Dữ liệu cá koi:", response.data);
-        if (Array.isArray(response.data)) {
-          setKoiFishes(response.data);
-        }
-      } catch (error) {
-        console.error("Lỗi khi gọi API cá koi:", error);
-      }
-    };
+function CompatibilityPage() {
+  const [fishData, setFishData] = useState([]);
+  const [tankData, setTankData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    // Gọi API để lấy dữ liệu hồ
-    const fetchTanks = async () => {
-      try {
-        const response = await api.get("tank");
-        console.log("Dữ liệu hồ:", response.data);
-        if (Array.isArray(response.data)) {
-          setTanks(response.data);
-        }
-      } catch (error) {
-        console.error("Lỗi khi gọi API hồ:", error);
-      }
-    };
-
-    fetchKoiFishes();
-    fetchTanks();
-  }, []);
-
-  const handleKoiSelect = (koi) => {
-    if (selectedKoi.includes(koi)) {
-      setSelectedKoi(selectedKoi.filter((item) => item !== koi)); // Bỏ chọn
-    } else {
-      if (selectedKoi.length < 3) {
-        setSelectedKoi([...selectedKoi, koi]); // Chọn thêm cá
-      } else {
-        alert("Bạn chỉ có thể chọn tối đa 3 con cá.");
-      }
+  // Hàm lấy dữ liệu cho cá
+  const fetchFishData = async () => {
+    try {
+      const response = await api.get("fish"); // Gọi API cho cá
+      const data = response.data.result || []; // Kiểm tra nếu không có dữ liệu
+      setFishData(Array.isArray(data) ? data : []); // Đảm bảo là mảng
+    } catch (error) {
+      toast.error("Error fetching fish data: " + error.message);
     }
   };
 
-  const handleTankSelect = (tank) => {
-    setSelectedTank(tank); // Chọn hồ
+  // Hàm lấy dữ liệu cho hồ
+  const fetchTankData = async () => {
+    try {
+      const response = await api.get("tank"); // Gọi API cho hồ
+      const data = response.data.result || []; // Kiểm tra nếu không có dữ liệu
+      setTankData(Array.isArray(data) ? data : []); // Đảm bảo là mảng
+    } catch (error) {
+      toast.error("Error fetching tank data: " + error.message);
+    }
   };
 
+  // Hàm gọi để fetch dữ liệu
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await Promise.all([fetchFishData(), fetchTankData()]);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  // Cấu hình cột cho bảng cá
+  const fishColumns = [
+    {
+      title: "Tên Cá",
+      dataIndex: "name",
+      key: "name",
+    },
+  ];
+
+  // Cấu hình cột cho bảng hồ
+  const tankColumns = [
+    {
+      title: "Tên Hồ",
+      dataIndex: "shape",
+      key: "shape",
+    },
+  ];
+
   return (
-    <div>
+    <Layout>
       <Navbar /> {/* Hiển thị Navbar */}
-      <Typography.Title level={2}>Trang Độ Tương Hợp</Typography.Title>{" "}
-      {/* Nội dung của trang Độ Tương Hợp */}
-      {/* Hiển thị các cá koi */}
-      <Typography.Title level={3}>Cá Koi</Typography.Title>
-      <Table
-        dataSource={koiFishes}
-        rowKey="id" // Giả định id là trường duy nhất
-        pagination={false}
-      >
-        <Table.Column title="Tên Cá" dataIndex="name" key="name" />
-        <Table.Column
-          title="Hành Động"
-          key="action"
-          render={(text, fish) => (
-            <Button onClick={() => handleKoiSelect(fish)}>
-              {selectedKoi.includes(fish) ? "Bỏ Chọn" : "Chọn"}
-            </Button>
-          )}
-        />
-      </Table>
-      {/* Hiển thị các hồ */}
-      <Typography.Title level={3}>Hồ</Typography.Title>
-      <Table
-        dataSource={tanks}
-        rowKey="tankId" // Giả định tankId là trường duy nhất
-        pagination={false}
-      >
-        <Table.Column title="Tên Hồ" dataIndex="shape" key="shape" />
-        <Table.Column
-          title="Hành Động"
-          key="action"
-          render={(text, tank) => (
-            <Button onClick={() => handleTankSelect(tank)}>
-              {selectedTank === tank ? "Bỏ Chọn" : "Chọn"}
-            </Button>
-          )}
-        />
-      </Table>
-      {/* Hiển thị cá và hồ đã chọn */}
-      <Typography.Title level={3}>Cá và Hồ Đã Chọn</Typography.Title>
-      <div>
-        <Typography.Title level={4}>Cá Koi:</Typography.Title>
-        <List
-          dataSource={selectedKoi}
-          renderItem={(fish) => (
-            <List.Item key={fish.id}>{fish.name}</List.Item>
-          )}
-        />
-        <Typography.Title level={4}>Hồ:</Typography.Title>
-        {selectedTank ? <p>{selectedTank.shape}</p> : <p>Chưa chọn hồ nào.</p>}
-      </div>
-    </div>
+      <Content style={{ padding: "20px" }}>
+        <Title level={2}>Độ Tương Hợp</Title>
+        {loading ? (
+          <Spin size="large" />
+        ) : (
+          <Row gutter={16}>
+            <Col span={12}>
+              <Title level={4}>Danh Sách Cá</Title>
+              <Table
+                columns={fishColumns}
+                dataSource={fishData}
+                rowKey="id" // Hoặc trường khóa chính khác của bạn
+              />
+            </Col>
+            <Col span={12}>
+              <Title level={4}>Danh Sách Hồ</Title>
+              <Table
+                columns={tankColumns}
+                dataSource={tankData}
+                rowKey="id" // Hoặc trường khóa chính khác của bạn
+              />
+            </Col>
+          </Row>
+        )}
+      </Content>
+    </Layout>
   );
-};
+}
 
 export default CompatibilityPage;
