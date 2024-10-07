@@ -29,6 +29,7 @@ const DropdownAvatar = (props) => {
 
     return (
         <Dropdown
+            className="dropdown-avatar"
             trigger={['click']}
             menu={{
                 items: [
