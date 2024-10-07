@@ -40,6 +40,8 @@ public interface UserMapper {
                     @Context ElementRepo elementRepo);
 
     @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementName")
+    @Mapping(target = "userID", source = "userID")
+    @Mapping(t)
     ProfileResponse toProfileResponse(User user);
 
     @Named("mapToElement")
