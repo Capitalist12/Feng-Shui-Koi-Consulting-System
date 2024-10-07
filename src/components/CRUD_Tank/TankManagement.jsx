@@ -1,19 +1,43 @@
-import { Button, Form, Input, Upload } from "antd";
-
-import { UploadOutlined } from "@ant-design/icons";
-// import CRUDTemplate from "../crud-template/CRUDTemplate";
+import { useEffect, useState } from "react";
+import api from "../../config/axiosConfig";
+import { toast } from "react-toastify";
 import {
-  fetchTank,
-  createTank,
-  updateTank,
-  deleteTank,
-} from "../../services/tankAPIService";
+  Button,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Table,
+  Row,
+  Col,
+  Select,
+} from "antd";
+import { ELEMENT_VALUES } from "../../utils/constant";
 
 function TankManagement() {
-  //
+  const [datas, setDatas] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [selectedTank, setSelectedTank] = useState(null);
+
+  // Fetch tanks data
+  const fetchData = async () => {
+    try {
+      const response = await api.get("tank");
+      setDatas(response.data?.result || []);
+    } catch (err) {
+      toast.error(err.response?.data || "Error fetching data");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const columns = [
     {
-      title: "Tank ID",
+      title: "ID",
       dataIndex: "tankId",
       key: "tankId",
     },
@@ -23,78 +47,226 @@ function TankManagement() {
       key: "shape",
     },
     {
-      title: "Element Name",
-      dataIndex: ["elementTank", "elementName"],
-      key: "elementName",
-    },
-    {
-      title: "Quantity",
-      dataIndex: ["elementTank", "quantity"],
-      key: "quantity",
-    },
-    {
       title: "Description",
-      dataIndex: ["elementTank", "description"],
       key: "description",
+      render: (text, record) => {
+        return record.elementTank?.description || "N/A";
+      },
+    },
+    {
+      title: "Direction",
+      key: "direction",
+      render: (text, record) => {
+        return record.elementTank?.direction || "N/A";
+      },
+    },
+    {
+      title: "Element ID",
+      key: "elementId",
+      render: (text, record) => {
+        return record.elementTank?.elementId || "N/A";
+      },
+    },
+    {
+      title: "Element",
+      key: "elementName",
+      render: (text, record) => {
+        return record.elementTank?.elementName || "N/A";
+      },
+    },
+    {
+      title: "Action",
+      dataIndex: "tankId",
+      key: "tankId",
+      render: (tankId, tank) => (
+        <>
+          <Button
+            type="primary"
+            onClick={() => {
+              setSelectedTank(tank); // Lưu tank được chọn
+              form.setFieldsValue({
+                tankId: tank.tankId,
+                shape: tank.shape,
+                elementName: tank.elementTank?.elementName || "",
+                imageURL: tank.imageURL || "",
+              });
+              setShowModal(true); // Mở modal
+            }}
+          >
+            Edit
+          </Button>
+
+          <Popconfirm
+            title="Delete"
+            description="Do you want to delete this tank?"
+            onConfirm={() => handleDelete(tankId)}
+          >
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
+        </>
+      ),
     },
   ];
 
-  // nhung formItems rieng
-  const formItems = (
-    <>
-      <Form.Item name="id" hidden>
-        <Input />
-      </Form.Item>
+  // Handle delete tank
+  const handleDelete = async (tankId) => {
+    if (!tankId) {
+      toast.error("Invalid tank ID");
+      return;
+    }
 
-      <Form.Item
-        name="name"
-        label="Name"
-        rules={[
-          {
-            required: true,
-            message: "Please input name!",
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
+    try {
+      await api.delete(`tank/${tankId}`);
+      toast.success("Delete success");
+      fetchData();
+    } catch (err) {
+      const errorMessage = err.response?.data || "Error deleting tank";
+      toast.error(errorMessage);
+    }
+  };
 
-      <Form.Item name="size" label="Size">
-        <Input />
-      </Form.Item>
+  // Handle create/update tank
+  const handleSubmit = async (values) => {
+    try {
+      setLoading(true);
 
-      <Form.Item name="weight" label="Weight">
-        <Input />
-      </Form.Item>
+      const payload = {
+        shape: values.shape,
+        element: values.elementName,
+        imageURL: values.imageURL || "",
+      };
 
-      <Form.Item name="color" label="Color">
-        <Input />
-      </Form.Item>
+      console.log("Payload before sending:", payload); // Kiểm tra payload
 
-      <Form.Item name="description" label="Description">
-        <Input.TextArea />
-      </Form.Item>
+      if (values.tankId) {
+        const response = await api.put(`tank/${values.tankId}`, payload);
+        console.log("Response after update:", response.data);
+      } else {
+        await api.post("tank", payload);
+      }
 
-      <Form.Item name="imagesFish" label="Images">
-        <Upload
-          listType="picture"
-          beforeUpload={() => false} // Ngăn chặn upload tự động
-        // Các cấu hình khác nếu cần
-        >
-          <Button icon={<UploadOutlined />}>Upload</Button>
-        </Upload>
-      </Form.Item>
-    </>
-  );
+      toast.success("Successfully saved");
+      fetchData();
+      form.resetFields();
+      setShowModal(false);
+    } catch (err) {
+      toast.error(err.response?.data || "Error saving data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleElementChange = (value) => {
+    const selectedElement = ELEMENT_VALUES.find(
+      (option) => option.value === value
+    );
+    if (selectedElement) {
+      form.setFieldsValue({
+        elementName: selectedElement.label,
+      });
+    } else {
+      form.setFieldsValue({
+        elementName: "",
+      });
+    }
+  };
 
   return (
     <div>
-      {/* <CRUDTemplate
-        columns={columns}
-        formItems={formItems}
-        // theo api tren swagger
-        path={"tank"}
-      /> */}
+      <Button
+        type="primary"
+        onClick={() => {
+          form.resetFields();
+          setSelectedTank(null);
+          setShowModal(true);
+        }}
+      >
+        + Add
+      </Button>
+      <Table columns={columns} dataSource={Array.isArray(datas) ? datas : []} />
+
+      <Modal
+        open={showModal}
+        onCancel={() => setShowModal(false)}
+        title="Tank Information"
+        onOk={() => form.submit()}
+        confirmLoading={loading}
+      >
+        <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmit}>
+          <Form.Item name="tankId" hidden>
+            <Input />
+          </Form.Item>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="shape"
+                label="Shape"
+                rules={[{ required: true, message: "Please input Shape!" }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="elementName"
+                label="Element Name"
+                rules={[{ required: true, message: "Please select Element!" }]}
+              >
+                <Select
+                  options={ELEMENT_VALUES}
+                  onChange={handleElementChange}
+                  defaultValue={selectedTank?.elementTank?.elementId}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label="Description">
+                <Input.TextArea
+                  value={selectedTank?.elementTank?.description || "N/A"}
+                  disabled
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Color">
+                <Input
+                  value={selectedTank?.elementTank?.color || "N/A"}
+                  disabled
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label="Quantity">
+                <Input
+                  value={selectedTank?.elementTank?.quantity || "N/A"}
+                  disabled
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Direction">
+                <Input
+                  value={selectedTank?.elementTank?.direction || "N/A"}
+                  disabled
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Form.Item name="imageURL" label="Image URL">
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

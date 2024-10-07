@@ -8,12 +8,12 @@ import { useEffect, useState } from 'react';
 const MultiSelectElement = ({ onChange, data, customeStyle, maxCount }) => {
     const [elements, setElements] = useState(data ? data : []);
 
-    useEffect(() => {
-        if (JSON.stringify(data) !== JSON.stringify(elements)) { // so sánh sự khác biệt giữa data và elements tránh vòng lặp vô hạn
-            setElements(data);
-        }
-    }, [data]);
-
+  useEffect(() => {
+    if (JSON.stringify(data) !== JSON.stringify(elements)) {
+      // so sánh sự khác biệt giữa data và elements tránh vòng lặp vô hạn
+      setElements(data);
+    }
+  }, [data]);
 
     const suffix = (
         <>

@@ -8,6 +8,7 @@ import UserProfilePage from "./pages/user/profile/UserProfilePage";
 import TankManagement from "./components/CRUD_Tank/TankManagement";
 import Admin from "./components/AdminRoute/Admin";
 import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
+import UserManagement from "./components/CRUD_User/UserManagement";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -36,8 +37,8 @@ const App = () => {
           element: <KoiContainer />
         },
         {
-          path: "user",
-          element: <DashboardPage />,
+          path: "users",
+          element: <UserManagement />,
         },
         {
           path: "tank",
@@ -49,7 +50,7 @@ const App = () => {
       path: 'user',
       element: <UserProfilePage />
     }
-
+    
   ]);
 
   return <RouterProvider router={router} />;

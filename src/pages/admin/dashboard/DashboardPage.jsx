@@ -16,9 +16,9 @@ const DashboardPage = () => {
     const [collapsed, setCollapsed] = useState(false);
     const admin = useSelector((store) => store?.user);
 
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
 
     return (
         <Layout>
@@ -78,5 +78,3 @@ const DashboardPage = () => {
 }
 
 export default DashboardPage;
-
-
