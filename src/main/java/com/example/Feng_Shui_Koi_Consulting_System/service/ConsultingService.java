@@ -75,7 +75,7 @@ public class ConsultingService {
     {
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-        Integer elementID = user.getElement().getElementId();
+        Integer elementID = elementCalculationService.calculateElementId(user.getDateOfBirth());
         return tankRepo.findByElementTank_ElementId(elementID).stream().map(tank -> {
             ElementResponse elementResponse = elementMapper
                     .toElementResponse(tank.getElementTank());

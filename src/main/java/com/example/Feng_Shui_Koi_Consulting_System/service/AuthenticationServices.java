@@ -18,6 +18,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -50,8 +51,8 @@ public class AuthenticationServices {
     OutboundIdentityClient outboundIdentityClient;
     OutboundUserClient outboundUserClient;
     EmailService emailService;
-    private Map<String, String> otpData = new HashMap<>();
-    private Map<String, LocalDateTime> otpExpiry = new HashMap<>();
+    Map<String, String> otpData = new HashMap<>();
+    Map<String, LocalDateTime> otpExpiry = new HashMap<>();
     ElementRepo elementRepo;
     ElementCalculationService elementCalculationService;
 
@@ -75,12 +76,12 @@ public class AuthenticationServices {
     protected String GRANT_TYPE = "authorization_code";
 
 
-    //Method to registed user
+    //Method to register user
     public SignUpResponse registerUser(SignUpRequest request) {
+        if (!validateOTP(request.getEmail().trim(), request.getOtp()))
+            throw new AppException(ErrorCode.OTP_NOT_FOUND);
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXIST);
-        if (userRepository.existsByEmail(request.getEmail()))
-            throw new AppException(ErrorCode.EMAIL_EXIST);
         int elementId = elementCalculationService
                 .calculateElementId(request.getDateOfBirth());
         Element element = elementRepo.findById(elementId)
@@ -93,11 +94,21 @@ public class AuthenticationServices {
 //        user.setPlanID("PP005");
         user.setElement(element);
         user.setDeleteStatus(false);
+        clearOTP(request.getEmail().trim());
         emailService.sendEmail(request.getEmail(),
                 "This is your password: " + request.getPassword(),
                 "Create User Successful");
         return userMapper.toSignUpResponse(userRepository.save(user));
+    }
 
+    public void sendOTPToEmail(@Valid SendOTPRequest request) {
+        if (userRepository.existsByEmail(request.getEmail()))
+            throw new AppException(ErrorCode.EMAIL_EXIST);
+        String otp = generateOTP();
+        storeOTP(request.getEmail().trim(), otp);
+        emailService.sendEmail(request.getEmail().trim(),
+                "Your OTP Code: " + otp, "OTP for Password Reset");
+        System.out.println("OTP sent to: " + request.getEmail().trim());
     }
 
     //Method to login user
@@ -119,8 +130,8 @@ public class AuthenticationServices {
 
     }
 
-    public IntrospectResponse introspected(IntrospectResquest resquest) throws JOSEException, ParseException {
-        var token = resquest.getToken();
+    public IntrospectResponse introspected(IntrospectResquest request) throws JOSEException, ParseException {
+        var token = request.getToken();
 
         JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
@@ -131,15 +142,10 @@ public class AuthenticationServices {
                 .build();
     }
 
-    public void forgotPassword(ForgotPasswordRequest request) {
+    public void forgotPassword(@Valid SendOTPRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-        String otp = generateOTP();
-        storeOTP(request.getEmail().trim(), otp);
-        emailService.sendEmail(request.getEmail().trim(),
-                "Your OTP Code: " + otp, "OTP for Password Reset");
-
-        System.out.println("OTP sent to: " + request.getEmail().trim());
+        sendOTPToEmail(request);
     }
 
     public String verifyOtpAndResetPassword(ResetPasswordRequest request) {
