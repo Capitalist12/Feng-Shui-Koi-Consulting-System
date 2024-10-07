@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import { Col, Divider, Drawer, Input, Row, Select, Tag } from "antd";
 import { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS } from "../../../utils/constant";
 import "../../../styles/KoiDrawer.scss";
-import {
-  DeleteOutlined,
-  CheckOutlined,
-  CloseOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import ImageCarousel from "./ImageCarousel";
 import { deleteKoiFish } from "../../../services/koiAPIService";
 import { getAllKoiType } from "../../../services/koiTypeService";
@@ -14,6 +10,7 @@ import { toast } from "react-toastify";
 import { FiEdit } from "react-icons/fi";
 import TextArea from "antd/es/input/TextArea";
 import MultiSelectElement from "../CreateKoiForm/MultiSelectElement";
+import { updateKoiFish, getKoiFish } from "../../../services/koiAPIService";
 
 const drawerSize = 640;
 const charWidth = 15;
@@ -26,17 +23,14 @@ const DescriptionItem = ({ title, content }) => (
 );
 
 const KoiDrawer = (props) => {
-  const { open, onClose, data, getMatchedOptions, fetchAPI } = props;
+  const { open, onClose, data, getMatchedOptions, fetchAPI, updateDrawer } = props;
   const [koiTypeList, setKoiTypeList] = useState([]);
 
   const [koiName, setKoiName] = useState(data.name);
   const [koiSize, setKoiSize] = useState(data.size ? data.size : "");
   const [koiWeight, setKoiWeight] = useState(data.weight ? data.weight : "");
-  const [koiElements, setKoiElements] = useState(
-    data.elements.map((item) => {
-      return item.elementName;
-    })
-  );
+  const [koiElements, setKoiElements] = useState(data.elements.map((item) => {return item.elementName}));
+
   const [koiColor, setKoiColor] = useState(data.color);
   const [koiType, setKoiType] = useState(data.koiTypes.typeName);
   const [koiDescription, setKoiDescription] = useState(data.description);
@@ -45,14 +39,7 @@ const KoiDrawer = (props) => {
   const [isEdit, setIsEdit] = useState(false);
 
   // Lấy các options khớp với elements của koi
-  const matchedOptions = data
-    ? getMatchedOptions(OPTIONS, data.elements)
-    : null;
-  console.log(
-    data.elements.map((item) => {
-      return item.elementName;
-    })
-  );
+  const matchedOptions = data ? getMatchedOptions(OPTIONS, data.elements) : null;
 
   const toggleConfirmDelete = () => {
     setIsConfirm(!isConfirm);
@@ -68,11 +55,33 @@ const KoiDrawer = (props) => {
     fetchAPI();
   };
 
+  const updateKoi = async () => {
+    const payload = {
+      name: koiName,
+      size: koiSize,
+      weight: koiWeight,
+      color: koiColor,
+      description: koiDescription,
+      // imagesURL: Array.isArray(data.imagesFish) ? data.imagesFish : [data.imagesFish],
+      imagesURL: [],
+      koiTypeName: koiType,
+      elements: Array.isArray(koiElements) ? koiElements : [koiElements]
+    };
+
+    const response = await updateKoiFish(data.id, payload)
+
+    if (response?.data.code === 1000) {
+      setIsEdit(!isEdit);
+      toast.success("Cập nhật thành công!");
+      const res = await getKoiFish(data.id);
+      updateDrawer(res?.data?.result);
+      fetchAPI();
+    }
+  }
+
   const toggleEditable = async () => {
     const response = await getAllKoiType();
-    response.data.code === 1000 && response.data.result.length > 0
-      ? setKoiTypeList(response.data.result)
-      : setKoiTypeList([]);
+    response.data.code === 1000 && response.data.result.length > 0 ? setKoiTypeList(response.data.result) : setKoiTypeList([]);
     setIsEdit(!isEdit);
   };
 
@@ -135,7 +144,7 @@ const KoiDrawer = (props) => {
               </div>
             ) : isEdit ? (
               <div className="edit-container">
-                <div className="edit-save">Lưu</div>
+                <div className="edit-save" onClick={() => updateKoi()}>Lưu</div>
                 <div className="edit-cancel" onClick={toggleEditable}>
                   <CloseOutlined />
                   Hủy
