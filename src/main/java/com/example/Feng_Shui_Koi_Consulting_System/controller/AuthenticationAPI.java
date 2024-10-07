@@ -76,6 +76,6 @@ public class AuthenticationAPI {
 
     @PostMapping("/reset-password")
     String resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
-        return authenticationServices.verifyOtpAndResetPassword(request);
+        return authenticationServices.resetPassword(request);
     }
 }

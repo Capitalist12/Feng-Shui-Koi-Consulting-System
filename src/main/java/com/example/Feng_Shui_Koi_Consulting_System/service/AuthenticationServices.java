@@ -148,7 +148,7 @@ public class AuthenticationServices {
         sendOTPToEmail(request);
     }
 
-    public String verifyOtpAndResetPassword(ResetPasswordRequest request) {
+    public String resetPassword(ResetPasswordRequest request) {
         boolean isOtpValid = validateOTP(request.getEmail().trim(), request.getOtp());
 
         if (isOtpValid) {
