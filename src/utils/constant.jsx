@@ -9,6 +9,8 @@ import {
 import { NavLink } from 'react-router-dom';
 import DropdownAvatar from "../components/Utils/DropdownAvatar";
 
+const KOI_ELEMENT_MAX_COUNT = 3;
+
 
 const OPTIONS = [
     {
@@ -153,10 +155,6 @@ const NAVBAR_ITEMS = [
         },
       ],
     },
-    {
-        label: <DropdownAvatar />,
-        key: "info",
-    }
   ];
 
-export { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS, DASHBOARD_ITEMS, NAVBAR_ITEMS };
+export { KOI_ELEMENT_MAX_COUNT, OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS, DASHBOARD_ITEMS, NAVBAR_ITEMS };

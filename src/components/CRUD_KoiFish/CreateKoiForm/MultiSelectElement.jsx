@@ -4,10 +4,8 @@ import { DownOutlined } from '@ant-design/icons';
 import { OPTIONS } from '../../../utils/constant';
 import { useEffect, useState } from 'react';
 
-const MAX_COUNT = 3;
 
-
-const MultiSelectElement = ({ onChange, data, customeStyle }) => {
+const MultiSelectElement = ({ onChange, data, customeStyle, maxCount }) => {
     const [elements, setElements] = useState(data ? data : []);
 
     useEffect(() => {
@@ -19,8 +17,8 @@ const MultiSelectElement = ({ onChange, data, customeStyle }) => {
 
     const suffix = (
         <>
-            <span style={{ color: elements.length === MAX_COUNT ? 'red' : '#222222' }}>
-                {elements.length} / {MAX_COUNT}
+            <span style={{ color: elements.length === maxCount ? 'red' : '#222222' }}>
+                {elements.length} / {maxCount}
             </span>
             <DownOutlined />
         </>
@@ -29,7 +27,7 @@ const MultiSelectElement = ({ onChange, data, customeStyle }) => {
 
     return (
         <Select
-            maxCount={MAX_COUNT}
+            maxCount={maxCount}
             mode="multiple"
             value={elements}
             onChange={(newValue) => {

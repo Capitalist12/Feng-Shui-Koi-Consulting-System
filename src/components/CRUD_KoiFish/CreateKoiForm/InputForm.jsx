@@ -14,7 +14,7 @@ import { createKoiFish } from '../../../services/koiAPIService';
 import { toast } from 'react-toastify';
 import { PlusOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import { getAllKoiType, createNewKoiType } from '../../../services/koiTypeService';
-import { SIZE_OPTIONS, WEIGHT_OPTIONS } from '../../../utils/constant';
+import { SIZE_OPTIONS, WEIGHT_OPTIONS, KOI_ELEMENT_MAX_COUNT } from '../../../utils/constant';
 import TextArea from 'antd/es/input/TextArea';
 
 const InputForm = (props) => {
@@ -214,7 +214,7 @@ const InputForm = (props) => {
                     },
                 ]}
             >
-                <MultiSelectElement data={selectedElement} onChange={setSelectedElement} customeStyle={{width: '100%'}}/>
+                <MultiSelectElement data={selectedElement} onChange={setSelectedElement} customeStyle={{width: '100%'}} maxCount={KOI_ELEMENT_MAX_COUNT}/>
             </Form.Item>
 
             <Form.Item label="Thông tin" name="description">
