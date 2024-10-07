@@ -53,7 +53,7 @@ function UserManagement() {
         password: values.password,
         dateOfBirth: values.dateOfBirth?.format("YYYY-MM-DD"),
         roleName: editingUserId ? values.roleName : "USER", // Mặc định là USER khi tạo mới
-        element: values.element[0], // vì mảng nên lấy element đầu tiên
+        element: values.element[0], // vi mảng nên lấy element đầu tiên
         imageLink: values.imageLink,
         planID: values.planID,
         deleteStatus: values.deleteStatus,
