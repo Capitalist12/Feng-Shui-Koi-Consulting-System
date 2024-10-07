@@ -4,9 +4,9 @@ import DashboardPage from "./pages/admin/dashboard/DashboardPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import LoginPage from "./pages/login/LoginPage";
 import HomePage from "./pages/home/HomePage";
-import ProfilePage from "./pages/user/profile/ProfilePage";
+import UserProfilePage from "./pages/user/profile/UserProfilePage";
 import TankManagement from "./components/CRUD_Tank/TankManagement";
-import Admin from "./utils/AdminRoute/Admin";
+import Admin from "./components/AdminRoute/Admin";
 import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
 import UserManagement from "./components/CRUD_User/UserManagement";
 
@@ -26,11 +26,15 @@ const App = () => {
     },
     {
       path: "dashboard",
-      element: <DashboardPage />,
+      element: (
+        <Admin>
+          <DashboardPage />
+        </Admin>
+      ),
       children: [
         {
           path: "koi",
-          element: <KoiContainer />,
+          element: <KoiContainer />
         },
         {
           path: "users",
@@ -43,9 +47,10 @@ const App = () => {
       ],
     },
     {
-      path: "user",
-      element: <ProfilePage />,
-    },
+      path: 'user',
+      element: <UserProfilePage />
+    }
+    
   ]);
 
   return <RouterProvider router={router} />;

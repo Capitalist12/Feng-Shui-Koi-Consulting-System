@@ -177,6 +177,7 @@ function UserManagement() {
       <Button
         type="primary"
         onClick={() => {
+          setSelectedElement([]);
           form.resetFields();
           setEditingUserId(null);
           // setOriginalPassword("");

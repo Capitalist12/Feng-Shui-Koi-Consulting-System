@@ -4,6 +4,7 @@ import { Tooltip } from "antd";
 import { TbLetterP, TbNumber1 } from "react-icons/tb";
 import TableKoi from "./KoiTable/TableKoi";
 import { getAllKoiFish } from "../../services/koiAPIService";
+import BackToTopBtn from "../Utils/BackToTopBtn";
 
 const KoiContainer = () => {
   const [data, setData] = useState([]);
@@ -24,29 +25,29 @@ const KoiContainer = () => {
     setIsPaginate(!isPaginate);
   };
 
-  return (
-    <div>
-      <div className="content-header">
+    return (
         <div>
-          <FormModal fetchAPI={fetchAPI} />
+            <div className='content-header'>
+                <div>
+                    <FormModal fetchAPI={fetchAPI} />
+                </div>
+                <div>
+                    Chế độ xem
+                    <div className='page-break' onClick={togglePaginate}>
+                        <Tooltip placement="bottomLeft" title={isPaginate ? "Phân trang" : "Một trang"}>
+                            <span>
+                                {isPaginate ? <TbLetterP /> : <TbNumber1 />}
+                            </span>
+                        </Tooltip>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <TableKoi data={data} fetchAPI={fetchAPI} isPaginate={isPaginate} />
+            </div>
+            {!isPaginate && <BackToTopBtn/>}
         </div>
-        <div>
-          Chế độ xem
-          <div className="page-break" onClick={togglePaginate}>
-            <Tooltip
-              placement="bottomLeft"
-              title={isPaginate ? "Phân trang" : "Một trang"}
-            >
-              <span>{isPaginate ? <TbLetterP /> : <TbNumber1 />}</span>
-            </Tooltip>
-          </div>
-        </div>
-      </div>
-      <div>
-        <TableKoi data={data} fetchAPI={fetchAPI} isPaginate={isPaginate} />
-      </div>
-    </div>
-  );
-};
+    );
+}
 
 export default KoiContainer;
