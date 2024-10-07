@@ -279,7 +279,8 @@ public SignUpResponse registerUser(SignUpRequest request) {
     }
 
     private String buildScope(User user) {
-        return user.getRoleName() != null ? user.getRoleName() : "";
+
+    return user.getRoleName() != null ? user.getRoleName() : "";
     }
 
     private String generateUserID() {

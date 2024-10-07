@@ -1,9 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.PasswordCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ProfileResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
@@ -80,4 +77,13 @@ public class UserController {
         userService.deleteUser(userID);
         return "User has been Deleted!";
     }
+
+    @PostMapping("/create-dob")
+    ApiResponse<Void> createDOB(@RequestBody  DOBCreationRequest request){
+        userService.createDOB(request);
+        return ApiResponse.<Void>builder()
+                .message("Date of birth and element has been updated!")
+                .build();
+    }
+
 }
