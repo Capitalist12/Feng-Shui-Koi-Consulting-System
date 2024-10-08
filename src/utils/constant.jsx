@@ -137,12 +137,12 @@ const NAVBAR_ITEMS = [
   },
   {
     label: "MUA / BÁN",
-    key: "shop",
+    // key: "shop",
     //   icon: <MailOutlined />,
   },
   {
     label: "BLOG & TIN TỨC",
-    key: "blog",
+    // key: "blog",
     //   icon: <AppstoreOutlined />,
   },
   {

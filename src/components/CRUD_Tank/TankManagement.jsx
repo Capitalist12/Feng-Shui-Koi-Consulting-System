@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import api from "../../config/axiosConfig";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -13,6 +12,12 @@ import {
   Select,
 } from "antd";
 import { ELEMENT_VALUES } from "../../utils/constant";
+import {
+  fetchTank,
+  createTank,
+  updateTank,
+  deleteTank,
+} from "../../services/tankAPIService"; // Import các hàm từ tankAPI
 
 function TankManagement() {
   const [datas, setDatas] = useState([]);
@@ -24,8 +29,8 @@ function TankManagement() {
   // Fetch tanks data
   const fetchData = async () => {
     try {
-      const response = await api.get("tank");
-      setDatas(response.data?.result || []);
+      const result = await fetchTank(); // Sử dụng API helper để lấy dữ liệu
+      setDatas(result?.result || []);
     } catch (err) {
       toast.error(err.response?.data || "Error fetching data");
     }
@@ -118,9 +123,9 @@ function TankManagement() {
     }
 
     try {
-      await api.delete(`tank/${tankId}`);
-      toast.success("Delete success");
-      fetchData();
+      await deleteTank(tankId); // Sử dụng API helper deleteTank
+      toast.success("Tank deleted successfully");
+      fetchData(); // Reload lại danh sách tank sau khi xóa
     } catch (err) {
       const errorMessage = err.response?.data || "Error deleting tank";
       toast.error(errorMessage);
@@ -141,14 +146,14 @@ function TankManagement() {
       console.log("Payload before sending:", payload); // Kiểm tra payload
 
       if (values.tankId) {
-        const response = await api.put(`tank/${values.tankId}`, payload);
-        console.log("Response after update:", response.data);
+        await updateTank(values.tankId, payload); // Sử dụng API helper updateTank
+        toast.success("Tank updated successfully");
       } else {
-        await api.post("tank", payload);
+        await createTank(payload); // Sử dụng API helper createTank
+        toast.success("Tank created successfully");
       }
 
-      toast.success("Successfully saved");
-      fetchData();
+      fetchData(); // Reload lại danh sách tank sau khi lưu
       form.resetFields();
       setShowModal(false);
     } catch (err) {

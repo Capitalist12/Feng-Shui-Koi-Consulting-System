@@ -1,4 +1,3 @@
-import React from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, Flex } from "antd";
 import { FcGoogle } from "react-icons/fc";

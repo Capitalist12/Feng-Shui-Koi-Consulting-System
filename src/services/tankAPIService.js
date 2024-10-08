@@ -1,42 +1,38 @@
-import { toast } from "react-toastify";  
-import instance from "../config/axiosConfig";  
+import api from "../config/axiosConfig";  
 
 const fetchTank = async () => {  
     try {  
-        const response = await instance.get('tank');  
+        const response = await api.get('tank');  
         return response.data;  
     } catch (err) {  
-        toast.error(err.response?.data?.message || err.message);  
+        throw err; // Thay vì gọi toast ở đây, bạn ném lỗi ra component xử lý
     }  
 }  
 
 const createTank = async (payload) => {  
     try {  
-        const response = await instance.post('tank', payload);  
-        toast.success("Tank created successfully!");  
+        const response = await api.post('tank', payload);  
         return response.data;  
     } catch (err) {  
-        toast.error(err.response?.data?.message || err.message);  
+        throw err; // Ném lỗi ra component
     }  
 }  
 
 const updateTank = async (id, payload) => {  
     try {  
-        const response = await instance.put(`tank/${id}`, payload);  
-        toast.success("Tank updated successfully!");  
+        const response = await api.put(`tank/${id}`, payload);  
         return response.data;  
     } catch (err) {  
-        toast.error(err.response?.data?.message || err.message);  
+        throw err; // Ném lỗi ra component
     }  
 }  
 
 const deleteTank = async (id) => {  
     try {  
-        const response = await instance.delete(`tank/${id}`);  
-        toast.success("Tank deleted successfully!"); 
+        const response = await api.delete(`tank/${id}`);  
         return response.data;  
     } catch (err) {  
-        toast.error(err.response?.data?.message || err.message);  
+        throw err; // Ném lỗi ra component
     }  
 }  
 
