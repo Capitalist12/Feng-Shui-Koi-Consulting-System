@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiResponse> handLingValidation(MethodArgumentNotValidException exception){
         String enumKey = exception.getFieldError().getDefaultMessage();
 
-        ErrorCode errorCode = ErrorCode.ENUMKEY_INVALID;
+        ErrorCode errorCode = ErrorCode.ENUM_INVALID;
 
         try {
             errorCode = ErrorCode.valueOf(enumKey);

@@ -20,15 +20,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class FishService {
 
-     FishRepo fishRepo;
-     KoiFishMapper koiFishMapper;
-     KoiTypeService koiTypeService;
-     ElementRepo elementRepo;
+    FishRepo fishRepo;
+    KoiFishMapper koiFishMapper;
+    KoiTypeService koiTypeService;
+    ElementRepo elementRepo;
 
     public KoiFishResponse createFish(FishCreationRequest request) {
         // Check if the fish with the given name already exists
@@ -36,7 +37,7 @@ public class FishService {
             throw new AppException(ErrorCode.FISH_EXISTED);
         }
         // Convert the request to a KoiFish entity
-        KoiFish fish =  koiFishMapper.toKoiFish(request, koiTypeService, elementRepo);
+        KoiFish fish = koiFishMapper.toKoiFish(request, koiTypeService, elementRepo);
         fish.setId(generateKoiID());
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
             Set<Koi_Image> koiImageEntities = request.getImagesURL().stream()
@@ -59,11 +60,11 @@ public class FishService {
 
     public List<KoiFishResponse> getFish() {
         return fishRepo.findAll().stream()
-                .map(koiFishMapper :: toKoiFishRespon).collect(Collectors.toList());
+                .map(koiFishMapper::toKoiFishRespon).collect(Collectors.toList());
     }
 
-    public KoiFishResponse getFishById(String id){
-        KoiFish fish =  fishRepo.findById(id).orElseThrow(()
+    public KoiFishResponse getFishById(String id) {
+        KoiFish fish = fishRepo.findById(id).orElseThrow(()
                 -> new AppException(ErrorCode.FISH_NOT_FOUND));
         return koiFishMapper.toKoiFishRespon(fish);
 
@@ -127,11 +128,11 @@ public class FishService {
         fishRepo.delete(fish); // Use the entity to delete
     }
 
-    public String generateKoiID(){
-        return "KF" + String.format("%05d", System.nanoTime() % 100000);
+    public String generateKoiID() {
+        return "KF" + String.format("%05d", System.nanoTime() % 1000);
     }
 
-    public String generateImage_Koi(){
-        return "I" + String.format("%05d", System.nanoTime() % 100000);
+    public String generateImage_Koi() {
+        return "I" + String.format("%05d", System.nanoTime() % 1000);
     }
 }

@@ -10,8 +10,6 @@ import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -28,19 +26,24 @@ public class AuthenticationAPI {
 
     @PostMapping("/outbound/authentication")
     ApiResponse<AuthenResponse> outboundAuthenticate(
-        @RequestParam("code") String code){
+            @RequestParam("code") String code) {
         var result = authenticationServices.outboundAuthenticate(code);
         return ApiResponse.<AuthenResponse>builder().result(result).build();
-
     }
 
+//    @PostMapping("/verify-email")
+//    String verifyEmail(@RequestBody @Valid SendOTPRequest request) {
+//        authenticationServices.sendOTPToEmail(request);
+//        return "An OTP has been sent to your email. Please verify it to reset your password.";
+//    }
 
     @PostMapping("/signup")
     ApiResponse<SignUpResponse> registerUser(@RequestBody @Valid SignUpRequest request) {
-            return ApiResponse.<SignUpResponse>builder()
-                    .result(authenticationServices.registerUser(request))
-                    .build();
+        return ApiResponse.<SignUpResponse>builder()
+                .result(authenticationServices.registerUser(request))
+                .build();
     }
+
     @PostMapping("/token")
     ApiResponse<AuthenResponse> authenticate(@RequestBody AuthenRequest request) {
         var result = authenticationServices.authenticate(request);
@@ -48,7 +51,7 @@ public class AuthenticationAPI {
     }
 
     @PostMapping("/login")
-    ApiResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) {
+    ApiResponse<AuthenResponse> loginUser(@RequestBody @Valid AuthenRequest request) {
         var result = authenticationServices.loginUser(request);
         return ApiResponse.<AuthenResponse>builder()
                 .result(result)
@@ -56,7 +59,7 @@ public class AuthenticationAPI {
     }
 
     @PostMapping("/introspect")
-    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectResquest request) throws ParseException, JOSEException {
+    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
         var valid = authenticationServices.introspected(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(valid)
@@ -64,13 +67,13 @@ public class AuthenticationAPI {
     }
 
     @PostMapping("/forgot-password")
-    String forgotPassword(@RequestBody @Valid ForgotPasswordRequest request){
+    String forgotPassword(@RequestBody @Valid SendOTPRequest request) {
         authenticationServices.forgotPassword(request);
         return "An OTP has been sent to your email. Please verify it to reset your password.";
     }
 
     @PostMapping("/reset-password")
-    String resetPassword(@RequestBody @Valid ResetPasswordRequest request){
-        return authenticationServices.verifyOtpAndResetPassword(request);
+    String resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
+        return authenticationServices.resetPassword(request);
     }
 }

@@ -1,20 +1,17 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
-public class ResetPasswordRequest {
+public class SendOTPRequest {
     @Email(message = "EMAIL_INVALID")
     String email;
-    @Size(min = 6, max = 6, message = "OTP_INVALID")
-    String otp;
-    @Size(min = 5, max = 20, message = "PASSWORD_INVALID")
-    String newPassword;
 }

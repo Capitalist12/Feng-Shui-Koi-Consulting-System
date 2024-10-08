@@ -11,7 +11,10 @@ import java.util.List;
 
 @Repository
 public interface TankRepo extends JpaRepository<Tank, String> {
+
     boolean existsByShape(String shape);
+
     Optional<Tank> findByShape(String shape);
+
     List<Tank> findByElementTank_ElementId(Integer elementID);
 }

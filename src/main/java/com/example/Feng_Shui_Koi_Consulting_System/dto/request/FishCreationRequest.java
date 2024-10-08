@@ -20,5 +20,4 @@ public class FishCreationRequest {
     Set<String> imagesURL;
     String koiTypeName;
     Set<String> elements;
-
 }

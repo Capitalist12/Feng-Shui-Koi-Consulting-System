@@ -41,22 +41,21 @@ public class KoiFish {
     KoiTypes koiTypes;
 
     @OneToMany(mappedBy = "koiFish", cascade = CascadeType.ALL
-            ,orphanRemoval = true)
+            , orphanRemoval = true)
     @JsonManagedReference
     Set<Koi_Image> imagesFish = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "Koi_Element",
             joinColumns = @JoinColumn(name = "KoiID"),
-    inverseJoinColumns = @JoinColumn(name = "ElementID"))
+            inverseJoinColumns = @JoinColumn(name = "ElementID"))
     @JsonManagedReference
     Set<Element> elements;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof KoiFish)) return false;
-        KoiFish koiFish = (KoiFish) o;
+        if (!(o instanceof KoiFish koiFish)) return false;
         return Objects.equals(id, koiFish.id);
     }
 

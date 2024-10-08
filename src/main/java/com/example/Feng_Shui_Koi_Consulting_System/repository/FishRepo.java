@@ -11,9 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface FishRepo extends JpaRepository<KoiFish, String> {
+
     boolean existsByName(String fishName);
-    @Query("SELECT kf FROM KoiFish kf JOIN kf.elements e WHERE e.elementId = :elementID")
-    List<KoiFish> findByElementID(@Param("elementID") Integer elementID);
+
+    //    @Query("SELECT kf FROM KoiFish kf JOIN kf.elements e WHERE e.elementId = :elementID")
+//    List<KoiFish> findByElementID(@Param("elementID") Integer elementID);
     @Query("SELECT kf FROM KoiFish kf JOIN kf.elements e WHERE e.elementId = :elementId OR e.elementName = :generation")
     List<KoiFish> findByElementIDOrGeneration(@Param("elementId") Integer elementId, @Param("generation") String generation);
 }
