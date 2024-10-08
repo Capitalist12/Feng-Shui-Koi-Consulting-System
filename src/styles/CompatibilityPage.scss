@@ -1,12 +1,87 @@
-.table-container {
-    display: flex;
-    justify-content: space-between;
+#navbar-section {
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+
+  .navbar {
+    background-color: #353535;
+    height: 100%;
+
+    li.ant-menu-overflow-item.ant-menu-item.ant-menu-item-only-child {
+      color: white;
+      display: flex;
+      align-items: center;
+    }
+
+    li.ant-menu-overflow-item.ant-menu-submenu.ant-menu-submenu-horizontal {
+      display: flex;
+      align-items: center;
+      color: white;
+    }
   }
-  
-  .table-wrapper {
-    width: 48%;
+}
+
+.compatibility-background {
+  background-image: url('../assets/images/background-compatibility.jpg'); /* Thay đổi đường dẫn tới hình ảnh của bạn */
+  background-size: cover; /* Đảm bảo hình ảnh phủ kín toàn bộ không gian */
+  background-position: center; /* Đặt hình ảnh ở giữa */
+  min-height: 100vh; /* Đảm bảo chiều cao tối thiểu là 100% viewport height */
+}
+
+
+// CompatibilityPage.scss
+
+.table-custom {
+  // Background color for the table
+  background-color: #f0f4f8;
+
+  // Header styles
+  .ant-table-header {
+    background-color: #007bff; // Header background color
+    color: #fff; // Header text color
+
+    .ant-table-cell {
+      font-weight: bold; // Bold header text
+    }
   }
-  .selected-row {
-    background-color: #e6f7ff !important; /* Màu nền cho hàng đã chọn */
+
+  // Body styles
+  .ant-table-body {
+    .ant-table-row {
+      &:hover {
+        background-color: #e6f7ff; // Row hover color
+      }
+
+      &.selected-row {
+        background-color: #cce5ff; // Selected row color
+      }
+    }
   }
-    
+
+  // Cell styles
+  .ant-table-cell {
+    border-color: #007bff; // Cell border color
+  }
+}
+.compatibility-background {
+  background-color: #f0f2f5;
+  padding: 20px;
+}
+
+.selected-row {
+  background-color: #e6f7ff; // Highlight selected row
+}
+
+.table-custom {
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.card-custom {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+

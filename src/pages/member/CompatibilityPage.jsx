@@ -8,6 +8,8 @@ import {
   Typography,
   Button,
   message,
+  Input,
+  Select,
 } from "antd";
 import Navbar from "../../components/Utils/Navbar";
 import { getAllKoiFish } from "../../services/koiAPIService";
@@ -15,13 +17,16 @@ import { fetchTank } from "../../services/tankAPIService";
 
 const { Title } = Typography;
 const { Content } = Layout;
+const { Option } = Select;
 
 function CompatibilityPage() {
   const [fishData, setFishData] = useState([]);
   const [tankData, setTankData] = useState([]);
   const [selectedFish, setSelectedFish] = useState([]);
-  const [selectedTank, setSelectedTank] = useState(null); // Hồ đã chọn
+  const [selectedTank, setSelectedTank] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedElement, setSelectedElement] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +37,6 @@ function CompatibilityPage() {
     fetchData();
   }, []);
 
-  // Lấy dữ liệu cá
   const fetchFishData = async () => {
     try {
       const response = await getAllKoiFish();
@@ -43,7 +47,6 @@ function CompatibilityPage() {
     }
   };
 
-  // Lấy dữ liệu hồ
   const fetchTankData = async () => {
     try {
       const data = await fetchTank();
@@ -53,32 +56,32 @@ function CompatibilityPage() {
     }
   };
 
-  // Hàm chọn cá koi
+  const handleSearchTermChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   const handleSelectFish = (fish) => {
     if (selectedFish.includes(fish)) {
-      setSelectedFish(selectedFish.filter((item) => item !== fish)); // Bỏ chọn cá
+      setSelectedFish(selectedFish.filter((item) => item !== fish));
     } else if (selectedFish.length < 3) {
-      setSelectedFish([...selectedFish, fish]); // Chọn thêm cá nếu < 3 con
+      setSelectedFish([...selectedFish, fish]);
     } else {
       message.warning("Chỉ được chọn tối đa 3 con cá!");
     }
   };
 
-  // Hàm chọn hồ
   const handleSelectTank = (tank) => {
     if (selectedTank) {
       message.warning("Vui lòng chỉ chọn 1 hồ!");
     } else {
-      setSelectedTank(tank); // Chọn hồ nếu chưa có hồ nào được chọn
+      setSelectedTank(tank);
     }
   };
 
-  // Hàm bỏ chọn hồ
   const handleRemoveTank = () => {
-    setSelectedTank(null); // Hủy chọn hồ
+    setSelectedTank(null);
   };
 
-  // Hàm tính toán độ tương hợp
   const handleCalculateCompatibility = () => {
     if (selectedFish.length === 0) {
       message.warning("Vui lòng chọn ít nhất 1 con cá!");
@@ -88,32 +91,33 @@ function CompatibilityPage() {
       message.warning("Vui lòng chọn 1 hồ!");
       return;
     }
+    if (!selectedElement) {
+      message.warning("Vui lòng chọn 1 yếu tố!");
+      return;
+    }
 
     const koiFishColors = selectedFish.map((fish) => fish.color.split(","));
     const payload = {
-      userElement: "Water", // mệnh của người dùng, có thể thay thế bằng dữ liệu động
+      userElement: selectedElement,
       koiFishColors,
       tankShape: selectedTank.shape,
     };
 
     console.log("Payload gửi đi:", payload);
-
-    // Gọi API tính toán độ tương hợp tại đây
   };
 
-  // Cột của bảng cá koi
   const fishColumns = [
     {
       title: "Tên Cá",
       dataIndex: "name",
       key: "name",
-      width: 200, // Set a fixed width for the fish name column
+      width: 200,
     },
     {
       title: "Màu sắc",
       dataIndex: "color",
       key: "color",
-      width: 100, // Set a fixed width for the fish name column
+      width: 100,
     },
     {
       title: "Hành Động",
@@ -121,11 +125,10 @@ function CompatibilityPage() {
       render: (fish) => (
         <Button onClick={() => handleSelectFish(fish)}>+</Button>
       ),
-      width: 100, // Set a fixed width for the action column
+      width: 100,
     },
   ];
 
-  // Cột của bảng hồ
   const tankColumns = [
     {
       title: "Loại Hồ",
@@ -134,7 +137,7 @@ function CompatibilityPage() {
     },
     {
       title: "Số lượng",
-      render: (text, record) => {
+      render: (record) => {
         return record.elementTank?.quantity || "N/A";
       },
     },
@@ -146,46 +149,93 @@ function CompatibilityPage() {
     },
   ];
 
-  // Kiểm tra xem cá có được chọn hay không
   const isFishSelected = (fish) => selectedFish.includes(fish);
-
-  // Kiểm tra xem hồ có được chọn hay không
   const isTankSelected = (tank) => selectedTank === tank;
+
+  // Filtering logic for koi based on the unified search term
+  const filteredFishData = fishData.filter((fish) => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const matchesColor = fish.color.toLowerCase().includes(lowerCaseSearchTerm);
+    const matchesType = fish.name.toLowerCase().includes(lowerCaseSearchTerm);
+
+    return matchesColor || matchesType;
+  });
 
   return (
     <Layout>
-      <Navbar /> {/* Hiển thị Navbar */}
+      <section id="navbar-section">
+        <Navbar />
+      </section>
       <Content style={{ padding: "20px" }}>
-        <Title level={2}>Tính độ tương hợp</Title>
+        <Title>Tính độ tương hợp</Title>
+        <p>Bạn đang phân vân loại cá nào, tính thử ngay nhé ! </p>
 
         {loading ? (
           <Spin size="large" />
         ) : (
           <>
-            <Row gutter={16}>
-              <Col span={12}>
+            <Row gutter={16} style={{ display: "flex" }}>
+              {/* Make both columns equal in height */}
+              <Col
+                span={12}
+                style={{ display: "flex", flexDirection: "column" }}
+              >
                 <Title level={4}>Danh Sách Cá</Title>
+                <Input
+                  placeholder="Tìm kiếm theo màu sắc hoặc loại cá"
+                  value={searchTerm}
+                  onChange={handleSearchTermChange}
+                  style={{ marginBottom: "16px" }}
+                />
                 <Table
                   columns={fishColumns}
-                  dataSource={fishData}
+                  dataSource={filteredFishData}
                   rowKey="id"
-                  pagination={{ pageSize: 5 }} // Hiển thị 5 hàng mỗi trang
+                  pagination={{ pageSize: 5 }}
                   rowClassName={(fish) =>
                     isFishSelected(fish) ? "selected-row" : ""
-                  } // Thêm class cho hàng đã chọn
+                  }
+                  style={{ flex: 1 }} // Ensures the table expands to fill the column
                 />
               </Col>
-              <Col span={12}>
+              <Col
+                span={12}
+                style={{ display: "flex", flexDirection: "column" }}
+              >
                 <Title level={4}>Danh Sách Hồ</Title>
+                {/* Khoảng trống tương đương với thanh tìm kiếm bên koi */}
+                <div style={{ height: "32.5px", marginBottom: "16px" }}></div>
                 <Table
                   columns={tankColumns}
                   dataSource={tankData}
-                  rowKey="id"
-                  pagination={false} // Giữ hồ không phân trang, hiển thị tất cả
+                  rowKey="tankId"
+                  pagination={{ pageSize: 5 }}
                   rowClassName={(tank) =>
                     isTankSelected(tank) ? "selected-row" : ""
-                  } // Thêm class cho hàng đã chọn
+                  }
+                  style={{ flex: 1 }} // Ensures the table expands to fill the column
                 />
+              </Col>
+            </Row>
+
+            {/* Phần chọn element */}
+            <Row gutter={16} style={{ marginTop: "20px" }}>
+              <Col span={24}>
+                <Title level={4}>Chọn Yếu Tố</Title>
+                <Select
+                  placeholder="Chọn yếu tố"
+                  value={selectedElement}
+                  onChange={setSelectedElement}
+                  style={{ width: "200px" }}
+                >
+                  {["Water", "Earth", "Fire", "Wood", "Metal"].map(
+                    (element) => (
+                      <Option key={element} value={element}>
+                        {element}
+                      </Option>
+                    )
+                  )}
+                </Select>
               </Col>
             </Row>
 
@@ -223,7 +273,11 @@ function CompatibilityPage() {
               </p>
             </div>
 
-            <Button type="primary" onClick={handleCalculateCompatibility}>
+            <Button
+              className="dark-theme-button"
+              type="primary"
+              onClick={handleCalculateCompatibility}
+            >
               Tính toán độ tương hợp
             </Button>
           </>
