@@ -13,6 +13,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConsultingRequest {
-    String userID;
+    String username;
     LocalDate dob;
 }

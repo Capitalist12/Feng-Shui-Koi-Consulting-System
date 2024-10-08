@@ -66,6 +66,6 @@ public class TankService {
     }
 
     public String generateTankID(){
-        return "TA" + String.format("%05d", System.nanoTime() % 100000);
+        return "TA" + String.format("%05d", System.nanoTime() % 1000);
     }
 }

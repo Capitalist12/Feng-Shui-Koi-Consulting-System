@@ -12,6 +12,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SendOTPRequest {
-    @Email
+    @Email(message = "EMAIL_INVALID")
     String email;
 }

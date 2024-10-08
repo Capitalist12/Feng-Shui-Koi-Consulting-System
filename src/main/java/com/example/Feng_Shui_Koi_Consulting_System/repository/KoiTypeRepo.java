@@ -8,9 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface KoiTypeRepo extends JpaRepository<KoiTypes, String> {
+
     boolean existsByTypeName(String typeName);
+
     Optional<KoiTypes> findByTypeName(String typeName);
-
-
-
 }

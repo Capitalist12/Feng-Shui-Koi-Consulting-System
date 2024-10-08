@@ -19,12 +19,12 @@ public class ElementCalculationService {
         try {
             int canNumber = calculateCanNumber(birthYear);
             int chiNumber = calculateChiNumber(birthYear);
-            return canNumber + chiNumber;
+            int sum = canNumber + chiNumber;
+            return (sum > 5) ? (sum - 5) : sum;
         } catch (Exception e) {
             throw new RuntimeException("Error calculating element ID", e);
         }
     }
-
 
     private int calculateCanNumber(int birthYear) {
         int canTableNumber = birthYear % 10;

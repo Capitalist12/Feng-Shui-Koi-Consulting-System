@@ -48,11 +48,10 @@ public interface KoiFishMapper {
 
     @Named("mapToElement")
     default Set<Element> mapToElement(Set<String> elements, @Context ElementRepo elementRepo) {
-        Set<Element> element = elements.stream()
+        return elements.stream()
                 .map(elementName -> elementRepo.findByElementName(elementName)
                         .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST)))
                 .collect(Collectors.toSet());
-        return element;
     }
 
     @Named("mapToKoiTypesResponse")
@@ -73,6 +72,9 @@ public interface KoiFishMapper {
                         .quantity(element.getQuantity())
                         .direction(element.getDirection())
                         .value(element.getValue())
+                        .color(element.getColor())
+                        .generation(element.getGeneration())
+                        .inhibition(element.getInhibition())
                         .build())
                 .collect(Collectors.toSet());
     }

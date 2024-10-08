@@ -54,22 +54,10 @@ public class ConsultingAPI {
 //                .build();
 //    }
 
-    @GetMapping("/koiFish/{userID}")
-    public ApiResponse<List<ConsultingFishResponse>> getKoiFishByElement(@PathVariable String userID) {
-        return ApiResponse.<List<ConsultingFishResponse>>
-                builder().result(consultingService.koiFishList(userID)).build();
-    }
-
-    @GetMapping("/tank/{userID}")
-    public ApiResponse<List<ConsultingTankResponse>> getTankByElement(@PathVariable String userID){
-        return ApiResponse.<List<ConsultingTankResponse>>
-                builder().result(consultingService.tankList(userID)).build();
-    }
-
     @GetMapping("/all")
     public ApiResponse<ConsultingResponse> getConsulting(@RequestBody ConsultingRequest request){
-        var koiFishList = consultingService.koiFishList(request.getUserID());
-        var tankList = consultingService.tankList(request.getUserID());
+        var koiFishList = consultingService.koiFishList(request);
+        var tankList = consultingService.tankList(request);
         ConsultingResponse consultingResponse = ConsultingResponse.builder()
                 .koiFishList(koiFishList)
                 .tankList(tankList)

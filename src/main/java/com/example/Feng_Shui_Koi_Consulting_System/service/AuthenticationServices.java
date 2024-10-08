@@ -78,10 +78,12 @@ public class AuthenticationServices {
 
     //Method to register user
     public SignUpResponse registerUser(SignUpRequest request) {
-        if (!validateOTP(request.getEmail().trim(), request.getOtp()))
-            throw new AppException(ErrorCode.OTP_NOT_FOUND);
+//        if (!validateOTP(request.getEmail().trim(), request.getOtp()))
+//            throw new AppException(ErrorCode.OTP_NOT_FOUND);
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXIST);
+        if (userRepository.existsByEmail(request.getEmail()))
+            throw new AppException(ErrorCode.EMAIL_EXIST);
         int elementId = elementCalculationService
                 .calculateElementId(request.getDateOfBirth());
         Element element = elementRepo.findById(elementId)
@@ -94,7 +96,7 @@ public class AuthenticationServices {
 //        user.setPlanID("PP005");
         user.setElement(element);
         user.setDeleteStatus(false);
-        clearOTP(request.getEmail().trim());
+//        clearOTP(request.getEmail().trim());
         emailService.sendEmail(request.getEmail(),
                 "This is your password: " + request.getPassword(),
                 "Create User Successful");
@@ -102,12 +104,10 @@ public class AuthenticationServices {
     }
 
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
-        if (userRepository.existsByEmail(request.getEmail()))
-            throw new AppException(ErrorCode.EMAIL_EXIST);
         String otp = generateOTP();
         storeOTP(request.getEmail().trim(), otp);
         emailService.sendEmail(request.getEmail().trim(),
-                "Your OTP Code: " + otp, "OTP for Password Reset");
+                "Your OTP Code: " + otp, "OTP for Consulting Website");
         System.out.println("OTP sent to: " + request.getEmail().trim());
     }
 
@@ -130,7 +130,7 @@ public class AuthenticationServices {
 
     }
 
-    public IntrospectResponse introspected(IntrospectResquest request) throws JOSEException, ParseException {
+    public IntrospectResponse introspected(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
 
         JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
