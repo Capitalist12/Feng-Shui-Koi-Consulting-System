@@ -23,8 +23,9 @@ public class Koi_Image {
     String imageURL;
 
 
+
     @ManyToOne
-    @JoinColumn(name = "KoiID", nullable = false, referencedColumnName = "KoiID")
+    @JoinColumn(name = "KoiID", nullable = false,  referencedColumnName = "KoiID")
     @JsonBackReference
     KoiFish koiFish;
 

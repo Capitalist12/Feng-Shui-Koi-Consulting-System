@@ -1,9 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ConsultingRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
@@ -32,22 +30,24 @@ public class ConsultingService {
     ElementMapper elementMapper;
     ElementCalculationService elementCalculationService;
 
-    public List<ConsultingFishResponse> koiFishList(ConsultingRequest request) {
-        // Calculate the user's elementID based on the date of birth
-        int elementID = elementCalculationService.calculateElementId(request.getDob());
+    public List<ConsultingFishResponse> koiFishList(String userID){
+        // Fetch the user
+        User user = userRepository.findById(userID)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+
+        // Get the user's element ID
+        int elementID = elementCalculationService
+                .calculateElementId(user.getDateOfBirth());
 
         // Fetch the Element entity by the elementID
         Element element = elementRepo.findById(elementID)
                 .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
 
-        // Get the generation (element that supports this element)
+        // Get the generation (element that supports this one)
         String generation = element.getGeneration();
 
-        // Fetch the KoiFish that match either the user's elementID or the supporting generation
-        List<KoiFish> koiFishList = fishRepo.findByElementIDOrGeneration(elementID, generation);
-
-        // Map the KoiFish entities to ConsultingFishResponse
-        return koiFishList.stream()
+        // Find KoiFish by elementID or supported generation name
+        return fishRepo.findByElementIDOrGeneration(elementID, generation).stream()
                 .map(fish -> {
                     // Prepare KoiTypesResponse
                     var koiType = fish.getKoiTypes();
@@ -71,9 +71,11 @@ public class ConsultingService {
                 .collect(Collectors.toList());
     }
 
-    public List<ConsultingTankResponse> tankList(ConsultingRequest request)
+    public List<ConsultingTankResponse> tankList(String userID)
     {
-        Integer elementID = elementCalculationService.calculateElementId(request.getDob());
+        User user = userRepository.findById(userID)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+        Integer elementID = user.getElement().getElementId();
         return tankRepo.findByElementTank_ElementId(elementID).stream().map(tank -> {
             ElementResponse elementResponse = elementMapper
                     .toElementResponse(tank.getElementTank());
@@ -81,7 +83,7 @@ public class ConsultingService {
                     .tankId(tank.getTankId())
                     .shape(tank.getShape())
                     .imageURL(tank.getImageURL())
-//                    .elementTank(elementResponse)
+                    .elementTank(elementResponse)
                     .build();
         }).collect(Collectors.toList());
     }

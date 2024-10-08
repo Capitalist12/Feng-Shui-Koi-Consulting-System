@@ -46,13 +46,15 @@ public interface UserMapper {
 
     @Named("mapToElement")
     default Element mapToElement(String element, @Context ElementRepo elementRepo) {
-        return elementRepo.findByElementName(element)
+        Element destiny =  elementRepo.findByElementName(element)
                 .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+        return destiny;
     }
 
     @Named("mapToElementName")
     default String mapToElementName(Element element) {
-        return element.getElementName();
+        String elementName =  element.getElementName();
+        return elementName;
     }
 
 }

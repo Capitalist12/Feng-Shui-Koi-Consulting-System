@@ -2,7 +2,6 @@ package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CalculateElementRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ConsultingRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingFishResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingTankResponse;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -54,10 +52,22 @@ public class ConsultingAPI {
 //                .build();
 //    }
 
-    @GetMapping("/all")
-    public ApiResponse<ConsultingResponse> getConsulting(@RequestBody ConsultingRequest request){
-        var koiFishList = consultingService.koiFishList(request);
-        var tankList = consultingService.tankList(request);
+    @GetMapping("/koiFish/{userID}")
+    public ApiResponse<List<ConsultingFishResponse>> getKoiFishByElement(@PathVariable String userID) {
+        return ApiResponse.<List<ConsultingFishResponse>>
+                builder().result(consultingService.koiFishList(userID)).build();
+    }
+
+    @GetMapping("/tank/{userID}")
+    public ApiResponse<List<ConsultingTankResponse>> getTankByElement(@PathVariable String userID){
+        return ApiResponse.<List<ConsultingTankResponse>>
+                builder().result(consultingService.tankList(userID)).build();
+    }
+
+    @GetMapping("/all/{userID}")
+    public ApiResponse<ConsultingResponse> getConsulting(@PathVariable String userID){
+        var koiFishList = consultingService.koiFishList(userID);
+        var tankList = consultingService.tankList(userID);
         ConsultingResponse consultingResponse = ConsultingResponse.builder()
                 .koiFishList(koiFishList)
                 .tankList(tankList)

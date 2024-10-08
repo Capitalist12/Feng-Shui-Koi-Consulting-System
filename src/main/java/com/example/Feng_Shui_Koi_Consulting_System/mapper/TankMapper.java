@@ -26,8 +26,9 @@ public interface TankMapper {
 
     @Named("mapToElement")
     default Element mapToElement(String element, @Context ElementRepo elementRepo) {
-        return elementRepo.findByElementName(element).
+        Element destiny = elementRepo.findByElementName(element).
                 orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+        return destiny;
     }
 
     @Named("mapToElementResponse")

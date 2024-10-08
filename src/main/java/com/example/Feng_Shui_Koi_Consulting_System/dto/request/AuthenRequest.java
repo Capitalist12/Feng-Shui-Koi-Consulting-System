@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenRequest {
     @NotBlank
-    @Email(message = "EMAIL_INVALID")
+    @Email
     @Size(min = 3, max = 50, message = "EMAIL_INVALID")
     String email;
     @NotBlank

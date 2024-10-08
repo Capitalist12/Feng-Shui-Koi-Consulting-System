@@ -14,9 +14,11 @@ import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.UserMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +42,7 @@ public class UserService {
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXIST);
         if (userRepository.existsByEmail(request.getEmail()))
-            throw new AppException(ErrorCode.EMAIL_EXIST);
+            throw new AppException(ErrorCode.EMAIL_EXITST);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         User user = userMapper.toUser(request, elementRepo);
         user.setUserID(generateUserID());
@@ -54,7 +56,7 @@ public class UserService {
         return "U" + String.format("%09d", System.nanoTime() % 1000000000);
     }
 //@PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponse> getUsers(){
+    public List<UserResponse> geUsers(){
         return userRepository.findAll().stream()
                 .map(userMapper :: toUserResponse).collect(Collectors.toList());
     }
