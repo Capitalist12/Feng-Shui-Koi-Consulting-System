@@ -40,6 +40,9 @@ public interface TankMapper {
                 .quantity(elementTank.getQuantity())
                 .direction(elementTank.getDirection())
                 .value(elementTank.getValue())
+                .color(elementTank.getColor())
+                .generation(elementTank.getGeneration())
+                .inhibition(elementTank.getInhibition())
                 .build();
     }
 

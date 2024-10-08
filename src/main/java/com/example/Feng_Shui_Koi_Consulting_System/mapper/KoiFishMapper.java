@@ -73,6 +73,9 @@ public interface KoiFishMapper {
                         .quantity(element.getQuantity())
                         .direction(element.getDirection())
                         .value(element.getValue())
+                        .color(element.getColor())
+                        .generation(element.getGeneration())
+                        .inhibition(element.getInhibition())
                         .build())
                 .collect(Collectors.toSet());
     }
