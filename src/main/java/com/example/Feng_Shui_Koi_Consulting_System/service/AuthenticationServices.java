@@ -274,6 +274,8 @@ public SignUpResponse registerUser(SignUpRequest request) {
         var token = generateToken(user);
 
         return  AuthenResponse.builder()
+                .username(user.getUsername())
+                .roleName(user.getRoleName())
                 .token(token)
                 .build();
     }
