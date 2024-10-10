@@ -27,7 +27,7 @@ public class SignUpRequest {
     @NotBlank
     String email;
     LocalDate dateOfBirth;
-//    @NotBlank
-//    @Size(min = 6, max = 6, message = "OTP_INVALID")
-//    String otp;
+    @NotBlank
+    @Size(min = 6, max = 6, message = "OTP_INVALID")
+    String otp;
 }

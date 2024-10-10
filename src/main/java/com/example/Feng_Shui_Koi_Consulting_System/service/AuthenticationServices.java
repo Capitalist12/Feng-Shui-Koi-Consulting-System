@@ -78,8 +78,8 @@ public class AuthenticationServices {
 
     //Method to register user
     public SignUpResponse registerUser(SignUpRequest request) {
-//        if (!validateOTP(request.getEmail().trim(), request.getOtp()))
-//            throw new AppException(ErrorCode.OTP_NOT_FOUND);
+        if (!validateOTP(request.getEmail().trim(), request.getOtp()))
+            throw new AppException(ErrorCode.OTP_NOT_FOUND);
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXIST);
         if (userRepository.existsByEmail(request.getEmail()))
@@ -96,7 +96,7 @@ public class AuthenticationServices {
 //        user.setPlanID("PP005");
         user.setElement(element);
         user.setDeleteStatus(false);
-//        clearOTP(request.getEmail().trim());
+        clearOTP(request.getEmail().trim());
         emailService.sendEmail(request.getEmail(),
                 "This is your password: " + request.getPassword(),
                 "Create User Successful");

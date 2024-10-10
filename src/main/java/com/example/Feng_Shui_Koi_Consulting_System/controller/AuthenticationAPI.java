@@ -31,11 +31,11 @@ public class AuthenticationAPI {
         return ApiResponse.<AuthenResponse>builder().result(result).build();
     }
 
-//    @PostMapping("/verify-email")
-//    String verifyEmail(@RequestBody @Valid SendOTPRequest request) {
-//        authenticationServices.sendOTPToEmail(request);
-//        return "An OTP has been sent to your email. Please verify it to reset your password.";
-//    }
+    @PostMapping("/verify-email")
+    String verifyEmail(@RequestBody @Valid SendOTPRequest request) {
+        authenticationServices.sendOTPToEmail(request);
+        return "An OTP has been sent to your email. Please verify it to reset your password.";
+    }
 
     @PostMapping("/signup")
     ApiResponse<SignUpResponse> registerUser(@RequestBody @Valid SignUpRequest request) {
