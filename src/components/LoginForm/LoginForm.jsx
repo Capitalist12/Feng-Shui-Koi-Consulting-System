@@ -4,10 +4,9 @@ import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import { FcGoogle } from 'react-icons/fc';
 import { loginAuth } from "../../services/AuthAPIService";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth";
-import { googleProvider } from "../../config/firebase";
 import { useDispatch } from 'react-redux';
 import { login } from "../../redux/Slices/userSlice.js";
+import { GoogleURL } from '../../config/googleConfig.js';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -15,36 +14,21 @@ const LoginForm = () => {
 
   const onFinish = async (values) => {
     const { email, password } = values;
-    const response = await loginAuth({email, password});
+    const response = await loginAuth({ email, password });
 
-    if(response.status === 200 && response.data.code === 1000){
+    if (response.status === 200 && response.data.code === 1000) {
       dispatch(login(response.data.result));
 
       const role = response.data.result.roleName.toUpperCase();
 
-      (role !== "ADMIN") ? navigate("/") : navigate("/dashboard"); 
+      (role !== "ADMIN") ? navigate("/") : navigate("/dashboard");
 
     }
 
   };
 
   const handleLoginGoogle = () => {
-    const auth = getAuth();
-    signInWithPopup(auth, googleProvider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-
-        const user = result.user;
-        // login google thành công thì qua trang user
-        navigate("/user");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
+    window.location.href = GoogleURL();
   };
 
   return (

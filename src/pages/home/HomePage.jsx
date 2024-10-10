@@ -11,9 +11,12 @@ import { IoIosArrowDown } from 'react-icons/io';
 import BackToTopBtn from '../../components/Utils/BackToTopBtn';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import Navbar from '../../components/Utils/Navbar';
+import Consultant from '../../components/HomePage/Consultant';
+import { useSelector } from 'react-redux';
 // import '../../javaScript/HomePageScript.js'
 
 const HomePage = () => {
+    const token = useSelector((store) => store?.user?.token);
     const [scrollProgress, setScrollProgress] = useState(0); // Để theo dõi quá trình cuộn
     const containerRef = useRef(null); // Ref cho lớp input-yearOfBirth-container
 
@@ -89,7 +92,7 @@ const HomePage = () => {
             </section>
 
             <section id='navbar-section'>
-                <Navbar />
+                <Navbar token={token} />
             </section>
 
             <section id='inspec-section'>
@@ -133,6 +136,10 @@ const HomePage = () => {
                     ></div>
                     <div className='background-effect-overlay'></div>
                 </div>
+            </section>
+
+            <section id='consultant-section'>
+                <Consultant />
             </section>
 
             <section id='element-info-section'>

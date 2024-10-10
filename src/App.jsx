@@ -9,8 +9,10 @@ import TankManagement from "./components/CRUD_Tank/TankManagement";
 import Admin from "./components/AdminRoute/Admin";
 import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
 import UserManagement from "./components/CRUD_User/UserManagement";
+import Authenticate from "./components/LoginForm/Authenticate";
 
 const App = () => {
+
   const router = createBrowserRouter([
     {
       path: "",
@@ -19,6 +21,15 @@ const App = () => {
     {
       path: "login",
       element: <LoginPage />,
+      children: [
+        {
+          path: "authenticate",
+          element: <Authenticate />
+        }
+      ]
+    },{
+      path: "authenticate",
+      element: <Authenticate />
     },
     {
       path: "register",
