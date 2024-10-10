@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Layout, Row, Col, Spin, Typography, message } from "antd";
 import Navbar from "../../components/Utils/Navbar";
 import { getAllKoiFish } from "../../services/koiAPIService";
@@ -7,7 +7,9 @@ import KoiList from "../../components/Compatibility/KoiList";
 import TankList from "../../components/Compatibility/TankList";
 import CompatibilityForm from "../../components/Compatibility/CompatibilityForm";
 import SelectedItems from "../../components/Compatibility/SelectedItems";
-import CustomeFooter from "../../components/HomePage/CustomeFooter";
+import "../../styles/CompatibilityPage.scss";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import { IoIosArrowDown } from "react-icons/io";
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -72,16 +74,38 @@ function CompatibilityPage() {
     setSelectedTank(null);
   };
 
+  window.addEventListener("scroll", function () {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const background = document.querySelector(".background");
+    const blurValue = Math.min(scrollTop / 100, 10); // Giới hạn blur tối đa là 10px
+
+    background.style.filter = `blur(${blurValue}px)`;
+  });
+
   const handleCalculateCompatibility = () => {};
 
   return (
-    <Layout>
+    <Layout className="layout" style={{ marginBottom: "200px" }}>
+      <div className="background"></div>
       <section id="navbar-section">
         <Navbar />
       </section>
-      <Content style={{ padding: "20px" }}>
-        <Title>Tính độ tương hợp</Title>
-        <p>Bạn đang phân vân loại cá nào, tính thử ngay nhé ! </p>
+      <Content className="compatibility-page" style={{ padding: "20px" }}>
+        <section id="sec1">
+          <Title>Tính độ tương hợp</Title>
+          <h2>
+            Bạn đang phân vân loại cá và hồ nào, tính thử độ tương hợp ngay nhé
+            !{" "}
+          </h2>
+          <div className="btn">
+            <a href="#inspec-section">
+              <FaMagnifyingGlass /> &nbsp; TRA CỨU NGAY
+            </a>
+            <div className="downArrow bounce">
+              <IoIosArrowDown style={{ color: "white" }} />
+            </div>
+          </div>
+        </section>
 
         {loading ? (
           <Spin size="large" />
@@ -106,13 +130,17 @@ function CompatibilityPage() {
                 style={{ display: "flex", flexDirection: "column" }}
               >
                 <Title level={4}>Danh Sách Cá</Title>
-                <KoiList
-                  koiData={koiData}
-                  handleSelectFish={handleSelectFish}
-                  isKoiSelected={(fish) => selectedFish.includes(fish)}
-                  searchTerm={searchTerm}
-                  handleSearchTermChange={(e) => setSearchTerm(e.target.value)}
-                />
+                <div className="custom-table">
+                  <KoiList
+                    koiData={koiData}
+                    handleSelectFish={handleSelectFish}
+                    isKoiSelected={(fish) => selectedFish.includes(fish)}
+                    searchTerm={searchTerm}
+                    handleSearchTermChange={(e) =>
+                      setSearchTerm(e.target.value)
+                    }
+                  />
+                </div>
               </Col>
 
               <Col
@@ -120,20 +148,22 @@ function CompatibilityPage() {
                 style={{ display: "flex", flexDirection: "column" }}
               >
                 <Title level={4}>Danh Sách Hồ</Title>
-                <TankList
-                  tankData={tankData}
-                  handleSelectTank={handleSelectTank}
-                  isTankSelected={(tank) => selectedTank === tank}
-                />
+                <div className="custom-table">
+                  <TankList
+                    tankData={tankData}
+                    handleSelectTank={handleSelectTank}
+                    isTankSelected={(tank) => selectedTank === tank}
+                  />
+                </div>
               </Col>
             </Row>
           </>
         )}
       </Content>
-      <section id="footer-section" style={{ marginTop: "20px" }}>
+      {/* <section id="footer-section" style={{ marginTop: "20px" }}>
         {" "}
         <CustomeFooter />
-      </section>
+      </section> */}
     </Layout>
   );
 }

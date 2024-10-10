@@ -20,7 +20,7 @@ const TankList = ({ tankData, handleSelectTank, isTankSelected }) => {
   ];
 
   return (
-    <div style={{ maxHeight: "380px" }}>
+    <div style={{ maxHeight: "380px", marginTop: "48px" }}>
       <Table
         columns={tankColumns}
         dataSource={tankData}

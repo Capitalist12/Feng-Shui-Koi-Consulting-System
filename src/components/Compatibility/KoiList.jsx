@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Button, Input } from "antd";
-
+import "../../styles/KoiList.scss";
 const KoiList = ({
   koiData,
   handleSelectFish,

@@ -1,91 +1,196 @@
-#navbar-section {
-  height: 60px;
-  position: sticky;
-  top: 0;
-  z-index: 3;
+// .compatibility-page {
+//   padding: 20px;
 
-  .navbar {
-    background-color: #353535;
-    height: 100%;
+//   h1 , h3 {
+//     z-index: 1; /* Make sure the title stays below the navbar */
+//     position: relative;
+//     margin-top: 90;
+//     margin-bottom: 1; /* Corrected margin value, no need to use just "1" */
+//     padding: 0;
+//     color: red;
+//     text-align: center;
+//   } 
+// }
 
-    li.ant-menu-overflow-item.ant-menu-item.ant-menu-item-only-child {
-      color: white;
-      display: flex;
-      align-items: center;
-    }
-
-    li.ant-menu-overflow-item.ant-menu-submenu.ant-menu-submenu-horizontal {
-      display: flex;
-      align-items: center;
-      color: white;
-    }
-  }
-}
-
-.compatibility-background {
-  background-image: url('../assets/images/background-compatibility.jpg'); /* Thay đổi đường dẫn tới hình ảnh của bạn */
-  background-size: cover; /* Đảm bảo hình ảnh phủ kín toàn bộ không gian */
-  background-position: center; /* Đặt hình ảnh ở giữa */
-  min-height: 100vh; /* Đảm bảo chiều cao tối thiểu là 100% viewport height */
-}
-
-
-// CompatibilityPage.scss
-
-.table-custom {
-  // Background color for the table
-  background-color: #f0f4f8;
-
-  // Header styles
-  .ant-table-header {
-    background-color: #007bff; // Header background color
-    color: #fff; // Header text color
-
-    .ant-table-cell {
-      font-weight: bold; // Bold header text
-    }
-  }
-
-  // Body styles
-  .ant-table-body {
-    .ant-table-row {
-      &:hover {
-        background-color: #e6f7ff; // Row hover color
-      }
-
-      &.selected-row {
-        background-color: #cce5ff; // Selected row color
-      }
-    }
-  }
-
-  // Cell styles
-  .ant-table-cell {
-    border-color: #007bff; // Cell border color
-  }
-}
-.compatibility-background {
-  background-color: #f0f2f5;
+#sec1 {
   padding: 20px;
+  margin: 20px 0;
+  height: 500px;
+  // background-color: #f5f5f5; /* Light background color */
+  // border-radius: 10px; /* Rounded corners */
+  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add some shadow for depth */
+  .btn {
+
+    a {
+        position: absolute;
+        bottom: 10vh;
+        left: 50%;
+        transform: translate(-45%, -50%);
+        text-decoration: none;
+        color: white;
+        display: flex;
+        justify-content: center;
+        background-color: none;
+        align-items: center;
+        height: 70px;
+        width: 300px;
+        border-radius: 5em;
+        border: 1px solid white;
+        font-size: 1.2em;
+        transition: all 1s ease;
+        box-shadow: 0 0 0;
+
+        &:hover {
+            background-color: white;
+            box-shadow: 0 0 10px white;
+            width: 305px;
+            height: 72px;
+            font-size: 1.23em;
+            color: black;
+        }
+    }
+
+    .downArrow {
+        position: absolute;
+        bottom: 7vh;
+        left: 50%;
+        font-size: 2em;
+    }
+
+    .bounce {
+        -moz-animation: bounce 3s infinite;
+        -webkit-animation: bounce 3s infinite;
+        animation: bounce 3s infinite;
+    }
+
+    @-moz-keyframes bounce {
+
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            -moz-transform: translateY(0);
+            transform: translateY(0);
+        }
+
+        40% {
+            -moz-transform: translateY(-30px);
+            transform: translateY(-30px);
+        }
+
+        60% {
+            -moz-transform: translateY(-15px);
+            transform: translateY(-15px);
+        }
+    }
+
+    @-webkit-keyframes bounce {
+
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
+
+        40% {
+            -webkit-transform: translateY(-30px);
+            transform: translateY(-30px);
+        }
+
+        60% {
+            -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+        }
+    }
+
+    @keyframes bounce {
+
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            -moz-transform: translateY(0);
+            -ms-transform: translateY(0);
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
+
+        40% {
+            -moz-transform: translateY(-30px);
+            -ms-transform: translateY(-30px);
+            -webkit-transform: translateY(-30px);
+            transform: translateY(-30px);
+        }
+
+        60% {
+            -moz-transform: translateY(-15px);
+            -ms-transform: translateY(-15px);
+            -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+        }
+    }
 }
 
-.selected-row {
-  background-color: #e6f7ff; // Highlight selected row
+  h1, h2 {
+    margin-top: -10px;
+    margin-left: 20px;
+    color: red; /* Text color */
+     /* Center the text */
+  }
+
+  h1 {
+    font-size: 50em; /* Adjust font size */
+    font-weight: 900; /* Bold text */
+    margin-bottom: 10px; /* Add space between h1 and h2 */
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 15px; /* Space after h3 */
+  }
+
+  /* Optional: Style the Title component */
+  .ant-typography {
+    font-size: 90px; /* Adjust Title size */
+    font-weight: 600; /* Adjust Title weight */
+    color: #ff6347; /* Tomato color for Title */
+  }
 }
 
-.table-custom {
-  background-color: #ffffff;
-  border-radius: 8px;
+
+.background {
+  background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
-.card-custom {
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
+/* Ensure the Navbar is always on top */
+#navbar-section {
+  z-index: 10; /* Make sure the navbar has a higher z-index than the title */
+  position: relative; /* Ensure it doesn't interfere with the flow of the page */
 }
 
-
-.footer {
-  margin-top:20px;
+/* Apply to the table in CompatibilityPage */
+.compatibility-page .custom-table thead[class*="ant-table-thead"] th {
+  background-color: grey !important;
+  font-weight: bold;
+  font-size: 20px;
+  border-color: #000;
+  text-align: center;
+  color: white !important;
 }
