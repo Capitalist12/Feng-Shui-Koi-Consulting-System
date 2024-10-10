@@ -4,14 +4,12 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ConsultingRequest
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.ElementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.FishRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.TankRepo;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,7 +26,6 @@ public class ConsultingService {
     FishRepo fishRepo;
     TankRepo tankRepo;
     ElementRepo elementRepo;
-    UserRepository userRepository;
     ElementMapper elementMapper;
     ElementCalculationService elementCalculationService;
 

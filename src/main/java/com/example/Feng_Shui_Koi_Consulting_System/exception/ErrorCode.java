@@ -30,7 +30,8 @@ public enum ErrorCode {
     INVALID_TOKEN(1020, "Token invalid", HttpStatus.BAD_REQUEST ),
     EXPIRED_TOKEN(1021, "Token expired", HttpStatus.BAD_REQUEST),
     SEND_MAIL_FAILED(1022, "Send mail failed", HttpStatus.BAD_REQUEST ),
-    OTP_NOT_FOUND(1023, "OTP not found", HttpStatus.BAD_REQUEST );
+    OTP_NOT_FOUND(1023, "OTP not found", HttpStatus.BAD_REQUEST ),
+    AD_NOT_EXIST(1024, "Advertisement not found", HttpStatus.NOT_FOUND);
 
     private int code;
     private String message;

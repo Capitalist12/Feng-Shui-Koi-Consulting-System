@@ -36,9 +36,7 @@ public class Advertisement {
     @Column(name = "UserID")
     String userID;
 
-
     @Column(name = "AdImageID")
     String adImageID;
-
 
 }
