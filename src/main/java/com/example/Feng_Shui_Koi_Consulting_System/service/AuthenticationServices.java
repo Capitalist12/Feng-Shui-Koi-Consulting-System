@@ -104,6 +104,8 @@ public class AuthenticationServices {
     }
 
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
         String otp = generateOTP();
         storeOTP(request.getEmail().trim(), otp);
         emailService.sendEmail(request.getEmail().trim(),
@@ -140,12 +142,6 @@ public class AuthenticationServices {
         return IntrospectResponse.builder()
                 .valid(expediteTime.after(new Date()) && verifier)
                 .build();
-    }
-
-    public void forgotPassword(@Valid SendOTPRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-        sendOTPToEmail(request);
     }
 
     public String resetPassword(ResetPasswordRequest request) {

@@ -34,7 +34,7 @@ public class AuthenticationAPI {
 
     @PostMapping("/verify-email")
     String verifyEmail(@RequestBody @Valid SendOTPRequest request){
-        authenticationServices.forgotPassword(request);
+        authenticationServices.sendOTPToEmail(request);
         return "An OTP has been sent to your email. Please verify it to reset your password.";
     }
 
