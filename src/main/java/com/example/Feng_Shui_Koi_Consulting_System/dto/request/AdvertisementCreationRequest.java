@@ -1,15 +1,20 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
 
-import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SendOTPRequest {
-    @Email
-    String email;
+public class AdvertisementCreationRequest {
+    String adID;
+    String title;
+    String description;
+    Float price;
+    int elementID;
+    String categoryID;
+    String userID;
+    String adImageID;
 }

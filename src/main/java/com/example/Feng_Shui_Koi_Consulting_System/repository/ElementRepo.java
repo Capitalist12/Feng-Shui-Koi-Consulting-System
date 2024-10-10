@@ -12,12 +12,9 @@ import java.util.Set;
 
 @Repository
 public interface ElementRepo extends JpaRepository<Element, Integer> {
-
     @Query("SELECT e FROM Element e WHERE e.elementName IN :elementNames")
     List<Element> findByElementNameIn(@Param("elementNames") Set<String> elementName);
-
     Optional<Element> findByElementName(String elementName);
-
     @Query("SELECT e FROM Element e WHERE e.color LIKE %:color%")
     Optional<Element> findByColor(@Param("color") String color);
 }

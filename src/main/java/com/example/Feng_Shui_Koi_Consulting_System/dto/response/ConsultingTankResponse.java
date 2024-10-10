@@ -12,4 +12,5 @@ public class ConsultingTankResponse {
     String tankId;
     String shape;
     String imageURL;
+    ElementResponse elementTank;
 }

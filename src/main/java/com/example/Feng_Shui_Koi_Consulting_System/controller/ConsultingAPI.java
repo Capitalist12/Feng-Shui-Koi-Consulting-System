@@ -2,10 +2,13 @@ package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CalculateElementRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CompatibilityRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ConsultingRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CompatibilityResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingFishResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingTankResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.service.CompatibilityService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ConsultingService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ElementCalculationService;
 import lombok.AccessLevel;
@@ -17,8 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @Data
@@ -29,6 +33,7 @@ public class ConsultingAPI {
 
     ElementCalculationService elementCalculationService;
     ConsultingService consultingService;
+    CompatibilityService compatibilityService;
 
     @GetMapping("/calculate")
     public ApiResponse<Integer> calculateElementId(@RequestBody CalculateElementRequest request) {
@@ -38,21 +43,21 @@ public class ConsultingAPI {
                 .build();
     }
 
-//    @PostMapping("/compatibility")
-//    ApiResponse<CompatibilityResponse> calculateCompatibilityScore
-//            (@RequestBody CompatibilityRequest request) {
-//        String userElement = request.getUserElement();
-//        String tankElement = consultingService.elementFromShape(request.getTankShape());
-//        Set<Set<String>> fishElements = request.getKoiFishColors().stream()
-//                .map(colors -> colors.stream()
-//                        .map(consultingService::elementFromColor)
-//                        .collect(Collectors.toSet()))
-//                .collect(Collectors.toSet());
-//        return ApiResponse.<CompatibilityResponse>builder()
-//                .result(consultingService.compatibilityScore(userElement,
-//                        tankElement, fishElements, request))
-//                .build();
-//    }
+    @PostMapping("/compatibility")
+    ApiResponse<CompatibilityResponse> calculateCompatibilityScore
+            (@RequestBody CompatibilityRequest request) {
+        String userElement = request.getUserElement();
+        String tankElement = compatibilityService.elementFromShape(request.getTankShape());
+        Set<Set<String>> fishElements = request.getKoiFishColors().stream()
+                .map(colors -> colors.stream()
+                        .map(compatibilityService::elementFromColor)
+                        .collect(Collectors.toSet()))
+                .collect(Collectors.toSet());
+        return ApiResponse.<CompatibilityResponse>builder()
+                .result(compatibilityService.compatibilityScore(userElement,
+                        tankElement, fishElements, request))
+                .build();
+    }
 
     @GetMapping("/all")
     public ApiResponse<ConsultingResponse> getConsulting(@RequestBody ConsultingRequest request){

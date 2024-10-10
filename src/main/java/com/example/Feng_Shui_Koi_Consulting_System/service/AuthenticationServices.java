@@ -83,7 +83,7 @@ public class AuthenticationServices {
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXIST);
         if (userRepository.existsByEmail(request.getEmail()))
-            throw new AppException(ErrorCode.EMAIL_EXIST);
+            throw new AppException(ErrorCode.EMAIL_EXITST);
         int elementId = elementCalculationService
                 .calculateElementId(request.getDateOfBirth());
         Element element = elementRepo.findById(elementId)
@@ -130,7 +130,7 @@ public class AuthenticationServices {
 
     }
 
-    public IntrospectResponse introspected(IntrospectRequest request) throws JOSEException, ParseException {
+    public IntrospectResponse introspected(IntrospectResquest request) throws JOSEException, ParseException {
         var token = request.getToken();
 
         JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
@@ -266,18 +266,24 @@ public class AuthenticationServices {
         log.info("User info{}:", userInfo);
 
         //On board user
+        Element element = elementRepo.findById(6)
+                .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+
         var user = userRepository.findByEmail(userInfo.getEmail()).orElseGet(
-                () -> userRepository.save(User.builder()
-                        .userID(generateUserID())
-                        .email(userInfo.getEmail())
-                        .username(userInfo.getName())
-                        .password(userInfo.getEmail())
-                        .roleName(String.valueOf(Roles.USER))
-                        .build()));
+                ()-> userRepository.save(User.builder()
+                                .userID(generateUserID())
+                                .email(userInfo.getEmail())
+                                .username(userInfo.getName())
+                                .roleName(String.valueOf(Roles.USER))
+                                .element(element)
+                                .password("")
+                                .build()));
 
         var token = generateToken(user);
 
-        return AuthenResponse.builder()
+        return  AuthenResponse.builder()
+                .username(user.getUsername())
+                .roleName(user.getRoleName())
                 .token(token)
                 .build();
     }

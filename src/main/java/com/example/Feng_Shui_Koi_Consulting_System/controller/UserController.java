@@ -1,17 +1,16 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.PasswordCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ProfileResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,19 +40,19 @@ public class UserController {
     }
 
     @GetMapping("/my-info")
-    ApiResponse<ProfileResponse> getMyInfo() {
-        return ApiResponse.<ProfileResponse>builder()
+    ApiResponse<UserResponse> getMyInfo() {
+        return ApiResponse.<UserResponse>builder()
                 .result(userService.getMyInfo())
                 .build();
     }
 
     @GetMapping
-    ApiResponse<List<UserResponse>>getUsers(){
+    ApiResponse<List<UserResponse>>geUsers(){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username: {}", authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
         return ApiResponse.<List<UserResponse>>builder()
-                .result(userService.getUsers())
+                .result(userService.geUsers())
                 .build();
     }
 
@@ -78,4 +77,13 @@ public class UserController {
         userService.deleteUser(userID);
         return "User has been Deleted!";
     }
+
+    @PostMapping("/create-dob")
+    ApiResponse<Void> createDOB(@RequestBody  DOBCreationRequest request){
+        userService.createDOB(request);
+        return ApiResponse.<Void>builder()
+                .message("Date of birth and element has been updated!")
+                .build();
+    }
+
 }

@@ -14,17 +14,22 @@ public class ElementCalculationService {
             throw new IllegalArgumentException("Date of birth cannot be null");
         }
 
-        int birthYear = dateOfBirth.getYear(); // Extract the year from LocalDate
+        int birthYear = dateOfBirth.getYear();
 
         try {
             int canNumber = calculateCanNumber(birthYear);
             int chiNumber = calculateChiNumber(birthYear);
-            int sum = canNumber + chiNumber;
-            return (sum > 5) ? (sum - 5) : sum;
+            int elementId = canNumber + chiNumber;
+
+            if(elementId>5){
+                elementId = elementId -5 ;
+            }
+            return elementId;
         } catch (Exception e) {
             throw new RuntimeException("Error calculating element ID", e);
         }
     }
+
 
     private int calculateCanNumber(int birthYear) {
         int canTableNumber = birthYear % 10;
