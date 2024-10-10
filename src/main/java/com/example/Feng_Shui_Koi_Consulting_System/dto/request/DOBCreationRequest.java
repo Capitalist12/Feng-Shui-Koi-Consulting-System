@@ -1,17 +1,13 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
+import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CompatibilityRequest {
-    String userElement;
-    Set<Set<String>> koiFishColors;
-    String tankShape;
+public class DOBCreationRequest {
+    LocalDate dateOfBirth;
 }

@@ -7,6 +7,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AuthenticationServices;
 import com.example.Feng_Shui_Koi_Consulting_System.service.EmailService;
 import com.nimbusds.jose.JOSEException;
+import com.stripe.exception.StripeException;
 import jakarta.validation.Valid;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -48,7 +49,7 @@ public class AuthenticationAPI {
     }
 
     @PostMapping("/login")
-    ApiResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) {
+    ApiResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) throws StripeException {
         var result = authenticationServices.loginUser(request);
         return ApiResponse.<AuthenResponse>builder()
                 .result(result)

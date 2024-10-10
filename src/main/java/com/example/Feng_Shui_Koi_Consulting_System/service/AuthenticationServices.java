@@ -10,6 +10,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.UserMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.TransactionRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundIdentityClient;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundUserClient;
@@ -18,6 +19,8 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Subscription;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +58,7 @@ public class AuthenticationServices {
     private Map<String, LocalDateTime> otpExpiry = new HashMap<>();
     ElementRepo elementRepo;
     ElementCalculationService elementCalculationService;
+    TransactionRepo transactionRepo;
 
     @NonFinal
     @Value("${jwt.singerKey}")
@@ -99,23 +103,33 @@ public SignUpResponse registerUser(SignUpRequest request) {
 }
 
 //Method to login user
-    public AuthenResponse loginUser(AuthenRequest request) {
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());//Check user password
-        if (!authenticated)                                                                         //is match with password
-            throw new AppException(ErrorCode.UNAUTHENTICATED);                                      //in database
-        var token = generateToken(user);
-
-        return AuthenResponse.builder()
-                .authenticated(true)
-                .username(user.getUsername())
-                .roleName(user.getRoleName())
-                .token(token)
-                .build();
-
+public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
+    var user = userRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+    // Check for the transaction and subscription status
+    transactionRepo.findByUser_UserID(user.getUserID())
+            .ifPresent(transaction -> {
+                boolean isSubscriptionActive = checkSubscription(
+                        transaction.getSubscriptionID()
+                ) ;
+                if (!isSubscriptionActive) {
+                    user.setRoleName(Roles.USER.toString());
+                    userRepository.save(user);
+                }
+            });
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+    //Check user password is match with password in database
+    if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        throw new AppException(ErrorCode.UNAUTHENTICATED);
     }
+    var token = generateToken(user);
+    return AuthenResponse.builder()
+            .authenticated(true)
+            .username(user.getUsername())
+            .roleName(user.getRoleName())
+            .token(token)
+            .build();
+}
 
     public IntrospectResponse introspected(IntrospectResquest resquest) throws JOSEException, ParseException {
         var token  = resquest.getToken();
@@ -202,7 +216,7 @@ public SignUpResponse registerUser(SignUpRequest request) {
         otpExpiry.remove(email);
     }
 
-    private String generateToken(User user) {
+    public String generateToken(User user) {
        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
@@ -274,17 +288,36 @@ public SignUpResponse registerUser(SignUpRequest request) {
         var token = generateToken(user);
 
         return  AuthenResponse.builder()
+                .username(user.getUsername())
+                .roleName(user.getRoleName())
                 .token(token)
                 .build();
     }
 
     private String buildScope(User user) {
-        return user.getRoleName() != null ? user.getRoleName() : "";
+
+    return user.getRoleName() != null ? user.getRoleName() : "";
     }
 
     private String generateUserID() {
         // Implement a method to generate a unique user ID of length 10
         return "U" + String.format("%09d", System.nanoTime() % 1000000000);
+    }
+
+    public boolean checkSubscription(String subscriptionId) {
+        try {
+            Subscription subscription = Subscription.retrieve(subscriptionId);
+            if("active".equals(subscription.getStatus())) {
+                long currentTime = System.currentTimeMillis() / 1000L;
+                long subscriptionEndTime = subscription.getCurrentPeriodEnd();
+                if(subscriptionEndTime > currentTime) {
+                    return true;
+                }
+            }
+        }catch (StripeException e) {
+            log.error("Exception: ", e);
+        }
+        return false;
     }
 
 }

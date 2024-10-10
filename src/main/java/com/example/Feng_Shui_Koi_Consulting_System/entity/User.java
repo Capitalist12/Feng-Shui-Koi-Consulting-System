@@ -36,7 +36,7 @@ public class User {
     @Column(name = "Email")
     String email;
 
-    @Column(name = "ImageLink")
+    @Column(name = "ImageURL")
     String imageLink;
 
     @Column(name = "RoleName")
@@ -52,6 +52,10 @@ public class User {
     @JoinColumn(name = "ElementID", nullable = false, referencedColumnName = "ElementID")
     @JsonBackReference
     Element element;
+
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    Transaction transaction;
 
     // Lombok will generate getters and setters
 }
