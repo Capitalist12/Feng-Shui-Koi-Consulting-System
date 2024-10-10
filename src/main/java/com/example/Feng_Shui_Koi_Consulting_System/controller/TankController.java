@@ -51,7 +51,7 @@ public class TankController {
 
     @DeleteMapping("/{tankId}")
     String deleteTank(@PathVariable String tankId){
-        tankService.deleteFish(tankId);
+        tankService.deleteTank(tankId);
         return "Tank has been delete";
     }
 }

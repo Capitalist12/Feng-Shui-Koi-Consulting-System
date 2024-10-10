@@ -26,10 +26,11 @@ public enum ErrorCode {
     UNAUTHORIZED(1016,"You don't have permission", HttpStatus.FORBIDDEN),
     ELEMENT_NOT_EXIST(1017,"Element not exist", HttpStatus.NOT_FOUND),
     KOI_TYPE_EXIST(1018,"KoiType existed", HttpStatus.BAD_REQUEST),
-    PASSWORD_EXIST(1019,"Password existed", HttpStatus.BAD_REQUEST)
-
-
-    ;
+    PASSWORD_EXIST(1019,"Password existed", HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN(1020, "Token invalid", HttpStatus.BAD_REQUEST ),
+    EXPIRED_TOKEN(1021, "Token expired", HttpStatus.BAD_REQUEST),
+    SEND_MAIL_FAILED(1022, "Send mail failed", HttpStatus.BAD_REQUEST ),
+    OTP_NOT_FOUND(1023, "OTP not found", HttpStatus.BAD_REQUEST );
 
     private int code;
     private String message;

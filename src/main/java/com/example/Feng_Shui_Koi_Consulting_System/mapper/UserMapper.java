@@ -32,6 +32,7 @@ public interface UserMapper {
     @Mapping(source = "element", target = "element", qualifiedByName = "mapToElement")
     User toUser(UserCreationRequest request, @Context ElementRepo elementRepo);
 
+
     @Mapping(source = "element", target = "element", qualifiedByName = "mapToElementName")
     UserResponse toUserResponse(User user);
 
@@ -39,9 +40,8 @@ public interface UserMapper {
     void updateUser(@MappingTarget User user, UserUpdateRequest request,
                     @Context ElementRepo elementRepo);
 
-    @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementName")
     @Mapping(target = "userID", source = "userID")
-    @Mapping(t)
+    @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementName")
     ProfileResponse toProfileResponse(User user);
 
     @Named("mapToElement")

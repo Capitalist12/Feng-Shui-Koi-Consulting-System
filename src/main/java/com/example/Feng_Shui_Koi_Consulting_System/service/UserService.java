@@ -59,8 +59,6 @@ public class UserService {
                 .map(userMapper :: toUserResponse).collect(Collectors.toList());
     }
 
-
-
     public UserResponse getUserById(String id) {
         User user =  userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
@@ -84,12 +82,16 @@ public class UserService {
         userRepository.deleteById(userID);
     }
 
-    public ProfileResponse getMyInfo() {
+    public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String email = context.getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
-        return userMapper.toProfileResponse(user);
+
+        var userResponse = userMapper.toUserResponse(user);
+        userResponse.setNoPassword(!StringUtils.hasText(user.getPassword()));
+
+        return userResponse;  // Return the modified response
     }
 
     public void createPassword( PasswordCreationRequest request) {

@@ -2,19 +2,29 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 @Service
 public class ElementCalculationService {
 
-    public int calculateElementId(int birthYear) {
+    public int calculateElementId(LocalDate dateOfBirth) {
+        if (dateOfBirth == null) {
+            throw new IllegalArgumentException("Date of birth cannot be null");
+        }
+
+        int birthYear = dateOfBirth.getYear(); // Extract the year from LocalDate
+
         try {
             int canNumber = calculateCanNumber(birthYear);
             int chiNumber = calculateChiNumber(birthYear);
-            int elementId = canNumber + chiNumber;
-            return elementId;  // Return as String to match your Element entity ID type
+            return canNumber + chiNumber;
         } catch (Exception e) {
             throw new RuntimeException("Error calculating element ID", e);
         }
     }
+
 
     private int calculateCanNumber(int birthYear) {
         int canTableNumber = birthYear % 10;

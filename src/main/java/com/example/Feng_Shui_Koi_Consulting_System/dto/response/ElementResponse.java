@@ -13,11 +13,13 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ElementResponse {
-
     Integer elementId;
     String elementName;
     String description;
     String quantity;
     String direction;
     int value;
+    String color;
+    String generation;
+    String inhibition;
 }

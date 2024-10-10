@@ -22,4 +22,6 @@ public class UserResponse {
     String imageLink;
     String planID;
     boolean deleteStatus;
+    boolean noPassword;
+    boolean noDob;
 }

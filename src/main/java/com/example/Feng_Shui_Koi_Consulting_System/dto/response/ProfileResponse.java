@@ -14,10 +14,11 @@ import java.time.LocalDate;
 public class ProfileResponse {
     String userID;
     String username;
+    String password;
     String email;
     LocalDate dateOfBirth;
     String roleName;
     String element;
     String imageLink;
-
+    boolean noDob;
 }
