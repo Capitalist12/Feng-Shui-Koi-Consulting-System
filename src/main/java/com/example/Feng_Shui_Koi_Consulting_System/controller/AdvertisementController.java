@@ -39,6 +39,20 @@ public class AdvertisementController {
                 .build();
     }
 
+    @GetMapping("/{userID}")
+    ApiResponse<List<AdvertisementResponse>> getAdByUser(@PathVariable String userID){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getAdvertisementByUserID(userID))
+                .build();
+    }
+
+    @GetMapping("/{userID}")
+    ApiResponse<List<AdvertisementResponse>> getAdByUserID(@PathVariable String userID){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getAdvertisementByCategory(userID))
+                .build();
+    }
+
     @PutMapping("/{adID}")
     ApiResponse<AdvertisementResponse> updateAd(@PathVariable String adID, @RequestBody AdvertisementUpdateRequest request){
         return ApiResponse.<AdvertisementResponse>builder()

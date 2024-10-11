@@ -27,12 +27,18 @@ public class Advertisement {
     @Column(name = "Price")
     Float price;
 
+    @ManyToOne
+    @JoinColumn(name = "ElementID", referencedColumnName = "ElementID")
     @Column(name = "ElementID")
     int elementID;
 
+    @ManyToOne
+    @JoinColumn(name = "CategoryID", referencedColumnName = "CategoryID")
     @Column(name = "CategoryID")
     String categoryID;
 
+    @ManyToOne
+    @JoinColumn(name = "UserID", referencedColumnName = "UserID")
     @Column(name = "UserID")
     String userID;
 

@@ -11,5 +11,7 @@ import java.util.List;
 @Repository
 public interface AdvertisementRepo extends JpaRepository<Advertisement, String> {
     @Query("SELECT ad FROM Advertisement ad JOIN ad.CategoryID c WHERE c.categoryId = :categoryID")
-    List<Advertisement> findByCategoryID(@Param("categoryID") String categoryID);
+    List<Advertisement> findByCategoryID(@Param("categoryID") String categoryId);
+    @Query("SELECT ad FROM Advertisement ad JOIN ad.UserID u WHERE u.userId = :userID")
+    List<Advertisement> findByUserID(@Param("userID") String userId);
 }
