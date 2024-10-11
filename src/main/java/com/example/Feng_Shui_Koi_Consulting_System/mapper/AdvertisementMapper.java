@@ -19,24 +19,24 @@ import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface AdvertisementMapper {
-    @Mapping(target = "elementID", source = "elementID", qualifiedByName = "mapToElement")
-    @Mapping(target = "categoryID", source = "categoryID", qualifiedByName = "mapToCategory")
-    @Mapping(target = "userID", source = "userID", qualifiedByName = "mapToUser")
+    @Mapping(target = "element", source = "elementID", qualifiedByName = "mapToElement")
+    @Mapping(target = "category", source = "categoryID", qualifiedByName = "mapToCategory")
+    @Mapping(target = "user", source = "userID", qualifiedByName = "mapToUser")
     Advertisement toAdvertisement(AdvertisementCreationRequest advertisementRequest,
                                   @Context ElementRepo elementRepo,
                                   @Context CategoryRepo categoryRepo,
                                   @Context UserRepository userRepository);
 
     // Map from Advertisement entity to the response DTO
-    @Mapping(target = "elementID", source = "elementID", qualifiedByName = "mapToElementResponse")
-    @Mapping(target = "categoryID", source = "categoryID", qualifiedByName = "mapToCategoryResponse")
-    @Mapping(target = "userID", source = "userID", qualifiedByName = "mapToUserResponse")
+    @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementResponse")
+    @Mapping(target = "category", source = "category", qualifiedByName = "mapToCategoryResponse")
+    @Mapping(target = "user", source = "user", qualifiedByName = "mapToUserResponse")
     AdvertisementResponse toAdvertisementResponse(Advertisement advertisement);
 
     // Update an existing Advertisement entity with data from the update request
-    @Mapping(target = "elementID", source = "elementID", qualifiedByName = "mapToElement")
-    @Mapping(target = "categoryID", source = "categoryID", qualifiedByName = "mapToCategory")
-    @Mapping(target = "userID", source = "userID", qualifiedByName = "mapToUser")
+    @Mapping(target = "element", source = "elementID", qualifiedByName = "mapToElement")
+    @Mapping(target = "category", source = "categoryID", qualifiedByName = "mapToCategory")
+    @Mapping(target = "user", source = "userID", qualifiedByName = "mapToUser")
     void updateAdvertisement(@MappingTarget Advertisement advertisement, AdvertisementUpdateRequest request,
                              @Context ElementRepo elementRepo,
                              @Context CategoryRepo categoryRepo,

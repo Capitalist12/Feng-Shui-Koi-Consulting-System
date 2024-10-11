@@ -9,11 +9,10 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdvertisementCreationRequest {
-    String adID;
     String title;
     String description;
     Float price;
-    int elementID;
+    Integer elementID;
     String categoryID;
     String userID;
     String adImageID;

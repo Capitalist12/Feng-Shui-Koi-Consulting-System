@@ -29,18 +29,15 @@ public class Advertisement {
 
     @ManyToOne
     @JoinColumn(name = "ElementID", referencedColumnName = "ElementID")
-    @Column(name = "ElementID")
-    int elementID;
+    Element element;
 
     @ManyToOne
     @JoinColumn(name = "CategoryID", referencedColumnName = "CategoryID")
-    @Column(name = "CategoryID")
-    String categoryID;
+    Category category;
 
     @ManyToOne
     @JoinColumn(name = "UserID", referencedColumnName = "UserID")
-    @Column(name = "UserID")
-    String userID;
+    User user;
 
     @Column(name = "AdImageID")
     String adImageID;

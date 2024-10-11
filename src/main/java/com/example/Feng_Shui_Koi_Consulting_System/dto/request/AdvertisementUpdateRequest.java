@@ -12,7 +12,7 @@ public class AdvertisementUpdateRequest {
     String title;
     String description;
     Float price;
-    int elementID;
+    Integer elementID;
     String categoryID;
     String userID;
     String adImageID;
