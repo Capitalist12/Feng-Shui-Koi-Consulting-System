@@ -35,7 +35,7 @@ public class ConsultingAPI {
     ConsultingService consultingService;
     CompatibilityService compatibilityService;
 
-    @GetMapping("/calculate")
+    @PostMapping("/calculate")
     public ApiResponse<Integer> calculateElementId(@RequestBody CalculateElementRequest request) {
         int elementId = elementCalculationService.calculateElementId(request.getDob());
         return ApiResponse.<Integer>builder()
@@ -59,7 +59,7 @@ public class ConsultingAPI {
                 .build();
     }
 
-    @GetMapping("/all")
+    @PostMapping("/consulting")
     public ApiResponse<ConsultingResponse> getConsulting(@RequestBody ConsultingRequest request){
         var koiFishList = consultingService.koiFishList(request);
         var tankList = consultingService.tankList(request);

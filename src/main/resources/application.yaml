@@ -1,6 +1,9 @@
 
 server:
   port: 8080
+  servlet:
+    session:
+      timeout: 5m
 
 springdoc:
   api-docs:
@@ -12,9 +15,9 @@ springdoc:
 
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB9"
+    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB10"
     username: root
-    password: 12345
+    password: 123456
 
   application:
     name: sendemail
@@ -51,6 +54,10 @@ outbound:
 
 jwt:
   singerKey: "cq9cu5H3J3h1qWLxonaN4CFQy2J47Mnf/0vRPGek0SBZm//1k0V0CKAYlcC/G68A"
+
+api:
+  stripe:
+    key: sk_test_51Q7E6DF0U8Qubnpu6K2IVhs7Gj5GpEDEWTyDBuv4JeFGK0dphOZDXtGGcTCkR2LZOF8bOauwpVDfLaeqS5sdLXwt00J5sOw6wn
 
 
 
