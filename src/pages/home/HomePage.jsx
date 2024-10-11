@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Col, DatePicker, Divider, Form, Row } from 'antd';
-import { BsYinYang } from 'react-icons/bs';
-import { IoSearch } from 'react-icons/io5';
-import "../../styles/HomePage.scss";
+import { Col, Divider, Row } from 'antd';
+import "../../styles/homepage/HomePage.scss";
 import AdvertiseSlider from '../../components/HomePage/AdvertiseSlider';
 import BlogCardItem from '../../components/HomePage/BlogCardItem';
 import { NavLink } from 'react-router-dom';
@@ -13,7 +11,7 @@ import { FaMagnifyingGlass } from 'react-icons/fa6';
 import Navbar from '../../components/Utils/Navbar';
 import Consultant from '../../components/HomePage/Consultant';
 import { useSelector } from 'react-redux';
-// import '../../javaScript/HomePageScript.js'
+import InputDOBForm from '../../components/HomePage/InputDOB/InputDOBForm';
 
 const HomePage = () => {
     const token = useSelector((store) => store?.user?.token);
@@ -99,19 +97,7 @@ const HomePage = () => {
                 <div ref={containerRef} className='input-yearOfBirth-container'>
                     <h1>TRA CỨU PHONG THỦY CÁ KOI VÀ HỒ CÁ</h1>
                     <div className='input-form'>
-                        <Form>
-                            <label htmlFor="yearOfBirth" style={{ color: 'white' }}>Nhập năm sinh của bạn</label>
-                            <Form.Item name='yearOfBirth'>
-                                <DatePicker
-                                    size="large"
-                                    picker="year"
-                                    placeholder='Năm Sinh'
-                                    suffixIcon={<BsYinYang />}
-                                    style={{ width: '100%' }}
-                                />
-                            </Form.Item>
-                        </Form>
-                        <button className='inspec-btn'> <IoSearch /> &nbsp; Tra cứu</button>
+                        <InputDOBForm />
                     </div>
                     <div className='note'>
                         <h2>
@@ -140,6 +126,7 @@ const HomePage = () => {
 
             <section id='consultant-section'>
                 <Consultant />
+                
             </section>
 
             <section id='element-info-section'>

@@ -204,7 +204,7 @@ body {
         .background {
             width: 100%;
             height: 100vh;
-            background-image: url(../assets/images/beautiful-exotic-colorful-fish.jpg);
+            background-image: url(../../assets/images/beautiful-exotic-colorful-fish.jpg);
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -275,32 +275,10 @@ body {
             }
         }
 
-        .inspec-btn {
-            padding: 0.5em 0;
-            font-size: 1.2em;
-            border: none;
-            width: 100%;
-            border-radius: 1.5em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 0 0 hsl(0, 68%, 34%);
-            background: linear-gradient(to right, #eb4b02, #ff6b15);
-            color: white;
-            transition: all 0.4s ease;
-
-            &:hover {
-                text-decoration: double;
-                background: linear-gradient(to bottom, #eb4b02, #ff6b15);
-                transform: translateY(-3px);
-                box-shadow: 0 0 20px hsl(0, 68%, 34%);
-
-            }
-        }
+        
 
         .background-effect {
-            background-image: url(../assets/images/background.png);
+            background-image: url(../../assets/images/background.png);
             height: 100%;
             width: 100%;
             background-position: center;
@@ -460,7 +438,7 @@ body {
             height: 100vh;
 
             .inner-image {
-                background-image: url(../assets/images/SWP_Homepage.png);
+                background-image: url(../../assets/images/SWP_Homepage.png);
                 background-position: center;
                 background-repeat: no-repeat;
                 background-size: cover;
@@ -470,7 +448,7 @@ body {
         }
 
         #cloud-background {
-            background-image: url(../assets/images/cloud-background.png);
+            background-image: url(../../assets/images/cloud-background.png);
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;

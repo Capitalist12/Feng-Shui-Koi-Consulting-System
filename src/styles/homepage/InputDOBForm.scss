@@ -1,0 +1,38 @@
+#input-dob-form{
+    position: relative;
+    width: 100vw;
+
+    .input-dob-scroll{
+        transform: translate(-7%);
+
+    }
+
+    .intput-dob-submit-btn{
+        margin: auto;
+        width: 200px;
+
+        .inspec-btn {
+            padding: 0.5em 0;
+            font-size: 1.2em;
+            border: none;
+            width: 100%;
+            border-radius: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 0 hsl(0, 68%, 34%);
+            background: linear-gradient(to right, #eb4b02, #ff6b15);
+            color: white;
+            transition: all 0.4s ease;
+
+            &:hover {
+                text-decoration: double;
+                background: linear-gradient(to bottom, #eb4b02, #ff6b15);
+                transform: translateY(-3px);
+                box-shadow: 0 0 20px hsl(0, 68%, 34%);
+
+            }
+        }
+    }
+}

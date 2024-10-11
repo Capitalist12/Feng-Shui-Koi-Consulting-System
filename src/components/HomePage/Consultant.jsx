@@ -6,6 +6,7 @@ import WaterElementImage from "../../assets/images/elements-image/water.png";
 import EarthElementImage from "../../assets/images/elements-image/earth.png";
 import WoodElementImage from "../../assets/images/elements-image/wood.png";
 import Title from "antd/es/typography/Title";
+import ConsultantKoiSlider from "./ConsultantKoiSlider";
 
 const particle = 100;
 
@@ -17,13 +18,11 @@ const Consultant = () => {
                     <div className="element-image-container">
                         <img src={FireElementImage} />
                     </div>
-                    <Title level={2} style={{color: 'white'}}>MỆNH HỎA</Title>
+                    <Title level={2} style={{ color: 'white' }}>MỆNH HỎA</Title>
                 </Col>
             </Row>
-            <Col>
-
-            </Col>
-            <div className="background-effect"></div>
+            <ConsultantKoiSlider />
+            {/* <div className="background-effect"></div> */}
         </Row>
     )
 }

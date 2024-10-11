@@ -27,9 +27,6 @@ const App = () => {
           element: <Authenticate />
         }
       ]
-    },{
-      path: "authenticate",
-      element: <Authenticate />
     },
     {
       path: "register",
