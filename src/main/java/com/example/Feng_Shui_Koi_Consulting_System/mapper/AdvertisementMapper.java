@@ -19,6 +19,7 @@ import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface AdvertisementMapper {
+
     @Mapping(target = "element", source = "elementID", qualifiedByName = "mapToElement")
     @Mapping(target = "category", source = "categoryID", qualifiedByName = "mapToCategory")
     @Mapping(target = "user", source = "userID", qualifiedByName = "mapToUser")

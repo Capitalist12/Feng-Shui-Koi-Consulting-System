@@ -11,12 +11,20 @@ import com.example.Feng_Shui_Koi_Consulting_System.repository.AdvertisementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.CategoryRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AdvertisementService {
     AdvertisementRepo advertisementRepo;
     AdvertisementMapper advertisementMapper;
@@ -27,6 +35,7 @@ public class AdvertisementService {
     public AdvertisementResponse createAdvertisement(AdvertisementCreationRequest request) {
         Advertisement advertisement = advertisementMapper
                 .toAdvertisement(request, elementRepo, categoryRepo, userRepository);
+        advertisement.setAdID(generateAdID());
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 
@@ -35,15 +44,15 @@ public class AdvertisementService {
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
 
-//    public List<AdvertisementResponse> getAdvertisementByCategory(String categoryID){
-//        return advertisementRepo.findByCategoryID(categoryID).stream()
-//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
-//    }
-//
-//    public List<AdvertisementResponse> getAdvertisementByUserID(String userID){
-//        return advertisementRepo.findByUserID(userID).stream()
-//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
-//    }
+    public List<AdvertisementResponse> getAdvertisementByCategory(String categoryID){
+        return advertisementRepo.findByCategoryID(categoryID).stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
+
+    public List<AdvertisementResponse> getAdvertisementByUserID(String userID){
+        return advertisementRepo.findByUserID(userID).stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
 
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request){
         Advertisement advertisement = advertisementRepo.findById(adID)
@@ -57,5 +66,9 @@ public class AdvertisementService {
         Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
         advertisementRepo.delete(advertisement);
+    }
+
+    public String generateAdID(){
+        return "AD" + String.format("%05d", System.nanoTime() % 100000);
     }
 }
