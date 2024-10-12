@@ -1,8 +1,5 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
 
-import com.example.Feng_Shui_Koi_Consulting_System.entity.Category;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

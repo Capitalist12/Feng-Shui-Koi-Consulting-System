@@ -82,6 +82,8 @@ public class AuthenticationServices {
 
     //Method to register user
     public SignUpResponse registerUser(SignUpRequest request) {
+        if (request.getOtp().isEmpty())
+            throw new AppException(ErrorCode.OTP_REQUIRED);
         if (!validateOTP(request.getEmail().trim(), request.getOtp()))
             throw new AppException(ErrorCode.OTP_NOT_FOUND);
         if (userRepository.existsByUsername(request.getUsername()))
