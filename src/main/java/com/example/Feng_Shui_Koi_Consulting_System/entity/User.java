@@ -36,7 +36,7 @@ public class User {
     @Column(name = "Email")
     String email;
 
-    @Column(name = "ImageURL")
+    @Column(name = "ImageLink")
     String imageLink;
 
     @Column(name = "RoleName")

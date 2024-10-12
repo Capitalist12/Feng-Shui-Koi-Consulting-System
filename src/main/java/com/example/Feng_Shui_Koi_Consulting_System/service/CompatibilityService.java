@@ -43,8 +43,10 @@ public class CompatibilityService {
     public CompatibilityResponse compatibilityScore(String elementName, String tankElement,
                                                     Set<Set<String>> fishElements, CompatibilityRequest request) {
 
+        // Tìm yếu tố của người dùng dựa trên tên của yếu tố
         Element userElement = elementRepo.findByElementName(elementName)
                 .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+        double finalScore;
 
         double totalFishScore = 0;
         int numFish = fishElements.size();
@@ -78,6 +80,7 @@ public class CompatibilityService {
 
         // Tính điểm trung bình của cá
         double averageFishScore = totalFishScore / numFish;
+        double finalFishScore =  (totalFishScore / (numFish * 50)) * 100;
 
         // Tính điểm cho yếu tố bể (pond element)
         double tankScore = 0;
@@ -91,15 +94,47 @@ public class CompatibilityService {
             tankScore += 25; // Quan hệ trung lập với bể
         }
 
-        // Thay vì chia trung bình giữa cá và bể, bạn có thể dùng phép cộng
-        double finalScore = (averageFishScore + tankScore); // Tổng điểm cá và bể
+        // Tính điểm cuối cùng: cá sẽ có trọng số ít nhất 50%, ngay cả khi bể tương khắc
+        if (tankScore < 0) {
+            // Nếu bể tương khắc, cá chiếm 80% trọng số, bể chiếm 20%
+            finalScore = (averageFishScore * 0.8) + (tankScore * 0.2);
+        } else {
+            // Nếu bể trung lập hoặc tương sinh, cá và bể chia đôi trọng số
+            finalScore = (averageFishScore * 0.5) + (tankScore * 0.5);
+        }
+        double finalTankScore = tankCompatibilityScore(elementName, tankElement);
 
-
+        // Trả về kết quả
         return CompatibilityResponse.builder()
-                .calculateCompatibilityScore(Math.max(0, Math.min(100, finalScore)))
-                .build(); // Clamp score between 0 and 100
-
+                .fishCompatibilityScore(finalFishScore)
+                .tankCompatibilityScore(finalTankScore)
+                .calculateCompatibilityScore(Math.max(0, Math.min(100, finalScore))) // Điểm tổng (0 - 100)
+                .build();
     }
+
+
+
+    public double tankCompatibilityScore(String elementName,
+                                         String tankElement) {
+        Element userElement = elementRepo.findByElementName(elementName)
+                .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+
+        double tankScore = 0;
+        if (userElement.getElementName().equals(tankElement)) {
+            tankScore += 100; // Yếu tố bể giống với yếu tố người dùng
+        } else if (userElement.getGeneration().equals(tankElement)) {
+            tankScore += 100; // Quan hệ thuận lợi với bể
+        } else if (userElement.getInhibition().equals(tankElement)) {
+            tankScore -= 0; // Quan hệ bất lợi với bể
+        } else {
+            tankScore += 50; // Quan hệ trung lập với bể
+        }
+
+        return tankScore; // Return the response with the final score
+    }
+
+
+
 
 
 //    public String getAdvice(CompatibilityRequest request,

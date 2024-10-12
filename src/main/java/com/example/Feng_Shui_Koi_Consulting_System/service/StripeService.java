@@ -158,6 +158,7 @@ public class StripeService {
             return PaymentSuccessfulResponse.builder()
                     .checkout(true)
                     .token(token)
+                    .role(user.getRoleName())
                     .build();
         }catch(StripeException e) {
             log.error("Exception : ",e);
@@ -166,6 +167,7 @@ public class StripeService {
         return PaymentSuccessfulResponse.builder()
                 .checkout(false)
                 .token(null)
+                .role(Roles.USER.toString())
                 .build();
     }
 
