@@ -1,15 +1,16 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 @Entity
-@Table(name = "Category")
 @Data
+@Table(name = "`Category`")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,7 +18,24 @@ import lombok.experimental.FieldDefaults;
 public class Category {
     @Id
     @Column(name = "CategoryID")
-    String categoryId;
+    String categoryID;
     @Column(name = "CategoryName")
     String categoryName;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    Set<Advertisement> advertisement = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Category)) return false;
+        Category category = (Category) o;
+        return Objects.equals(categoryID, category.categoryID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(categoryID);
+    }
 }

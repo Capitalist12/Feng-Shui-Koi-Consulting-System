@@ -103,10 +103,10 @@ public class AuthenticationServices {
 //        user.setPlanID("PP005");
         user.setElement(element);
         user.setDeleteStatus(false);
-        clearOTP(request.getEmail().trim());
-        emailService.sendEmail(request.getEmail(),
-                "This is your password: " + request.getPassword(),
-                "Create User Successful");
+//        clearOTP(request.getEmail().trim());
+//        emailService.sendEmail(request.getEmail(),
+//                "This is your password: " + request.getPassword(),
+//                "Create User Successful");
 
         return userMapper.toSignUpResponse(userRepository.save(user));
     }

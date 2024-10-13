@@ -3,6 +3,8 @@ package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -12,8 +14,8 @@ public class AdvertisementCreationRequest {
     String title;
     String description;
     Float price;
-    Integer elementID;
-    String categoryID;
-    String userID;
-    String adImageID;
+    String element;
+    String categoryName;
+    String username;
+    Set<String> imagesURL;
 }

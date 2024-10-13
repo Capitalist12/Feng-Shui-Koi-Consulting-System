@@ -2,101 +2,101 @@ package com.example.Feng_Shui_Koi_Consulting_System.mapper;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CategoryResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ElementResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.Advertisement;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.Category;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.*;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.CategoryRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
+import com.example.Feng_Shui_Koi_Consulting_System.service.AdvertisementService;
+import com.example.Feng_Shui_Koi_Consulting_System.service.CategoryService;
+import com.example.Feng_Shui_Koi_Consulting_System.service.KoiTypeService;
+import com.example.Feng_Shui_Koi_Consulting_System.service.UserService;
 import org.mapstruct.*;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface AdvertisementMapper {
-
-    @Mapping(target = "element", source = "elementID", qualifiedByName = "mapToElement")
-    @Mapping(target = "category", source = "categoryID", qualifiedByName = "mapToCategory")
-    @Mapping(target = "user", source = "userID", qualifiedByName = "mapToUser")
-    Advertisement toAdvertisement(AdvertisementCreationRequest advertisementRequest,
+    @Mapping(source = "element", target = "element", qualifiedByName = "mapToElement")
+    @Mapping(target = "category", source = "categoryName", qualifiedByName = "mapToCategory")
+    @Mapping(target = "user", source = "username", qualifiedByName = "mapToUser")
+    @Mapping(target = "imagesAd", ignore = true)
+    Advertisement toAdvertisement(AdvertisementCreationRequest request,
                                   @Context ElementRepo elementRepo,
-                                  @Context CategoryRepo categoryRepo,
-                                  @Context UserRepository userRepository);
+                                  @Context CategoryService categoryService,
+                                  @Context UserService userService
+                                  );
 
-    // Map from Advertisement entity to the response DTO
-    @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementResponse")
-    @Mapping(target = "category", source = "category", qualifiedByName = "mapToCategoryResponse")
-    @Mapping(target = "user", source = "user", qualifiedByName = "mapToUserResponse")
-    AdvertisementResponse toAdvertisementResponse(Advertisement advertisement);
-
-    // Update an existing Advertisement entity with data from the update request
-    @Mapping(target = "element", source = "elementID", qualifiedByName = "mapToElement")
-    @Mapping(target = "category", source = "categoryID", qualifiedByName = "mapToCategory")
-    @Mapping(target = "user", source = "userID", qualifiedByName = "mapToUser")
+    @Mapping(target = "element", source = "element", qualifiedByName = "mapToElement")
+    @Mapping(target = "category", source = "categoryName", qualifiedByName = "mapToCategory")
+    @Mapping(target = "user", source = "username", qualifiedByName = "mapToUser")
+    @Mapping(target = "imagesAd", ignore = true)
     void updateAdvertisement(@MappingTarget Advertisement advertisement, AdvertisementUpdateRequest request,
                              @Context ElementRepo elementRepo,
-                             @Context CategoryRepo categoryRepo,
-                             @Context UserRepository userRepository);
+                             @Context CategoryService categoryService,
+                             @Context UserService userService);
 
-    // Custom mapping for Element
-    @Named("mapToElement")
-    default Element mapToElement(Integer elementID, @Context ElementRepo elementRepo) {
-        return elementRepo.findById(elementID)
-                .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
-    }
+    @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementName")
+    @Mapping(target = "category", source = "category", qualifiedByName = "mapToCategoryResponse")
+    @Mapping(target = "user", source = "user", qualifiedByName = "mapToUserResponse")
+    @Mapping(target = "imagesAd", source = "imagesAd")
+    AdvertisementResponse toAdvertisementResponse(Advertisement advertisement);
 
-    // Custom mapping for Category
+
     @Named("mapToCategory")
-    default Category mapToCategory(String categoryID, @Context CategoryRepo categoryRepo) {
-        return categoryRepo.findById(categoryID)
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXIST));
+    default Category mapToCategory(String categoryName, @Context CategoryService categoryService) {
+        return categoryService.findByCategoryName(categoryName);
     }
 
-    // Custom mapping for User
-    @Named("mapToUser")
-    default User mapToUser(String userID, @Context UserRepository userRepo) {
-        return userRepo.findById(userID)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+    @Named("mapToElement")
+    default Element mapToElement(String element, @Context ElementRepo elementRepo) {
+        Element destiny =  elementRepo.findByElementName(element)
+                .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+        return destiny;
     }
 
-    // Custom mapping for Element to ElementResponse
-    @Named("mapToElementResponse")
-    default ElementResponse mapToElementResponse(Element element) {
-        return ElementResponse.builder()
-                .elementId(element.getElementId())
-                .elementName(element.getElementName())
-                .description(element.getDescription())
-                .quantity(element.getQuantity())
-                .direction(element.getDirection())
-                .value(element.getValue())
-                .color(element.getColor())
-                .generation(element.getGeneration())
-                .inhibition(element.getInhibition())
-                .build();
+    @Named("mapToElementName")
+    default String mapToElementName(Element element) {
+        return element.getElementName();  // Simple mapping from entity to string
     }
 
-    // Custom mapping for Category to CategoryResponse
     @Named("mapToCategoryResponse")
     default CategoryResponse mapToCategoryResponse(Category category) {
         return CategoryResponse.builder()
-                .categoryId(category.getCategoryId())
                 .categoryName(category.getCategoryName())
                 .build();
     }
+    @Named("mapToUser")
+    default User mapToUser(String username, @Context UserService userService) {
+        return userService.findByUsername(username);
 
-    // Custom mapping for User to UserResponse
+    }
+
     @Named("mapToUserResponse")
     default UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
-                .userID(user.getUserID())
                 .username(user.getUsername())
-                .email(user.getEmail())
-                .dateOfBirth(user.getDateOfBirth())
                 .build();
     }
+
+    @Named("mapToElementResponse")
+    default Set<ElementResponse> mapToElementResponse(Set<Element> elements) {
+        return elements.stream()
+                .map(element -> ElementResponse.builder()
+                        .elementId(element.getElementId())
+                        .elementName(element.getElementName())
+                        .description(element.getDescription())
+                        .quantity(element.getQuantity())
+                        .direction(element.getDirection())
+                        .value(element.getValue())
+                        .color(element.getColor())
+                        .generation(element.getGeneration())
+                        .inhibition(element.getInhibition())
+                        .build())
+                .collect(Collectors.toSet());
+    }
+
 }

@@ -7,13 +7,18 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AdvertisementRepo extends JpaRepository<Advertisement, String> {
-    @Query("SELECT ad FROM Advertisement ad JOIN ad.category c WHERE c.categoryId = :categoryID")
-    List<Advertisement> findByCategoryID(@Param("categoryID") String categoryId);
-    @Query("SELECT ad FROM Advertisement ad JOIN ad.user u WHERE u.userID = :userID")
-    List<Advertisement> findByUserID(@Param("userID") String userId);
-    @Query("SELECT ad FROM Advertisement ad JOIN ad.element e WHERE e.elementId = :elementID")
-    List<Advertisement> findByElementID(@Param("elementID") Integer elementId);
+//    @Query("SELECT ad FROM Advertisement ad JOIN ad.category c WHERE c.categoryId = :categoryID")
+//    List<Advertisement> findByCategoryID(@Param("categoryID") String categoryId);
+//    @Query("SELECT ad FROM Advertisement ad JOIN ad.user u WHERE u.userID = :userID")
+//    List<Advertisement> findByUserID(@Param("userID") String userId);
+//    @Query("SELECT ad FROM Advertisement ad JOIN ad.element e WHERE e.elementId = :elementID")
+//    List<Advertisement> findByElementID(@Param("elementID") String elementId);
+    boolean existsByAdID(String adID);
+    Optional<Advertisement> findByTitle(String title);
+//    @Query("SELECT ad FROM Advertisement ad JOIN ad.CategoryID c WHERE c.categoryId = :categoryID")
+//    List<Advertisement> findByCategoryID(@Param("categoryID") String categoryID);
 }

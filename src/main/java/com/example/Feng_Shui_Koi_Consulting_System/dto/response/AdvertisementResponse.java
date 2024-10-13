@@ -1,20 +1,22 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
 
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdvertisementResponse {
     String adID;
     String title;
     String description;
     Float price;
-    ElementResponse element;
+    String element;
     CategoryResponse category;
     UserResponse user;
-    String adImageID;
+    Set<Ads_Image> imagesAd;
 }

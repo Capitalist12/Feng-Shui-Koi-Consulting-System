@@ -11,4 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class PaymentSuccessfulResponse {
     boolean checkout;
     String token;
+    String role;
 }
