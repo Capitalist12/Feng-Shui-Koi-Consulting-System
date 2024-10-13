@@ -15,5 +15,5 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, String> 
     @Query("SELECT ad FROM Advertisement ad JOIN ad.user u WHERE u.userID = :userID")
     List<Advertisement> findByUserID(@Param("userID") String userId);
     @Query("SELECT ad FROM Advertisement ad JOIN ad.element e WHERE e.elementId = :elementID")
-    List<Advertisement> findByElementID(@Param("elementID") String elementId);
+    List<Advertisement> findByElementID(@Param("elementID") Integer elementId);
 }
