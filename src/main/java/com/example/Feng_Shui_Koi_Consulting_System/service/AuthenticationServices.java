@@ -47,7 +47,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationServices {
     UserRepository userRepository;
     UserMapper userMapper;
@@ -66,15 +66,15 @@ public class AuthenticationServices {
 
     @NonFinal
     @Value("${outbound.client-id}")
-    protected String CLIENT_ID ;
+    protected String CLIENT_ID;
 
     @NonFinal
     @Value("${outbound.client-secret}")
-    protected String CLIENT_SECRET ;
+    protected String CLIENT_SECRET;
 
     @NonFinal
     @Value("${outbound.redirect-uri}")
-    protected String REDIRECT_URI ;
+    protected String REDIRECT_URI;
 
     @NonFinal
     protected String GRANT_TYPE = "authorization_code";
@@ -82,12 +82,12 @@ public class AuthenticationServices {
 
     //Method to register user
     public SignUpResponse registerUser(SignUpRequest request) {
+        if (request.getOtp().isEmpty())
+            throw new AppException(ErrorCode.OTP_REQUIRED);
         if (!validateOTP(request.getEmail().trim(), request.getOtp()))
             throw new AppException(ErrorCode.OTP_NOT_FOUND);
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXIST);
-        if (userRepository.existsByEmail(request.getEmail()))
-            throw new AppException(ErrorCode.EMAIL_EXITST);
         int elementId = elementCalculationService
                 .calculateElementId(request.getDateOfBirth());
         Element element = elementRepo.findById(elementId)
@@ -112,8 +112,8 @@ public class AuthenticationServices {
     }
 
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+        if (userRepository.existsByEmail(request.getEmail()))
+            throw new AppException(ErrorCode.EMAIL_EXITST);
         String otp = generateOTP();
         storeOTP(request.getEmail().trim(), otp);
         emailService.sendEmail(request.getEmail().trim(),
@@ -121,37 +121,37 @@ public class AuthenticationServices {
         System.out.println("OTP sent to: " + request.getEmail().trim());
     }
 
-//Method to login user
-public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
-    var user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
-    // Check for the transaction and subscription status
-    transactionRepo.findByUser_UserID(user.getUserID())
-            .ifPresent(transaction -> {
-                boolean isSubscriptionActive = checkSubscription(
-                        transaction.getSubscriptionID()
-                ) ;
-                if (!isSubscriptionActive) {
-                    user.setRoleName(Roles.USER.toString());
-                    userRepository.save(user);
-                }
-            });
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-    //Check user password is match with password in database
-    if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-        throw new AppException(ErrorCode.UNAUTHENTICATED);
+    //Method to login user
+    public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+        // Check for the transaction and subscription status
+        transactionRepo.findByUser_UserID(user.getUserID())
+                .ifPresent(transaction -> {
+                    boolean isSubscriptionActive = checkSubscription(
+                            transaction.getSubscriptionID()
+                    );
+                    if (!isSubscriptionActive) {
+                        user.setRoleName(Roles.USER.toString());
+                        userRepository.save(user);
+                    }
+                });
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        //Check user password is match with password in database
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+        var token = generateToken(user);
+        return AuthenResponse.builder()
+                .authenticated(true)
+                .username(user.getUsername())
+                .roleName(user.getRoleName())
+                .token(token)
+                .build();
     }
-    var token = generateToken(user);
-    return AuthenResponse.builder()
-            .authenticated(true)
-            .username(user.getUsername())
-            .roleName(user.getRoleName())
-            .token(token)
-            .build();
-}
 
     public IntrospectResponse introspected(IntrospectResquest resquest) throws JOSEException, ParseException {
-        var token  = resquest.getToken();
+        var token = resquest.getToken();
 
         JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
@@ -184,34 +184,34 @@ public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
         }
     }
 
-    public String generateOTP(){
+    public String generateOTP() {
         String CHARACTERS = "0123456789";
         int OTP_LENGTH = 6;
         SecureRandom random = new SecureRandom();
         StringBuilder otp = new StringBuilder(OTP_LENGTH);
-        for(int i = 0; i < OTP_LENGTH; i++){
+        for (int i = 0; i < OTP_LENGTH; i++) {
             otp.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         }
         return otp.toString();
     }
 
-    public void storeOTP(String email, String otp){
+    public void storeOTP(String email, String otp) {
         otpData.put(email, otp);
         otpExpiry.put(email, LocalDateTime.now().plusMinutes(5));
     }
 
-    public boolean validateOTP(String email, String inputOtp){
+    public boolean validateOTP(String email, String inputOtp) {
         String storedOTP = otpData.get(email);
         LocalDateTime expiryOTP = otpExpiry.get(email);
-        if(storedOTP == null || expiryOTP == null){
+        if (storedOTP == null || expiryOTP == null) {
             return false;
         }
-        if(expiryOTP.isBefore(LocalDateTime.now())){
+        if (expiryOTP.isBefore(LocalDateTime.now())) {
             otpData.remove(email);
             otpExpiry.remove(email);
             return false;
         }
-        if(storedOTP.equals(inputOtp)){
+        if (storedOTP.equals(inputOtp)) {
             otpData.remove(email);
             otpExpiry.remove(email);
             return true;
@@ -219,13 +219,13 @@ public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
         return false;
     }
 
-    public void clearOTP(String email){
+    public void clearOTP(String email) {
         otpData.remove(email);
         otpExpiry.remove(email);
     }
 
     public String generateToken(User user) {
-       JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
                 .issuer("Fengshui.com")
@@ -233,16 +233,16 @@ public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
                 .expirationTime(new Date(
                         Instant.now().plus(2, ChronoUnit.HOURS).toEpochMilli()
                 ))
-                .claim("scope",buildScope(user))
+                .claim("scope", buildScope(user))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
-        JWSObject jwsObject = new JWSObject(header,payload);
+        JWSObject jwsObject = new JWSObject(header, payload);
         try {
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
             return jwsObject.serialize();
-        }catch (JOSEException e) {
-            log.error("Can create token",e);
+        } catch (JOSEException e) {
+            log.error("Can create token", e);
             throw new RuntimeException(e);
         }
     }
@@ -262,7 +262,7 @@ public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
         return AuthenResponse.builder().token(token).authenticated(true).build();
     }
 
-    public AuthenResponse outboundAuthenticate(String code){
+    public AuthenResponse outboundAuthenticate(String code) {
         var response = outboundIdentityClient
                 .exchangeToken(ExchangeTokenRequest.builder()
                         .code(code)
@@ -284,18 +284,18 @@ public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
                 .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
 
         var user = userRepository.findByEmail(userInfo.getEmail()).orElseGet(
-                ()-> userRepository.save(User.builder()
-                                .userID(generateUserID())
-                                .email(userInfo.getEmail())
-                                .username(userInfo.getName())
-                                .roleName(String.valueOf(Roles.USER))
-                                .element(element)
-                                .password("")
-                                .build()));
+                () -> userRepository.save(User.builder()
+                        .userID(generateUserID())
+                        .email(userInfo.getEmail())
+                        .username(userInfo.getName())
+                        .roleName(String.valueOf(Roles.USER))
+                        .element(element)
+                        .password("")
+                        .build()));
 
         var token = generateToken(user);
 
-        return  AuthenResponse.builder()
+        return AuthenResponse.builder()
                 .username(user.getUsername())
                 .roleName(user.getRoleName())
                 .token(token)
@@ -314,14 +314,14 @@ public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
     public boolean checkSubscription(String subscriptionId) {
         try {
             Subscription subscription = Subscription.retrieve(subscriptionId);
-            if("active".equals(subscription.getStatus())) {
+            if ("active".equals(subscription.getStatus())) {
                 long currentTime = System.currentTimeMillis() / 1000L;
                 long subscriptionEndTime = subscription.getCurrentPeriodEnd();
-                if(subscriptionEndTime > currentTime) {
+                if (subscriptionEndTime > currentTime) {
                     return true;
                 }
             }
-        }catch (StripeException e) {
+        } catch (StripeException e) {
             log.error("Exception: ", e);
         }
         return false;

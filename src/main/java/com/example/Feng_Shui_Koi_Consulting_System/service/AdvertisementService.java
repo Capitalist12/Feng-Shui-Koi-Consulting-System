@@ -9,19 +9,18 @@ import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.AdvertisementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.AdvertisementRepo;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.CategoryRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +32,8 @@ public class AdvertisementService {
     CategoryService categoryService;
     UserService userService;
     ElementRepo elementRepo;
+//    UserRepository userRepository;
+//    CategoryRepo categoryRepo;
 
     public AdvertisementResponse createAdvertisement(AdvertisementCreationRequest request) {
         Advertisement ad = advertisementMapper.toAdvertisement(request, elementRepo, categoryService, userService);
@@ -63,40 +64,23 @@ public class AdvertisementService {
 //                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
 //    }
 
+//    public List<AdvertisementResponse> getAdvertisementByUserID(String userID){
+//        return advertisementRepo.findByUserID(userID).stream()
+//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+//    }
+
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request){
-        Advertisement ad = advertisementRepo.findById(adID)
+        Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
-        advertisementMapper.updateAdvertisement(ad, request, elementRepo, categoryService, userService);
-
-        if(request.getImagesURL() != null && !request.getImagesURL().isEmpty()){
-            Set<String> newImageURLs = new HashSet<>(request.getImagesURL());
-            Set<Ads_Image> existingImages = ad.getImagesAd();
-
-            existingImages.removeIf(image -> !newImageURLs.contains(image.getImageURL()));
-
-            newImageURLs.forEach(imageUrl -> {
-                boolean exists = existingImages.stream()
-                        .anyMatch(existingImage -> existingImage.getImageURL().equals(imageUrl));
-                if (!exists) {
-                    // Create new image entity
-                    Ads_Image adsImage = new Ads_Image();
-                    adsImage.setAdImageId(generateImage_Ads());  // You may want to ensure this generates unique IDs
-                    adsImage.setImageURL(imageUrl);
-                    adsImage.setAdvertisement(ad);  // Maintain bidirectional relationship
-                    // Add new image to existing images
-                    existingImages.add(adsImage);
-                }
-            });
-            ad.setImagesAd(existingImages);
-        }
-
-        return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(ad));
+        advertisementMapper
+                .updateAdvertisement(advertisement, request, elementRepo, categoryService, userService);
+        return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 
     public void deleteAdvertisement(String adID){
-        Advertisement ad = advertisementRepo.findById(adID)
+        Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
-        advertisementRepo.delete(ad);
+        advertisementRepo.delete(advertisement);
     }
 
     public String generateAdID(){
