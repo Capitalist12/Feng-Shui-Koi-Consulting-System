@@ -2,34 +2,40 @@ import React, { useState } from "react";
 import DOBCarousel from "./DOBCarousel/DOBCarousel";
 import { Form } from "antd";
 import { IoSearch } from "react-icons/io5";
-import '../../../styles/emblaCarousel/DOBScroll/embla.css';
+import '../../../styles/emblaCarousel/DOBScroll/embla.scss';
 import '../../../styles/homepage/InputDOBForm.scss';
+import '../../../styles/emblaCarousel/DOBScroll/base.css';
 import { calculateElement } from "../../../services/consultingAPIService";
 
 const START_YEAR = 1950
 const END_YEAR = 2025
 const YEAR_COUNT = END_YEAR - START_YEAR + 1
 
-const InputDOBForm = () => {
+const InputDOBForm = ({setdata}) => {
     const [selectedDay, setSelectedDay] = useState(1)
     const [selectedMonth, setSelectedMonth] = useState(1)
     const [selectedYear, setSelectedYear] = useState(START_YEAR)
 
     const onSubmit = async () => {
         const formatDate = selectedDay < 10 ? `0${selectedDay}` : selectedDay;
-        const dateOfBirth = `${selectedYear}-${selectedMonth}-${formatDate}`;
-        console.log(selectedDay + "/" + selectedMonth + "/" + selectedYear)
+        const formatMonth = selectedMonth < 10 ? `0${selectedMonth}` : selectedMonth;
+        
+        const dateOfBirth = `${selectedYear}-${formatMonth}-${formatDate}`;
         const response = await calculateElement({
             dob: dateOfBirth
         });
 
-        console.log(response);
+        response.status === 200 && response.data.code === 1000 && setdata({
+            dob: dateOfBirth,
+            element: response.data.result
+        })
+
     }
 
     return (
         <Form id="input-dob-form" onFinish={() => onSubmit()}>
             <label htmlFor="yearOfBirth" style={{ color: 'white' }}>Nhập năm sinh của bạn</label>
-            <Form.Item name='yearOfBirth' className="input-dob-scroll">
+            <Form.Item name='yearOfBirth' className="input-dob-scroll theme-dark">
                 <DOBCarousel
                     loop={true}
                     setSelectedDay={setSelectedDay}

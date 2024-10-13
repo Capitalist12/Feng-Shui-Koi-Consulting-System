@@ -2,8 +2,9 @@
     position: relative;
     width: 100vw;
 
+    
     .input-dob-scroll{
-        transform: translate(-7%);
+        // transform: translate(-7%);
 
     }
 
@@ -35,4 +36,9 @@
             }
         }
     }
+}
+
+.input-form{
+    width: 100%;
+    display: flex;
 }

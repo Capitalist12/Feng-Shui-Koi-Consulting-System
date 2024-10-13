@@ -12,11 +12,49 @@ import Navbar from '../../components/Utils/Navbar';
 import Consultant from '../../components/HomePage/Consultant';
 import { useSelector } from 'react-redux';
 import InputDOBForm from '../../components/HomePage/InputDOB/InputDOBForm';
+import Title from 'antd/es/typography/Title';
 
 const HomePage = () => {
+    const [consultantElementData, setConsultantElementData] = useState(null);
+    const [isRotate, setIsRotate] = useState(false);
+    const [isSpinning, setIsSpinning] = useState(false);
+    const [isShowConsultant, setIsShowConsultant] = useState(false);
+    let rotateTimeout;
+    let spinningTimeout;
+
     const token = useSelector((store) => store?.user?.token);
     const [scrollProgress, setScrollProgress] = useState(0); // Để theo dõi quá trình cuộn
     const containerRef = useRef(null); // Ref cho lớp input-yearOfBirth-container
+
+    useEffect(() => {
+        if (consultantElementData) {
+            setIsRotate(true);
+        }
+    }, [consultantElementData]);
+
+    useEffect(() => {
+
+        if (isRotate) {
+            setIsShowConsultant(false);
+            rotateTimeout = setTimeout(() => {
+                setIsRotate(false);
+                setIsSpinning(true);
+            }, 2100);
+        }
+
+        if (isSpinning) {
+            spinningTimeout = setTimeout(() => {
+                setIsSpinning(false);
+                setIsShowConsultant(true);
+
+            }, 3500);
+        }
+
+        return () => {
+            clearTimeout(rotateTimeout);
+            clearTimeout(spinningTimeout);
+        };
+    }, [isRotate, isSpinning]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -43,6 +81,35 @@ const HomePage = () => {
 
     return (
         <div>
+            {(isRotate || isSpinning) &&
+                (<div id='spinning-effect-container'>
+                    {isRotate &&
+                        (<div>
+                            <div className='element'></div>
+                            <div className='element'></div>
+                            <div className='element'></div>
+                            <div className='element'></div>
+                            <div className='element'></div>
+                        </div>)
+                    }
+                    {isSpinning &&
+                        (<div id='spinning-effect'>
+                        </div>)
+                    }
+                    <Title
+                        level={3}
+                        id='skip-effect'
+                        onClick={() => {
+                            clearTimeout(rotateTimeout);
+                            clearTimeout(spinningTimeout);
+                            setIsSpinning(false);
+                            setIsRotate(false)
+                            setIsShowConsultant(true);
+                        }}>
+                        &gt;&gt;&gt; Bỏ qua
+                    </Title>
+                </div>)
+            }
             <section id='hero-section'>
                 <div className='main-content'>
                     <div className='title'>
@@ -97,7 +164,7 @@ const HomePage = () => {
                 <div ref={containerRef} className='input-yearOfBirth-container'>
                     <h1>TRA CỨU PHONG THỦY CÁ KOI VÀ HỒ CÁ</h1>
                     <div className='input-form'>
-                        <InputDOBForm />
+                        <InputDOBForm setdata={setConsultantElementData} />
                     </div>
                     <div className='note'>
                         <h2>
@@ -124,10 +191,11 @@ const HomePage = () => {
                 </div>
             </section>
 
-            <section id='consultant-section'>
-                <Consultant />
-                
-            </section>
+            {(consultantElementData && isShowConsultant) &&
+                (<section id='consultant-section'>
+                    <Consultant userElement={consultantElementData} />
+                </section>)
+            }
 
             <section id='element-info-section'>
                 <Row>
@@ -135,7 +203,7 @@ const HomePage = () => {
                         <div className='inner-image'></div>
                     </Col>
                     <Col span={12} className='element-info'>
-                        <h2>MỆNH NGŨ HÀNH LÀ GÌ?</h2>
+                        {/* <h2>MỆNH NGŨ HÀNH LÀ GÌ?</h2> */}
                         <div className='info-content'>
                             <p>
                                 Theo quan niệm của người phương Đông, ngũ hành tác động đến vạn vật trên trái đất. Ngũ hành có 5 yếu tố cơ bản là: Kim, Mộc, Thủy, Hỏa, Thổ. Các yếu tố này đều có sự tác động qua lại lẫn nhau và có những tính chất riêng.

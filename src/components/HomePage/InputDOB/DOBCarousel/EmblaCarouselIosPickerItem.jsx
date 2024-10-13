@@ -62,7 +62,9 @@ export const IosPickerItem = (props) => {
     axis: 'y',
     dragFree: true,
     containScroll: false,
-    watchSlides: false
+    watchSlides: false,
+    speed: 1,
+    dragThreshold: 100
   })
 
   const [selectedIndex, setSelectedIndex] = useState(1) // Lưu vị trí slide hiện tại
@@ -108,7 +110,7 @@ export const IosPickerItem = (props) => {
     emblaApi.on('pointerUp', (emblaApi) => {
       const { scrollTo, target, location } = emblaApi.internalEngine()
       const diffToTarget = target.get() - location.get()
-      const factor = Math.abs(diffToTarget) < WHEEL_ITEM_SIZE / 2.5 ? 10 : 0.1
+      const factor = Math.abs(diffToTarget) < WHEEL_ITEM_SIZE / 2.5 ? 10 : 0.01
       const distance = diffToTarget * factor
       scrollTo.distance(distance, true)
     })

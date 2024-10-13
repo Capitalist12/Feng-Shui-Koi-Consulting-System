@@ -59,6 +59,7 @@ const InputForm = (props) => {
       } finally {
         // clear old data
         setTypeInput("");
+        setSelectedElement([]);
         form.resetFields();
         await fetchAPI();
         save();
@@ -68,6 +69,7 @@ const InputForm = (props) => {
 
   const cancelForm = () => {
     setAddType(false);
+    setSelectedElement([]);
     setTypeInput("");
     form.resetFields();
     save();
@@ -76,6 +78,7 @@ const InputForm = (props) => {
   const cancelCreateKoiType = () => {
     setAddType(false);
     setTypeInput("");
+    setSelectedElement([]);
   };
 
   const createKoiType = async (newType) => {
