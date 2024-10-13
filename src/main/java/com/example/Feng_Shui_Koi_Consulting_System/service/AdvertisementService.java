@@ -59,15 +59,15 @@ public class AdvertisementService {
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
 
-//    public List<AdvertisementResponse> getAdvertisementByCategory(String categoryID){
-//        return advertisementRepo.findByCategoryID(categoryID).stream()
-//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
-//    }
+    public List<AdvertisementResponse> getAdvertisementByCategory(String categoryID){
+        return advertisementRepo.findByCategoryID(categoryID).stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
 
-//    public List<AdvertisementResponse> getAdvertisementByUserID(String userID){
-//        return advertisementRepo.findByUserID(userID).stream()
-//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
-//    }
+    public List<AdvertisementResponse> getAdvertisementByUserID(String userID){
+        return advertisementRepo.findByUserID(userID).stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
 
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request){
         Advertisement advertisement = advertisementRepo.findById(adID)

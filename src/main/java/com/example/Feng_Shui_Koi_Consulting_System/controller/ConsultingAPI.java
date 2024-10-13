@@ -36,10 +36,10 @@ public class ConsultingAPI {
     CompatibilityService compatibilityService;
 
     @PostMapping("/calculate")
-    public ApiResponse<Integer> calculateElementId(@RequestBody CalculateElementRequest request) {
-        int elementId = elementCalculationService.calculateElementId(request.getDob());
-        return ApiResponse.<Integer>builder()
-                .result(elementId)
+    public ApiResponse<String> calculateElementName(@RequestBody CalculateElementRequest request) {
+        String elementName = elementCalculationService.calculateElementName(request.getDob());
+        return ApiResponse.<String>builder()
+                .result(elementName)
                 .build();
     }
 
