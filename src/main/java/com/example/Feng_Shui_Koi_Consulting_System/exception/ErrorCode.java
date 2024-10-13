@@ -32,7 +32,8 @@ public enum ErrorCode {
     SEND_MAIL_FAILED(1022, "Send mail failed", HttpStatus.BAD_REQUEST ),
     OTP_NOT_FOUND(1023, "OTP not found", HttpStatus.BAD_REQUEST ),
     AD_NOT_EXIST(1024, "Advertisement not found", HttpStatus.NOT_FOUND),
-    SESSION_ID_NULL(1025, "SessionID is null", HttpStatus.BAD_REQUEST );
+    SESSION_ID_NULL(1025, "SessionID is null", HttpStatus.BAD_REQUEST ),
+    CATEGORY_NOT_EXIST(1026, "Category not found", HttpStatus.NOT_FOUND);
 
     private int code;
     private String message;

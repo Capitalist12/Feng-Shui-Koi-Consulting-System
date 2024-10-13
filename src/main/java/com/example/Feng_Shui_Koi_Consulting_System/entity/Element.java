@@ -49,4 +49,8 @@ public class Element {
     @JsonManagedReference
     Set<User> user ;
 
+    @OneToMany(mappedBy = "element", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    Set<Advertisement> advertisement ;
+
 }

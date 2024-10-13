@@ -3,18 +3,19 @@ package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdvertisementCreationRequest {
-    String adID;
     String title;
     String description;
     Float price;
-    int elementID;
-    String categoryID;
-    String userID;
-    String adImageID;
+    String element;
+    String categoryName;
+    String username;
+    Set<String> imagesURL;
 }

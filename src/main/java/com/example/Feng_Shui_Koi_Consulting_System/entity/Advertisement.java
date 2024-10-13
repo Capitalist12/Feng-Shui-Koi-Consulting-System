@@ -1,11 +1,16 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 @Entity
 @Table(name = "Advertisement")
 @Data
@@ -27,16 +32,35 @@ public class Advertisement {
     @Column(name = "Price")
     Float price;
 
-    @Column(name = "ElementID")
-    int elementID;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "ElementID", nullable = false, referencedColumnName = "ElementID")
+    @JsonBackReference
+    Element element;
 
-    @Column(name = "CategoryID")
-    String categoryID;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "CategoryID", nullable = false, referencedColumnName = "CategoryID")
+    @JsonBackReference
+    Category category;
 
-    @Column(name = "UserID")
-    String userID;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "UserID", nullable = false, referencedColumnName = "UserID")
+    @JsonBackReference
+    User user;
+    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL
+            ,orphanRemoval = true)
+    @JsonManagedReference
+    Set<Ads_Image> imagesAd = new HashSet<>();
 
-    @Column(name = "AdImageID")
-    String adImageID;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Advertisement)) return false;
+        Advertisement advertisement = (Advertisement) o;
+        return Objects.equals(adID, advertisement.adID);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(adID);
+    }
 }
