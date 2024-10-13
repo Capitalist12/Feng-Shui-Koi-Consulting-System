@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
 
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,5 +18,5 @@ public class AdvertisementResponse {
     String element;
     CategoryResponse category;
     UserResponse user;
-    Set<String> imagesURL;
+    Set<Ads_Image> imagesAd;
 }

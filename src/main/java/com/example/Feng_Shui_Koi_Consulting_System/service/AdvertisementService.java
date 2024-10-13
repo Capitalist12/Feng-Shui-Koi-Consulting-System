@@ -5,12 +5,15 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpda
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Advertisement;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.Koi_Image;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.AdvertisementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.AdvertisementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -18,32 +21,34 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AdvertisementService {
+
     AdvertisementRepo advertisementRepo;
     AdvertisementMapper advertisementMapper;
     CategoryService categoryService;
-    UserService user;
+    UserService userService;
     ElementRepo elementRepo;
 
-
     public AdvertisementResponse createAdvertisement(AdvertisementCreationRequest request) {
-        Advertisement ad = advertisementMapper.toAdvertisement(request, elementRepo, categoryService, user);
+        Advertisement ad = advertisementMapper.toAdvertisement(request, elementRepo, categoryService, userService);
         ad.setAdID(generateAdID());
-        if(request.getImagesURL() != null & request.getImagesURL().isEmpty()){
-            Set<Ads_Image> adsImageEntities = request.getImagesURL().stream()
+
+        if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
+            Set<Ads_Image> imagesAd = request.getImagesURL().stream()
                     .map(imageUrl -> {
-                        // Create new Image entities, linking them to the koiFish
                         Ads_Image adsImage = new Ads_Image();
                         adsImage.setAdImageId(generateImage_Ads());
-                        adsImage.setImageURL(imageUrl);  // Set the image link from the request
-                        adsImage.setAdvertisement(ad);        // Set the association to the koiFish
-                        // Handle Tank relationship here if needed, assuming the Tank is already available or from another part of the request
-                        // image.setTank(tank); // You can add tank reference if the Tank entity is required.
+                        adsImage.setImageURL(imageUrl);
+                        adsImage.setAdvertisement(ad); // Set the association to the advertisement
                         return adsImage;
                     })
                     .collect(Collectors.toSet());
-            ad.setImagesAd(adsImageEntities);
+            ad.setImagesAd(imagesAd);
         }
         return  advertisementMapper.toAdvertisementResponse(advertisementRepo.save(ad));
     }
@@ -61,7 +66,7 @@ public class AdvertisementService {
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request){
         Advertisement ad = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
-        advertisementMapper.updateAdvertisement(ad, request, elementRepo, categoryService, user);
+        advertisementMapper.updateAdvertisement(ad, request, elementRepo, categoryService, userService);
 
         if(request.getImagesURL() != null && !request.getImagesURL().isEmpty()){
             Set<String> newImageURLs = new HashSet<>(request.getImagesURL());

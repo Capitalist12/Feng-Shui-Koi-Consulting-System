@@ -12,10 +12,18 @@ import com.example.Feng_Shui_Koi_Consulting_System.mapper.CategoryMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.KoiTypeMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.CategoryRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.KoiTypeRepo;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryService {
     CategoryRepo categoryRepo;
     CategoryMapper categoryMapper;
@@ -30,13 +38,11 @@ public class CategoryService {
         return categoryMapper.toCategoryResponse(categoryRepo.save(category));
     }
 
-
     //@PreAuthorize("hasRole('ADMIN')")
     public List<CategoryResponse> getCategories(){
         return categoryRepo.findAll().stream()
                 .map(categoryMapper :: toCategoryResponse).collect(Collectors.toList());
     }
-
 
     public CategoryResponse updateCategory(String categoryID ,CategoryRequest request) {
 

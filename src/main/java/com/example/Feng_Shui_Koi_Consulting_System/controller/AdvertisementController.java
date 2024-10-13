@@ -7,6 +7,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementRes
 import com.example.Feng_Shui_Koi_Consulting_System.service.AdvertisementService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequestMapping("/ad")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdvertisementController {
-
+    @Autowired
     AdvertisementService advertisementService;
 
     @PostMapping

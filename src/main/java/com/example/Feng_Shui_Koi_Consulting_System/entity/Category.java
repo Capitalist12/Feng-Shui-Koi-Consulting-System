@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 @Entity
 @Data
-@Table(name = "`Element`")
+@Table(name = "`Category`")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

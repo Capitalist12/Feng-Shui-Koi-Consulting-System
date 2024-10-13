@@ -46,6 +46,7 @@ public class Advertisement {
     @JoinColumn(name = "UserID", nullable = false, referencedColumnName = "UserID")
     @JsonBackReference
     User user;
+
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL
             ,orphanRemoval = true)
     @JsonManagedReference
