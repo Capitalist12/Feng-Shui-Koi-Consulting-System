@@ -1,8 +1,10 @@
 import React from "react";
+import AdvertiseCardItem from "./AdvertiseCardItem.jsx";
+
+//slick carousel library
 import Slider from "@ant-design/react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import AdvertiseCardItem from "./AdvertiseCardItem";
 
 export default function AdvertiseSlider() {
   const settings = {

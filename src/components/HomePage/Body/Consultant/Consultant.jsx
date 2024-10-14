@@ -1,21 +1,24 @@
 import { Col, Row } from "antd";
 import React, { useEffect, useState } from "react";
-import FireElementImage from "../../assets/images/elements-image/fire.png";
-import MetalElementImage from "../../assets/images/elements-image/metal.png";
-import WaterElementImage from "../../assets/images/elements-image/water.png";
-import EarthElementImage from "../../assets/images/elements-image/earth.png";
-import WoodElementImage from "../../assets/images/elements-image/wood.png";
 import Title from "antd/es/typography/Title";
-import ConsultantKoiSlider from "./ConsultantKoiSlider";
-import { consultingKoi } from "../../services/consultingAPIService";
-import { store } from "../../redux/store";
-import ConsultantTank from "./Body/Consultant/ConsultantTank";
+import ConsultantKoiSlider from "./Koi-Tank/ConsultantKoiSlider";
+import { consultingKoi } from "../../../../services/consultingAPIService";
+import { store } from "../../../../redux/store";
+import ConsultantTank from "./Koi-Tank/ConsultantTank";
+
+//Images
+import FireElementImage from "../../../../assets/images/elements-image/fire.png";
+import MetalElementImage from "../../../../assets/images/elements-image/metal.png";
+import WaterElementImage from "../../../../assets/images/elements-image/water.png";
+import EarthElementImage from "../../../../assets/images/elements-image/earth.png";
+import WoodElementImage from "../../../../assets/images/elements-image/wood.png";
 
 
 const Consultant = (props) => {
     const [consultantKoiData, setConsultantKoiData] = useState([]);
     const { userElement } = props;
     const { dob, element } = userElement;
+
     const [displayElementTitle, setDisplayElementTitle] = useState(null);
     const [displayElementImage, setDisplayElementImage] = useState(null);
     const [displayElementStyle, setDisplayElementStyle] = useState({});
@@ -67,24 +70,26 @@ const Consultant = (props) => {
     }, [element])
 
     return (
-        <Row>
-            <Row className='consultant-item-row1'>
-                <Col className='col' span={24}>
-                    {(displayElementImage && displayElementTitle) &&
-                        (<>
-                            <div className="element-image-container" style={displayElementStyle}>
-                                <img src={displayElementImage} alt={displayElementTitle} />
-                            </div>
-                            <Title level={2} style={{ color: 'white' }}>MỆNH {displayElementTitle?.toUpperCase()}</Title>
-                        </>
-                        )}
-                </Col>
-            </Row>
-            <ConsultantKoiSlider data={consultantKoiData} />
-            {consultantKoiData.tankList?.length > 0 && <ConsultantTank data={consultantKoiData} />}
-            {/* <div className="background-effect"></div> */}
+        <section id='consultant-section'>
+            <Row>
+                <Row className='consultant-item-row1'>
+                    <Col className='col' span={24}>
+                        {(displayElementImage && displayElementTitle) &&
+                            (<>
+                                <div className="element-image-container" style={displayElementStyle}>
+                                    <img src={displayElementImage} alt={displayElementTitle} />
+                                </div>
+                                <Title level={2} style={{ color: 'white' }}>MỆNH {displayElementTitle?.toUpperCase()}</Title>
+                            </>
+                            )}
+                    </Col>
+                </Row>
+                <ConsultantKoiSlider data={consultantKoiData} />
+                {consultantKoiData.tankList?.length > 0 && <ConsultantTank data={consultantKoiData} />}
+                {/* <div className="background-effect"></div> */}
 
-        </Row>
+            </Row>
+        </section>
     )
 }
 

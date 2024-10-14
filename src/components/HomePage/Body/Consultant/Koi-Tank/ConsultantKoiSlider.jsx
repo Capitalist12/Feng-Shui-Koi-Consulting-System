@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Col, Divider, Row } from "antd";
-import "../../styles/ConsultantKoiSlider.scss"
-import EmblaCarousel from "./EmbleCarousel/EmblaCarousel";
-// import '../../styles/emblaCarousel/ImageSlider/base.css';
-import '../../styles/emblaCarousel/ImageSlider/embla.scss';
-import ImageList from "./ImageList";
+import ImageList from "./ImageCarousel/ImageList";
 import Title from "antd/es/typography/Title";
+import EmblaCarousel from "./ImageCarousel/EmblaCarousel";
+import "../../../../../styles/homepage/body/consultant/ConsultantKoiSlider.scss";
+import '../../../../../styles/homepage/body/consultant/ImageSlider/embla.scss';
 
 export default function ConsultantKoiSlider({ data }) {
     const [selectedKoi, setSelectedKoi] = useState(null);

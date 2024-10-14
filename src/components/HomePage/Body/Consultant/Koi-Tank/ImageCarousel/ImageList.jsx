@@ -11,7 +11,7 @@ import {
     ZoomOutOutlined,
 } from '@ant-design/icons';
 import { Image, Space } from 'antd';
-import { customePreview } from "../../javaScript/HomePageScript.js";
+import { customePreview } from "../../../../../../javaScript/HomePageScript.js";
 
 const ImageList = ({ images }) => {
     const [current, setCurrent] = React.useState(0);

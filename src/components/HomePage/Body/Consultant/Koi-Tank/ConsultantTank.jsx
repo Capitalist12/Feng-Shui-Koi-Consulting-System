@@ -1,7 +1,7 @@
 import { Col, Image, Row } from "antd";
 import React, { useEffect } from "react";
-import "../../../../styles/homepage/ConsultantTank.scss"
 import Title from "antd/es/typography/Title";
+import "../../../../../styles/homepage/body/consultant/ConsultantTank.scss"
 
 const ConsultantTank = ({ data }) => {
     const { tankList } = data;

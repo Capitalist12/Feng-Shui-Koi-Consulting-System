@@ -1,0 +1,140 @@
+#blog-advertise-section {
+    min-height: 100vh;
+    background-color: black;
+
+    a {
+        color: black;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .advertise {
+        height: 100vh;
+
+        h2 {
+            color: white;
+            font-size: 2.5em;
+            margin: auto;
+            margin-top: 2em;
+        }
+
+        .slick-slider {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .slick-slider.slick-initialized {
+            width: 85%;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            background-color: #292929;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .slick-track {
+            display: flex;
+            gap: 1.5em;
+        }
+
+        .slick-dots {
+            li button:before {
+                opacity: 0.25;
+                color: white;
+            }
+
+            li.slick-active button:before {
+                opacity: 1;
+                color: white;
+            }
+        }
+
+        .slick-next:before {
+            content: '>';
+        }
+
+        .slick-next:before {
+            content: '→';
+            font-size: 45px;
+        }
+
+        .slick-prev {
+            left: -50px;
+
+            &:before {
+                font-size: 45px;
+            }
+        }
+    }
+
+    .blog {
+        display: flex;
+        flex-direction: column;
+        // align-items: center;
+        justify-content: end;
+
+        h2 {
+            text-align: center;
+            color: white;
+            font-size: 2em;
+        }
+
+        .blog-container {
+            width: 350px;
+            height: 250px;
+            padding: 0 0 1.5em 0;
+            background-color: white;
+            border-radius: 10px;
+            margin-bottom: 3em;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+            }
+
+            .blog-title {
+                height: '25%';
+                width: '90%';
+                margin: 'auto';
+                margin-top: '10px';
+
+                a {
+                    font-size: 1.2em;
+                }
+            }
+
+        }
+
+        @media (max-width: 1200px) {
+            justify-content: start;
+
+            .blog-container {
+                width: 280px;
+                height: 190px;
+                margin-bottom: 2em;
+            }
+
+            h2 {
+                text-align: start;
+            }
+
+            .ant-divider{
+                margin: 0;
+            }
+
+            a {
+                font-size: 1em;
+                margin: 0 !important;
+                margin-top: 0 !important;
+            }
+        }
+    }
+}
