@@ -22,26 +22,21 @@ import java.util.stream.Collectors;
 public interface AdvertisementMapper {
     @Mapping(source = "element", target = "element", qualifiedByName = "mapToElement")
     @Mapping(target = "category", source = "categoryName", qualifiedByName = "mapToCategory")
-    @Mapping(target = "user", source = "username", qualifiedByName = "mapToUser")
     @Mapping(target = "imagesAd", ignore = true)
     Advertisement toAdvertisement(AdvertisementCreationRequest request,
                                   @Context ElementRepo elementRepo,
-                                  @Context CategoryService categoryService,
-                                  @Context UserService userService
-                                  );
+                                  @Context CategoryService categoryService);
 
     @Mapping(target = "element", source = "element", qualifiedByName = "mapToElement")
     @Mapping(target = "category", source = "categoryName", qualifiedByName = "mapToCategory")
-    @Mapping(target = "user", source = "username", qualifiedByName = "mapToUser")
     @Mapping(target = "imagesAd", ignore = true)
     void updateAdvertisement(@MappingTarget Advertisement advertisement, AdvertisementUpdateRequest request,
                              @Context ElementRepo elementRepo,
-                             @Context CategoryService categoryService,
-                             @Context UserService userService);
+                             @Context CategoryService categoryService);
 
     @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementName")
     @Mapping(target = "category", source = "category", qualifiedByName = "mapToCategoryResponse")
-    @Mapping(target = "user", source = "user", qualifiedByName = "mapToUserResponse")
+    @Mapping(target = "user", source = "user", qualifiedByName = "mapToUserName")
     @Mapping(target = "imagesAd", source = "imagesAd")
     AdvertisementResponse toAdvertisementResponse(Advertisement advertisement);
 
@@ -62,6 +57,10 @@ public interface AdvertisementMapper {
     default String mapToElementName(Element element) {
         return element.getElementName();  // Simple mapping from entity to string
     }
+    @Named("mapToUserName")
+    default String mapToUserName(User user) {
+        return user.getUsername();  // Simple mapping from entity to string
+    }
 
     @Named("mapToCategoryResponse")
     default CategoryResponse mapToCategoryResponse(Category category) {
@@ -69,11 +68,11 @@ public interface AdvertisementMapper {
                 .categoryName(category.getCategoryName())
                 .build();
     }
-    @Named("mapToUser")
-    default User mapToUser(String username, @Context UserService userService) {
-        return userService.findByUsername(username);
-
-    }
+//    @Named("mapToUser")
+//    default User mapToUser(String username, @Context UserService userService) {
+//        return userService.findByUsername(username);
+//
+//    }
 
     @Named("mapToUserResponse")
     default UserResponse mapToUserResponse(User user) {
