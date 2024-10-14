@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import api from "../../config/axiosConfig";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -12,12 +13,6 @@ import {
   Select,
 } from "antd";
 import { ELEMENT_VALUES } from "../../utils/constant";
-import {
-  fetchTank,
-  createTank,
-  updateTank,
-  deleteTank,
-} from "../../services/tankAPIService"; // Import các hàm từ tankAPI
 
 function TankManagement() {
   const [datas, setDatas] = useState([]);
@@ -29,8 +24,8 @@ function TankManagement() {
   // Fetch tanks data
   const fetchData = async () => {
     try {
-      const result = await fetchTank(); // Sử dụng API helper để lấy dữ liệu
-      setDatas(result?.result || []);
+      const response = await api.get("tank");
+      setDatas(response.data?.result || []);
     } catch (err) {
       toast.error(err.response?.data || "Error fetching data");
     }
@@ -54,28 +49,28 @@ function TankManagement() {
     {
       title: "Description",
       key: "description",
-      render: (text, record) => {
+      render: (record) => {
         return record.elementTank?.description || "N/A";
       },
     },
     {
       title: "Direction",
       key: "direction",
-      render: (text, record) => {
+      render: (record) => {
         return record.elementTank?.direction || "N/A";
       },
     },
     {
       title: "Element ID",
       key: "elementId",
-      render: (text, record) => {
+      render: (record) => {
         return record.elementTank?.elementId || "N/A";
       },
     },
     {
       title: "Element",
       key: "elementName",
-      render: (text, record) => {
+      render: (record) => {
         return record.elementTank?.elementName || "N/A";
       },
     },
@@ -123,9 +118,9 @@ function TankManagement() {
     }
 
     try {
-      await deleteTank(tankId); // Sử dụng API helper deleteTank
-      toast.success("Tank deleted successfully");
-      fetchData(); // Reload lại danh sách tank sau khi xóa
+      await api.delete(`tank/${tankId}`);
+      toast.success("Delete success");
+      fetchData();
     } catch (err) {
       const errorMessage = err.response?.data || "Error deleting tank";
       toast.error(errorMessage);
@@ -146,14 +141,14 @@ function TankManagement() {
       console.log("Payload before sending:", payload); // Kiểm tra payload
 
       if (values.tankId) {
-        await updateTank(values.tankId, payload); // Sử dụng API helper updateTank
-        toast.success("Tank updated successfully");
+        const response = await api.put(`tank/${values.tankId}`, payload);
+        console.log("Response after update:", response.data);
       } else {
-        await createTank(payload); // Sử dụng API helper createTank
-        toast.success("Tank created successfully");
+        await api.post("tank", payload);
       }
 
-      fetchData(); // Reload lại danh sách tank sau khi lưu
+      toast.success("Successfully saved");
+      fetchData();
       form.resetFields();
       setShowModal(false);
     } catch (err) {
@@ -224,6 +219,7 @@ function TankManagement() {
                   options={ELEMENT_VALUES}
                   onChange={handleElementChange}
                   defaultValue={selectedTank?.elementTank?.elementId}
+                  placeholder="Chọn bản mệnh"
                 />
               </Form.Item>
             </Col>

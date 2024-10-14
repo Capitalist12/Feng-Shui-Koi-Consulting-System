@@ -10,13 +10,17 @@ import {
   Popconfirm,
   Select,
   Table,
-  Avatar,
   Switch,
+  Upload,
+  Image,
 } from "antd";
 import moment from "moment";
 import { ROLE_OPTIONS, USER_ELEMENT_COUNT } from "../../utils/constant";
 import { Row, Col } from "antd";
 import MultiSelectElement from "../CRUD_KoiFish/CreateKoiForm/MultiSelectElement";
+import { PlusOutlined } from "@ant-design/icons";
+import uploadFile from "../../utils/file";
+import UploadAvatar from "./UploadAvatar";
 
 function UserManagement() {
   const [datas, setDatas] = useState([]);
@@ -25,6 +29,9 @@ function UserManagement() {
   const [loading, setLoading] = useState(false);
   const [editingUserId, setEditingUserId] = useState(null);
   const [selectedElement, setSelectedElement] = useState([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [fileList, setFileList] = useState([]);
 
   // Fetch user data
   const fetchData = async () => {
@@ -42,8 +49,15 @@ function UserManagement() {
 
   // Handle form submit for create/update
   const handleSubmit = async (values) => {
-    console.log(values.element);
-    console.log(values);
+    // console.log(values.element);
+    // console.log(values);
+
+    if (fileList.length > 0) {
+      const file = fileList[0];
+      console.log(file);
+      const url = await uploadFile(file.originFileObj);
+      values.imageLink = url;
+    }
 
     try {
       setLoading(true);
@@ -143,10 +157,11 @@ function UserManagement() {
     // },
     {
       title: "Avatar",
-      key: "avatar",
-      render: (text, data) => (
-        <Avatar src={data.imageLink} size="large" shape="circle" />
-      ),
+      dataIndex: "imageLink",
+      key: "imageLink",
+      render: (imageLink) => {
+        return <Image src={imageLink} alt="" width={100}></Image>;
+      },
     },
     {
       title: "Action",
@@ -172,6 +187,41 @@ function UserManagement() {
     },
   ];
 
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: "none",
+      }}
+      type="button"
+    >
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </button>
+  );
+
   return (
     <div>
       <Button
@@ -186,13 +236,11 @@ function UserManagement() {
       >
         + Add
       </Button>
-
       <Table
         columns={columns}
         dataSource={Array.isArray(datas) ? datas : []}
         rowKey="userID"
       />
-
       <Modal
         open={showModal}
         onCancel={() => setShowModal(false)}
@@ -237,9 +285,19 @@ function UserManagement() {
 
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name="imageLink" label="Image Link">
-                <Input placeholder="URL avatar" />
+              <Form.Item label="image" name="imageLink">
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onPreview={handlePreview}
+                  onChange={handleChange}
+                >
+                  {fileList.length >= 8 ? null : uploadButton}
+                </Upload>
               </Form.Item>
+              {/* <Form.Item label="Avatar" name="image">
+                <UploadAvatar value={fileList} onChange={setFileList} />
+              </Form.Item> */}
             </Col>
             <Col span={12}>
               <Form.Item
@@ -291,7 +349,7 @@ function UserManagement() {
                 >
                   {ELEMENT_VALUES.map((item) => (
                     <Select.Option
-                      key={item.value}  
+                      key={item.value}
                       value={item.value}
                       label={item.label}
                     >
@@ -337,7 +395,20 @@ function UserManagement() {
             </Col>
           </Row>
         </Form>
-      </Modal>
+      </Modal>{" "}
+      {previewImage && (
+        <Image
+          wrapperStyle={{
+            display: "none",
+          }}
+          preview={{
+            visible: previewOpen,
+            onVisibleChange: (visible) => setPreviewOpen(visible),
+            afterOpenChange: (visible) => !visible && setPreviewImage(""),
+          }}
+          src={previewImage}
+        />
+      )}
     </div>
   );
 }

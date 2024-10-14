@@ -10,6 +10,7 @@ import SelectedItems from "../../components/Compatibility/SelectedItems";
 import "../../styles/CompatibilityPage.scss";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
+import api from "../../config/axiosConfig";
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -82,7 +83,37 @@ function CompatibilityPage() {
     background.style.filter = `blur(${blurValue}px)`;
   });
 
-  const handleCalculateCompatibility = () => {};
+  const handleCalculateCompatibility = async () => {
+    // Kiểm tra xem đã chọn cá và hồ chưa
+    if (selectedFish.length === 0 || !selectedTank || !selectedElement) {
+      message.warning("Vui lòng chọn cá, hồ và yếu tố trước khi tính toán!");
+      return;
+    }
+
+    // Lấy màu sắc cá từ state selectedFish
+    const selectedKoiColors = selectedFish.map(
+      (fish) => fish.color.split(",").map((color) => color.trim()) // Tách chuỗi màu sắc và loại bỏ khoảng trắng
+    );
+
+    const selectedTankShape = selectedTank.shape;
+    const userElement = selectedElement;
+
+    const payload = {
+      userElement: userElement,
+      koiFishColors: selectedKoiColors,
+      tankShape: selectedTankShape,
+    };
+    console.log("Payload gửi đến API:", payload);
+    try {
+      const response = await api.post("compatibility", payload);
+      console.log("Phản hồi từ API:", response.data);
+      console.log("Tính điểm tương thích:", response.data);
+      message.success("Tính điểm tương thích thành công!");
+    } catch (error) {
+      console.error("Lỗi khi tính điểm tương thích:", error);
+      message.error("Lỗi khi tính điểm tương thích: " + error.message);
+    }
+  };
 
   return (
     <Layout className="layout" style={{ marginBottom: "200px" }}>
