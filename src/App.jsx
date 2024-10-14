@@ -9,15 +9,22 @@ import TankManagement from "./components/CRUD_Tank/TankManagement";
 import Admin from "./components/AdminRoute/Admin";
 import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
 import UserManagement from "./components/CRUD_User/UserManagement";
+import CompatibilityPage from "./pages/member/CompatibilityPage";
+import ManageUser from "./components/CRUD_User2/ManageUser";
 import Authenticate from "./components/LoginForm/Authenticate";
 
 const App = () => {
 
   const router = createBrowserRouter([
     {
-      path: "",
+      path: "/",
       element: <HomePage />,
     },
+    {
+      path: "compatibility",
+      element: <CompatibilityPage />,
+    },
+
     {
       path: "login",
       element: <LoginPage />,
@@ -42,7 +49,7 @@ const App = () => {
       children: [
         {
           path: "koi",
-          element: <KoiContainer />
+          element: <KoiContainer />,
         },
         {
           path: "users",
@@ -55,10 +62,9 @@ const App = () => {
       ],
     },
     {
-      path: 'user',
-      element: <UserProfilePage />
-    }
-    
+      path: "user",
+      element: <UserProfilePage />,
+    },
   ]);
 
   return <RouterProvider router={router} />;

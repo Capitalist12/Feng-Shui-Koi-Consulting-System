@@ -59,28 +59,31 @@ const HomePage = () => {
         };
     }, [isRotate, isSpinning]);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const container = containerRef.current;
-            if (container) {
-                const containerTop = container.getBoundingClientRect().top; // Vị trí của phần tử
-                const viewportHeight = window.innerHeight; // Chiều cao của viewport
-                const containerHeight = container.offsetHeight;
+  useEffect(() => {
+    const handleScroll = () => {
+      const container = containerRef.current;
+      if (container) {
+        const containerTop = container.getBoundingClientRect().top; // Vị trí của phần tử
+        const viewportHeight = window.innerHeight; // Chiều cao của viewport
+        const containerHeight = container.offsetHeight;
 
-                // Tính toán tỷ lệ cuộn dựa trên khoảng cách giữa phần tử và viewport
-                const progress = Math.min(1, Math.max(0, 1 - containerTop / (viewportHeight / 2)));
+        // Tính toán tỷ lệ cuộn dựa trên khoảng cách giữa phần tử và viewport
+        const progress = Math.min(
+          1,
+          Math.max(0, 1 - containerTop / (viewportHeight / 2))
+        );
 
-                setScrollProgress(progress);
-            }
-        };
+        setScrollProgress(progress);
+      }
+    };
 
-        // Gắn sự kiện cuộn
-        window.addEventListener('scroll', handleScroll);
+    // Gắn sự kiện cuộn
+    window.addEventListener("scroll", handleScroll);
 
-        return () => {
-            window.removeEventListener('scroll', handleScroll); // Xóa sự kiện khi unmount
-        };
-    }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll); // Xóa sự kiện khi unmount
+    };
+  }, []);
 
     return (
         <div>

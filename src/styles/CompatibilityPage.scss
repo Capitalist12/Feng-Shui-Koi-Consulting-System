@@ -1,0 +1,190 @@
+// .compatibility-page {
+//   padding: 20px;
+
+//   h1 , h3 {
+//     z-index: 1; /* Make sure the title stays below the navbar */
+//     position: relative;
+//     margin-top: 90;
+//     margin-bottom: 1; /* Corrected margin value, no need to use just "1" */
+//     padding: 0;
+//     color: red;
+//     text-align: center;
+//   } 
+// }
+
+#sec1 {
+  padding: 20px;
+  margin: 20px 0;
+  height: 500px;
+  // background-color: #f5f5f5; /* Light background color */
+  // border-radius: 10px; /* Rounded corners */
+  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add some shadow for depth */
+  .btn {
+
+    a {
+        position: absolute;
+        bottom: 10vh;
+        left: 50%;
+        transform: translate(-45%, -50%);
+        text-decoration: none;
+        color: white;
+        display: flex;
+        justify-content: center;
+        background-color: none;
+        align-items: center;
+        height: 70px;
+        width: 300px;
+        border-radius: 5em;
+        border: 1px solid white;
+        font-size: 1.2em;
+        transition: all 1s ease;
+        box-shadow: 0 0 0;
+
+        &:hover {
+            background-color: white;
+            box-shadow: 0 0 10px white;
+            width: 305px;
+            height: 72px;
+            font-size: 1.23em;
+            color: black;
+        }
+    }
+
+    .downArrow {
+        position: absolute;
+        bottom: 7vh;
+        left: 50%;
+        font-size: 2em;
+    }
+
+    .bounce {
+        -moz-animation: bounce 3s infinite;
+        -webkit-animation: bounce 3s infinite;
+        animation: bounce 3s infinite;
+    }
+
+    @-moz-keyframes bounce {
+
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            -moz-transform: translateY(0);
+            transform: translateY(0);
+        }
+
+        40% {
+            -moz-transform: translateY(-30px);
+            transform: translateY(-30px);
+        }
+
+        60% {
+            -moz-transform: translateY(-15px);
+            transform: translateY(-15px);
+        }
+    }
+
+    @-webkit-keyframes bounce {
+
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
+
+        40% {
+            -webkit-transform: translateY(-30px);
+            transform: translateY(-30px);
+        }
+
+        60% {
+            -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+        }
+    }
+
+    @keyframes bounce {
+
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            -moz-transform: translateY(0);
+            -ms-transform: translateY(0);
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
+
+        40% {
+            -moz-transform: translateY(-30px);
+            -ms-transform: translateY(-30px);
+            -webkit-transform: translateY(-30px);
+            transform: translateY(-30px);
+        }
+
+        60% {
+            -moz-transform: translateY(-15px);
+            -ms-transform: translateY(-15px);
+            -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+        }
+    }
+}
+
+  h1, h2 {
+    margin-top: -10px;
+    margin-left: 20px;
+    color: red; /* Text color */
+     /* Center the text */
+  }
+
+  h1 {
+    font-size: 50em; /* Adjust font size */
+    font-weight: 900; /* Bold text */
+    margin-bottom: 10px; /* Add space between h1 and h2 */
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 15px; /* Space after h3 */
+  }
+
+  /* Optional: Style the Title component */
+  .ant-typography {
+    font-size: 90px; /* Adjust Title size */
+    font-weight: 600; /* Adjust Title weight */
+    color: #ff6347; /* Tomato color for Title */
+  }
+}
+
+
+.background {
+  background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Apply to the table in CompatibilityPage */
+.compatibility-page .custom-table thead[class*="ant-table-thead"] th {
+  background-color: grey !important;
+  font-weight: bold;
+  font-size: 20px;
+  border-color: #000;
+  text-align: center;
+  color: white !important;
+}

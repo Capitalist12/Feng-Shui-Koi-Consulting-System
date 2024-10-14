@@ -1,7 +1,8 @@
 #navbar-section {
     height: 60px;
-    position: sticky;
+    position: fixed;
     top: 0;
+    width: 100%;
     z-index: 3;
 
     .navbar {

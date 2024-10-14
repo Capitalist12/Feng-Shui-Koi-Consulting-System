@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, message, Upload } from "antd";
+import uploadFile from "../../utils/file"; // Thêm hàm uploadFile để upload ảnh lên Firebase hoặc server
 
-const MAX_COUNT = 5;
-const MAX_SIZE = 10 * 1024 * 1024;
+const MAX_SIZE = 10 * 1024 * 1024; // Giới hạn kích thước ảnh
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -15,9 +15,10 @@ const getBase64 = (file) =>
     };
   });
 
-const UploadImage = ({ value = [], onChange }) => {
+const UploadAvatar = ({ value = [], onChange }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -27,11 +28,26 @@ const UploadImage = ({ value = [], onChange }) => {
     setPreviewOpen(true);
   };
 
-  const handleChange = ({ fileList: newFileList }) => {
-    // console.log(">>> check list: ", newFileList)
-    onChange?.(newFileList.filter((file) => file.size <= MAX_SIZE)); // Use `onChange` to update form state
+  const handleChange = async ({ fileList: newFileList }) => {
+    if (!Array.isArray(newFileList)) {
+      message.error("Đã xảy ra lỗi, vui lòng thử lại.");
+      return;
+    }
+    const file = newFileList[0];
+    if (file && file.size <= MAX_SIZE) {
+      setLoading(true);
+      try {
+        const url = await uploadFile(file.originFileObj);
+        onChange(url);
+      } catch (error) {
+        message.error("Upload failed!");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      onChange("");
+    }
   };
-
   const uploadButton = (
     <button
       style={{
@@ -41,13 +57,7 @@ const UploadImage = ({ value = [], onChange }) => {
       type="button"
     >
       <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
+      <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
 
@@ -66,17 +76,15 @@ const UploadImage = ({ value = [], onChange }) => {
   return (
     <>
       <Upload
-        // action="https://66e7ed93b17821a9d9da9375.mockapi.io/koi"
         beforeUpload={handleImageSize}
         listType="picture-card"
-        fileList={value} // Bind to form's `value`
+        fileList={value}
         onPreview={handlePreview}
         onChange={handleChange}
-        maxCount={MAX_COUNT}
-        multiple
+        maxCount={1}
         accept="image/png, image/jpeg"
       >
-        {value.length >= MAX_COUNT ? null : uploadButton}
+        {value.length >= 1 ? null : uploadButton}
       </Upload>
 
       {previewImage && (
@@ -93,11 +101,10 @@ const UploadImage = ({ value = [], onChange }) => {
           src={previewImage}
         />
       )}
-      <span style={{ color: value.length === MAX_COUNT ? "red" : "black" }}>
-        {value.length} / {MAX_COUNT}
-      </span>
+
+      {loading && <span>Đang tải ảnh...</span>}
     </>
   );
 };
 
-export default UploadImage;
+export default UploadAvatar;
