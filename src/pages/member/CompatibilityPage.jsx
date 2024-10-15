@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Layout, Row, Col, Spin, Typography, message } from "antd";
 import Navbar from "../../components/Utils/Navbar";
 import { getAllKoiFish } from "../../services/koiAPIService";
@@ -7,9 +7,8 @@ import KoiList from "../../components/Compatibility/KoiList";
 import TankList from "../../components/Compatibility/TankList";
 import CompatibilityForm from "../../components/Compatibility/CompatibilityForm";
 import SelectedItems from "../../components/Compatibility/SelectedItems";
+import Result from "../../components/Compatibility/Result"; // Import Modal component
 import "../../styles/CompatibilityPage.scss";
-import { FaMagnifyingGlass } from "react-icons/fa6";
-import { IoIosArrowDown } from "react-icons/io";
 import api from "../../config/axiosConfig";
 
 const { Title } = Typography;
@@ -24,6 +23,9 @@ function CompatibilityPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedElement, setSelectedElement] = useState("");
 
+  const [resultData, setResultData] = useState(null); // Lưu kết quả tính toán
+  const [isModalVisible, setIsModalVisible] = useState(false); // Quản lý trạng thái modal
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -37,7 +39,6 @@ function CompatibilityPage() {
     try {
       const response = await getAllKoiFish();
       const data = response?.data?.result || [];
-      console.log("Fish Data:", data); // Kiểm tra dữ liệu cá koi
       setKoiData(Array.isArray(data) ? data : []);
     } catch (error) {
       message.error("Error fetching fish data: " + error.message);
@@ -56,7 +57,7 @@ function CompatibilityPage() {
   const handleSelectFish = (fish) => {
     if (selectedFish.includes(fish)) {
       setSelectedFish(selectedFish.filter((item) => item !== fish));
-    } else if (selectedFish.length < 3) {
+    } else if (selectedFish.length <= 5) {
       setSelectedFish([...selectedFish, fish]);
     } else {
       message.warning("Chỉ được chọn tối đa 3 con cá!");
@@ -75,24 +76,14 @@ function CompatibilityPage() {
     setSelectedTank(null);
   };
 
-  window.addEventListener("scroll", function () {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const background = document.querySelector(".background");
-    const blurValue = Math.min(scrollTop / 100, 10); // Giới hạn blur tối đa là 10px
-
-    background.style.filter = `blur(${blurValue}px)`;
-  });
-
   const handleCalculateCompatibility = async () => {
-    // Kiểm tra xem đã chọn cá và hồ chưa
     if (selectedFish.length === 0 || !selectedTank || !selectedElement) {
       message.warning("Vui lòng chọn cá, hồ và yếu tố trước khi tính toán!");
       return;
     }
 
-    // Lấy màu sắc cá từ state selectedFish
-    const selectedKoiColors = selectedFish.map(
-      (fish) => fish.color.split(",").map((color) => color.trim()) // Tách chuỗi màu sắc và loại bỏ khoảng trắng
+    const selectedKoiColors = selectedFish.map((fish) =>
+      fish.color.split(",").map((color) => color.trim())
     );
 
     const selectedTankShape = selectedTank.shape;
@@ -103,11 +94,17 @@ function CompatibilityPage() {
       koiFishColors: selectedKoiColors,
       tankShape: selectedTankShape,
     };
+
     console.log("Payload gửi đến API:", payload);
     try {
       const response = await api.post("compatibility", payload);
-      console.log("Phản hồi từ API:", response.data);
-      console.log("Tính điểm tương thích:", response.data);
+      const result = response.data.result; // Lấy dữ liệu từ API
+
+      console.log("Phản hồi từ API:", result);
+
+      // Lưu kết quả vào state và mở modal
+      setResultData(result); // Cập nhật state với dữ liệu kết quả
+      setIsModalVisible(true); // Hiển thị modal
       message.success("Tính điểm tương thích thành công!");
     } catch (error) {
       console.error("Lỗi khi tính điểm tương thích:", error);
@@ -123,78 +120,83 @@ function CompatibilityPage() {
       </section>
       <Content className="compatibility-page" style={{ padding: "20px" }}>
         <section id="sec1">
-          <Title>Tính độ tương hợp</Title>
+          <Title style={{ marginTop: "50px" }}>Tính độ tương hợp</Title>
           <h2>
             Bạn đang phân vân loại cá và hồ nào, tính thử độ tương hợp ngay nhé
-            !{" "}
+            !
           </h2>
-          <div className="btn">
-            <a href="#inspec-section">
-              <FaMagnifyingGlass /> &nbsp; TRA CỨU NGAY
-            </a>
-            <div className="downArrow bounce">
-              <IoIosArrowDown style={{ color: "white" }} />
-            </div>
-          </div>
         </section>
 
         {loading ? (
           <Spin size="large" />
         ) : (
           <>
-            <SelectedItems
-              selectedFish={selectedFish}
-              selectedTank={selectedTank}
-              handleRemoveTank={handleRemoveTank}
-              handleSelectFish={handleSelectFish}
-            />
+            <section id="sec2">
+              <Row gutter={[24, 16]}>
+                <Col span={8}>
+                  <div className="custom-title">
+                    <Title level={2}>Danh Sách Cá</Title>
+                  </div>
+                  <div className="custom-table">
+                    <KoiList
+                      koiData={koiData}
+                      handleSelectFish={handleSelectFish}
+                      isKoiSelected={(fish) => selectedFish.includes(fish)}
+                      searchTerm={searchTerm}
+                      handleSearchTermChange={(e) =>
+                        setSearchTerm(e.target.value)
+                      }
+                    />
+                  </div>
+                </Col>
 
-            <CompatibilityForm
-              selectedElement={selectedElement}
-              setSelectedElement={setSelectedElement}
-              handleCalculateCompatibility={handleCalculateCompatibility}
-            />
-
-            <Row gutter={16} style={{ display: "flex", marginTop: "20px" }}>
-              <Col
-                span={12}
-                style={{ display: "flex", flexDirection: "column" }}
-              >
-                <Title level={4}>Danh Sách Cá</Title>
-                <div className="custom-table">
-                  <KoiList
-                    koiData={koiData}
+                <Col
+                  span={8}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <SelectedItems
+                    selectedFish={selectedFish}
+                    selectedTank={selectedTank}
+                    handleRemoveTank={handleRemoveTank}
                     handleSelectFish={handleSelectFish}
-                    isKoiSelected={(fish) => selectedFish.includes(fish)}
-                    searchTerm={searchTerm}
-                    handleSearchTermChange={(e) =>
-                      setSearchTerm(e.target.value)
-                    }
                   />
-                </div>
-              </Col>
 
-              <Col
-                span={12}
-                style={{ display: "flex", flexDirection: "column" }}
-              >
-                <Title level={4}>Danh Sách Hồ</Title>
-                <div className="custom-table">
-                  <TankList
-                    tankData={tankData}
-                    handleSelectTank={handleSelectTank}
-                    isTankSelected={(tank) => selectedTank === tank}
+                  <CompatibilityForm
+                    selectedElement={selectedElement}
+                    setSelectedElement={setSelectedElement}
+                    handleCalculateCompatibility={handleCalculateCompatibility}
                   />
-                </div>
-              </Col>
-            </Row>
+                </Col>
+
+                <Col
+                  span={8}
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
+                  <Title level={2}>Danh Sách Hồ</Title>
+                  <div className="custom-table">
+                    <TankList
+                      tankData={tankData}
+                      handleSelectTank={handleSelectTank}
+                      isTankSelected={(tank) => selectedTank === tank}
+                    />
+                  </div>
+                </Col>
+              </Row>
+            </section>
           </>
         )}
+
+        <Result
+          isVisible={isModalVisible}
+          resultData={resultData}
+          onClose={() => setIsModalVisible(false)} // Đóng modal khi nhấn OK
+        />
       </Content>
-      {/* <section id="footer-section" style={{ marginTop: "20px" }}>
-        {" "}
-        <CustomeFooter />
-      </section> */}
     </Layout>
   );
 }

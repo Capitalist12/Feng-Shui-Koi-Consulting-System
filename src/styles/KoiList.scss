@@ -1,6 +1,59 @@
-.selected-row {
-    background-color: brown;
-    &:hover{
-    //     background-color: black;
-    }
-}
+// // Định nghĩa keyframes cho animation
+// @keyframes highlight {
+//     0% {
+//       background-color: #ff8177; // Màu nền nhẹ
+//     }
+//     30% {
+//       background-color: #ff867a; // Màu nền nhẹ
+//     }
+//     50% {
+//       background-color: #ff8c7f; // Màu nền đậm hơn
+//     }
+//     70% {
+//       background-color: #f99185; // Màu nền đậm hơn
+//     }
+//     90% {
+//       background-color: #ff9a9e; // Trở lại màu nền nhẹ
+//     }
+//     100% {
+//       background-color: #f99185; // Giữ nguyên màu nền sau animation
+//     }
+//   }
+  
+//   // Áp dụng style cho bảng trong KoiList
+//   .koi-list-table {
+//     .ant-table {
+//       border: 1px solid #d9d9d9;
+  
+//       // Styles cho tiêu đề cột
+//       th {
+//         background-color: darkgrey;
+//         color: black;
+//         font-weight: 500;
+//         text-align: center;
+//         font-size: 15px;
+//       }
+  
+//       // Áp dụng cho hàng
+//       tr {
+//         // Hiệu ứng hover cho hàng chưa chọn
+//         &:hover {
+//           animation: highlight 0.3s ease-in-out;
+//           background-color: burlywood; // Màu nền khi hover
+//         }
+  
+//         // Áp dụng cho hàng đã chọn
+//         &.selected-row {
+//           background-color: burlywood; // Màu nền cho hàng đã chọn
+//           animation: none; // Tắt animation cho hàng đã chọn
+//           transition: background-color 0.3s; // Thêm transition cho mượt mà
+  
+//           // Tăng độ đậm khi hover qua hàng đã chọn
+//           &:hover {
+//             background-color: rgba(135, 206, 235, 1); // Đậm hơn khi hover
+//           }
+//         }
+//       }
+//     }
+//   }
+  

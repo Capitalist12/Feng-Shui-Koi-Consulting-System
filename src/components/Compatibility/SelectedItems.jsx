@@ -8,43 +8,93 @@ const SelectedItems = ({
   handleRemoveTank,
   handleSelectFish,
 }) => {
+  // Giới hạn số lượng cá tối đa là 6
+  const maxSelectedFish = selectedFish.slice(0, 6);
+
   return (
     <Card
       style={{
         marginBottom: "10px",
-        backgroundColor: "#fafafa",
+        backgroundColor: "pink",
         border: "1px solid #d9d9d9",
+        width: "80%",
       }}
     >
-      <Title level={4}>Cá và Hồ Đã Chọn</Title>
+      <Title level={2} style={{ textAlign: "center" }}>
+        Cá và Hồ Đã Chọn
+      </Title>
+      <h2>
+        <strong>Cá Koi:</strong>
+      </h2>
       <p>
-        <strong>Cá Koi:</strong>{" "}
-        {selectedFish.length > 0
-          ? selectedFish.map((fish) => (
-              <span key={fish.id} style={{ marginRight: "10px" }}>
+        {maxSelectedFish.length > 0 ? (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                maxSelectedFish.length > 3 ? "repeat(2, 1fr)" : "1fr",
+              gap: "px", // khoảng cách giữa các cá Koi
+            }}
+          >
+            {maxSelectedFish.map((fish, index) => (
+              <span
+                key={fish.id}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between", // Căn đều khoảng cách giữa tên và nút X
+                  alignItems: "center", // Căn giữa theo trục dọc
+                  marginBottom: "5px", // Tạo khoảng cách giữa các dòng cá
+                  marginRight: "10px",
+                  gap: "10px",
+                }}
+              >
+                {/* Hiển thị số thứ tự */}
+                <span>{index + 1}.</span> {/* Đánh số bắt đầu từ 1 */}
                 {fish.name}
                 <Button
-                  type="link"
+                  type="primary"
                   danger
                   onClick={() => handleSelectFish(fish)}
+                  style={{ width: "20px" }}
                 >
-                  X
+                  Xóa
                 </Button>
               </span>
-            ))
-          : "Chưa chọn"}
-      </p>
-      <p>
-        <strong>Hồ:</strong>{" "}
-        {selectedTank ? (
-          <>
-            {selectedTank.shape}
-            <Button type="link" danger onClick={handleRemoveTank}>
-              X
-            </Button>
-          </>
+            ))}
+          </div>
         ) : (
-          "Chưa chọn"
+          "Chưa chọn (tối đa 6 con cá)"
+        )}
+      </p>
+
+      {/* Hiển thị Hồ đã chọn */}
+      <h2>
+        <strong>Hồ:</strong>
+      </h2>
+      <p>
+        {selectedTank ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between", // Căn đều khoảng cách giữa tên và nút X
+              alignItems: "center", // Căn giữa theo trục dọc
+              marginBottom: "5px", // Tạo khoảng cách giữa các dòng cá
+              marginRight: "10px",
+              gap: "10px", // Căn giữa theo chiều dọc
+            }}
+          >
+            <span>{selectedTank.shape}</span>
+            <Button
+              style={{ width: "20px" }}
+              type="primary"
+              danger
+              onClick={handleRemoveTank}
+            >
+              Xóa
+            </Button>
+          </div>
+        ) : (
+          "Chưa chọn (tối đa 1 hồ)"
         )}
       </p>
     </Card>

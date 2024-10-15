@@ -1,4 +1,4 @@
-import { Button, Select, Row, Col, Typography } from "antd";
+import { Button, Select, Row, Col, Typography, Card } from "antd";
 import { OPTIONS } from "../../utils/constant";
 
 const { Title } = Typography;
@@ -10,10 +10,21 @@ const CompatibilityForm = ({
   handleCalculateCompatibility,
 }) => {
   return (
-    <div>
-      <Row gutter={16} style={{ marginTop: "5px" }}>
+    <Card bordered={true} style={{ width: "50%", marginTop: "10px" }}>
+      <Row
+        gutter={16}
+        style={{
+          display: "flex",
+          flexDirection: "column", // Đảm bảo các phần tử được xếp theo cột
+          justifyContent: "center", // Căn giữa theo trục ngang
+          alignItems: "center", // Căn giữa theo trục dọc
+          marginTop: "5px",
+        }}
+      >
         <Col span={24}>
-          <Title level={4}>Chọn Yếu Tố</Title>
+          <Title level={3} style={{ textAlign: "center", marginTop: "-10px" }}>
+            Chọn Yếu Tố
+          </Title>
           <Select
             placeholder="Chọn yếu tố"
             value={selectedElement}
@@ -32,9 +43,9 @@ const CompatibilityForm = ({
                   <span
                     style={{
                       backgroundColor: option.color,
-                      color: "#fff",
+                      // color: "white",
                       padding: "2px 8px",
-                      borderRadius: "4px",
+                      borderRadius: "12px",
                     }}
                   >
                     {option.desc}
@@ -44,17 +55,15 @@ const CompatibilityForm = ({
             ))}
           </Select>
         </Col>
+        <Button
+          type="primary"
+          onClick={handleCalculateCompatibility}
+          style={{ marginTop: "20px", justifyItems: "center" }}
+        >
+          Tính toán độ tương hợp
+        </Button>
       </Row>
-
-      <Button
-        className="dark-theme-button"
-        type="primary"
-        onClick={handleCalculateCompatibility}
-        style={{ marginTop: "20px" }}
-      >
-        Tính toán độ tương hợp
-      </Button>
-    </div>
+    </Card>
   );
 };
 
