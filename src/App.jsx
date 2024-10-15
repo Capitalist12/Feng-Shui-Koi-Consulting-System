@@ -12,6 +12,7 @@ import UserManagement from "./components/CRUD_User/UserManagement";
 import CompatibilityPage from "./pages/member/CompatibilityPage";
 import ManageUser from "./components/CRUD_User2/ManageUser";
 import Authenticate from "./components/LoginForm/Authenticate";
+import PricingPage from "./pages/PricingPage";
 
 const App = () => {
 
@@ -24,7 +25,10 @@ const App = () => {
       path: "compatibility",
       element: <CompatibilityPage />,
     },
-
+    {
+      path: "pricing",
+      element: <PricingPage />
+    },
     {
       path: "login",
       element: <LoginPage />,
