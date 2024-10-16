@@ -32,4 +32,7 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, String> 
     boolean existsByAdID(String adID);
 
     Optional<Advertisement> findByTitle(String title);
+
+    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Verified'")
+    List<Advertisement> findAds();
 }

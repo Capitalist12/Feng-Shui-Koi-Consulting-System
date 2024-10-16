@@ -2,6 +2,7 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.VerifyAdRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
@@ -42,6 +43,7 @@ public class AdvertisementService {
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXIST)));
         ad.setUser(user);
         ad.setAdID(generateAdID());
+        ad.setStatus("Unverified");
 
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
             Set<Ads_Image> imagesAd = request.getImagesURL().stream()
@@ -58,29 +60,26 @@ public class AdvertisementService {
         return  advertisementMapper.toAdvertisementResponse(advertisementRepo.save(ad));
     }
 
+//    public List<AdvertisementResponse> getListAdvertisements(){
+//        return advertisementRepo.findAll().stream()
+//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+//    }
+
     public List<AdvertisementResponse> getListAdvertisements(){
-        return advertisementRepo.findAll().stream()
+        return advertisementRepo.findAds().stream()
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
-
-//    public List<AdvertisementResponse> getAdvertisementByCategory(String categoryName){
-//        return advertisementRepo.findByCategory(categoryName).stream()
-//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
-//    }
-//
-//    public List<AdvertisementResponse> getAdvertisementByUser(String username){
-//        return advertisementRepo.findByUser(username).stream()
-//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
-//    }
-//
-//    public List<AdvertisementResponse> getAdvertisementByElement(String elementName){
-//        return advertisementRepo.findByElement(elementName).stream()
-//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
-//    }
 
     public List<AdvertisementResponse> getAdvertisementByFilter(String categoryName, String username, String elementName){
         return advertisementRepo.filterAdvertisements(categoryName, username, elementName).stream()
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
+
+    public AdvertisementResponse verifyAd(VerifyAdRequest request){
+        Advertisement advertisement = advertisementRepo.findById(request.getAdID())
+                .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
+        advertisement.setStatus(request.getNewStatus());
+        return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request){

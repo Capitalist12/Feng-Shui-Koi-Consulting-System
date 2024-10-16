@@ -1,9 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FindAdByFilterRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AdvertisementService;
 import lombok.*;
@@ -61,6 +58,13 @@ public class AdvertisementController {
                         request.getCategoryName(),
                         request.getUsername(),
                         request.getElementName()))
+                .build();
+    }
+
+    @PostMapping("/updateAdStatus")
+    ApiResponse<AdvertisementResponse> updateAdStatus(@RequestBody VerifyAdRequest request){
+        return ApiResponse.<AdvertisementResponse>builder()
+                .result(advertisementService.verifyAd(request))
                 .build();
     }
 

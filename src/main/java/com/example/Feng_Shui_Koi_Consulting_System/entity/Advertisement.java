@@ -52,8 +52,8 @@ public class Advertisement {
     @JsonManagedReference
     Set<Ads_Image> imagesAd = new HashSet<>();
 
-//    @Column(name = "Status")
-//    String status;
+    @Column(name = "Status")
+    String status;
 
     @Override
     public boolean equals(Object o) {
