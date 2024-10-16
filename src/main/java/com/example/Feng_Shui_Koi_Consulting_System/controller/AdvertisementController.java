@@ -30,27 +30,6 @@ public class AdvertisementController {
                 .build();
     }
 
-//    @GetMapping("/category/{categoryName}")
-//    ApiResponse<List<AdvertisementResponse>> getAdByCategory(@PathVariable("categoryName") String categoryName){
-//        return ApiResponse.<List<AdvertisementResponse>>builder()
-//                .result(advertisementService.getAdvertisementByCategory(categoryName))
-//                .build();
-//    }
-//
-//    @GetMapping("/user/{username}")
-//    ApiResponse<List<AdvertisementResponse>> getAdByUser(@PathVariable("username") String username){
-//        return ApiResponse.<List<AdvertisementResponse>>builder()
-//                .result(advertisementService.getAdvertisementByUser(username))
-//                .build();
-//    }
-//
-//    @GetMapping("/element/{elementName}")
-//    ApiResponse<List<AdvertisementResponse>> getAdByElement(@PathVariable("elementName") String elementName){
-//        return ApiResponse.<List<AdvertisementResponse>>builder()
-//                .result(advertisementService.getAdvertisementByElement(elementName))
-//                .build();
-//    }
-
     @PostMapping("/filter")
     ApiResponse<List<AdvertisementResponse>> getAdByFilter(@RequestBody FindAdByFilterRequest request){
         return ApiResponse.<List<AdvertisementResponse>>builder()
