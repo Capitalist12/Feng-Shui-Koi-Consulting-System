@@ -43,7 +43,7 @@ public class AdvertisementService {
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXIST)));
         ad.setUser(user);
         ad.setAdID(generateAdID());
-        ad.setStatus("Unverified");
+        ad.setStatus("Pending");
 
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
             Set<Ads_Image> imagesAd = request.getImagesURL().stream()
