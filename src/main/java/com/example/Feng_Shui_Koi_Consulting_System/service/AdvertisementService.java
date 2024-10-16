@@ -3,8 +3,10 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Advertisement;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.AdvertisementMapper;
@@ -32,11 +34,13 @@ public class AdvertisementService {
     CategoryService categoryService;
     UserService userService;
     ElementRepo elementRepo;
-//    UserRepository userRepository;
-//    CategoryRepo categoryRepo;
+    UserRepository userRepository;
 
     public AdvertisementResponse createAdvertisement(AdvertisementCreationRequest request) {
-        Advertisement ad = advertisementMapper.toAdvertisement(request, elementRepo, categoryService, userService);
+        Advertisement ad = advertisementMapper.toAdvertisement(request, elementRepo, categoryService);
+        User user = userRepository.findByUsername(userService.getMyInfo().getUsername())
+                .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXIST)));
+        ad.setUser(user);
         ad.setAdID(generateAdID());
 
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
@@ -59,21 +63,31 @@ public class AdvertisementService {
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
 
-//    public List<AdvertisementResponse> getAdvertisementByCategory(String categoryID){
-//        return advertisementRepo.findByCategoryID(categoryID).stream()
+//    public List<AdvertisementResponse> getAdvertisementByCategory(String categoryName){
+//        return advertisementRepo.findByCategory(categoryName).stream()
+//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+//    }
+//
+//    public List<AdvertisementResponse> getAdvertisementByUser(String username){
+//        return advertisementRepo.findByUser(username).stream()
+//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+//    }
+//
+//    public List<AdvertisementResponse> getAdvertisementByElement(String elementName){
+//        return advertisementRepo.findByElement(elementName).stream()
 //                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
 //    }
 
-//    public List<AdvertisementResponse> getAdvertisementByUserID(String userID){
-//        return advertisementRepo.findByUserID(userID).stream()
-//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
-//    }
+    public List<AdvertisementResponse> getAdvertisementByFilter(String categoryName, String username, String elementName){
+        return advertisementRepo.filterAdvertisements(categoryName, username, elementName).stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
 
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request){
         Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
         advertisementMapper
-                .updateAdvertisement(advertisement, request, elementRepo, categoryService, userService);
+                .updateAdvertisement(advertisement, request, elementRepo, categoryService);
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 

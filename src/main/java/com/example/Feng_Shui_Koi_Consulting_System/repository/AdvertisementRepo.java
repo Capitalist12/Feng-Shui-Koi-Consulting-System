@@ -11,14 +11,25 @@ import java.util.Optional;
 
 @Repository
 public interface AdvertisementRepo extends JpaRepository<Advertisement, String> {
-//    @Query("SELECT ad FROM Advertisement ad JOIN ad.category c WHERE c.categoryId = :categoryID")
-//    List<Advertisement> findByCategoryID(@Param("categoryID") String categoryId);
-//    @Query("SELECT ad FROM Advertisement ad JOIN ad.user u WHERE u.userID = :userID")
-//    List<Advertisement> findByUserID(@Param("userID") String userId);
-//    @Query("SELECT ad FROM Advertisement ad JOIN ad.element e WHERE e.elementId = :elementID")
-//    List<Advertisement> findByElementID(@Param("elementID") String elementId);
+    //    @Query("SELECT ad FROM Advertisement ad JOIN ad.category c WHERE c.categoryName = :categoryName")
+//    List<Advertisement> findByCategory(@Param("categoryName") String categoryName);
+//    @Query("SELECT ad FROM Advertisement ad JOIN ad.user u WHERE u.username = :username")
+//    List<Advertisement> findByUser(@Param("username") String userId);
+//    @Query("SELECT ad FROM Advertisement ad JOIN ad.element e WHERE e.elementName = :elementName")
+//    List<Advertisement> findByElement(@Param("elementName") String elementName);
+    @Query("SELECT ad FROM Advertisement ad " +
+            "JOIN ad.category c " +
+            "JOIN ad.user u " +
+            "JOIN ad.element e " +
+            "WHERE (:categoryName IS NULL OR :categoryName = '' OR c.categoryName = :categoryName) " +
+            "AND (:username IS NULL OR :username = '' OR u.username = :username) " +
+            "AND (:elementName IS NULL OR :elementName = '' OR e.elementName = :elementName)")
+    List<Advertisement> filterAdvertisements(
+            @Param("categoryName") String categoryName,
+            @Param("username") String username,
+            @Param("elementName") String elementName);
+
     boolean existsByAdID(String adID);
+
     Optional<Advertisement> findByTitle(String title);
-//    @Query("SELECT ad FROM Advertisement ad JOIN ad.CategoryID c WHERE c.categoryId = :categoryID")
-//    List<Advertisement> findByCategoryID(@Param("categoryID") String categoryID);
 }

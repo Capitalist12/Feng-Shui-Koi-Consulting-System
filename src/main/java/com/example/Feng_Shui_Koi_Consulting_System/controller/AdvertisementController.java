@@ -3,11 +3,11 @@ package com.example.Feng_Shui_Koi_Consulting_System.controller;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FindAdByFilterRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AdvertisementService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,19 +33,37 @@ public class AdvertisementController {
                 .build();
     }
 
-//    @GetMapping("/category/{categoryID}")
-//    ApiResponse<List<AdvertisementResponse>> getAdByCategory(@PathVariable("categoryID") String categoryID){
+//    @GetMapping("/category/{categoryName}")
+//    ApiResponse<List<AdvertisementResponse>> getAdByCategory(@PathVariable("categoryName") String categoryName){
 //        return ApiResponse.<List<AdvertisementResponse>>builder()
-//                .result(advertisementService.getAdvertisementByCategory(categoryID))
+//                .result(advertisementService.getAdvertisementByCategory(categoryName))
+//                .build();
+//    }
+//
+//    @GetMapping("/user/{username}")
+//    ApiResponse<List<AdvertisementResponse>> getAdByUser(@PathVariable("username") String username){
+//        return ApiResponse.<List<AdvertisementResponse>>builder()
+//                .result(advertisementService.getAdvertisementByUser(username))
+//                .build();
+//    }
+//
+//    @GetMapping("/element/{elementName}")
+//    ApiResponse<List<AdvertisementResponse>> getAdByElement(@PathVariable("elementName") String elementName){
+//        return ApiResponse.<List<AdvertisementResponse>>builder()
+//                .result(advertisementService.getAdvertisementByElement(elementName))
 //                .build();
 //    }
 
-//    @GetMapping("/user/{userID}")
-//    ApiResponse<List<AdvertisementResponse>> getAdByUser(@PathVariable("userID") String userID){
-//        return ApiResponse.<List<AdvertisementResponse>>builder()
-//                .result(advertisementService.getAdvertisementByUserID(userID))
-//                .build();
-//    }
+    @PostMapping("/filter")
+    ApiResponse<List<AdvertisementResponse>> getAdByFilter(@RequestBody FindAdByFilterRequest request){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getAdvertisementByFilter(
+                        request.getCategoryName(),
+                        request.getUsername(),
+                        request.getElementName()))
+                .build();
+    }
+
 
     @PutMapping("/{adID}")
     ApiResponse<AdvertisementResponse> updateAd(@PathVariable String adID, @RequestBody AdvertisementUpdateRequest request){

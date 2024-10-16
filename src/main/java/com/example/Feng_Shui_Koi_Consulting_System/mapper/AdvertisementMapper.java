@@ -22,22 +22,18 @@ import java.util.stream.Collectors;
 public interface AdvertisementMapper {
     @Mapping(source = "element", target = "element", qualifiedByName = "mapToElement")
     @Mapping(target = "category", source = "categoryName", qualifiedByName = "mapToCategory")
-    @Mapping(target = "user", source = "username", qualifiedByName = "mapToUser")
     @Mapping(target = "imagesAd", ignore = true)
     Advertisement toAdvertisement(AdvertisementCreationRequest request,
                                   @Context ElementRepo elementRepo,
-                                  @Context CategoryService categoryService,
-                                  @Context UserService userService
+                                  @Context CategoryService categoryService
                                   );
 
     @Mapping(target = "element", source = "element", qualifiedByName = "mapToElement")
     @Mapping(target = "category", source = "categoryName", qualifiedByName = "mapToCategory")
-    @Mapping(target = "user", source = "username", qualifiedByName = "mapToUser")
     @Mapping(target = "imagesAd", ignore = true)
     void updateAdvertisement(@MappingTarget Advertisement advertisement, AdvertisementUpdateRequest request,
                              @Context ElementRepo elementRepo,
-                             @Context CategoryService categoryService,
-                             @Context UserService userService);
+                             @Context CategoryService categoryService);
 
     @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementName")
     @Mapping(target = "category", source = "category", qualifiedByName = "mapToCategoryResponse")
@@ -53,9 +49,8 @@ public interface AdvertisementMapper {
 
     @Named("mapToElement")
     default Element mapToElement(String element, @Context ElementRepo elementRepo) {
-        Element destiny =  elementRepo.findByElementName(element)
+        return elementRepo.findByElementName(element)
                 .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
-        return destiny;
     }
 
     @Named("mapToElementName")
@@ -68,11 +63,6 @@ public interface AdvertisementMapper {
         return CategoryResponse.builder()
                 .categoryName(category.getCategoryName())
                 .build();
-    }
-    @Named("mapToUser")
-    default User mapToUser(String username, @Context UserService userService) {
-        return userService.findByUsername(username);
-
     }
 
     @Named("mapToUserResponse")

@@ -16,6 +16,5 @@ public class AdvertisementUpdateRequest {
     Float price;
     String element;
     String categoryName;
-    String username;
     Set<String> imagesURL;
 }
