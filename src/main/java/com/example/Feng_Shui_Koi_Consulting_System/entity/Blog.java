@@ -22,10 +22,16 @@ public class Blog {
     @Id
     @Column(name = "BlogID")
     String blogID;
+
     @Column(name = "Title")
     String title;
+
+    @Column(name = "ImageURL")
+    String imageURL;
+
     @Column(name = "Description")
     String description;
+
     @Column(name = "CreatedDate")
     LocalDate createdDate;
 
@@ -33,11 +39,6 @@ public class Blog {
     @JoinColumn(name = "UserID", nullable = false, referencedColumnName = "UserID")
     @JsonBackReference
     User user;
-
-    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL
-            ,orphanRemoval = true)
-    @JsonManagedReference
-    Set<Blog_Image> imagesBlog = new HashSet<>();
 
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL
             ,orphanRemoval = true)

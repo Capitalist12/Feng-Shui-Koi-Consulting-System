@@ -18,6 +18,6 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BlogCreationRequest {
     String title;
-    Set<String> imagesURL;
+    String imageURL;
     String description;
 }

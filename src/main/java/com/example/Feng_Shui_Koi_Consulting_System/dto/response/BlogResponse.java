@@ -22,7 +22,7 @@ public class BlogResponse {
     String blogID;
     String title;
     String description;
-    Set<Blog_Image> imagesBlog;
+    String imageURL;
     LocalDate createdDate;
     String user;
     Set<Comment> comments;

@@ -37,26 +37,18 @@ public class BlogService {
                 .blogID(generateBlogID())
                 .title(request.getTitle())
                 .description(request.getDescription())
+                .imageURL(request.getImageURL())
                 .createdDate(LocalDate.now())
                 .user(user)
                 .build();
-        if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
-            Set<Blog_Image> imagesBlog = request.getImagesURL().stream()
-                    .map(imageUrl -> Blog_Image.builder()
-                            .blogImageId(generateImage_Blog())
-                            .imageURL(imageUrl)
-                            .blog(newblog) // Set the association to the advertisement
-                            .build())
-                    .collect(Collectors.toSet());
-            newblog.setImagesBlog(imagesBlog);
-        }
+
         Blog savedblog = blogRepo.save(newblog);
 
         BlogResponse response = BlogResponse.builder()
                 .blogID(savedblog.getBlogID())
                 .title(savedblog.getTitle())
                 .description(savedblog.getDescription())
-                .imagesBlog(savedblog.getImagesBlog())
+                .imageURL(savedblog.getImageURL())
                 .user(savedblog.getUser().getUsername())
                 .createdDate(savedblog.getCreatedDate())
                 .build();
@@ -70,8 +62,8 @@ public class BlogService {
                         .blogID(blog.getBlogID())
                         .title(blog.getTitle())
                         .description(blog.getDescription())
+                        .imageURL(blog.getImageURL())
                         .user(blog.getUser().getUsername())
-                        .imagesBlog(blog.getImagesBlog())
                         .comments(blog.getComments())// Pass the set of Ads_Image directly
                         .build())
                 .collect(Collectors.toList());
