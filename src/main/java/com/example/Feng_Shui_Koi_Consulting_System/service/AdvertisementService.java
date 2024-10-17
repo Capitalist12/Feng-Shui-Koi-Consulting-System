@@ -107,7 +107,7 @@ public class AdvertisementService {
 
 //    @Scheduled(fixedRate = 86400000)
 //    public void deleteOldRejectedAdvertisements() {
-//        LocalDateTime thirtySecondsAgo = LocalDateTime.now().minusDays(7);
+//        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
 //
 //        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(sevenDaysAgo);
 //
