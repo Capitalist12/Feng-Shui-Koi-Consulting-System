@@ -1,0 +1,38 @@
+.nav {
+    width: 100%;
+    position: fixed; /* Giữ cố định thanh navbar ở đầu trang */
+    top: 0; /* Đảm bảo navbar ở ngay đầu trang */
+    left: 0;
+    z-index: 1000; /* Đảm bảo navbar luôn ở trên các phần tử khác */
+    background-color: white; /* Đặt màu nền cho navbar nếu cần */
+    padding: 10px 0; /* Tùy chọn: Điều chỉnh padding để navbar trông đẹp hơn */
+}
+
+.ads-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 50px 200px;
+    gap: 30px;
+    margin-top: 150px; /* Điều chỉnh khoảng cách để tránh navbar chèn vào quảng cáo */
+
+    .advertisement {
+        width: calc(25% - 30px); /* 4 quảng cáo trên 1 hàng */
+        background-color: red;
+        margin-top: 50px; /* Có thể giảm margin-top để gọn gàng hơn */
+        padding: 20px; /* Thêm khoảng đệm trong quảng cáo */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm đổ bóng để hiển thị nổi bật */
+        border-radius: 8px; /* Bo góc cho quảng cáo */
+        transition: transform 0.2s ease; /* Hiệu ứng khi hover */
+
+        &:hover {
+            transform: translateY(-20px); /* Hiệu ứng khi hover để quảng cáo nổi lên */
+        }
+    }
+
+    img {
+        width: 100%;
+        height: 250px; /* Giảm chiều cao ảnh để giữ cân đối */
+        object-fit: cover;
+        border-radius: 8px; /* Bo góc cho ảnh */
+    }
+}
