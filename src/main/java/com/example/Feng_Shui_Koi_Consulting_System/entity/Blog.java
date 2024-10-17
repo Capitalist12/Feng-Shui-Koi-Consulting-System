@@ -7,6 +7,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -22,8 +24,6 @@ public class Blog {
     String blogID;
     @Column(name = "Title")
     String title;
-    @Column(name = "ImageID")
-    String imageID;
     @Column(name = "Description")
     String description;
     @Column(name = "CreatedDate")
@@ -37,8 +37,24 @@ public class Blog {
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL
             ,orphanRemoval = true)
     @JsonManagedReference
+    Set<Blog_Image> blogImages = new HashSet<>();
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL
+            ,orphanRemoval = true)
+    @JsonManagedReference
     Set<Comment> comments;
 
-    @Column(name = "BlogImageID")
-    String blogImageID;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Blog)) return false;
+        Blog blog = (Blog) o;
+        return Objects.equals(blogID, blog.blogID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(blogID);
+    }
 }

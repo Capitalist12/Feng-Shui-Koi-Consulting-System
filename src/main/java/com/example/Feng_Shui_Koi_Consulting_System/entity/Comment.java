@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Comment")
@@ -33,4 +34,17 @@ public class Comment {
     @JoinColumn(name = "BlogID", nullable = false, referencedColumnName = "BlogID")
     @JsonBackReference
     Blog blog;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Comment)) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(commentID, comment.commentID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(commentID);
+    }
 }
