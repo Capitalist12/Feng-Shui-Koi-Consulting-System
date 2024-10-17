@@ -17,10 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BlogCreationRequest {
-    String blogID;
     String title;
-    String imageID;
+    Set<String> imagesURL;
     String description;
-    LocalDate createdDate;
-    String blogImageID;
 }

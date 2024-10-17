@@ -37,7 +37,7 @@ public class Blog {
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL
             ,orphanRemoval = true)
     @JsonManagedReference
-    Set<Blog_Image> blogImages = new HashSet<>();
+    Set<Blog_Image> imagesBlog = new HashSet<>();
 
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL
             ,orphanRemoval = true)
