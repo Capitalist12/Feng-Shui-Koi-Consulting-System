@@ -13,12 +13,8 @@ import org.mapstruct.*;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.SignUpRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

@@ -3,8 +3,6 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Service
 public class ElementCalculationService {
