@@ -26,7 +26,28 @@ public class AdvertisementController {
     @GetMapping
     ApiResponse<List<AdvertisementResponse>> getAllAds(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getAllAdvertisements())
+                .build();
+    }
+
+    @GetMapping("/verified")
+    ApiResponse<List<AdvertisementResponse>> getAds(){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
                 .result(advertisementService.getListAdvertisements())
+                .build();
+    }
+
+    @GetMapping("/pending")
+    ApiResponse<List<AdvertisementResponse>> getAdsPending(){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getListAdvertisementsPending())
+                .build();
+    }
+
+    @GetMapping("/rejected")
+    ApiResponse<List<AdvertisementResponse>> getAdsRejected(){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getListAdvertisementsRejected())
                 .build();
     }
 

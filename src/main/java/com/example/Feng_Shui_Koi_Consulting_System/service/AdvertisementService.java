@@ -4,7 +4,6 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCrea
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.VerifyAdRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Advertisement;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
@@ -12,15 +11,15 @@ import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.AdvertisementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.AdvertisementRepo;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.CategoryRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,6 +43,7 @@ public class AdvertisementService {
         ad.setUser(user);
         ad.setAdID(generateAdID());
         ad.setStatus("Pending");
+        ad.setCreatedDate(LocalDateTime.now());
 
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
             Set<Ads_Image> imagesAd = request.getImagesURL().stream()
@@ -57,16 +57,24 @@ public class AdvertisementService {
                     .collect(Collectors.toSet());
             ad.setImagesAd(imagesAd);
         }
-        return  advertisementMapper.toAdvertisementResponse(advertisementRepo.save(ad));
+        return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(ad));
     }
 
-//    public List<AdvertisementResponse> getListAdvertisements(){
-//        return advertisementRepo.findAll().stream()
-//                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
-//    }
+    public List<AdvertisementResponse> getAllAdvertisements(){
+        return advertisementRepo.findAll().stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
 
     public List<AdvertisementResponse> getListAdvertisements(){
-        return advertisementRepo.findAds().stream()
+        return advertisementRepo.findAdsVerified().stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
+    public List<AdvertisementResponse> getListAdvertisementsPending(){
+        return advertisementRepo.findAdsPending().stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
+    public List<AdvertisementResponse> getListAdvertisementsRejected(){
+        return advertisementRepo.findAdsRejected().stream()
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
 
@@ -81,6 +89,30 @@ public class AdvertisementService {
         advertisement.setStatus(request.getNewStatus());
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
+
+    @Scheduled(fixedRate = 30000)  // Run every 30 seconds
+    public void deleteOldRejectedAdvertisements() {
+        // Get the timestamp of 30 seconds ago
+        LocalDateTime thirtySecondsAgo = LocalDateTime.now().minusSeconds(30);
+
+        // Retrieve rejected advertisements older than 30 seconds
+        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(thirtySecondsAgo);
+
+        // Delete all old rejected ads from the database
+        advertisementRepo.deleteAll(oldRejectedAds);
+    }
+
+//    @Scheduled(fixedRate = 86400000)  // Run every 30 seconds
+//    public void deleteOldRejectedAdvertisements() {
+//        // Get the timestamp of 30 seconds ago
+//        LocalDateTime thirtySecondsAgo = LocalDateTime.now().minusDays(7);
+//
+//        // Retrieve rejected advertisements older than 30 seconds
+//        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(sevenDaysAgo);
+//
+//        // Delete all old rejected ads from the database
+//        advertisementRepo.deleteAll(oldRejectedAds);
+//    }
 
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request){
         Advertisement advertisement = advertisementRepo.findById(adID)

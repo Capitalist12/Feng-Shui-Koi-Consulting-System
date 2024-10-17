@@ -1,12 +1,13 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -32,6 +33,13 @@ public class Advertisement {
     @Column(name = "Price")
     Float price;
 
+    @Column(name = "Status")
+    String status;
+
+    @Column(name = "CreatedDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    LocalDateTime createdDate;
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "ElementID", nullable = false, referencedColumnName = "ElementID")
     @JsonBackReference
@@ -51,9 +59,6 @@ public class Advertisement {
             ,orphanRemoval = true)
     @JsonManagedReference
     Set<Ads_Image> imagesAd = new HashSet<>();
-
-    @Column(name = "Status")
-    String status;
 
     @Override
     public boolean equals(Object o) {
