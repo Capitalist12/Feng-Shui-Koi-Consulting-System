@@ -12,7 +12,7 @@ import UserManagement from "./components/CRUD_User/UserManagement";
 import CompatibilityPage from "./pages/member/CompatibilityPage";
 import ManageUser from "./components/CRUD_User2/ManageUser";
 import Authenticate from "./components/LoginForm/Authenticate";
-import AdvertismentPage from "./pages/member/AdvertismentPage";
+import AdvertisementPage from "./pages/member/AdvertisementPage";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -26,7 +26,7 @@ const App = () => {
     },
     {
       path: "ad",
-      element: <AdvertismentPage />,
+      element: <AdvertisementPage />,
     },
     {
       path: "login",

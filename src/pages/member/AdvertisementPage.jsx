@@ -58,8 +58,10 @@ import { Layout, Button } from "antd";
 import CreateAdForm from "../../components/Advertisement/CreateAdForm";
 import EditAdForm from "../../components/Advertisement/EditAdForm";
 import SearchBar from "../../components/Advertisement/SearchBar";
+import Title from "antd/es/typography/Title";
+import "../../../src/styles/AvertisementPage.scss";
 
-function AdvertismentPage({ currentUser }) {
+function AdvertisementPage({ currentUser }) {
   const [ads, setAds] = useState([]);
   const [editingAd, setEditingAd] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -75,7 +77,7 @@ function AdvertismentPage({ currentUser }) {
 
   const fetchCategories = async () => {
     try {
-      const response = await api.get("/categories");
+      const response = await api.get("/category");
       setCategories(response.data.result);
     } catch (e) {
       console.log("Error fetching categories: ", e);
@@ -106,7 +108,8 @@ function AdvertismentPage({ currentUser }) {
 
   return (
     <Layout>
-      <Navbar />
+      <Navbar className="custom-nav" />
+      <Title className="custom-title">SHOP</Title>
       <SearchBar categories={categories} onSearch={handleSearch} />
 
       {/* Hiển thị form tạo quảng cáo nếu là Member hoặc Admin */}
@@ -141,4 +144,4 @@ function AdvertismentPage({ currentUser }) {
   );
 }
 
-export default AdvertismentPage;
+export default AdvertisementPage;
