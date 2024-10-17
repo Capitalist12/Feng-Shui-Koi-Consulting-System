@@ -1,0 +1,32 @@
+#blog-section {
+    width: 100%;
+    height: 100vh;
+    background-color: red;
+    display: block;
+
+    .banner{
+        height: 250px;
+        background-image: url("../assets/images/banner1.png");
+        background-size: contain;
+        background-position: center;
+        width: 100%;
+    }
+
+    .blogs-row{
+        display: flex;
+        justify-content: center;
+        background-color: #1f1f1f;
+        min-height: 100%;
+
+        .blogs-col {
+            width: 100%;
+            min-height: 100%;
+            background-color: #131518;
+        }
+
+        .blog-content-col{
+            background-color: white;
+            padding: 40px;
+        }
+    }
+}

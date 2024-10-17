@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import { Image, message, Upload } from "antd";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { Button, Image, message, Upload } from "antd";
 
-const MAX_COUNT = 5;
 const MAX_SIZE = 10 * 1024 * 1024;
 
 const getBase64 = (file) =>
@@ -15,7 +14,7 @@ const getBase64 = (file) =>
     };
   });
 
-const UploadImage = ({ value = [], onChange }) => {
+const UploadImage = ({ value = [], onChange, MAX_COUNT, uploadType }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
 
@@ -33,22 +32,28 @@ const UploadImage = ({ value = [], onChange }) => {
   };
 
   const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      <PlusOutlined />
-      <div
+    uploadType === "picture"
+      ?
+      <Button type="primary" icon={<UploadOutlined />}>
+        Đăng tải
+      </Button>
+      :
+      <button
         style={{
-          marginTop: 8,
+          border: 0,
+          background: "none",
         }}
+        type="button"
       >
-        Upload
-      </div>
-    </button>
+        <PlusOutlined />
+        <div
+          style={{
+            marginTop: 8,
+          }}
+        >
+          Đăng tải
+        </div>
+      </button>
   );
 
   const handleImageSize = (file) => {
@@ -68,7 +73,7 @@ const UploadImage = ({ value = [], onChange }) => {
       <Upload
         // action="https://66e7ed93b17821a9d9da9375.mockapi.io/koi"
         beforeUpload={handleImageSize}
-        listType="picture-card"
+        listType={uploadType}
         fileList={value} // Bind to form's `value`
         onPreview={handlePreview}
         onChange={handleChange}

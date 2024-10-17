@@ -1,0 +1,110 @@
+#blog-editor-section {
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .editor {
+        padding: 20px;
+        overflow-y: auto;
+
+
+        #toolbar {
+            background-color: #e0e0e0;
+            border: 1.5px solid black;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .quill {
+            min-height: 350px;
+            
+            .ql-container.ql-snow {
+                min-height: 350px;
+                border: 1.5px solid black;
+                border-top: 0;
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+                
+                .ql-editor{
+                    min-height: 350px;
+                }
+            }
+        }
+
+        .ant-tooltip.ant-tooltip-placement-top{
+            display: none !important;
+            visibility: hidden !important;
+        }
+    }
+
+    .preview {
+        padding: 20px;
+        overflow-y: auto;
+        height: 100vh;
+        max-width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .ql-align-left {
+            float: left;
+            margin-right: 10px;
+        }
+    
+        .ql-align-right {
+            float: right;
+            margin-left: 10px;
+        }
+    
+        .ql-align-center {
+            display: block;
+            text-align: center;
+        }
+
+        .preview-content {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 95%;
+            height: 100%;
+            overflow-y: auto;
+
+            h2{
+                text-align: center;
+                color: #ccc;
+                min-height: 40px;
+
+                &.content-title{
+                    color: black;
+                }
+            }
+
+            .content-body{
+                padding: 0 20px;
+            }
+        }
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+
+        &.ql-align-left {
+            float: left;
+            margin-right: 10px;
+        }
+    
+        &.ql-align-right {
+            float: right;
+            margin-left: 10px;
+        }
+    
+        &.ql-align-center {
+            display: block;
+            margin: 0 auto;
+        }
+    }
+
+}
