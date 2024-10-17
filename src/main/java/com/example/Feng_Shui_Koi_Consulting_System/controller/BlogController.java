@@ -4,6 +4,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.BlogCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.BlogResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.BlogService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,13 @@ public class BlogController {
     ApiResponse<List<BlogResponse>> getAllBlogs(){
         return ApiResponse.<List<BlogResponse>>builder()
                 .result(blogService.getListBlogs())
+                .build();
+    }
+
+    @GetMapping("/{blogID}")
+    ApiResponse<BlogResponse> getBlogById(@PathVariable("blogID") String blogID) {
+        return ApiResponse.<BlogResponse>builder()
+                .result(blogService.getBlogByID(blogID))
                 .build();
     }
 }

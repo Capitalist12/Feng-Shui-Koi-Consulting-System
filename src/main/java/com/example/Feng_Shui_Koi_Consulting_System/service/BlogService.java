@@ -68,7 +68,18 @@ public class BlogService {
                         .build())
                 .collect(Collectors.toList());
     }
-
+    public BlogResponse getBlogByID(String blogID) {
+        return blogRepo.findById(blogID)
+                .map(blog -> BlogResponse.builder()
+                        .blogID(blog.getBlogID())
+                        .title(blog.getTitle())
+                        .description(blog.getDescription())
+                        .imageURL(blog.getImageURL()) // Assuming you want to return the set of Blog_Image
+                        .user(blog.getUser().getUsername())
+                        .comments(blog.getComments()) // Assuming comments is a Set<Comment>
+                        .build())
+                .orElseThrow(() -> new AppException(ErrorCode.BLOG_NOT_FOUND));
+    }
     public String generateBlogID(){
         return "BLOG" + String.format("%05d", System.nanoTime() % 100000);
     }
