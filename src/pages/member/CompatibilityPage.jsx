@@ -26,12 +26,13 @@ function CompatibilityPage() {
   const [resultData, setResultData] = useState(null); // Lưu kết quả tính toán
   const [isModalVisible, setIsModalVisible] = useState(false); // Quản lý trạng thái modal
 
+  const fetchData = async () => {
+    setLoading(true);
+    await Promise.all([fetchFishData(), fetchTankData()]);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await Promise.all([fetchFishData(), fetchTankData()]);
-      setLoading(false);
-    };
     fetchData();
   }, []);
 

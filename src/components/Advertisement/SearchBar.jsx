@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Input, Select } from "antd";
+import { Input, Select, Button } from "antd";
 
 const { Option } = Select;
 
 const SearchBar = ({ categories, onSearch }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchValue, setSearchValue] = useState("");
 
-  const handleSearch = (value) => {
-    onSearch(value, selectedCategory);
+  const handleSearch = () => {
+    onSearch(searchValue, selectedCategory);
   };
 
   const handleCategoryChange = (value) => {
@@ -16,10 +17,10 @@ const SearchBar = ({ categories, onSearch }) => {
 
   return (
     <div className="search-bar">
-      <Input.Search
+      <Input
         placeholder="Tìm kiếm quảng cáo..."
-        onSearch={handleSearch}
-        enterButton
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
         style={{ width: 400 }}
       />
       <Select
@@ -33,6 +34,13 @@ const SearchBar = ({ categories, onSearch }) => {
           </Option>
         ))}
       </Select>
+      <Button
+        type="primary"
+        onClick={handleSearch}
+        style={{ marginLeft: "10px" }}
+      >
+        Tìm kiếm
+      </Button>
     </div>
   );
 };

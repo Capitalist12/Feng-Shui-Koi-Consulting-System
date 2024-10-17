@@ -1,52 +1,95 @@
 import React, { useState } from "react";
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button, Select, Upload, message } from "antd";
 import api from "../../config/axiosConfig";
 
+const { Option } = Select;
+
 const CreateAdForm = ({ currentUser, fetchAds }) => {
-  const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
+  const [images, setImages] = useState([]);
 
-  const onFinish = async (values) => {
+  const handleFinish = async (values) => {
     try {
-      setLoading(true);
-      const response = await api.post("/ad", {
+      await api.post("/ad", {
         ...values,
-
-        user: currentUser, // Gán tên người đăng bài
-        imagesURL: values.imagesURL ? [values.imagesURL] : [],
+        imagesURL: images,
       });
-      message.success("Đăng quảng cáo thành công!");
+      message.success("Đã đăng quảng cáo thành công!");
+      form.resetFields();
+      setImages([]);
       fetchAds(); // Cập nhật danh sách quảng cáo
-      setLoading(false);
     } catch (error) {
-      message.error("Có lỗi xảy ra khi đăng quảng cáo.");
-      setLoading(false);
+      message.error("Đăng quảng cáo không thành công!");
     }
   };
 
+  const handleImageChange = (fileList) => {
+    const newImages = fileList.map((file) => file.originFileObj);
+    setImages(newImages);
+  };
+
   return (
-    <Form onFinish={onFinish} layout="vertical">
-      <Form.Item name="title" label="Tiêu đề" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="description" label="Mô tả" rules={[{ required: true }]}>
-        <Input.TextArea rows={4} />
-      </Form.Item>
-      <Form.Item name="price" label="Giá" rules={[{ required: true }]}>
-        <Input type="number" />
-      </Form.Item>
+    <Form form={form} layout="vertical" onFinish={handleFinish}>
       <Form.Item
-        name="categoryName"
-        label="Danh mục"
-        rules={[{ required: true }]}
+        label="Tiêu đề"
+        name="title"
+        rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
       >
         <Input />
       </Form.Item>
-      <Form.Item name="imagesURL" label="URL hình ảnh">
-        <Input />
+      <Form.Item
+        label="Mô tả"
+        name="description"
+        rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
+      >
+        <Input.TextArea />
       </Form.Item>
-      <Button type="primary" htmlType="submit" loading={loading}>
-        Đăng bài
-      </Button>
+      <Form.Item
+        label="Giá"
+        name="price"
+        rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
+      >
+        <Input type="number" />
+      </Form.Item>
+      <Form.Item
+        label="Mệnh"
+        name="element"
+        rules={[{ required: true, message: "Vui lòng chọn mệnh!" }]}
+      >
+        <Select>
+          <Option value="Metal">Kim</Option>
+          <Option value="Earth">Thổ</Option>
+          <Option value="Water">Thủy</Option>
+          <Option value="Fire">Hỏa</Option>
+          <Option value="Wood">Mộc</Option>
+        </Select>
+      </Form.Item>
+      <Form.Item
+        label="Danh mục"
+        name="categoryName"
+        rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
+      >
+        <Select>
+          <Option value="Koi Fish">Cá Koi</Option>
+          <Option value="Aquarium Supplies">Thiết bị hồ cá</Option>
+          <Option value="Feng Shui Items">Vật phẩm phong thủy</Option>
+        </Select>
+      </Form.Item>
+      <Form.Item label="Hình ảnh" name="images">
+        <Upload
+          beforeUpload={() => false} // Ngăn chặn tự động upload
+          onChange={({ fileList }) => handleImageChange(fileList)}
+          fileList={images}
+          multiple
+        >
+          <Button>Chọn hình ảnh</Button>
+        </Upload>
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Đăng quảng cáo
+        </Button>
+      </Form.Item>
     </Form>
   );
 };

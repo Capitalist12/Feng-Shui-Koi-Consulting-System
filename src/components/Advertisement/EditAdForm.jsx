@@ -1,55 +1,103 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Button, message } from "antd";
+import React, { useEffect, useState } from "react";
+import { Form, Input, Button, Select, Upload, message } from "antd";
 import api from "../../config/axiosConfig";
+
+const { Option } = Select;
 
 const EditAdForm = ({ ad, fetchAds }) => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState(ad.imagesAd || []);
 
   useEffect(() => {
-    form.setFieldsValue(ad); // Đặt giá trị ban đầu cho form từ bài quảng cáo hiện tại
-  }, [ad, form]);
+    form.setFieldsValue({
+      title: ad.title,
+      description: ad.description,
+      price: ad.price,
+      element: ad.element,
+      categoryName: ad.category.categoryName,
+    });
+  }, [ad]);
 
-  const onFinish = async (values) => {
+  const handleFinish = async (values) => {
     try {
-      setLoading(true);
       await api.put(`/ad/${ad.adID}`, {
         ...values,
-        imagesURL: values.imagesURL ? [values.imagesURL] : [],
+        imagesURL: images,
       });
-      message.success("Sửa quảng cáo thành công!");
+      message.success("Đã chỉnh sửa quảng cáo thành công!");
       fetchAds(); // Cập nhật danh sách quảng cáo
-      setLoading(false);
     } catch (error) {
-      message.error("Có lỗi xảy ra khi sửa quảng cáo.");
-      setLoading(false);
+      message.error("Chỉnh sửa quảng cáo không thành công!");
     }
   };
 
+  const handleImageChange = (fileList) => {
+    const newImages = fileList.map((file) => file.originFileObj);
+    setImages(newImages);
+  };
+
   return (
-    <Form form={form} onFinish={onFinish} layout="vertical">
-      <Form.Item name="title" label="Tiêu đề" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="description" label="Mô tả" rules={[{ required: true }]}>
-        <Input.TextArea rows={4} />
-      </Form.Item>
-      <Form.Item name="price" label="Giá" rules={[{ required: true }]}>
-        <Input type="number" />
-      </Form.Item>
+    <Form form={form} layout="vertical" onFinish={handleFinish}>
       <Form.Item
-        name="categoryName"
-        label="Danh mục"
-        rules={[{ required: true }]}
+        label="Tiêu đề"
+        name="title"
+        rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
       >
         <Input />
       </Form.Item>
-      <Form.Item name="imagesURL" label="URL hình ảnh">
-        <Input />
+      <Form.Item
+        label="Mô tả"
+        name="description"
+        rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
+      >
+        <Input.TextArea />
       </Form.Item>
-      <Button type="primary" htmlType="submit" loading={loading}>
-        Sửa bài
-      </Button>
+      <Form.Item
+        label="Giá"
+        name="price"
+        rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
+      >
+        <Input type="number" />
+      </Form.Item>
+      <Form.Item
+        label="Mệnh"
+        name="element"
+        rules={[{ required: true, message: "Vui lòng chọn mệnh!" }]}
+      >
+        <Select>
+          <Option value="Metal">Kim</Option>
+          <Option value="Earth">Thổ</Option>
+          <Option value="Water">Thủy</Option>
+          <Option value="Fire">Hỏa</Option>
+          <Option value="Wood">Mộc</Option>
+        </Select>
+      </Form.Item>
+      <Form.Item
+        label="Danh mục"
+        name="categoryName"
+        rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
+      >
+        <Select>
+          <Option value="Koi Fish">Cá Koi</Option>
+          <Option value="Aquarium Supplies">Thiết bị hồ cá</Option>
+          <Option value="Feng Shui Items">Vật phẩm phong thủy</Option>
+        </Select>
+      </Form.Item>
+      <Form.Item label="Hình ảnh" name="images">
+        <Upload
+          beforeUpload={() => false}
+          onChange={({ fileList }) => handleImageChange(fileList)}
+          fileList={images}
+          multiple
+        >
+          <Button>Chọn hình ảnh</Button>
+        </Upload>
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Cập nhật quảng cáo
+        </Button>
+      </Form.Item>
     </Form>
   );
 };

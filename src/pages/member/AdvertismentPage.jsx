@@ -50,7 +50,7 @@
 // };
 
 // export default AdvertismentPage;
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../../config/axiosConfig";
 import "../../styles/Advertisement.scss";
 import Navbar from "../../components/Utils/Navbar";
@@ -61,7 +61,7 @@ import SearchBar from "../../components/Advertisement/SearchBar";
 
 function AdvertismentPage({ currentUser }) {
   const [ads, setAds] = useState([]);
-  const [editingAd, setEditingAd] = useState(null); // Dùng để chỉnh sửa
+  const [editingAd, setEditingAd] = useState(null);
   const [categories, setCategories] = useState([]);
 
   const fetchAds = async () => {
@@ -108,7 +108,9 @@ function AdvertismentPage({ currentUser }) {
     <Layout>
       <Navbar />
       <SearchBar categories={categories} onSearch={handleSearch} />
-      {currentUser === "Member" || currentUser === "Admin" ? (
+
+      {/* Hiển thị form tạo quảng cáo nếu là Member hoặc Admin */}
+      {currentUser === "Member" ? (
         <CreateAdForm currentUser={currentUser} fetchAds={fetchAds} />
       ) : null}
 
@@ -118,8 +120,8 @@ function AdvertismentPage({ currentUser }) {
         <div className="ads-list">
           {ads.map((ad) => (
             <div key={ad.adID} className="advertisement">
-              <h2>{ad.title}</h2>
-              <h3>Mệnh: {ad.element}</h3>
+              <h2>Mệnh: {ad.element}</h2>
+              <h3>{ad.title}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
               <p>Mô tả: {ad.description}</p>
               <p>Giá: ${ad.price}</p>
@@ -127,7 +129,10 @@ function AdvertismentPage({ currentUser }) {
               <p className="ad-category">
                 Danh mục: {ad.category.categoryName}
               </p>
-              <Button onClick={() => setEditingAd(ad)}>Sửa</Button>
+              {/* Hiển thị nút sửa chỉ khi là Member hoặc Admin */}
+              {(currentUser === "Member" || currentUser === "Admin") && (
+                <Button onClick={() => setEditingAd(ad)}>Sửa</Button>
+              )}
             </div>
           ))}
         </div>
