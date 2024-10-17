@@ -102,15 +102,12 @@ public class AdvertisementService {
         advertisementRepo.deleteAll(oldRejectedAds);
     }
 
-//    @Scheduled(fixedRate = 86400000)  // Run every 30 seconds
+//    @Scheduled(fixedRate = 86400000)
 //    public void deleteOldRejectedAdvertisements() {
-//        // Get the timestamp of 30 seconds ago
 //        LocalDateTime thirtySecondsAgo = LocalDateTime.now().minusDays(7);
 //
-//        // Retrieve rejected advertisements older than 30 seconds
 //        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(sevenDaysAgo);
 //
-//        // Delete all old rejected ads from the database
 //        advertisementRepo.deleteAll(oldRejectedAds);
 //    }
 
