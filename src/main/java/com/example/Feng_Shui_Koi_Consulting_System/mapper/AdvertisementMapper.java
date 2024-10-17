@@ -69,6 +69,7 @@ public interface AdvertisementMapper {
     default UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
                 .username(user.getUsername())
+                .roleName(user.getRoleName())
                 .build();
     }
 
