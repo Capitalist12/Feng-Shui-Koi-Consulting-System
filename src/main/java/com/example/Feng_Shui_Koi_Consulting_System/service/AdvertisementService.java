@@ -86,6 +86,9 @@ public class AdvertisementService {
     public AdvertisementResponse verifyAd(VerifyAdRequest request){
         Advertisement advertisement = advertisementRepo.findById(request.getAdID())
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
+        if(!request.getNewStatus().equals("Verified") && !request.getNewStatus().equals("Rejected")){
+            throw new AppException(ErrorCode.STATUS_INVALID);
+        }
         advertisement.setStatus(request.getNewStatus());
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
