@@ -1,67 +1,65 @@
-// Định nghĩa keyframes cho animation
-@keyframes highlight {
-    0% {
-      background-color: #ff8177; // Màu nền nhẹ
+// @keyframes highlight {
+//   0% {
+//     background-color: #ff8177; // Màu nền nhẹ
+//   }
+//   30% {
+//     background-color: #ff867a; // Màu nền nhẹ
+//   }
+//   50% {
+//     background-color: #ff8c7f; // Màu nền đậm hơn
+//   }
+//   70% {
+//     background-color: #f99185; // Màu nền đậm hơn
+//   }
+//   90% {
+//     background-color: #ff9a9e; // Trở lại màu nền nhẹ
+//   }
+//   100% {
+//     background-color: #f99185; // Giữ nguyên màu nền sau animation
+//   }
+// }
+
+
+.custom-table {
+  .ant-table {
+    border: 1px solid #d9d9d9;
+
+    // Styles cho tiêu đề cột
+    th {
+      background-color: darkgrey !important;
+      color: black;
+      font-weight: 500;
+      text-align: center;
+      font-size: 15px;
     }
-    30% {
-      background-color: #ff867a; // Màu nền nhẹ
-    }
-    50% {
-      background-color: #ff8c7f; // Màu nền đậm hơn
-    }
-    70% {
-      background-color: #f99185; // Màu nền đậm hơn
-    }
-    90% {
-      background-color: #ff9a9e; // Trở lại màu nền nhẹ
-    }
-    100% {
-      background-color: #f99185; // Giữ nguyên màu nền sau animation
-    }
-  }
-  
-  // Áp dụng style cho bảng trong KoiList
-  .custom-table {
-    .ant-table {
-      border: 1px solid #d9d9d9;
-  
-      // Styles cho tiêu đề cột
-      th {
-        background-color: darkgrey !important;
-        color: black;
-        font-weight: 500;
-        text-align: center;
-        font-size: 15px;
-      }
-  
-      // Áp dụng cho hàng
-      tr {
-        // Hiệu ứng hover cho hàng chưa chọn
-        &:hover {
-          animation: highlight 0.3s ease-in-out !important; 
+
+    // Áp dụng cho hàng
+    tr {
+      // Hiệu ứng hover cho hàng chưa chọn
+      &:hover {
+        animation: highlight 0.3s ease-in-out !important;
         //   background-color: burlywood; // Màu nền khi hover
-        }
-  
-        // Áp dụng cho hàng đã chọn
-        &.selected-row {
-          background-color: burlywood; // Màu nền cho hàng đã chọn
-          animation: none !important; // Tắt animation cho hàng đã chọn
-          transition: background-color 0.3s !important; // Thêm transition cho mượt mà
-  
-          // Tăng độ đậm khi hover qua hàng đã chọn
+      }
+
+      // Áp dụng cho hàng đã chọn
+      &.selected-row {
+        background-color: burlywood; // Màu nền cho hàng đã chọn
+        animation: none !important; // Tắt animation cho hàng đã chọn
+        transition: background-color 0.3s !important; // Thêm transition cho mượt mà
+
+        // Tăng độ đậm khi hover qua hàng đã chọn
         //   &:hover {
         //     background-color: rgba(135, 206, 235, 1); // Đậm hơn khi hover
         //   }
-        }
       }
     }
   }
-  
+}
 
-#sec1 {
+#sec1-comp {
   padding: 20px;
   margin: 20px 0;
-  height: 80vh;
+  height: 90vh;
 
   h2 {
     margin-top: -10px;
@@ -73,26 +71,57 @@
     font-weight: 800; /* Adjust Title weight */
     color: #ff6347; /* Tomato color for Title */
   }
+  .infor-data{
+    display: flex; /* Sử dụng flexbox */
+    justify-content: space-between; /* Tạo khoảng cách giữa các khối */
+    margin-top: 40vh; /* Thêm khoảng cách trên khối */
+    
+    p {
+      flex: 1; /* Mỗi khối sẽ chiếm 1 phần không gian bằng nhau */
+      margin: 0 10px; /* Thêm khoảng cách giữa các khối */
+      background-color: #ea0606; /* Thêm màu nền (tuỳ chọn) */
+      padding: 10px; /* Thêm khoảng cách bên trong (tuỳ chọn) */
+      border-radius: 5px; /* Bo góc cho khối (tuỳ chọn) */
+      height: 100px;
+
+    }
+  }
+  .background-comp {
+    background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0; // Đặt giá trị mặc định là 1
+    transition: opacity 0.3s ease; // Thêm transition cho mượt mà
+  }
 }
 
-#sec2 {
-    .h2 {
-      color: white;
-    }
-  
-    
+#sec2-comp {
+  .h2 {
+    color: white;
   }
-.background {
+}
+.background-comp {
   background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
   height: 100%;
   width: 100%;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: scroll;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 0;
   pointer-events: none;
+  opacity: 0; // Đặt giá trị mặc định là 1
+  transition: opacity 0.3s ease; // Thêm transition cho mượt mà
 }

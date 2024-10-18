@@ -1,38 +1,62 @@
+.custom-nav {
+  margin-bottom: 50px;
+}
+
+.custom-title {
+  margin-top: 100px;
+}
+.custom-pagination {
+  margin-top: 16px;
+  align-self: center; /* Căn giữa pagination */
+}
+.layout {
+  .background-ads {
+    background-color: green !important;
+  }
+}
 .nav {
-    width: 100%;
-    position: fixed; /* Giữ cố định thanh navbar ở đầu trang */
-    top: 0; /* Đảm bảo navbar ở ngay đầu trang */
-    left: 0;
-    z-index: 1000; /* Đảm bảo navbar luôn ở trên các phần tử khác */
-    background-color: white; /* Đặt màu nền cho navbar nếu cần */
-    padding: 10px 0; /* Tùy chọn: Điều chỉnh padding để navbar trông đẹp hơn */
+  width: 100%;
+  position: fixed; /* Giữ cố định thanh navbar ở đầu trang */
+  top: 0; /* Đảm bảo navbar ở ngay đầu trang */
+  left: 0;
+  z-index: 1000; /* Đảm bảo navbar luôn ở trên các phần tử khác */
+  background-color: white; /* Đặt màu nền cho navbar nếu cần */
+  padding: 10px 0; /* Tùy chọn: Điều chỉnh padding để navbar trông đẹp hơn */
 }
 
 .ads-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 50px 200px;
+  gap: 30px;
+  margin-top: 150px; /* Khoảng cách với navbar */
+
+  .advertisement {
+    width: calc(25% - 30px); /* 4 quảng cáo trên 1 hàng */
+    background-color: red;
+    margin-top: 50px; /* Giảm margin-top nếu cần */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-20px);
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  /* Thêm phần này để căn giữa pagination */
+  .pagination {
+    width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    padding: 50px 200px;
-    gap: 30px;
-    margin-top: 150px; /* Điều chỉnh khoảng cách để tránh navbar chèn vào quảng cáo */
-
-    .advertisement {
-        width: calc(25% - 30px); /* 4 quảng cáo trên 1 hàng */
-        background-color: red;
-        margin-top: 50px; /* Có thể giảm margin-top để gọn gàng hơn */
-        padding: 20px; /* Thêm khoảng đệm trong quảng cáo */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm đổ bóng để hiển thị nổi bật */
-        border-radius: 8px; /* Bo góc cho quảng cáo */
-        transition: transform 0.2s ease; /* Hiệu ứng khi hover */
-
-        &:hover {
-            transform: translateY(-20px); /* Hiệu ứng khi hover để quảng cáo nổi lên */
-        }
-    }
-
-    img {
-        width: 100%;
-        height: 250px; /* Giảm chiều cao ảnh để giữ cân đối */
-        object-fit: cover;
-        border-radius: 8px; /* Bo góc cho ảnh */
-    }
+    justify-content: center; /* Căn giữa pagination */
+    margin-top: 30px; /* Khoảng cách giữa quảng cáo và pagination */
+  }
 }

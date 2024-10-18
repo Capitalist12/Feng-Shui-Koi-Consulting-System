@@ -22,7 +22,8 @@ function CompatibilityPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedElement, setSelectedElement] = useState("");
-
+  const [fishCount, setFishCount] = useState(0);
+  const [tankCount, setTankCount] = useState(0);
   const [resultData, setResultData] = useState(null); // Lưu kết quả tính toán
   const [isModalVisible, setIsModalVisible] = useState(false); // Quản lý trạng thái modal
 
@@ -40,6 +41,7 @@ function CompatibilityPage() {
     try {
       const response = await getAllKoiFish();
       const data = response?.data?.result || [];
+      setFishCount(response.data.result.length);
       setKoiData(Array.isArray(data) ? data : []);
     } catch (error) {
       message.error("Error fetching fish data: " + error.message);
@@ -48,8 +50,28 @@ function CompatibilityPage() {
 
   const fetchTankData = async () => {
     try {
-      const data = await fetchTank();
-      setTankData(Array.isArray(data.result) ? data.result : []);
+      const response = await fetchTank(); // Gọi API lấy dữ liệu hồ
+      console.log("Tank API Response:", response); // Kiểm tra phản hồi từ API
+
+      // Kiểm tra xem response.data có tồn tại
+      if (response && response.data) {
+        console.log("Response Data:", response.data); // Kiểm tra dữ liệu bên trong response.data
+
+        // Kiểm tra xem có thuộc tính result hay không
+        if (Array.isArray(response.data.result)) {
+          const data = response.data.result; // Lấy danh sách các hồ
+          setTankCount(data.length); // Đếm số lượng hồ
+          setTankData(data); // Lưu dữ liệu vào state
+        } else {
+          throw new Error(
+            "Result is not an array: " + JSON.stringify(response.data)
+          );
+        }
+      } else {
+        throw new Error(
+          "Unexpected response structure: " + JSON.stringify(response)
+        );
+      }
     } catch (error) {
       message.error("Error fetching tank data: " + error.message);
     }
@@ -98,6 +120,7 @@ function CompatibilityPage() {
 
     console.log("Payload gửi đến API:", payload);
     try {
+      nd - com;
       const response = await api.post("compatibility", payload);
       const result = response.data.result; // Lấy dữ liệu từ API
 
@@ -114,83 +137,86 @@ function CompatibilityPage() {
   };
 
   return (
-    <Layout className="layout" style={{ marginBottom: "200px" }}>
-      <div className="background"></div>
-      <section id="navbar-section">
-        <Navbar />
-      </section>
+    <Layout style={{ marginBottom: "200px" }}>
+      <Navbar />
       <Content className="compatibility-page" style={{ padding: "20px" }}>
-        <section id="sec1">
+        <section id="sec1-comp">
           <Title style={{ marginTop: "50px" }}>Tính độ tương hợp</Title>
+          <div className="background"></div>
           <h2>
             Bạn đang phân vân loại cá và hồ nào, tính thử độ tương hợp ngay nhé
             !
           </h2>
+          <div className="infor-data">
+            <div>
+              <p>{fishCount} con cá Koi với đa dạng chủng loại và màu sắc </p>
+            </div>
+            <div>
+              <p>{tankCount} cái hồ với những kiểu dáng khác nhau</p>
+            </div>
+          </div>
         </section>
-
-        {loading ? (
-          <Spin size="large" />
-        ) : (
-          <>
-            <section id="sec2">
-              <Row gutter={[24, 16]}>
-                <Col span={8}>
-                  <div className="custom-title">
-                    <Title level={2}>Danh Sách Cá</Title>
-                  </div>
-                  <div className="custom-table">
-                    <KoiList
-                      koiData={koiData}
-                      handleSelectFish={handleSelectFish}
-                      isKoiSelected={(fish) => selectedFish.includes(fish)}
-                      searchTerm={searchTerm}
-                      handleSearchTermChange={(e) =>
-                        setSearchTerm(e.target.value)
-                      }
-                    />
-                  </div>
-                </Col>
-
-                <Col
-                  span={8}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <SelectedItems
-                    selectedFish={selectedFish}
-                    selectedTank={selectedTank}
-                    handleRemoveTank={handleRemoveTank}
+        <>
+          <section id="sec2-comp">
+            <Row gutter={[24, 16]}>
+              <Col span={8}>
+                <div className="custom-title">
+                  <Title level={2}>Danh Sách Cá</Title>
+                </div>
+                <div className="custom-table">
+                  <KoiList
+                    koiData={koiData}
                     handleSelectFish={handleSelectFish}
+                    isKoiSelected={(fish) => selectedFish.includes(fish)}
+                    searchTerm={searchTerm}
+                    handleSearchTermChange={(e) =>
+                      setSearchTerm(e.target.value)
+                    }
                   />
+                </div>
+              </Col>
 
-                  <CompatibilityForm
-                    selectedElement={selectedElement}
-                    setSelectedElement={setSelectedElement}
-                    handleCalculateCompatibility={handleCalculateCompatibility}
+              <Col
+                span={8}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <SelectedItems
+                  selectedFish={selectedFish}
+                  selectedTank={selectedTank}
+                  handleRemoveTank={handleRemoveTank}
+                  handleSelectFish={handleSelectFish}
+                />
+
+                <CompatibilityForm
+                  selectedElement={selectedElement}
+                  setSelectedElement={setSelectedElement}
+                  handleCalculateCompatibility={handleCalculateCompatibility}
+                />
+              </Col>
+
+              <Col
+                span={8}
+                style={{ display: "flex", flexDirection: "column" }}
+              >
+                <Title level={2} style={{ marginTop: "100px" }}>
+                  Danh Sách Hồ
+                </Title>
+                <div className="custom-table">
+                  <TankList
+                    tankData={tankData}
+                    handleSelectTank={handleSelectTank}
+                    isTankSelected={(tank) => selectedTank === tank}
                   />
-                </Col>
-
-                <Col
-                  span={8}
-                  style={{ display: "flex", flexDirection: "column" }}
-                >
-                  <Title level={2}>Danh Sách Hồ</Title>
-                  <div className="custom-table">
-                    <TankList
-                      tankData={tankData}
-                      handleSelectTank={handleSelectTank}
-                      isTankSelected={(tank) => selectedTank === tank}
-                    />
-                  </div>
-                </Col>
-              </Row>
-            </section>
-          </>
-        )}
+                </div>
+              </Col>
+            </Row>
+          </section>
+        </>
 
         <Result
           isVisible={isModalVisible}

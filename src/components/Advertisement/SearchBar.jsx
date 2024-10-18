@@ -23,7 +23,7 @@ const SearchBar = ({ categories, onSearch }) => {
         onChange={(e) => setSearchValue(e.target.value)}
         style={{ width: 400 }}
       />
-      <Select
+      {/* <Select
         placeholder="Chọn danh mục"
         style={{ width: 200, marginLeft: "10px" }}
         onChange={handleCategoryChange}
@@ -33,7 +33,7 @@ const SearchBar = ({ categories, onSearch }) => {
             {category.categoryName}
           </Option>
         ))}
-      </Select>
+      </Select> */}
       <Button
         type="primary"
         onClick={handleSearch}
