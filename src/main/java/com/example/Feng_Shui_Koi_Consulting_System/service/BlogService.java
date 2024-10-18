@@ -2,6 +2,7 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.BlogRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.BlogResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CommentResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Blog;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
@@ -61,7 +62,14 @@ public class BlogService {
                         .description(blog.getDescription())
                         .imageURL(blog.getImageURL())
                         .user(blog.getUser().getUsername())
-                        .comments(blog.getComments())// Pass the set of Ads_Image directly
+                        .comments(blog.getComments().stream()
+                                .map(comment -> CommentResponse.builder()
+                                        .commentID(comment.getCommentID())
+                                        .commentDate(comment.getCommentDate())
+                                        .content(comment.getContent())
+                                        .username(comment.getUser().getUsername())
+                                        .build())
+                                .collect(Collectors.toList()))
                         .build())
                 .collect(Collectors.toList());
     }
@@ -71,9 +79,16 @@ public class BlogService {
                         .blogID(blog.getBlogID())
                         .title(blog.getTitle())
                         .description(blog.getDescription())
-                        .imageURL(blog.getImageURL()) // Assuming you want to return the set of Blog_Image
+                        .imageURL(blog.getImageURL())
                         .user(blog.getUser().getUsername())
-                        .comments(blog.getComments()) // Assuming comments is a Set<Comment>
+                        .comments(blog.getComments().stream()
+                                .map(comment -> CommentResponse.builder()
+                                        .commentID(comment.getCommentID())
+                                        .commentDate(comment.getCommentDate())
+                                        .content(comment.getContent())
+                                        .username(comment.getUser().getUsername()) // Include username
+                                        .build())
+                                .collect(Collectors.toList()))
                         .build())
                 .orElseThrow(() -> new AppException(ErrorCode.BLOG_NOT_FOUND));
     }
