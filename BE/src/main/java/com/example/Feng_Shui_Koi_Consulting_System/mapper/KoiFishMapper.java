@@ -4,7 +4,6 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationReque
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ElementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiFishResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiFishResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiTypesResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
@@ -73,6 +72,9 @@ public interface KoiFishMapper {
                         .quantity(element.getQuantity())
                         .direction(element.getDirection())
                         .value(element.getValue())
+                        .color(element.getColor())
+                        .generation(element.getGeneration())
+                        .inhibition(element.getInhibition())
                         .build())
                 .collect(Collectors.toSet());
     }

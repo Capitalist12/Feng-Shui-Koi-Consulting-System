@@ -7,11 +7,10 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AuthenticationServices;
 import com.example.Feng_Shui_Koi_Consulting_System.service.EmailService;
 import com.nimbusds.jose.JOSEException;
+import com.stripe.exception.StripeException;
 import jakarta.validation.Valid;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -34,6 +33,11 @@ public class AuthenticationAPI {
 
     }
 
+    @PostMapping("/verify-email")
+    String verifyEmail(@RequestBody @Valid SendOTPRequest request){
+        authenticationServices.sendOTPToEmail(request);
+        return "An OTP has been sent to your email. Please verify it to reset your password.";
+    }
 
     @PostMapping("/signup")
     ApiResponse<SignUpResponse> registerUser(@RequestBody @Valid SignUpRequest request) {
@@ -48,7 +52,7 @@ public class AuthenticationAPI {
     }
 
     @PostMapping("/login")
-    ApiResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) {
+    ApiResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) throws StripeException {
         var result = authenticationServices.loginUser(request);
         return ApiResponse.<AuthenResponse>builder()
                 .result(result)
@@ -63,14 +67,8 @@ public class AuthenticationAPI {
                 .build();
     }
 
-    @PostMapping("/forgot-password")
-    String forgotPassword(@RequestBody @Valid ForgotPasswordRequest request){
-        authenticationServices.forgotPassword(request);
-        return "An OTP has been sent to your email. Please verify it to reset your password.";
-    }
-
     @PostMapping("/reset-password")
     String resetPassword(@RequestBody @Valid ResetPasswordRequest request){
-        return authenticationServices.verifyOtpAndResetPassword(request);
+        return authenticationServices.resetPassword(request);
     }
 }
