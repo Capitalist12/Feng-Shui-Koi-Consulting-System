@@ -1,10 +1,8 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.BlogCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.BlogRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.BlogResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Blog;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.Blog_Image;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +25,7 @@ public class BlogService {
     UserRepository userRepository;
     BlogRepo blogRepo;
 
-    public BlogResponse createBlog(BlogCreationRequest request) {
+    public BlogResponse createBlog(BlogRequest request) {
         var context = SecurityContextHolder.getContext();
         String email = context.getAuthentication().getName();
         User user = userRepository.findByEmail(email)
@@ -79,6 +76,31 @@ public class BlogService {
                         .comments(blog.getComments()) // Assuming comments is a Set<Comment>
                         .build())
                 .orElseThrow(() -> new AppException(ErrorCode.BLOG_NOT_FOUND));
+    }
+
+    public BlogResponse updateBlog(String blogID, BlogRequest request){
+        Blog blog = blogRepo.findById(blogID)
+                .orElseThrow(()-> new AppException(ErrorCode.BLOG_NOT_FOUND));
+        blog.setTitle(request.getTitle());
+        blog.setDescription(request.getDescription());
+        blog.setImageURL(request.getImageURL());
+
+        Blog savedBlog = blogRepo.save(blog);
+
+        BlogResponse response = BlogResponse.builder()
+                .blogID(savedBlog.getBlogID())
+                .title(savedBlog.getTitle())
+                .description(savedBlog.getDescription())
+                .imageURL(savedBlog.getImageURL())
+                .user(savedBlog.getUser().getUsername())
+                .createdDate(savedBlog.getCreatedDate())
+                .build();
+
+        return response;
+    }
+
+    public void deleteBlog(String blogID){
+        blogRepo.deleteById(blogID);
     }
     public String generateBlogID(){
         return "BLOG" + String.format("%05d", System.nanoTime() % 100000);
