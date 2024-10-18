@@ -4,12 +4,12 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TankUpdateRequest {
-    String shape;
-    String element;
-    String imageURL;
+public class FindAdByFilterRequest {
+    String categoryName;
+    String username;
+    String elementName;
 }

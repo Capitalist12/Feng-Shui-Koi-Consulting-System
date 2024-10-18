@@ -1,9 +1,11 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
 
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 @Data
 @Builder
@@ -19,4 +21,7 @@ public class AdvertisementResponse {
     CategoryResponse category;
     String user;
     Set<Ads_Image> imagesAd;
+    String status;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    LocalDateTime createdDate;
 }
