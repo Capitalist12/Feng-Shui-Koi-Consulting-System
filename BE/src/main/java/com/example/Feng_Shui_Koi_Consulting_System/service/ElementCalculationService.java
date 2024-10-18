@@ -1,25 +1,51 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ElementCalculationService {
+
+    ElementRepo elementRepo;
+
+    public String calculateElementName(LocalDate dateOfBirth) {
+        if (dateOfBirth == null) {
+            throw new IllegalArgumentException("Date of birth cannot be null");
+        }
+        int birthYear = dateOfBirth.getYear();
+        int elementId = calculateElementId(dateOfBirth);
+            // Get the element name using the calculated element ID
+        Optional<Element> element = elementRepo.findById(elementId);
+        return element.map(Element::getElementName).orElse("Element not found");
+    }
 
     public int calculateElementId(LocalDate dateOfBirth) {
         if (dateOfBirth == null) {
             throw new IllegalArgumentException("Date of birth cannot be null");
         }
 
-        int birthYear = dateOfBirth.getYear(); // Extract the year from LocalDate
+        int birthYear = dateOfBirth.getYear();
 
         try {
             int canNumber = calculateCanNumber(birthYear);
             int chiNumber = calculateChiNumber(birthYear);
-            return canNumber + chiNumber;
+            int elementId = canNumber + chiNumber;
+
+            if(elementId>5){
+                elementId = elementId -5 ;
+            }
+            return elementId;
         } catch (Exception e) {
             throw new RuntimeException("Error calculating element ID", e);
         }

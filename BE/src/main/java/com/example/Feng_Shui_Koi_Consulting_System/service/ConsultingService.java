@@ -1,15 +1,15 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ConsultingRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.ElementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.FishRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.TankRepo;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,28 +26,25 @@ public class ConsultingService {
     FishRepo fishRepo;
     TankRepo tankRepo;
     ElementRepo elementRepo;
-    UserRepository userRepository;
     ElementMapper elementMapper;
     ElementCalculationService elementCalculationService;
 
-    public List<ConsultingFishResponse> koiFishList(String userID){
-        // Fetch the user
-        User user = userRepository.findById(userID)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-
-        // Get the user's element ID
-        int elementID = elementCalculationService
-                .calculateElementId(user.getDateOfBirth());
+    public List<ConsultingFishResponse> koiFishList(ConsultingRequest request) {
+        // Calculate the user's elementID based on the date of birth
+        int elementID = elementCalculationService.calculateElementId(request.getDob());
 
         // Fetch the Element entity by the elementID
         Element element = elementRepo.findById(elementID)
                 .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
 
-        // Get the generation (element that supports this one)
+        // Get the generation (element that supports this element)
         String generation = element.getGeneration();
 
-        // Find KoiFish by elementID or supported generation name
-        return fishRepo.findByElementIDOrGeneration(elementID, generation).stream()
+        // Fetch the KoiFish that match either the user's elementID or the supporting generation
+        List<KoiFish> koiFishList = fishRepo.findByElementIDOrGeneration(elementID, generation);
+
+        // Map the KoiFish entities to ConsultingFishResponse
+        return koiFishList.stream()
                 .map(fish -> {
                     // Prepare KoiTypesResponse
                     var koiType = fish.getKoiTypes();
@@ -71,11 +68,9 @@ public class ConsultingService {
                 .collect(Collectors.toList());
     }
 
-    public List<ConsultingTankResponse> tankList(String userID)
+    public List<ConsultingTankResponse> tankList(ConsultingRequest request)
     {
-        User user = userRepository.findById(userID)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-        Integer elementID = user.getElement().getElementId();
+        Integer elementID = elementCalculationService.calculateElementId(request.getDob());
         return tankRepo.findByElementTank_ElementId(elementID).stream().map(tank -> {
             ElementResponse elementResponse = elementMapper
                     .toElementResponse(tank.getElementTank());
@@ -83,7 +78,7 @@ public class ConsultingService {
                     .tankId(tank.getTankId())
                     .shape(tank.getShape())
                     .imageURL(tank.getImageURL())
-                    .elementTank(elementResponse)
+//                    .elementTank(elementResponse)
                     .build();
         }).collect(Collectors.toList());
     }

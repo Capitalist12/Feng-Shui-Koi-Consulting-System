@@ -1,6 +1,5 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
 
-import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -26,5 +25,7 @@ public class SignUpRequest {
     @NotBlank
     String email;
     LocalDate dateOfBirth;
-
+//    @NotBlank
+//    @Size(min = 6, max = 6, message = "OTP_INVALID")
+//    String otp;
 }

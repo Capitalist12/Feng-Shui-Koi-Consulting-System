@@ -14,5 +14,4 @@ public class CompatibilityRequest {
     String userElement;
     Set<Set<String>> koiFishColors;
     String tankShape;
-
 }
