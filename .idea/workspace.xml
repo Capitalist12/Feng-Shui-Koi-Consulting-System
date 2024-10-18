@@ -58,7 +58,9 @@
   "keyToString": {
     "Application.FengShuiKoiConsultingSystemApplication.executor": "Run",
     "Maven.Feng-Shui-Koi-Consulting-System [clean].executor": "Run",
+    "Maven.Feng-Shui-Koi-Consulting-System [compile].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/SpringBoot/Feng-Shui-Koi-Consulting-System",
