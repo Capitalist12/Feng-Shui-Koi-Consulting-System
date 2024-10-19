@@ -157,7 +157,7 @@ function CompatibilityPage() {
   }, []);
 
   return (
-    <Layout style={{ marginBottom: "200px" }}>
+    <Layout style={{ marginBottom: "20px" }}>
       <Navbar />
       <Content className="compatibility-page">
         <section id="sec1-comp">
@@ -208,58 +208,60 @@ function CompatibilityPage() {
             <div className="background-sec2"></div>
             <Row gutter={[24, 16]}>
               <Col span={8}>
-                <div className="custom-title">
-                  <Title level={2}>Danh Sách Cá</Title>
-                </div>
-                <div className="custom-table">
-                  <KoiList
-                    koiData={koiData}
-                    handleSelectFish={handleSelectFish}
-                    isKoiSelected={(fish) => selectedFish.includes(fish)}
-                    searchTerm={searchTerm}
-                    handleSearchTermChange={(e) =>
-                      setSearchTerm(e.target.value)
-                    }
-                  />
+                <div style={{ marginLeft: "2vw" }}>
+                  <div className="custom-title">
+                    <Title level={2}>Danh Sách Cá</Title>
+                  </div>
+                  <div className="custom-table">
+                    <KoiList
+                      koiData={koiData}
+                      handleSelectFish={handleSelectFish}
+                      isKoiSelected={(fish) => selectedFish.includes(fish)}
+                      searchTerm={searchTerm}
+                      handleSearchTermChange={(e) =>
+                        setSearchTerm(e.target.value)
+                      }
+                    />
+                  </div>
                 </div>
               </Col>
 
-              <Col
-                span={8}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  marginTop: "20px",
-                }}
-              >
-                <SelectedItems
-                  selectedFish={selectedFish}
-                  selectedTank={selectedTank}
-                  handleRemoveTank={handleRemoveTank}
-                  handleSelectFish={handleSelectFish}
-                />
+              <Col span={8} className="selected-ele">
+                <div className="selected-ele">
+                  {/* ????? */}
+                  <SelectedItems
+                    className="tank-koi-selected"
+                    selectedFish={selectedFish}
+                    selectedTank={selectedTank}
+                    handleRemoveTank={handleRemoveTank}
+                    handleSelectFish={handleSelectFish}
+                  />
 
-                <CompatibilityForm
-                  selectedElement={selectedElement}
-                  setSelectedElement={setSelectedElement}
-                  handleCalculateCompatibility={handleCalculateCompatibility}
-                />
+                  <CompatibilityForm
+                    selectedElement={selectedElement}
+                    setSelectedElement={setSelectedElement}
+                    handleCalculateCompatibility={handleCalculateCompatibility}
+                  />
+                </div>
               </Col>
 
               <Col
                 span={8}
                 style={{ display: "flex", flexDirection: "column" }}
               >
-                <Title level={2} style={{ marginTop: "100px" }}>
-                  Danh Sách Hồ
-                </Title>
-                <div className="custom-table">
-                  <TankList
-                    tankData={tankData}
-                    handleSelectTank={handleSelectTank}
-                    isTankSelected={(tank) => selectedTank === tank}
-                  />
+                <div style={{ marginRight: "3vw" }}>
+                  <div className="custom-title">
+                    <Title level={2} style={{ marginTop: "13.5vh" }}>
+                      Danh Sách Hồ
+                    </Title>
+                  </div>
+                  <div className="custom-table">
+                    <TankList
+                      tankData={tankData}
+                      handleSelectTank={handleSelectTank}
+                      isTankSelected={(tank) => selectedTank === tank}
+                    />
+                  </div>
                 </div>
               </Col>
             </Row>

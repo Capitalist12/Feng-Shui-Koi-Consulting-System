@@ -70,7 +70,7 @@ function AdvertisementPage({ currentUser }) {
   const fetchAds = async () => {
     try {
       const response = await api.get("/ad");
-      // Giả sử bạn sẽ kiểm tra trạng thái của quảng cáo từ cơ sở dữ liệu
+      //Giả sử bạn sẽ kiểm tra trạng thái của quảng cáo từ cơ sở dữ liệu
       const verifiedAds = response.data.result.filter(
         (ad) => ad.status === "Verified"
       ); // Điều này cần điều chỉnh tùy theo cách lấy trạng thái
@@ -173,9 +173,9 @@ function AdvertisementPage({ currentUser }) {
               <p className="ad-category">
                 Danh mục: {ad.category.categoryName}
               </p>
-              {(currentUser === "Member" || currentUser === "Admin") && (
-                <Button onClick={() => setEditingAd(ad)}>Sửa</Button>
-              )}
+              {/* {(currentUser === "Member" || currentUser === "Admin") && ( */}
+              <Button onClick={() => setEditingAd(ad)}>Sửa</Button>
+              {/* )} */}
             </div>
           ))}
           <div className="pagination">

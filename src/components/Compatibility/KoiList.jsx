@@ -56,18 +56,17 @@ const KoiList = ({
         placeholder="Tìm kiếm theo màu sắc hoặc loại cá"
         value={searchTerm}
         onChange={handleSearchTermChange}
-        style={{ marginBottom: "15px", height: "35px" }}
+        style={{ marginBottom: "2vh", height: "2rem" }}
       />
       <div style={{}}>
         <Table
-          style={{ width: "500vw" }}
           columns={koiColumns}
           dataSource={filteredFishData}
           rowKey="id"
           pagination={false}
           rowClassName={(fish) => (isKoiSelected(fish) ? "selected-row" : "")}
           sticky
-          scroll={{ y: 360 }}
+          scroll={{ y: 330 }}
         />
       </div>
     </div>

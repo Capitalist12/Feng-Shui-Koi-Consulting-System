@@ -1,4 +1,5 @@
 import { Button, Card, Typography } from "antd";
+import "../../../src/styles/SelectedItems.scss";
 
 const { Title } = Typography;
 
@@ -12,20 +13,11 @@ const SelectedItems = ({
   const maxSelectedFish = selectedFish.slice(0, 6);
 
   return (
-    <Card
-      style={{
-        marginBottom: "10px",
-        backgroundColor: "pink",
-        border: "1px solid #d9d9d9",
-        width: "80%",
-      }}
-    >
-      <Title level={2} style={{ textAlign: "center" }}>
+    <Card className="card">
+      <Title level={2.5} className="title">
         Cá và Hồ Đã Chọn
       </Title>
-      <h2>
-        <strong>Cá Koi:</strong>
-      </h2>
+      <h1>Cá Koi:</h1>
       <p>
         {maxSelectedFish.length > 0 ? (
           <div
@@ -33,7 +25,7 @@ const SelectedItems = ({
               display: "grid",
               gridTemplateColumns:
                 maxSelectedFish.length > 3 ? "repeat(2, 1fr)" : "1fr",
-              gap: "px", // khoảng cách giữa các cá Koi
+              gap: "0.5vw", // khoảng cách giữa các cá Koi
             }}
           >
             {maxSelectedFish.map((fish, index) => (
@@ -67,10 +59,7 @@ const SelectedItems = ({
         )}
       </p>
 
-      {/* Hiển thị Hồ đã chọn */}
-      <h2>
-        <strong>Hồ:</strong>
-      </h2>
+      <h1>Hồ:</h1>
       <p>
         {selectedTank ? (
           <div
