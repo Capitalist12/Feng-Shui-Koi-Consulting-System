@@ -154,7 +154,7 @@ public class StripeService {
             userRepository.save(user);
             String token =  authenticationServices.generateToken(user);
 
-            Savetransaction(subscriptionId,user);
+            saveTransaction(subscriptionId,user);
             return PaymentSuccessfulResponse.builder()
                     .checkout(true)
                     .token(token)
@@ -179,7 +179,7 @@ public class StripeService {
         return user;
     }
 
-    private void Savetransaction( String subscriptionId , User user ) throws StripeException {
+    private void saveTransaction( String subscriptionId , User user ) throws StripeException {
         Transaction transaction = transactionRepo.findByUser_UserID(user.getUserID())
                 .orElseGet(() -> Transaction.builder()
                         .user(user)

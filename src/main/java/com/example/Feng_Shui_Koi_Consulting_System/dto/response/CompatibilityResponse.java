@@ -12,5 +12,6 @@ public class CompatibilityResponse {
     double fishCompatibilityScore;
     double tankCompatibilityScore;
     double calculateCompatibilityScore;
+    String advise;
 
 }
