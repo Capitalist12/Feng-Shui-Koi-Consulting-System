@@ -10,6 +10,7 @@ import SelectedItems from "../../components/Compatibility/SelectedItems";
 import Result from "../../components/Compatibility/Result"; // Import Modal component
 import "../../styles/CompatibilityPage.scss";
 import api from "../../config/axiosConfig";
+import { ArrowDownOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -120,7 +121,6 @@ function CompatibilityPage() {
 
     console.log("Payload gửi đến API:", payload);
     try {
-      nd - com;
       const response = await api.post("compatibility", payload);
       const result = response.data.result; // Lấy dữ liệu từ API
 
@@ -136,28 +136,76 @@ function CompatibilityPage() {
     }
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const sec1Comp = document.getElementById("sec1-comp");
+      const scrollPosition = window.scrollY;
+
+      // Tính toán độ mờ của nền
+      const maxScroll = 300; // Bạn có thể điều chỉnh giá trị này
+      const opacity = Math.min(scrollPosition / maxScroll, 1); // Đảm bảo giá trị không vượt quá 1
+
+      // Cập nhật màu nền
+      sec1Comp.style.backgroundColor = `rgba(0, 0, 0, ${opacity})`;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <Layout style={{ marginBottom: "200px" }}>
       <Navbar />
-      <Content className="compatibility-page" style={{ padding: "20px" }}>
+      <Content className="compatibility-page">
         <section id="sec1-comp">
-          <Title style={{ marginTop: "50px" }}>Tính độ tương hợp</Title>
-          <div className="background"></div>
+          <div className="background-sec1"></div>
+          <Title className="title">Tính độ tương hợp</Title>
           <h2>
             Bạn đang phân vân loại cá và hồ nào, tính thử độ tương hợp ngay nhé
             !
           </h2>
           <div className="infor-data">
-            <div>
-              <p>{fishCount} con cá Koi với đa dạng chủng loại và màu sắc </p>
-            </div>
-            <div>
-              <p>{tankCount} cái hồ với những kiểu dáng khác nhau</p>
-            </div>
+            <h1
+              style={{
+                textAlign: "center",
+                marginBottom: "30px",
+              }}
+            >
+              Hệ thống hiện đang có :
+            </h1>
+            <Row>
+              <Col span={12} className="data">
+                <div>
+                  <p>{fishCount} con cá Koi </p>
+                </div>
+              </Col>
+              <Col span={12} className="data">
+                <div>
+                  <p>{tankCount} hồ cá</p>
+                </div>
+              </Col>
+            </Row>
+            {/* Các phần khác ở đây */}
+
+            <button
+              className="scroll-button"
+              onClick={() => {
+                const sec2 = document.getElementById("sec2-comp");
+                if (sec2) {
+                  sec2.scrollIntoView({ behavior: "smooth" }); // Cuộn xuống sec2
+                }
+              }}
+            >
+              <ArrowDownOutlined />
+            </button>
           </div>
         </section>
         <>
           <section id="sec2-comp">
+            <div className="background-sec2"></div>
             <Row gutter={[24, 16]}>
               <Col span={8}>
                 <div className="custom-title">
@@ -217,7 +265,6 @@ function CompatibilityPage() {
             </Row>
           </section>
         </>
-
         <Result
           isVisible={isModalVisible}
           resultData={resultData}
