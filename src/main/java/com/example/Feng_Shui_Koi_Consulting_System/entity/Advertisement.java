@@ -36,9 +36,9 @@ public class Advertisement {
     @Column(name = "Status")
     String status;
 
-    @Column(name = "CreatedDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime createdDate;
+//    @Column(name = "CreatedDate")
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+//    LocalDateTime createdDate;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "ElementID", nullable = false, referencedColumnName = "ElementID")

@@ -22,6 +22,4 @@ public class AdvertisementResponse {
     String user;
     Set<Ads_Image> imagesAd;
     String status;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime createdDate;
 }
