@@ -19,8 +19,6 @@ public class Ads_Image {
     @Column(name = "AdImageURL")
     String imageURL;
 
-
-
     @ManyToOne
     @JoinColumn(name = "AdID", nullable = false,  referencedColumnName = "AdID")
     @JsonBackReference

@@ -4,12 +4,10 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.TankResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.Tank;
 import com.example.Feng_Shui_Koi_Consulting_System.service.TankService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

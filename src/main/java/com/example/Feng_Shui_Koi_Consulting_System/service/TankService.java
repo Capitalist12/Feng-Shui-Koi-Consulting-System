@@ -2,12 +2,10 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ElementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.TankResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Tank;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
-import com.example.Feng_Shui_Koi_Consulting_System.mapper.ElementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.TankMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.TankRepo;
@@ -16,9 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
