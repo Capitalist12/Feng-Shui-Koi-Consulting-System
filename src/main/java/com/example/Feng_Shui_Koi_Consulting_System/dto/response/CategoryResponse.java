@@ -8,10 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CompatibilityResponse {
-    double fishCompatibilityScore;
-    double tankCompatibilityScore;
-    double calculateCompatibilityScore;
-    String advise;
-
+public class CategoryResponse {
+    String categoryID;
+    String categoryName;
 }

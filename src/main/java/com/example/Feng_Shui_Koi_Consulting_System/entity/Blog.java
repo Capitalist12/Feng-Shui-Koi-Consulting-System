@@ -12,56 +12,50 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "Advertisement")
+@Table(name = "Blog")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Advertisement {
+public class Blog {
     @Id
-    @Column(name = "AdID")
-    String adID;
+    @Column(name = "BlogID")
+    String blogID;
 
     @Column(name = "Title")
     String title;
 
+    @Column(name = "ImageURL")
+    String imageURL;
+
     @Column(name = "Description")
     String description;
 
-    @Column(name = "Price")
-    Float price;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "ElementID", nullable = false, referencedColumnName = "ElementID")
-    @JsonBackReference
-    Element element;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "CategoryID", nullable = false, referencedColumnName = "CategoryID")
-    @JsonBackReference
-    Category category;
+    @Column(name = "CreatedDate")
+    LocalDate createdDate;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "UserID", nullable = false, referencedColumnName = "UserID")
     @JsonBackReference
     User user;
 
-    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL
             ,orphanRemoval = true)
     @JsonManagedReference
-    Set<Ads_Image> imagesAd = new HashSet<>();
+    Set<Comment> comments;
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Advertisement)) return false;
-        Advertisement advertisement = (Advertisement) o;
-        return Objects.equals(adID, advertisement.adID);
+        if (!(o instanceof Blog)) return false;
+        Blog blog = (Blog) o;
+        return Objects.equals(blogID, blog.blogID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(adID);
+        return Objects.hash(blogID);
     }
 }

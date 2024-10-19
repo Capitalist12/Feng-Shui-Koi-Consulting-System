@@ -31,7 +31,14 @@ public enum ErrorCode {
     EXPIRED_TOKEN(1021, "Token expired", HttpStatus.BAD_REQUEST),
     SEND_MAIL_FAILED(1022, "Send mail failed", HttpStatus.BAD_REQUEST ),
     OTP_NOT_FOUND(1023, "OTP not found", HttpStatus.BAD_REQUEST ),
-    SESSION_ID_NULL(1024, "SessionID is null", HttpStatus.BAD_REQUEST );
+    AD_NOT_EXIST(1024, "Advertisement not found", HttpStatus.NOT_FOUND),
+    SESSION_ID_NULL(1025, "SessionID is null", HttpStatus.BAD_REQUEST ),
+    CATEGORY_NOT_EXIST(1026, "Category not found", HttpStatus.NOT_FOUND),
+    OTP_REQUIRED(1027, "OTP required", HttpStatus.BAD_REQUEST ),
+    BLOG_NOT_FOUND(1028, "BlogID not found", HttpStatus.BAD_REQUEST ),
+    COMMENT_NOT_FOUND(1029, "Comment not found", HttpStatus.BAD_REQUEST ),
+    CHATGPT_NOT_RESPONSE(1030, "OpenAI API Gateway Timeout", HttpStatus.GATEWAY_TIMEOUT );;
+
 
     private int code;
     private String message;

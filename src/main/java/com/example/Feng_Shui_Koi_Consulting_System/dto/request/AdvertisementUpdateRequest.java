@@ -10,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AdvertisementCreationRequest {
+public class AdvertisementUpdateRequest {
     String title;
     String description;
     Float price;
