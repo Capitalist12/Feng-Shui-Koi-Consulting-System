@@ -10,7 +10,6 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface KoiTypeMapper {
     KoiTypes toKoiType(KoiTypeRequest request);
-    KoiTypesResponse toKoiTypeResponse(KoiTypes koiTypes);
     void updateKoiType(@MappingTarget KoiTypes koiTypes, KoiTypeRequest request);
     KTResponse toKTResponse(KoiTypes koiTypes);
 }

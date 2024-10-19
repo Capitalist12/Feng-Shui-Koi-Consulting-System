@@ -20,7 +20,8 @@ public interface AdvertisementMapper {
     @Mapping(target = "imagesAd", ignore = true)
     Advertisement toAdvertisement(AdvertisementCreationRequest request,
                                   @Context ElementRepo elementRepo,
-                                  @Context CategoryService categoryService);
+                                  @Context CategoryService categoryService
+    );
 
     @Mapping(target = "element", source = "element", qualifiedByName = "mapToElement")
     @Mapping(target = "category", source = "categoryName", qualifiedByName = "mapToCategory")
@@ -43,9 +44,8 @@ public interface AdvertisementMapper {
 
     @Named("mapToElement")
     default Element mapToElement(String element, @Context ElementRepo elementRepo) {
-        Element destiny =  elementRepo.findByElementName(element)
+        return elementRepo.findByElementName(element)
                 .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
-        return destiny;
     }
 
     @Named("mapToElementName")
@@ -73,6 +73,7 @@ public interface AdvertisementMapper {
     default UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
                 .username(user.getUsername())
+                .roleName(user.getRoleName())
                 .build();
     }
 

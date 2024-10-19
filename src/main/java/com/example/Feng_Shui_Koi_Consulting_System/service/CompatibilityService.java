@@ -25,6 +25,8 @@ public class CompatibilityService {
 
     ElementRepo elementRepo;
     TankRepo tankRepo;
+    ChatGptService chatGptService;
+
 
 
 
@@ -41,7 +43,9 @@ public class CompatibilityService {
     }
 
     public CompatibilityResponse compatibilityScore(String elementName, String tankElement,
-                                                    Set<Set<String>> fishElements, CompatibilityRequest request) {
+                                                    Set<Set<String>> fishElements,
+                                                    CompatibilityRequest request) {
+
 
         // Tìm yếu tố của người dùng dựa trên tên của yếu tố
         Element userElement = elementRepo.findByElementName(elementName)
@@ -82,6 +86,7 @@ public class CompatibilityService {
         double averageFishScore = totalFishScore / numFish;
         double finalFishScore =  (totalFishScore / (numFish * 50)) * 100;
 
+
         // Tính điểm cho yếu tố bể (pond element)
         double tankScore = 0;
         if (userElement.getElementName().equals(tankElement)) {
@@ -106,9 +111,10 @@ public class CompatibilityService {
 
         // Trả về kết quả
         return CompatibilityResponse.builder()
-                .fishCompatibilityScore(finalFishScore)
+                .fishCompatibilityScore(Math.max(0, Math.min(100, finalFishScore)))
                 .tankCompatibilityScore(finalTankScore)
                 .calculateCompatibilityScore(Math.max(0, Math.min(100, finalScore))) // Điểm tổng (0 - 100)
+                .advise(chatGptService.chatCompletion(request))
                 .build();
     }
 
@@ -135,34 +141,6 @@ public class CompatibilityService {
 
 
 
-
-
-//    public String getAdvice(CompatibilityRequest request,
-//                            double calculateCompatibilityScore) {
-//
-//        if (request.getUserElement() == null || request.getTankShape() == null || request.getKoiFishColors() == null) {
-//            throw new IllegalArgumentException("Missing required compatibility information.");
-//        }
-//
-//        String koiFishColors = request.getKoiFishColors().stream()
-//                .map(set -> String.join(", ", set))  // Chuyển mỗi Set<String> thành chuỗi với các phần tử phân cách bằng dấu phẩy
-//                .collect(Collectors.joining("; "));  // Sau đó, kết hợp các chuỗi lại với nhau, phân cách bởi dấu chấm phẩy
-//
-//        // Gọi đến AI client để lấy tư vấn
-//        String advice = chatClient.prompt()
-//       .user(u -> u.text(String.format(" The user's element is %s, tank shape %s, and Compatibility between" +
-//                       " user's element and Koi fish and tank characteristics is (%.2f%%). "
-//                        + "The koi fish have the following colors: %s. "
-//                        + "Please suggest optimal koi fish colors and a tank shape to improve compatibility.",
-//                request.getUserElement(),
-//                request.getTankShape(),
-//                calculateCompatibilityScore,
-//                koiFishColors)))
-//                .call()
-//                .entity(String.class);
-//        return advice;
-//
-//    }
 
 
 }
