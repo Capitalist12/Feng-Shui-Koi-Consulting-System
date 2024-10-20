@@ -2,7 +2,6 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.KoiTypeRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KTResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiTypesResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiTypes;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;

@@ -4,7 +4,6 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiFishResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
 import com.example.Feng_Shui_Koi_Consulting_System.service.FishService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

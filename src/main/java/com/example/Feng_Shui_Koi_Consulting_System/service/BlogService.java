@@ -47,8 +47,8 @@ public class BlogService {
                 .title(savedblog.getTitle())
                 .description(savedblog.getDescription())
                 .imageURL(savedblog.getImageURL())
-                .user(savedblog.getUser().getUsername())
                 .createdDate(savedblog.getCreatedDate())
+                .user(savedblog.getUser().getUsername())
                 .build();
 
         return response;
@@ -62,6 +62,7 @@ public class BlogService {
                         .description(blog.getDescription())
                         .imageURL(blog.getImageURL())
                         .user(blog.getUser().getUsername())
+                        .createdDate(blog.getCreatedDate())
                         .comments(blog.getComments().stream()
                                 .map(comment -> CommentResponse.builder()
                                         .commentID(comment.getCommentID())
@@ -80,6 +81,7 @@ public class BlogService {
                         .title(blog.getTitle())
                         .description(blog.getDescription())
                         .imageURL(blog.getImageURL())
+                        .createdDate(blog.getCreatedDate())
                         .user(blog.getUser().getUsername())
                         .comments(blog.getComments().stream()
                                 .map(comment -> CommentResponse.builder()

@@ -3,7 +3,6 @@ package com.example.Feng_Shui_Koi_Consulting_System.controller;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.KoiTypeRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KTResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiTypesResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.KoiTypeService;
 import lombok.AccessLevel;
 import lombok.Builder;

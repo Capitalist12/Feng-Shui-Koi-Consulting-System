@@ -5,10 +5,12 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableFeignClients
+@EnableScheduling
 @ImportAutoConfiguration({FeignAutoConfiguration.class})
 
 public class FengShuiKoiConsultingSystemApplication {
