@@ -1,32 +1,116 @@
-import { Col } from "antd";
+import { Button, Col, Input, message, Modal } from "antd";
 import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { getBlogById } from "../../services/blogAPIService";
+import BlogComment from "./BlogComment";
+import TestImage from "../../assets/images/compatibility.jpg";
+import { IoMdShareAlt } from "react-icons/io";
+import { handleScroll } from "../../utils/helper";
+import { FaCommentAlt, FaCopy } from "react-icons/fa";
+import "../../styles/homepage/body/InputDOB/DOBCarousel/base.css";
 
 const BlogContent = () => {
-    const [content, setContent] = useState("");
+    const [blogInfo, setBlogInfo] = useState("");
+    const [blogBody, setBlogBody] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const url = useLocation();
+    const linkPath = window.location.origin + url.pathname;
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    const getBlogContent = async (id) => {
+        const response = await getBlogById(id);
+        response.status === 200 && response.data.code === 1000 ? setBlogInfo(response.data.result) : setBlogInfo("")
+    }
 
     useEffect(() => {
-        // URL Firebase của bạn
-        const blogUrl = "https://firebasestorage.googleapis.com/v0/b/fengshui-koi-consulting-system.appspot.com/o/blogs%2F1729175706449.html?alt=media&token=6dcbf989-98b3-4d38-8c4f-488e5edd2163";
+        const blogId = url.pathname.split("/")[2];
+        getBlogContent(blogId);
+    }, []);
 
+    useEffect(() => {
         // Fetch nội dung từ Firebase
-        fetch(blogUrl)
+        fetch(blogInfo?.description)
             .then((response) => response.text())
             .then((encodedContent) => {
                 // Giải mã nội dung HTML đã mã hóa
                 const decodedContent = decodeURIComponent(encodedContent);
-                setContent(decodedContent); // Lưu nội dung vào state
+                setBlogBody(decodedContent);
             })
             .catch((error) => {
                 console.error("Lỗi khi tải nội dung blog:", error);
             });
-    }, []);
+    }, [blogInfo])
 
     return (
         <Col className="blog-content-col">
-            <h1>Nội dung Blog</h1>
-            <div
-                dangerouslySetInnerHTML={{ __html: content }} // Hiển thị HTML đã giải mã
-            />
+            <Col xl={3} className="action-container">
+                <div className="action-buttons">
+                    <button onClick={() => showModal()}>
+                        <IoMdShareAlt />
+                    </button>
+                    <button onClick={() => handleScroll('comment-section')}>
+                        <FaCommentAlt />
+                    </button>
+                </div>
+            </Col>
+            <Col xl={18} className="blog-content-container">
+                <h1>{blogInfo?.title}</h1>
+                <div
+                    className="content-body theme-dark"
+                    dangerouslySetInnerHTML={{ __html: blogBody }} // Hiển thị HTML đã giải mã
+                />
+                <BlogComment id={blogInfo.blogID} />
+            </Col>
+            <Col xl={3} className="more-blogs-container">
+                <div className="blogs-container">
+                    <h2>Xem thêm</h2>
+                    <div>
+                        <img src={TestImage} />
+                        <Link >Blog content title</Link>
+                    </div>
+                    <div>
+                        <img src={TestImage} />
+                        <Link >Blog content title</Link>
+                    </div>
+                    <div>
+                        <img src={TestImage} />
+                        <Link >Blog content titlef dsff df sdfd fs dfsd dsf</Link>
+                    </div>
+                </div>
+            </Col>
+            <Modal
+                title="Chia sẻ"
+                centered
+                onCancel={handleCancel}
+                open={isModalOpen}
+                footer={[
+                    <Button key="ok" type="primary" onClick={handleOk}>
+                        Đóng
+                    </Button>
+                ]}
+            >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <Input
+                        value={linkPath}
+                    />
+                    <FaCopy
+                        title="sao chép"
+                        className="copy-button"
+                        onClick={() => navigator.clipboard.writeText(linkPath).then(() => {
+                            message.success('Đã sao chép!');
+                        })}
+                    />
+                </div>
+            </Modal>
         </Col>
     );
 };

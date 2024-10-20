@@ -9,10 +9,14 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import Title from "antd/es/typography/Title.js";
 import UploadImage from "../../components/CRUD_KoiFish/CreateKoiForm/UploadImage.jsx";
 import uploadFile from "../../utils/file.js";
+import { createNewBlog } from "../../services/blogAPIService.js";
+import { toast } from "react-toastify";
+import { useForm } from "antd/es/form/Form.js";
 
 const BlogEditorPage = () => {
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("Tiêu đề");
+    const [form] = useForm();
 
     useEffect(() => {
         // console.log(value)
@@ -41,12 +45,19 @@ const BlogEditorPage = () => {
 
                 const payload = {
                     title: values.title,
-                    imagesURL: url[0],
+                    imageURL: url[0],
                     description: blogUrl,
                 }
 
-                console.log(payload)
-            }
+                const response = await createNewBlog(payload);
+                if(response.status === 200 && response.code === 1000){
+                    toast.success("Tạo thành công!");
+                    setValue("")
+                    form.resetFields();
+                    setTitle("Tiêu đề")
+                }
+
+                }
 
 
         } catch (error) {

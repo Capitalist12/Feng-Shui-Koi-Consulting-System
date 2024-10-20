@@ -39,7 +39,7 @@ const Navbar = ({ token }) => {
             ]
           : [
               { 
-                label: <Link to="login">Đăng nhập</Link>, 
+                label: <Link to="http://localhost:5173/login">Đăng nhập</Link>, 
                 key: 'login', 
                 disabled: true,
                 className: 'login' 
