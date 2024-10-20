@@ -1,12 +1,12 @@
-import React from 'react';
-import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Flex } from 'antd';
-import { FcGoogle } from 'react-icons/fc';
+import React from "react";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input, Flex } from "antd";
+import { FcGoogle } from "react-icons/fc";
 import { loginAuth } from "../../services/AuthAPIService";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { login } from "../../redux/Slices/userSlice.js";
-import { GoogleURL } from '../../config/googleConfig.js';
+import { GoogleURL } from "../../config/googleConfig.js";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -21,10 +21,8 @@ const LoginForm = () => {
 
       const role = response.data.result.roleName.toUpperCase();
 
-      (role !== "ADMIN") ? navigate("/") : navigate("/dashboard");
-
+      role !== "ADMIN" ? navigate("/") : navigate("/dashboard");
     }
-
   };
 
   const handleLoginGoogle = () => {
@@ -33,7 +31,7 @@ const LoginForm = () => {
 
   return (
     <Form
-      className='login-form'
+      className="login-form"
       name="login"
       initialValues={{
         remember: true,
@@ -53,7 +51,7 @@ const LoginForm = () => {
           },
         ]}
       >
-        <Input prefix={<MailOutlined />} type='email' placeholder="Email" />
+        <Input prefix={<MailOutlined />} type="email" placeholder="Email" />
       </Form.Item>
       <label htmlFor="password">Mật khẩu</label>
       <Form.Item
@@ -82,7 +80,7 @@ const LoginForm = () => {
         <Button className="login-btn" onClick={handleLoginGoogle} block>
           Đăng nhập bằng Google <FcGoogle />
         </Button>
-        hoặc <Link to="/register">Đăng kí ngay !</Link>
+        hoặc <Link to="/signup">Đăng kí ngay !</Link>
       </Form.Item>
     </Form>
   );

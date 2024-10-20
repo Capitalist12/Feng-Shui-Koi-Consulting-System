@@ -10,7 +10,7 @@ const CompatibilityForm = ({
   handleCalculateCompatibility,
 }) => {
   return (
-    <Card bordered={true} style={{ width: "50%", marginTop: "10px" }}>
+    <Card style={{ width: "50%", marginTop: "10px" }}>
       <Row
         gutter={16}
         style={{
@@ -22,15 +22,11 @@ const CompatibilityForm = ({
         }}
       >
         <Col span={24}>
-          <Title level={3} style={{ textAlign: "center", marginTop: "-10px" }}>
-            Chọn Yếu Tố
-          </Title>
           <Select
-            placeholder="Chọn yếu tố"
             value={selectedElement}
             onChange={setSelectedElement}
-            style={{ width: "200px" }}
-            optionLabelProp="label"
+            style={{ width: "10rem", height: "3rem" }}
+            // optionLabelProp="label"
           >
             {OPTIONS.map((option) => (
               <Option

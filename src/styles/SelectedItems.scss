@@ -1,12 +1,87 @@
+// .card {
+//   margin-bottom: 10vh;
+//   height: 60vh;
+//   width: 30vw;
+//   background-color: #7499b5;
+//   border-radius: 50%; //  tron
+//   .title {
+//     text-align: center;
+//   }
+//   h1 {
+//     color: rgba(114, 57, 1, 0.944);
+//     margin-left: 2em;
+//   }
+// }
 .card {
-  margin-bottom: 10vh;
-  height: 60vh;
+  position: relative;
+  height: 30vw;
   width: 30vw;
-  background-color: #7499b5;
+  border: solid 2px;
+  border-radius: 50%; // Tạo khung tròn
+  overflow: hidden; // phần thừa của ảnh
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  // Lớp phủ nền mờ
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/images/amduong.png");
+    background-size: 120%;
+    background-position: center;
+    filter: blur(5px); // Chỉ làm mờ ảnh nền
+    z-index: -1; // Đặt nền phía sau nội dung
+  }
+
   .title {
-    text-align: center;
+    margin-top: 2rem; // Tăng khoảng cách trên tiêu đề
+    margin-right: 3rem;
+    font-size: 2rem; // Kích thước chữ cho tiêu đề
+    font-weight: bold; // Đậm
+    text-shadow: 2px 2px 1px white;
+    margin-top: -5rem;
+    padding-bottom: 3rem;
   }
+
   h1 {
-    color: rgba(114, 57, 1, 0.944);
+    margin-left: 2rem;
+    text-shadow: 2px 2px 1px white;
+    text-transform: round($number: 2);
   }
+  #koi,
+  #tank {
+    display: contents;
+    width: 45%; // Chiếm 45% chiều rộng màn hình cho mỗi bên
+    vertical-align: top; // Căn chúng ở cùng chiều cao
+  }
+
+  #koi {
+    color: black;
+    text-align: left; // Căn trái
+  }
+
+  #tank {
+    color: white;
+    text-align: right;
+    align-self: flex-end;
+
+    .tank-selected {
+      display: flex;
+      align-self: flex-end;
+      gap: 1rem; // Giảm khoảng cách giữa tên hồ và nút "Xóa"
+      justify-content: space-between;
+    }
+  }
+  //   style={{
+  //     display: "flex",
+  //     justifyContent: "space-between", // Căn đều khoảng cách giữa tên và nút X
+  //     alignItems: "center", // Căn giữa theo trục dọc
+  //     marginLeft: "2em",
+  //   }}
 }

@@ -10,7 +10,7 @@ import Admin from "./components/AdminRoute/Admin";
 import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
 import UserManagement from "./components/CRUD_User/UserManagement";
 import CompatibilityPage from "./pages/member/CompatibilityPage";
-import ManageUser from "./components/CRUD_User2/ManageUser";
+// import ManageUser from "./components/CRUD_User2/ManageUser";
 import Authenticate from "./components/LoginForm/Authenticate";
 import AdvertisementPage from "./pages/member/AdvertisementPage";
 
@@ -39,7 +39,7 @@ const App = () => {
       ],
     },
     {
-      path: "register",
+      path: "signup",
       element: <RegisterPage />,
     },
     {

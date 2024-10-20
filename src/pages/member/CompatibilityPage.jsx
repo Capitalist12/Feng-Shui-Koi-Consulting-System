@@ -54,23 +54,14 @@ function CompatibilityPage() {
       const response = await fetchTank(); // Gọi API lấy dữ liệu hồ
       console.log("Tank API Response:", response); // Kiểm tra phản hồi từ API
 
-      // Kiểm tra xem response.data có tồn tại
-      if (response && response.data) {
-        console.log("Response Data:", response.data); // Kiểm tra dữ liệu bên trong response.data
-
-        // Kiểm tra xem có thuộc tính result hay không
-        if (Array.isArray(response.data.result)) {
-          const data = response.data.result; // Lấy danh sách các hồ
-          setTankCount(data.length); // Đếm số lượng hồ
-          setTankData(data); // Lưu dữ liệu vào state
-        } else {
-          throw new Error(
-            "Result is not an array: " + JSON.stringify(response.data)
-          );
-        }
+      // Kiểm tra xem có thuộc tính result hay không
+      if (Array.isArray(response.data.result)) {
+        const data = response.data.result; // Lấy danh sách các hồ
+        setTankCount(data.length); // Đếm số lượng hồ
+        setTankData(data); // Lưu dữ liệu vào state
       } else {
         throw new Error(
-          "Unexpected response structure: " + JSON.stringify(response)
+          "Result is not an array: " + JSON.stringify(response.data)
         );
       }
     } catch (error) {
