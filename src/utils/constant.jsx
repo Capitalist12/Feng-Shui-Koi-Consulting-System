@@ -39,17 +39,17 @@ const ELEMENT_VALUES = [
 
 const OPTIONS = [
   {
-    label: "Lửa",
+    label: "Hỏa",
     value: "Fire",
     emoji: <FaFire />,
-    desc: "Lửa (Hỏa)",
+    desc: "Hỏa",
     color: "#f26d78",
   },
   {
-    label: "Đất",
+    label: "Thổ",
     value: "Earth",
     emoji: <FaMountainSun />,
-    desc: "Đất (Thổ)",
+    desc: "Thổ",
     color: "#fece47",
   },
   {
@@ -60,17 +60,17 @@ const OPTIONS = [
     color: "#a1978d",
   },
   {
-    label: "Nước",
+    label: "Thủy",
     value: "Water",
     emoji: <IoIosWater />,
-    desc: "Nước (Thủy)",
+    desc: "Thủy",
     color: "#2c6db6",
   },
   {
     label: "Mộc",
     value: "Wood",
     emoji: <FaLeaf />,
-    desc: "Cây (Mộc)",
+    desc: "Mộc",
     color: "#5aba47",
   },
 ];

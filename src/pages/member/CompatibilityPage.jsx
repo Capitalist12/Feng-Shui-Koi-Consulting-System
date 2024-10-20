@@ -92,15 +92,15 @@ function CompatibilityPage() {
   };
 
   const handleCalculateCompatibility = async () => {
+    // check
     if (selectedFish.length === 0 || !selectedTank || !selectedElement) {
       message.warning("Vui lòng chọn cá, hồ và yếu tố trước khi tính toán!");
       return;
     }
-
+    // lay mau
     const selectedKoiColors = selectedFish.map((fish) =>
       fish.color.split(",").map((color) => color.trim())
     );
-
     const selectedTankShape = selectedTank.shape;
     const userElement = selectedElement;
 
@@ -108,32 +108,59 @@ function CompatibilityPage() {
       userElement: userElement,
       koiFishColors: selectedKoiColors,
       tankShape: selectedTankShape,
+      chatGptAIDto: {
+        model: "null", // Đặt mặc định là null
+        messages: [
+          {
+            role: "user", // Đặt mặc định là "user"
+            content: "string", // Đặt mặc định là "string"
+          },
+        ],
+      },
     };
 
     console.log("Payload gửi đến API:", payload);
+
     try {
+      // Gửi yêu cầu POST đến API
       const response = await api.post("compatibility", payload);
-      const result = response.data.result; // Lấy dữ liệu từ API
 
-      console.log("Phản hồi từ API:", result);
+      // Kiểm tra xem phản hồi có chứa dữ liệu kết quả không
+      if (response.data && response.data.result) {
+        const result = response.data.result; // Lấy dữ liệu từ API
 
-      // Lưu kết quả vào state và mở modal
-      setResultData(result); // Cập nhật state với dữ liệu kết quả
-      setIsModalVisible(true); // Hiển thị modal
-      message.success("Tính điểm tương thích thành công!");
+        console.log("Phản hồi từ API:", result);
+
+        const formattedAdvise = result.advise.split("\n").map((line, index) => (
+          <span key={index}>
+            {line}
+            <br />
+          </span>
+        ));
+
+        const formattedResult = {
+          ...result,
+          advise: formattedAdvise,
+        };
+
+        setResultData(formattedResult);
+        setIsModalVisible(true);
+        message.success("Tính điểm tương thích thành công!");
+      } else {
+        throw new Error("Không có dữ liệu tương thích từ phản hồi.");
+      }
     } catch (error) {
       console.error("Lỗi khi tính điểm tương thích:", error);
       message.error("Lỗi khi tính điểm tương thích: " + error.message);
     }
   };
-
   useEffect(() => {
     const handleScroll = () => {
       const sec1Comp = document.getElementById("sec1-comp");
       const scrollPosition = window.scrollY;
 
       // Tính toán độ mờ của nền
-      const maxScroll = 300; // Bạn có thể điều chỉnh giá trị này
+      const maxScroll = 300;
       const opacity = Math.min(scrollPosition / maxScroll, 1); // Đảm bảo giá trị không vượt quá 1
 
       // Cập nhật màu nền
@@ -220,18 +247,17 @@ function CompatibilityPage() {
               <Col span={8} className="selected-ele">
                 <div className="selected-ele">
                   {/* ????? */}
+                  <CompatibilityForm
+                    selectedElement={selectedElement}
+                    setSelectedElement={setSelectedElement}
+                    handleCalculateCompatibility={handleCalculateCompatibility}
+                  />
                   <SelectedItems
                     className="tank-koi-selected"
                     selectedFish={selectedFish}
                     selectedTank={selectedTank}
                     handleRemoveTank={handleRemoveTank}
                     handleSelectFish={handleSelectFish}
-                  />
-
-                  <CompatibilityForm
-                    selectedElement={selectedElement}
-                    setSelectedElement={setSelectedElement}
-                    handleCalculateCompatibility={handleCalculateCompatibility}
                   />
                 </div>
               </Col>

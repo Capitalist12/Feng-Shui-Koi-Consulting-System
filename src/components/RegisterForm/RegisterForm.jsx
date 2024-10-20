@@ -4,13 +4,14 @@ import {
   MailOutlined,
   UserOutlined,
   CalendarOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import { Button, Form, Input, DatePicker } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../config/axiosConfig";
 import moment from "moment";
-import "../../styles/RegisterPage.scss"; // Nhớ thêm đường dẫn đến file SCSS của bạn
+// import "../../styles/RegisterPage.scss";
 
 const RegisterForm = () => {
   const [loading, setLoading] = useState(false);
@@ -30,10 +31,10 @@ const RegisterForm = () => {
       const response = await api.post("auth/signup", userData);
 
       if (response.status === 201 || response.status === 200) {
-        toast.success("Đăng ký thành công!");
+        toast.success("Đăng ký thành công! Vui lòng đăng nhập sau 2s...");
         setTimeout(() => {
           navigate("/login");
-        }, 3000);
+        }, 2000);
       }
     } catch (error) {
       toast.error("Đăng ký thất bại. Vui lòng thử lại.");
@@ -52,6 +53,9 @@ const RegisterForm = () => {
 
   return (
     <Form
+      labelCol={{
+        span: 24, // day input xuong hang 2
+      }}
       className="register-form"
       initialValues={{ remember: true }}
       style={{ maxWidth: 360, margin: "0 auto" }}
@@ -61,6 +65,7 @@ const RegisterForm = () => {
       <Form.Item
         className="form-item"
         name="username"
+        label="Username"
         rules={[{ required: true, message: "Vui lòng nhập tên đăng nhập!" }]}
       >
         <Input prefix={<UserOutlined />} placeholder="Tên đăng nhập" />
@@ -68,6 +73,7 @@ const RegisterForm = () => {
       <Form.Item
         className="form-item"
         name="email"
+        label="Email"
         rules={[
           { required: true, message: "Vui lòng nhập email!" },
           { type: "email", message: "Email không hợp lệ!" },
@@ -78,34 +84,35 @@ const RegisterForm = () => {
       <Form.Item
         className="form-item"
         name="password"
+        label="Mật khẩu"
         rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
       >
         <Input.Password prefix={<LockOutlined />} placeholder="Mật khẩu" />
       </Form.Item>
       <Form.Item
-        className="form-item"
+        label="Xác nhận mật khẩu"
         name="confirmPassword"
-        dependencies={["password"]}
         rules={[
-          { required: true, message: "Vui lòng xác nhận mật khẩu!" },
+          {
+            required: true,
+            message: "Confirm Password is required",
+          },
           ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue("password") === value) {
+            validator(rule, value) {
+              if (!value || value === getFieldValue("password")) {
                 return Promise.resolve();
               }
-              return Promise.reject(new Error("Mật khẩu xác nhận không khớp!"));
+              return Promise.reject("Passwords do not match");
             },
           }),
         ]}
       >
-        <Input.Password
-          prefix={<LockOutlined />}
-          placeholder="Xác nhận mật khẩu"
-        />
+        <Input.Password />
       </Form.Item>
       <Form.Item
         className="form-item"
         name="dateOfBirth"
+        label="Ngày sinh"
         rules={[{ required: true, message: "Vui lòng chọn ngày sinh!" }]}
       >
         <DatePicker

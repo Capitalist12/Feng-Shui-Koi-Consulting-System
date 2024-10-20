@@ -4,6 +4,17 @@ import { Modal, Typography } from "antd";
 const { Title, Paragraph } = Typography;
 
 const Result = ({ isVisible, resultData, onClose }) => {
+  // // Hàm chuyển đổi ký tự xuống dòng thành <br />
+  // const formatAdvise = (advise) => {
+  //   return advise.split("<br/>").map((line, index) => (
+  //     <span key={index}>
+  //       {line}
+  //       <br />
+  //       <br />
+  //     </span>
+  //   ));
+  // };
+
   return (
     <Modal
       title="Kết Quả Tính Toán"
@@ -16,13 +27,20 @@ const Result = ({ isVisible, resultData, onClose }) => {
         <div>
           <Title level={4}>Điểm tương thích:</Title>
           <Paragraph>
-            Điểm tương thích cá: {resultData.fishCompatibilityScore}%
+            <strong>Điểm tương thích cá:</strong>{" "}
+            {resultData.fishCompatibilityScore}%
           </Paragraph>
           <Paragraph>
-            Điểm tương thích hồ: {resultData.tankCompatibilityScore}%
+            <strong>Điểm tương thích hồ:</strong>{" "}
+            {resultData.tankCompatibilityScore}%
           </Paragraph>
           <Paragraph>
-            Điểm tổng hợp: {resultData.calculateCompatibilityScore}%
+            <strong style={{ fontWeight: "bold" }}> Điểm tổng hợp:</strong>{" "}
+            {resultData.calculateCompatibilityScore}%
+          </Paragraph>
+          <Paragraph>
+            <strong style={{ fontWeight: "bold" }}>Lời khuyên:</strong>{" "}
+            {resultData.advise}
           </Paragraph>
         </div>
       ) : (

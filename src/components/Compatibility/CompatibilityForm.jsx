@@ -10,7 +10,19 @@ const CompatibilityForm = ({
   handleCalculateCompatibility,
 }) => {
   return (
-    <Card style={{ width: "50%", marginTop: "10px" }}>
+    <Card
+      style={{
+        width: "40%",
+        height: "7em",
+        marginBottom: "3rem",
+        marginTop: "5em",
+        border: "5px solid black", // Viền card
+        boxShadow: "0 0 30px darkgrey", // Bóng đổ
+        display: "flex",
+        justifyContent: "center", // Căn giữa theo chiều dọc
+        alignItems: "center", // Căn giữa theo chiều ngang
+      }}
+    >
       <Row
         gutter={16}
         style={{
@@ -25,7 +37,10 @@ const CompatibilityForm = ({
           <Select
             value={selectedElement}
             onChange={setSelectedElement}
-            style={{ width: "10rem", height: "3rem" }}
+            style={{
+              width: "7rem",
+              height: "2.5rem",
+            }}
             // optionLabelProp="label"
           >
             {OPTIONS.map((option) => (
@@ -35,13 +50,13 @@ const CompatibilityForm = ({
                 label={option.label}
               >
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  <span style={{ marginRight: "8px" }}>{option.emoji}</span>
+                  <span style={{ marginRight: "0.6em" }}>{option.emoji}</span>
                   <span
                     style={{
                       backgroundColor: option.color,
                       // color: "white",
                       padding: "2px 8px",
-                      borderRadius: "12px",
+                      borderRadius: "50%",
                     }}
                   >
                     {option.desc}
@@ -54,7 +69,11 @@ const CompatibilityForm = ({
         <Button
           type="primary"
           onClick={handleCalculateCompatibility}
-          style={{ marginTop: "20px", justifyItems: "center" }}
+          style={{
+            marginTop: "0.5em",
+            justifyItems: "center",
+            // marginBottom: "2rem",
+          }}
         >
           Tính toán độ tương hợp
         </Button>
