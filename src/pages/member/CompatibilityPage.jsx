@@ -206,7 +206,6 @@ function CompatibilityPage() {
                 </div>
               </Col>
             </Row>
-            {/* Các phần khác ở đây */}
 
             <button
               className="scroll-button"
