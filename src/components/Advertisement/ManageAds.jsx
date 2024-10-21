@@ -3,17 +3,14 @@ import api from "../../config/axiosConfig";
 import { Form, Input, Button, Upload, message, Spin } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
-// Hàm giả lập để upload hình ảnh lên Firebase Storage
 const uploadImageToFirebase = async (file) => {
-  // Implement your upload logic here
-  // Example return statement
-  return "url_to_uploaded_image"; // Trả về URL hình ảnh đã upload
+  return "url_to_uploaded_image";
 };
 
 const ManageAds = ({ ad, currentUser, onSave }) => {
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(!!ad);
-  const [loading, setLoading] = useState(false); // Trạng thái loading
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (ad) {
@@ -24,19 +21,17 @@ const ManageAds = ({ ad, currentUser, onSave }) => {
   useEffect(() => {
     if (currentUser.role !== "Member") {
       message.error("Bạn không có quyền truy cập vào trang này.");
-      // Có thể điều hướng đến trang khác hoặc ẩn component
     }
   }, [currentUser]);
 
   const handleUpload = async (file) => {
-    const imageUrl = await uploadImageToFirebase(file); // Hàm upload hình ảnh của bạn
-    return imageUrl; // Trả về URL của hình ảnh
+    const imageUrl = await uploadImageToFirebase(file);
+    return imageUrl;
   };
 
   const handleSubmit = async (values) => {
-    setLoading(true); // Bắt đầu loading
+    setLoading(true);
     try {
-      // Nếu có hình ảnh mới được upload
       if (values.images) {
         const uploadedImageUrl = await handleUpload(values.images.file);
         values.imagesURL = [uploadedImageUrl]; // Thêm URL vào giá trị gửi đi

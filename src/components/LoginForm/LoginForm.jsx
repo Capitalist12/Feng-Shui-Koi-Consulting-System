@@ -6,8 +6,8 @@ import { loginAuth } from "../../services/AuthAPIService";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/Slices/userSlice.js";
-import { GoogleURL } from '../../config/googleConfig.js';
-import { saveToken } from '../../config/accessTokenConfig.js';
+import { GoogleURL } from "../../config/googleConfig.js";
+import { saveToken } from "../../config/accessTokenConfig.js";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const LoginForm = () => {
 
     if (response.status === 200 && response.data.code === 1000) {
       dispatch(login(response.data.result.username));
-      saveToken(response.data.result.token, response.data.result.roleName, 30);
+      saveToken(response.data.result.token, response.data.result.roleName, 60);
 
       const role = response.data.result.roleName.toUpperCase();
 
