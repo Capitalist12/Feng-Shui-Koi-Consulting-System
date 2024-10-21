@@ -1,8 +1,10 @@
 package com.example.Feng_Shui_Koi_Consulting_System.mapper;
 
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UpdateProfileRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ProfileResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UpdateProfileResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
@@ -39,6 +41,13 @@ public interface UserMapper {
     @Mapping(target = "userID", source = "userID")
     @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementName")
     ProfileResponse toProfileResponse(User user);
+
+    @Mapping(target = "advertisements", ignore = true)
+    @Mapping(target = "transaction", ignore = true)
+    @Mapping(target = "element", ignore = true)
+    void updateUserProfile(@MappingTarget User user, UpdateProfileRequest request);
+
+    UpdateProfileResponse toUpdateProfileResponse(User user);
 
     @Named("mapToElement")
     default Element mapToElement(String element, @Context ElementRepo elementRepo) {

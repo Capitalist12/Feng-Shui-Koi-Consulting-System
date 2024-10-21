@@ -2,14 +2,11 @@ package com.example.Feng_Shui_Koi_Consulting_System.mapper;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.*;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
-import com.example.Feng_Shui_Koi_Consulting_System.service.AdvertisementService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.CategoryService;
 import org.mapstruct.*;
 

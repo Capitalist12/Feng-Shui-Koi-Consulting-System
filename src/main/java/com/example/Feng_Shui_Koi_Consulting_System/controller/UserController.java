@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UpdateProfileResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.UserService;
 import jakarta.validation.Valid;
@@ -40,6 +41,13 @@ public class UserController {
     ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getMyInfo())
+                .build();
+    }
+
+    @PutMapping("/update-info")
+    ApiResponse<UpdateProfileResponse> updateMyInfo(@RequestBody UpdateProfileRequest request) {
+        return ApiResponse.<UpdateProfileResponse>builder()
+                .result(userService.updateMyInfo(request))
                 .build();
     }
 
