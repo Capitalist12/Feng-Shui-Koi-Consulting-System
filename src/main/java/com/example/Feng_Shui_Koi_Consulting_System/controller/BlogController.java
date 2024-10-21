@@ -24,14 +24,14 @@ public class BlogController {
                 .build();
     }
 
-    @GetMapping
+    @GetMapping("/search")
     ApiResponse<List<BlogResponse>> getAllBlogs(){
         return ApiResponse.<List<BlogResponse>>builder()
                 .result(blogService.getListBlogs())
                 .build();
     }
 
-    @GetMapping("/{blogID}")
+    @GetMapping("/search/{blogID}")
     ApiResponse<BlogResponse> getBlogById(@PathVariable("blogID") String blogID) {
         return ApiResponse.<BlogResponse>builder()
                 .result(blogService.getBlogByID(blogID))

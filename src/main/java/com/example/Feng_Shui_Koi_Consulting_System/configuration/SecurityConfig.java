@@ -26,9 +26,9 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-
     private final String[] PUBLIC_ENDPOINT = {"/auth/login","/auth/signup","/auth/introspect"
-    ,"/auth/outbound/authentication", "/auth/verify-email"};
+    ,"/auth/outbound/authentication", "/auth/verify-email"
+    ,"/blog/search","/blog/search/{blogID}"};
     private final String[] SWAGGER = {
             "/koifish-docs/v3/api-docs/**",
             "/swagger-ui/**",
@@ -43,7 +43,8 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(request -> request
 
-                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()  // Public endpoint
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()  // Public endpoint for post method
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINT).permitAll() // Public endpoint for get method
                         .requestMatchers(SWAGGER).permitAll()  // Permit access to Swagger
                         .anyRequest().authenticated()  // All other requests require authentication
 //                        request.anyRequest().permitAll()  // Permit all Request
