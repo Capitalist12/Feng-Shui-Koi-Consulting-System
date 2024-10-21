@@ -34,21 +34,25 @@ const App = () => {
     },
     {
       path: "blog",
-      element: <BlogPage/>,
+      element: <BlogPage />,
       children: [
         {
           path: "",
-          element: <Blogs/>
+          element: <Blogs />
         },
         {
           path: ":blogId",
-          element: <BlogContent/>
+          element: <BlogContent />
         }
       ]
     },
     {
       path: "editor",
-      element: <BlogEditorPage />
+      element: (
+        <Admin>
+          <BlogEditorPage />
+        </Admin>
+      )
     },
     {
       path: "login",

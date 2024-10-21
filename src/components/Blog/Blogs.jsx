@@ -6,57 +6,63 @@ import { getAllBlogs } from "../../services/blogAPIService";
 
 const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
+    const [randomBlogs, setRandomBlogs] = useState([]);
 
     const getBlogs = async () => {
         const response = await getAllBlogs();
         response.status === 200 && response.data.code === 1000 ? setBlogs(response.data.result) : setBlogs([])
     }
 
+    const getRandomBlogs = (blogList, numberOfBlogs) => {
+        const shuffled = [...blogList].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, numberOfBlogs);
+    };
+
     useEffect(() => {
         getBlogs();
     }, [])
+
+    useEffect(() => {
+        if (blogs.length > 0) {
+            const selectedBlogs = getRandomBlogs(blogs, 5); // Lấy 5 blog ngẫu nhiên
+            setRandomBlogs(selectedBlogs);
+        }
+    }, [blogs]);
 
     return (
         <Col lg={20} xl={18} className="blogs-col">
             <Row className="blogs-col-row">
                 <Col md={24} xl={16} className="blogs-col-row-col">
-                    {blogs && blogs.length > 0 &&
-                        <div className="blog-item" key={blogs[0].blogID}>
-                            <img src={blogs[0].imageURL} />
-                            <Link to={blogs[0].blogID}>
-                                {blogs[0].title}
+                    {randomBlogs.length > 0 &&
+                        <div className="blog-item" key={randomBlogs[0].blogID}>
+                            <img src={randomBlogs[0].imageURL} />
+                            <Link to={randomBlogs[0].blogID}>
+                                {randomBlogs[0].title}
                             </Link>
                             <p>
-                                {blogs[0].createdDate ? blogs[0].createdDate : '19/10/2024'}
+                                {randomBlogs[0].createdDate}
                             </p>
                         </div>
                     }
                 </Col>
                 <Col md={24} xl={8} className="blogs-col-row-col">
-                    <Row className="blogs-col-row-col-row">
-                        <div className="blog-item">
-                            <img src={imageTest} alt="" />
-                            <Link>Test blogf dsfd fsf sdfsdf dsf</Link>
-                        </div>
-                    </Row>
-                    <Row className="blogs-col-row-col-row">
-                        <div className="blog-item">
-                            <img src={imageTest} alt="" />
-                            <Link>Test blog</Link>
-                        </div>
-                    </Row>
-                    <Row className="blogs-col-row-col-row">
-                        <div className="blog-item">
-                            <img src={imageTest} alt="" />
-                            <Link>Test blog</Link>
-                        </div>
-                    </Row>
-                    <Row className="blogs-col-row-col-row">
-                        <div className="blog-item">
-                            <img src={imageTest} alt="" />
-                            <Link>Test blog</Link>
-                        </div>
-                    </Row>
+                    {randomBlogs.length > 1 &&
+                        randomBlogs.slice(1).map((blog) => (
+                            <Row className="blogs-col-row-col-row" key={blog.blogID}>
+                                <div className="blog-item">
+                                    <img src={blog.imageURL || imageTest} alt={blog.title} />
+                                    <div>
+                                        <Link to={blog.blogID}>
+                                            {blog.title}
+                                        </Link>
+                                        <p>
+                                            {blog.createdDate}
+                                        </p>
+                                    </div>
+                                </div>
+                            </Row>
+                        ))
+                    }
                 </Col>
             </Row>
             <Row className="blogs-col-row">

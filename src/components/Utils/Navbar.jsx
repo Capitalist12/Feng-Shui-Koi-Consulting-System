@@ -3,18 +3,20 @@ import { Input, Menu } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import DropdownAvatar from "./DropdownAvatar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getToken } from "../../config/accessTokenConfig";
 import "../../styles/homepage/header/Navbar.scss";
 
 
-const Navbar = ({ token }) => {
+const Navbar = () => {
     const [current, setCurrent] = useState();
+    const token = getToken();
     const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
       // Cập nhật current dựa trên đường dẫn hiện tại
-      const path = location.pathname.slice(1); // Lấy đường dẫn mà không có ký tự '/'
-      setCurrent(path || ""); // Cập nhật current
+      const path = location.pathname.split("/");
+      setCurrent(path[1] || "");
     }, [location.pathname]); // Theo dõi sự thay đổi của đường dẫn
 
     const items = [

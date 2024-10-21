@@ -10,6 +10,7 @@ import { getInfo, updateDob, updatePassword } from "../../services/userInfoAPISe
 import "../../styles/Authenticate.scss";
 import { GoogleURL } from "../../config/googleConfig";
 import { toast } from "react-toastify";
+import { saveToken } from "../../config/accessTokenConfig";
 
 export default function Authenticate() {
     const navigate = useNavigate();
@@ -25,8 +26,9 @@ export default function Authenticate() {
                 const authCode = isMatch[1];
                 const response = await googleLogin(authCode);
 
-                if (response.status === 200 && response.data && response.data.code === 1000) {
-                    dispatch(login(response?.data?.result));
+                if (response.status === 200 && response.data.code === 1000) {
+                    dispatch(login(response?.data?.result?.username));
+                    saveToken(response.data.result.token, response.data.result.roleName, 30)
                     const info = await getInfo();
 
                     if (info.data.result.noPassword || info.data.result.noDob) {
@@ -34,12 +36,11 @@ export default function Authenticate() {
                     } else if (!info.data.result.noPassword && !info.data.result.noDob){
                         navigate("/")
                     }
-
-
-                } else if (response.status !== 200) {
-                    dispatch(logout());
-                    window.location.href = GoogleURL();
                 }
+                //  else if (response.status !== 200) {
+                //     dispatch(logout());
+                //     window.location.href = GoogleURL();
+                // }
 
             } else {
                 navigate("/login")

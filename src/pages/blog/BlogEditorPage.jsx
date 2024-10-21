@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Divider, Form, Input, Row } from "antd";
+import { Button, Col, Divider, Form, Input, Row, Switch } from "antd";
 import ReactQuill from 'react-quill';
 import EditorToolbar, { modules, formats } from "../../components/RichTextEditor/EditorToolbar.jsx";
 import { storage } from "../../config/firebase.js";
@@ -12,10 +12,13 @@ import uploadFile from "../../utils/file.js";
 import { createNewBlog } from "../../services/blogAPIService.js";
 import { toast } from "react-toastify";
 import { useForm } from "antd/es/form/Form.js";
+import { IoSunny } from "react-icons/io5";
+import { FaMoon } from "react-icons/fa";
 
 const BlogEditorPage = () => {
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("Tiêu đề");
+    const [isDarkMode, setIsDarkMode] = useState(false);
     const [form] = useForm();
 
     useEffect(() => {
@@ -24,7 +27,7 @@ const BlogEditorPage = () => {
 
     const handleSubmit = async (values) => {
         try {
-            if (value) {
+            if (value && value.length > 10) {
                 const url = await Promise.all(
                     values.image.map(async (element) => {
                         return await uploadFile(element.originFileObj); // Upload từng hình ảnh
@@ -40,8 +43,6 @@ const BlogEditorPage = () => {
 
                 // Lấy URL của file đã upload
                 const blogUrl = await getDownloadURL(blogRef);
-                console.log(blogUrl);
-                alert("Blog đã được lưu");
 
                 const payload = {
                     title: values.title,
@@ -50,14 +51,14 @@ const BlogEditorPage = () => {
                 }
 
                 const response = await createNewBlog(payload);
-                if(response.status === 200 && response.code === 1000){
+                if (response.status === 200 && response.data.code === 1000) {
                     toast.success("Tạo thành công!");
                     setValue("")
                     form.resetFields();
-                    setTitle("Tiêu đề")
+                    form.resetFields
                 }
 
-                }
+            }
 
 
         } catch (error) {
@@ -71,11 +72,11 @@ const BlogEditorPage = () => {
 
     return (
         <section id="blog-editor-section">
-            <div style={{ textAlign: 'center' }}>
+            {/* <div style={{ textAlign: 'center' }}>
                 <Title level={1}>
                     Tạo blog mới
                 </Title>
-            </div>
+            </div> */}
             <Row className="container" >
                 <Col className="editor" span={12}>
                     <Title level={2}>Chỉnh sửa</Title>
@@ -129,8 +130,11 @@ const BlogEditorPage = () => {
                     </Form>
                 </Col>
                 <Col className="preview" span={12}>
-                    <Title level={2} style={{ marginRight: 'auto' }}>Xem trước</Title>
-                    <div className="preview-content">
+                    <div className="preview-header">
+                        <Title level={2} style={{ marginRight: 'auto' }}>Xem trước</Title>
+                        <Switch defaultChecked checkedChildren={<IoSunny/>} unCheckedChildren={<FaMoon />} onChange={() => setIsDarkMode(!isDarkMode)}/>
+                    </div>
+                    <div className={isDarkMode ? "dark-mode preview-content" : "light-mode preview-content"}>
                         <Title
                             level={2}
                             className={(title !== "Tiêu đề" && title) ? "content-title" : ""}

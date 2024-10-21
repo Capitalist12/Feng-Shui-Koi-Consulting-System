@@ -1,18 +1,20 @@
 import { Button, Col, Input, message, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { getBlogById } from "../../services/blogAPIService";
+import { getAllBlogs, getBlogById } from "../../services/blogAPIService";
 import BlogComment from "./BlogComment";
 import TestImage from "../../assets/images/compatibility.jpg";
 import { IoMdShareAlt } from "react-icons/io";
 import { handleScroll } from "../../utils/helper";
-import { FaCommentAlt, FaCopy } from "react-icons/fa";
-import "../../styles/homepage/body/InputDOB/DOBCarousel/base.css";
+import { FaCommentAlt, FaCopy, FaMoon } from "react-icons/fa";
+import { IoSunny } from "react-icons/io5";
 
 const BlogContent = () => {
     const [blogInfo, setBlogInfo] = useState("");
     const [blogBody, setBlogBody] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [blogs, setBlogs] = useState([]);
     const url = useLocation();
     const linkPath = window.location.origin + url.pathname;
 
@@ -31,9 +33,21 @@ const BlogContent = () => {
         response.status === 200 && response.data.code === 1000 ? setBlogInfo(response.data.result) : setBlogInfo("")
     }
 
+    const getBlogs = async () => {
+        const response = await getAllBlogs();
+        if (response.status === 200 && response.data.code === 1000) {
+            const filterBlogs = response.data.result.filter((element) => element.blogID !== blogInfo.blogID)
+            const randomBlogs = filterBlogs.sort(() => 0.5 - Math.random())
+            setBlogs(randomBlogs.slice(0, 3))
+        } else {
+            setBlogs([])
+        }
+    }
+
     useEffect(() => {
         const blogId = url.pathname.split("/")[2];
         getBlogContent(blogId);
+        getBlogs();
     }, []);
 
     useEffect(() => {
@@ -51,7 +65,7 @@ const BlogContent = () => {
     }, [blogInfo])
 
     return (
-        <Col className="blog-content-col">
+        <Col className={isDarkMode ? "dark-mode blog-content-col" : "light-mode blog-content-col"}>
             <Col xl={3} className="action-container">
                 <div className="action-buttons">
                     <button onClick={() => showModal()}>
@@ -60,34 +74,45 @@ const BlogContent = () => {
                     <button onClick={() => handleScroll('comment-section')}>
                         <FaCommentAlt />
                     </button>
+                    <button onClick={() => setIsDarkMode(!isDarkMode)}>
+                        {isDarkMode ? <FaMoon /> : <IoSunny />}
+                    </button>
                 </div>
             </Col>
             <Col xl={18} className="blog-content-container">
-                <h1>{blogInfo?.title}</h1>
+                <div className="content-header">
+                    <h1>{blogInfo?.title}</h1>
+                    <p>Ngày tạo: {blogInfo?.createdDate}</p>
+                </div>
                 <div
-                    className="content-body theme-dark"
+                    className="content-body"
                     dangerouslySetInnerHTML={{ __html: blogBody }} // Hiển thị HTML đã giải mã
                 />
+                <div className="content-footer">
+                    <h4>Tác giả:</h4>
+                    &nbsp;
+                    <p>{blogInfo?.user}</p>
+                </div>
                 <BlogComment id={blogInfo.blogID} />
             </Col>
             <Col xl={3} className="more-blogs-container">
                 <div className="blogs-container">
                     <h2>Xem thêm</h2>
-                    <div>
-                        <img src={TestImage} />
-                        <Link >Blog content title</Link>
-                    </div>
-                    <div>
-                        <img src={TestImage} />
-                        <Link >Blog content title</Link>
-                    </div>
-                    <div>
-                        <img src={TestImage} />
-                        <Link >Blog content titlef dsff df sdfd fs dfsd dsf</Link>
-                    </div>
+                    {blogs && blogs?.length > 0 &&
+                        blogs.map((blog) => (
+                            <div key={blog.blogID}>
+                                <img src={blog.imageURL || TestImage} />
+                                <div className="title-date">
+                                <Link reloadDocument to={`/blog/${blog.blogID}`}>{blog.title}</Link>
+                                <p>{blog.createdDate}</p>
+                                </div>
+                            </div>
+                        ))
+                    }
                 </div>
             </Col>
             <Modal
+                className="share-modal"
                 title="Chia sẻ"
                 centered
                 onCancel={handleCancel}
