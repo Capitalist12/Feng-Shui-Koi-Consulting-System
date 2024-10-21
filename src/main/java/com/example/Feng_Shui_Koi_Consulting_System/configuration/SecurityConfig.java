@@ -52,8 +52,9 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
                                 .decoder(customJwtDecoder)  // Configure JWT decoder
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())  // Set JWT converter
-                        )
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))  // Set JWT converter
+
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 )
                         .cors(Customizer.withDefaults()) // Enable CORS
                         .csrf(AbstractHttpConfigurer::disable);  // Disable CSRF for non-browser clients
