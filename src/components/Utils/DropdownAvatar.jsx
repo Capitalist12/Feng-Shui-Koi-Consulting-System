@@ -22,8 +22,9 @@ const DropdownAvatar = (props) => {
         boxShadow: 'none',
     };
 
-    const handleLogout = (user) => {
-        dispatch(logout(user));
+    const handleLogout = () => {
+        localStorage.removeItem('accessToken');
+        dispatch(logout());
         navigate("/");
     };
 
@@ -59,7 +60,7 @@ const DropdownAvatar = (props) => {
                             padding: 8,
                         }}
                     >
-                        <Button type="primary" onClick={() => handleLogout(user)}>Đăng xuất</Button>
+                        <Button type="primary" onClick={() => handleLogout()}>Đăng xuất</Button>
                     </Space>
                 </div>
             )}

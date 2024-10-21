@@ -19,11 +19,12 @@ import {
 import TextArea from "antd/es/input/TextArea";
 
 const InputForm = (props) => {
-  const { close, save, fetchAPI } = props;
+  const { close, save, fetchAPI, setIsLoading } = props;
   const [addType, setAddType] = useState(false);
   const [koiType, setKoiType] = useState([]);
   const [selectedElement, setSelectedElement] = useState([]);
   const [typeInput, setTypeInput] = useState("");
+  
   const [form] = useForm();
 
   const getAllTypes = async () => {
@@ -38,6 +39,8 @@ const InputForm = (props) => {
   }, []);
 
   const onFinish = async (values) => {
+    setIsLoading(true);
+
     if (values && values.images.length > 0) {
       const url = await Promise.all(
         values.images.map(async (image) => {
@@ -64,6 +67,7 @@ const InputForm = (props) => {
       } catch (err) {
         toast.error(err.message);
       } finally {
+        setIsLoading(false);
         // clear old data
         setTypeInput("");
         setSelectedElement([]);
@@ -103,7 +107,7 @@ const InputForm = (props) => {
 
   const handleInputNewType = (event) => {
     setTypeInput(event.target.value);
-  };
+  };    
 
   return (
     <Form

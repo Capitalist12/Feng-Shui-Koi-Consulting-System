@@ -5,7 +5,7 @@ import {  useNavigate } from "react-router-dom";
 const Admin = ({ children }) => {
     const navigation = useNavigate();
     const localData = localStorage.getItem('accessToken');
-    const isAdmin = JSON.parse(localData)?.roleName?.toUpperCase();
+    const isAdmin = JSON.parse(localData)?.role?.toUpperCase();
 
 
     useEffect(() => {
