@@ -5,11 +5,13 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.InvalidatedToken;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.UserMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.InvalidatedTokenRepository;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.TransactionRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundIdentityClient;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
@@ -29,6 +31,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,9 +42,7 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @Slf4j
@@ -59,6 +60,8 @@ public class AuthenticationServices {
     ElementRepo elementRepo;
     ElementCalculationService elementCalculationService;
     TransactionRepo transactionRepo;
+    InvalidatedTokenRepository invalidatedTokenRepository;
+
 
     @NonFinal
     @Value("${jwt.singerKey}")
@@ -150,16 +153,50 @@ public class AuthenticationServices {
                 .build();
     }
 
-    public IntrospectResponse introspected(IntrospectResquest resquest) throws JOSEException, ParseException {
-        var token = resquest.getToken();
+    public IntrospectResponse introspected(IntrospectRequest request)
+            throws JOSEException, ParseException {
+
+        var token = request.getToken();
+        boolean isValid = true;
+
+        try {
+            verifyToken(token);
+        }catch (AppException e) {
+            isValid = false;
+        }
+
+        return IntrospectResponse.builder()
+                .valid(isValid)
+                .build();
+    }
+
+    public void logout(LogoutResquest request) throws ParseException, JOSEException {
+        var signToken = verifyToken(request.getToken());
+
+        String jit = signToken.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expiryTime(expiryTime)
+                .build();
+
+        invalidatedTokenRepository.save(invalidatedToken);
+    }
+
+    private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
 
         JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
-        Date expepityTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
         var verifier = signedJWT.verify(jwsVerifier);
-        return IntrospectResponse.builder()
-                .valid(expepityTime.after(new Date()) && verifier)
-                .build();
+        if(!(expiryTime.after(new Date()) && verifier))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if(invalidatedTokenRepository.existsById(signedJWT
+                .getJWTClaimsSet().getJWTID()))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        return signedJWT;
+
     }
 
     public String resetPassword(ResetPasswordRequest request) {
@@ -233,6 +270,7 @@ public class AuthenticationServices {
                 .expirationTime(new Date(
                         Instant.now().plus(2, ChronoUnit.HOURS).toEpochMilli()
                 ))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -325,6 +363,14 @@ public class AuthenticationServices {
             log.error("Exception: ", e);
         }
         return false;
+    }
+
+    @Scheduled(cron = "0 0 */5 * * ?")
+    public void deleteInvalidatedToken() {
+        List<InvalidatedToken> invalidToken= invalidatedTokenRepository.findAll();
+        if(invalidToken.size() == 30) {
+            invalidatedTokenRepository.deleteAll(invalidToken);
+        }
     }
 
 }

@@ -60,10 +60,17 @@ public class AuthenticationAPI {
     }
 
     @PostMapping("/introspect")
-    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectResquest request) throws ParseException, JOSEException {
+    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
         var valid = authenticationServices.introspected(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(valid)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutResquest request) throws ParseException, JOSEException {
+        authenticationServices.logout(request);
+        return ApiResponse.<Void>builder()
                 .build();
     }
 

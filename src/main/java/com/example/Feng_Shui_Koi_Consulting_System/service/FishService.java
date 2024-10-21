@@ -53,19 +53,19 @@ public class FishService {
                     .collect(Collectors.toSet());
             fish.setImagesFish(koiImageEntities); // Set the images in the KoiFish entity
         }
-        return koiFishMapper.toKoiFishRespon(fishRepo.save(fish));
+        return koiFishMapper.toKoiFishResponse(fishRepo.save(fish));
     }
 
 
     public List<KoiFishResponse> getFish() {
         return fishRepo.findAll().stream()
-                .map(koiFishMapper :: toKoiFishRespon).collect(Collectors.toList());
+                .map(koiFishMapper :: toKoiFishResponse).collect(Collectors.toList());
     }
 
     public KoiFishResponse getFishById(String id){
         KoiFish fish =  fishRepo.findById(id).orElseThrow(()
                 -> new AppException(ErrorCode.FISH_NOT_FOUND));
-        return koiFishMapper.toKoiFishRespon(fish);
+        return koiFishMapper.toKoiFishResponse(fish);
 
     }
 
@@ -106,7 +106,7 @@ public class FishService {
         }
 
         // Return the response
-        return koiFishMapper.toKoiFishRespon(fishRepo.save(fish));
+        return koiFishMapper.toKoiFishResponse(fishRepo.save(fish));
     }
 
     public void deleteFish(String fishId) {
