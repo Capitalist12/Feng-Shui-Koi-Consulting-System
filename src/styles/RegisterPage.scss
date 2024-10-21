@@ -1,13 +1,13 @@
 @font-face {
-  font-family: 'Japan-Wave'; /* Name your font family */
-  src: url('../assets/font/Japan\ wave.ttf'); /* Locate the .ttf file within your directory*/
+  font-family: "Japan-Wave"; /* Name your font family */
+  src: url("../assets/font/Japan\ wave.ttf"); /* Locate the .ttf file within your directory*/
 }
 
 body {
-  font-family: 'Japan-Wave', sans-serif; /* Use the font family */
+  font-family: "Japan-Wave", sans-serif; /* Use the font family */
 }
 
-.main-title{
+.main-title {
   font-size: 5em;
   font-weight: bold;
   position: absolute;
@@ -26,12 +26,12 @@ body {
 
 @keyframes ripple-effect {
   to {
-      transform: scale(15);
-      opacity: 0.05;
+    transform: scale(15);
+    opacity: 0.05;
   }
 }
 
-.register-form{
+.register-form {
   background-color: white;
   position: absolute;
   width: 100%;
@@ -39,14 +39,14 @@ body {
   border-radius: 1em;
   right: 7em;
   top: 4%;
-  
+
   .register-btn {
-      margin-bottom: 0.7em;
-      border-radius: 2em;
+    margin-bottom: 0.7em;
+    border-radius: 2em;
   }
-  h2{
-      text-align: center;
-      font-size: 2em;
+  h2 {
+    text-align: center;
+    font-size: 2em;
   }
 }
 

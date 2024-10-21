@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Form, Input, Button, DatePicker } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import "../../styles/register.scss";
+// import "../../styles/register.scss";
 import { UserOutlined, KeyOutlined, MailOutlined } from "@ant-design/icons";
-import instance from "../../utils/axiosConfig";
+import api from "../../config/axiosConfig";
 import registerVideo from "../../assets/video/Login-video.mp4"; // Import video
 
 function RegisterPage() {
@@ -15,7 +15,7 @@ function RegisterPage() {
     try {
       values.role = "User";
       setLoading(true);
-      const response = await instance.post("register", values);
+      const response = await api.post("singup", values);
       toast.success("Successfully register new account!");
 
       if (response.status === 201 || response.status === 200) {

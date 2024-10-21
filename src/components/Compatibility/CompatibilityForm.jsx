@@ -1,4 +1,4 @@
-import { Button, Select, Row, Col, Typography } from "antd";
+import { Button, Select, Row, Col, Typography, Card } from "antd";
 import { OPTIONS } from "../../utils/constant";
 
 const { Title } = Typography;
@@ -10,16 +10,38 @@ const CompatibilityForm = ({
   handleCalculateCompatibility,
 }) => {
   return (
-    <div>
-      <Row gutter={16} style={{ marginTop: "5px" }}>
+    <Card
+      style={{
+        width: "40%",
+        height: "7em",
+        marginBottom: "3rem",
+        marginTop: "5em",
+        border: "5px solid black", // Viền card
+        boxShadow: "0 0 30px darkgrey", // Bóng đổ
+        display: "flex",
+        justifyContent: "center", // Căn giữa theo chiều dọc
+        alignItems: "center", // Căn giữa theo chiều ngang
+      }}
+    >
+      <Row
+        gutter={16}
+        style={{
+          display: "flex",
+          flexDirection: "column", // Đảm bảo các phần tử được xếp theo cột
+          justifyContent: "center", // Căn giữa theo trục ngang
+          alignItems: "center", // Căn giữa theo trục dọc
+          marginTop: "5px",
+        }}
+      >
         <Col span={24}>
-          <Title level={4}>Chọn Yếu Tố</Title>
           <Select
-            placeholder="Chọn yếu tố"
             value={selectedElement}
             onChange={setSelectedElement}
-            style={{ width: "200px" }}
-            optionLabelProp="label"
+            style={{
+              width: "7rem",
+              height: "2.5rem",
+            }}
+            // optionLabelProp="label"
           >
             {OPTIONS.map((option) => (
               <Option
@@ -28,13 +50,13 @@ const CompatibilityForm = ({
                 label={option.label}
               >
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  <span style={{ marginRight: "8px" }}>{option.emoji}</span>
+                  <span style={{ marginRight: "0.6em" }}>{option.emoji}</span>
                   <span
                     style={{
                       backgroundColor: option.color,
-                      color: "#fff",
+                      // color: "white",
                       padding: "2px 8px",
-                      borderRadius: "4px",
+                      borderRadius: "50%",
                     }}
                   >
                     {option.desc}
@@ -44,17 +66,19 @@ const CompatibilityForm = ({
             ))}
           </Select>
         </Col>
+        <Button
+          type="primary"
+          onClick={handleCalculateCompatibility}
+          style={{
+            marginTop: "0.5em",
+            justifyItems: "center",
+            // marginBottom: "2rem",
+          }}
+        >
+          Tính toán độ tương hợp
+        </Button>
       </Row>
-
-      <Button
-        className="dark-theme-button"
-        type="primary"
-        onClick={handleCalculateCompatibility}
-        style={{ marginTop: "20px" }}
-      >
-        Tính toán độ tương hợp
-      </Button>
-    </div>
+    </Card>
   );
 };
 

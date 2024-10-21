@@ -13,7 +13,7 @@ const KoiList = ({
       title: "Tên Cá",
       dataIndex: "name",
       key: "name",
-      width: 200,
+      width: 100,
     },
     {
       title: "Màu sắc",
@@ -31,12 +31,12 @@ const KoiList = ({
       ),
     },
     {
-      title: "Hành Động",
+      title: "Chọn",
       key: "action",
       render: (fish) => (
         <Button onClick={() => handleSelectFish(fish)}>+</Button>
       ),
-      width: 100,
+      width: 50,
     },
   ];
 
@@ -56,9 +56,9 @@ const KoiList = ({
         placeholder="Tìm kiếm theo màu sắc hoặc loại cá"
         value={searchTerm}
         onChange={handleSearchTermChange}
-        style={{ marginBottom: "16px" }}
+        style={{ marginBottom: "2vh", height: "2rem" }}
       />
-      <div style={{ maxHeight: "380px" }}>
+      <div style={{}}>
         <Table
           columns={koiColumns}
           dataSource={filteredFishData}
@@ -66,7 +66,7 @@ const KoiList = ({
           pagination={false}
           rowClassName={(fish) => (isKoiSelected(fish) ? "selected-row" : "")}
           sticky
-          scroll={{ y: 400 }}
+          scroll={{ y: 330 }}
         />
       </div>
     </div>

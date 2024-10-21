@@ -6,7 +6,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getToken } from "../../config/accessTokenConfig";
 import "../../styles/homepage/header/Navbar.scss";
 
-
 const Navbar = () => {
     const [current, setCurrent] = useState();
     const token = getToken();
@@ -21,7 +20,7 @@ const Navbar = () => {
 
     const items = [
         { label: 'TRANG CHỦ', key: '' },
-        { label: 'MUA / BÁN', key: 'shop' },
+        { label: 'MUA / BÁN', key: 'ad' },
         { label: 'BLOG & TIN TỨC', key: 'blog' },
         { label: 'ĐỘ TƯƠNG HỢP', key: 'compatibility' },
         { 
@@ -56,17 +55,23 @@ const Navbar = () => {
         )
       ];
 
-    const onClick = (e) => {
-        console.log('click ', e);
-        setCurrent(e.key);
-        navigate(`/${e.key}`);
-    };
+  const onClick = (e) => {
+    console.log("click ", e);
+    setCurrent(e.key);
+    navigate(`/${e.key}`);
+  };
 
-    return (
-      <section id='navbar-section'>
-        <Menu className='navbar' onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
-      </section>
-    );
-}
+  return (
+    <section id="navbar-section">
+      <Menu
+        className="navbar"
+        onClick={onClick}
+        selectedKeys={[current]}
+        mode="horizontal"
+        items={items}
+      />
+    </section>
+  );
+};
 
 export default Navbar;
