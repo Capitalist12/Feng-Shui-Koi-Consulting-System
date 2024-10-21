@@ -17,36 +17,37 @@ const SelectedItems = ({
       <Card
         style={{
           background: "transparent",
-          border: "none", // Loại bỏ border (viền)
+          border: "none", // xoa vien
         }}
       >
         <Title level={2.5} className="title">
           Danh sách tính toán:
         </Title>
 
-        <div id="koi" style={{ marginTop: "2rem" }}>
+        <div id="koi">
           <h1>Cá Koi:</h1>
           <p>
             {maxSelectedFish.length > 0 ? (
               <div
                 style={{
                   display: "grid",
+                  height: "2rem",
                   gridTemplateColumns:
                     maxSelectedFish.length > 3 ? "repeat(2, 1fr)" : "1fr",
-                  gap: "0.5vw", // khoảng cách giữa các cá Koi
+                  gap: "0.2rem",
                 }}
               >
                 {maxSelectedFish.map((fish, index) => (
                   <span
                     key={fish.id}
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between", // Căn đều khoảng cách giữa tên và nút X
-                      alignItems: "center", // Căn giữa theo trục dọc
-                      marginBottom: "5px", // Tạo khoảng cách giữa các dòng cá
-                      marginRight: "10px",
-                      gap: "10px",
-                    }}
+                    // style={{
+                    //   display: "flex",
+                    //   justifyContent: "space-between", // Căn đều khoảng cách giữa tên và nút X
+                    //   alignItems: "center", // Căn giữa theo trục dọc
+                    //   marginBottom: "5px", // Tạo khoảng cách giữa các dòng cá
+                    //   marginRight: "10px",
+                    //   gap: "10px",
+                    // }}
                   >
                     {/* Hiển thị số thứ tự */}
                     <span>{index + 1}.</span> {/* Đánh số bắt đầu từ 1 */}
@@ -68,18 +69,13 @@ const SelectedItems = ({
           </p>
         </div>
 
-        <div id="tank" style={{ marginTop: "1rem" }}>
+        <div id="tank">
           <h1>Hồ:</h1>
           <p>
             {selectedTank ? (
               <div className="tank-selected">
                 <span>{selectedTank.shape}</span>
-                <Button
-                  style={{ width: "20px" }}
-                  type="primary"
-                  danger
-                  onClick={handleRemoveTank}
-                >
+                <Button type="primary" danger onClick={handleRemoveTank}>
                   Xóa
                 </Button>
               </div>

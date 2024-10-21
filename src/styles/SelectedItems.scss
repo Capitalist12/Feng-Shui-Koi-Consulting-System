@@ -20,7 +20,7 @@
   border-radius: 50%; // Tạo khung tròn
   overflow: hidden; // phần thừa của ảnh
   display: flex;
-  justify-content: center;
+  // justify-content: center;
   align-items: center;
   flex-direction: column;
   box-shadow: 0px -1rem 10rem white;
@@ -41,30 +41,25 @@
   }
 
   .title {
-    margin-top: 2rem; // Tăng khoảng cách trên tiêu đề
-    margin-right: 3rem;
-    font-size: 2rem; // Kích thước chữ cho tiêu đề
-    font-weight: bold; // Đậm
+    position: relative;
+    height: 1rem;
+    margin-left: 0rem;
+    font-size: 2rem;
+    font-weight: bold;
     text-shadow: 2px 2px 1px white;
-    margin-top: -5rem;
     padding-bottom: 3rem;
-  }
-
-  h1 {
-    margin-left: 2rem;
-    text-shadow: 2px 2px 1px white;
-    text-transform: round($number: 2);
   }
   #koi,
   #tank {
+    height: 12rem;
     display: contents;
     width: 45%; // Chiếm 45% chiều rộng màn hình cho mỗi bên
-    vertical-align: top; // Căn chúng ở cùng chiều cao
+    // vertical-align: top; // Căn chúng ở cùng chiều cao
   }
 
   #koi {
     color: black;
-    text-align: left; // Căn trái
+    text-align: left;
   }
 
   #tank {

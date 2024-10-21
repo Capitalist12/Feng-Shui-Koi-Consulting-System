@@ -1,55 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import api from "../../config/axiosConfig";
-// import "../../styles/Advertisement.scss";
-// import Navbar from "../../components/Utils/Navbar";
-// import { Layout } from "antd";
-
-// function AdvertismentPage() {
-//   const [ads, setAds] = useState([]);
-
-//   const fetchAds = async () => {
-//     try {
-//       const response = await api.get("ad");
-//       setAds(response.data.result);
-//       console.log(response.data.result);
-//     } catch (e) {
-//       console.log("Error fetch ads: ", e);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchAds();
-//   }, []);
-
-//   return (
-//     <Layout>
-//       <div className="nav">
-//         <Navbar />
-//       </div>
-
-//       <div className="ads-list">
-//         {ads.map((ad) => (
-//           <Advertisement key={ad.adID} ad={ad} />
-//         ))}
-//       </div>
-//     </Layout>
-//   );
-// }
-
-// const Advertisement = ({ ad }) => {
-//   return (
-//     <div className="advertisement">
-//       <h2>Mệnh: {ad.element} </h2>
-//       <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
-//       <h3>{ad.title}</h3>
-//       <p>Mô tả: {ad.description}</p>
-//       <p>Giá: ${ad.price}</p>
-//       <p className="ad-user">Người đăng: {ad.user}</p>{" "}
-//     </div>
-//   );
-// };
-
-// export default AdvertismentPage;
 import { useEffect, useState } from "react";
 import api from "../../config/axiosConfig";
 import "../../styles/Advertisement.scss";
@@ -69,12 +17,9 @@ function AdvertisementPage({ currentUser }) {
 
   const fetchAds = async () => {
     try {
-      const response = await api.get("/ad");
-      //Giả sử bạn sẽ kiểm tra trạng thái của quảng cáo từ cơ sở dữ liệu
-      const verifiedAds = response.data.result.filter(
-        (ad) => ad.status === "Verified"
-      ); // Điều này cần điều chỉnh tùy theo cách lấy trạng thái
-      setAds(verifiedAds);
+      const response = await api.get("/ad/verified");
+
+      setAds(response.data.result);
     } catch (e) {
       console.log("Error fetching ads: ", e);
     }
@@ -104,7 +49,7 @@ function AdvertisementPage({ currentUser }) {
       }
       const filteredAds = response.data.result
         .filter((ad) => ad.title.toLowerCase().includes(keyword.toLowerCase()))
-        .filter((ad) => ad.status === "Verified"); // Chỉ hiển thị quảng cáo đã được xác thực
+        .filter((ad) => ad.status === "Verified");
       setAds(filteredAds);
     } catch (e) {
       console.log("Error searching ads: ", e);
@@ -113,13 +58,12 @@ function AdvertisementPage({ currentUser }) {
 
   const handleCategoryFilter = async (categoryName) => {
     try {
-      const response = await api.get("/ad");
+      const response = await api.get("/ad/verified");
       const filteredAds = response.data.result.filter(
-        (ad) =>
-          ad.category.categoryName === categoryName && ad.status === "Verified" // Lọc theo danh mục và trạng thái
+        (ad) => ad.category.categoryName === categoryName
       );
       setAds(filteredAds);
-      setCurrentPage(1); // Reset về trang đầu
+      setCurrentPage(1); // reset về trang đầu
     } catch (e) {
       console.log("Error filtering ads by category: ", e);
     }
