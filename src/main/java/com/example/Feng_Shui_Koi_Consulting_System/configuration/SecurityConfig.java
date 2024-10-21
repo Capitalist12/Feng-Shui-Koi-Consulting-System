@@ -28,7 +28,7 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINT = {"/auth/login","/auth/signup","/auth/introspect"
     ,"/auth/outbound/authentication", "/auth/verify-email"
-    ,"/blog/search","/blog/search/{blogID}"};
+    ,"/blog","/blog/{blogID}"};
     private final String[] SWAGGER = {
             "/koifish-docs/v3/api-docs/**",
             "/swagger-ui/**",

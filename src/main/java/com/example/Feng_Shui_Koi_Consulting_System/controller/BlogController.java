@@ -17,21 +17,21 @@ import java.util.List;
 public class BlogController {
     BlogService blogService;
 
-    @PostMapping
+    @PostMapping("/create")
     ApiResponse<BlogResponse> createBlog(@RequestBody BlogRequest request){
         return ApiResponse.<BlogResponse>builder()
                 .result(blogService.createBlog(request))
                 .build();
     }
 
-    @GetMapping("/search")
+    @GetMapping
     ApiResponse<List<BlogResponse>> getAllBlogs(){
         return ApiResponse.<List<BlogResponse>>builder()
                 .result(blogService.getListBlogs())
                 .build();
     }
 
-    @GetMapping("/search/{blogID}")
+    @GetMapping("{blogID}")
     ApiResponse<BlogResponse> getBlogById(@PathVariable("blogID") String blogID) {
         return ApiResponse.<BlogResponse>builder()
                 .result(blogService.getBlogByID(blogID))
