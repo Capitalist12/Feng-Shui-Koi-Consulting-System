@@ -6,8 +6,7 @@ const { Meta } = Card;
 const AdvertiseCardItem = () => (
     <Card
         hoverable
-        size='small'
-        
+        size='small'        
         cover={<img alt="example" style={{maxHeight: '300px', objectFit: 'cover'}} src="https://firebasestorage.googleapis.com/v0/b/fengshui-koi-consulting-system.appspot.com/o/Astral%20Koi%20Fish%2C%20Kerri%20McDonald.jpeg?alt=media&token=db5c0cf7-3869-45bc-8865-59e5ae29f6cb" />}
 
     >

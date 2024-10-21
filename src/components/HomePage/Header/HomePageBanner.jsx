@@ -3,6 +3,7 @@ import { Col, Row } from "antd";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import "../../../styles/homepage/header/HomePageBanner.scss";
+import { handleScroll } from "../../../utils/helper";
 
 const HomePageBanner = () => {
 
@@ -41,7 +42,7 @@ const HomePageBanner = () => {
                         </Row>
                     </div>
                     <div className='btn'>
-                        <a href='#inspec-section'>
+                        <a onClick={() => handleScroll('inspec-section')}>
                             <FaMagnifyingGlass /> &nbsp; TRA CỨU NGAY
                         </a>
                         <div className="downArrow bounce">

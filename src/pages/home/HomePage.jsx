@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 //components
 import BackToTopBtn from '../../components/Utils/BackToTopBtn.jsx';
@@ -16,6 +15,7 @@ import Title from 'antd/es/typography/Title';
 
 //scss
 import "../../styles/homepage/HomePage.scss";
+import { handleScroll } from '../../utils/helper.js';
 
 const HomePage = () => {
     const [consultantElementData, setConsultantElementData] = useState(null);
@@ -25,7 +25,6 @@ const HomePage = () => {
     let rotateTimeout;
     let spinningTimeout;
 
-    const token = useSelector((store) => store?.user?.token);
     const [scrollProgress, setScrollProgress] = useState(0); // Để theo dõi quá trình cuộn
     const containerRef = useRef(null); // Ref cho lớp input-yearOfBirth-container
 
@@ -119,7 +118,7 @@ const HomePage = () => {
 
             <HomePageBanner />
 
-            <Navbar token={token} />
+            <Navbar />
 
             <section id='inspec-section'>
                 <div ref={containerRef} className='input-yearOfBirth-container'>
@@ -137,7 +136,7 @@ const HomePage = () => {
                             Trong ngũ hành âm dương, 5 yếu tố Kim – Mộc – Thủy – Hỏa – Thổ luôn vận hành liên tục, vừa hỗ trợ, vừa khắc chế lẫn nhau.<br />
                             Mối quan hệ tương sinh, tương khắc này được ứng dụng trong phong thủy và các lĩnh vực trong cuộc sống.<br />
                             Mỗi người sẽ có tuổi và mệnh khác nhau. Để hiểu hơn về cung mệnh là gì, nhấn vào đây &nbsp;
-                            <a href='#element-info-section'>Xem thêm</a>
+                            <a onClick={() => handleScroll('element-info-section')} >Xem thêm</a>
                         </p>
 
                     </div>
