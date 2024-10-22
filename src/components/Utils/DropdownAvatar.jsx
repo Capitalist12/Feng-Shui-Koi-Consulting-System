@@ -68,7 +68,7 @@ const DropdownAvatar = (props) => {
             <a onClick={(e) => e.preventDefault()}>
                 <Space style={{ color: "black" }}>
                     <Avatar size='default' icon={<UserOutlined />} />
-                    {user?.username}
+                    {user && user}
                 </Space>
             </a>
         </Dropdown>

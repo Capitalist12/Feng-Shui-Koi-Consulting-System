@@ -46,7 +46,7 @@ const Navbar = () => {
                 className: 'login' 
               },
               { 
-                label: <Link to="register">Đăng ký</Link>, 
+                label: <Link to="signup">Đăng ký</Link>, 
                 key: 'register', 
                 disabled: true,
                 className: 'register' 

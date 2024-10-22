@@ -37,8 +37,9 @@ body {
   width: 100%;
   padding: 4em 2em 2em 2em;
   border-radius: 1em;
-  right: 7em;
-  top: 4%;
+  right: 5%;
+  top: 50%;
+  transform: translate(5%, -50%);
 
   .register-btn {
     margin-bottom: 0.7em;
@@ -47,6 +48,7 @@ body {
   h2 {
     text-align: center;
     font-size: 2em;
+    margin: 0;
   }
 }
 
@@ -56,4 +58,71 @@ video {
   left: 0;
   bottom: 0;
   z-index: -1;
+}
+
+
+.otp-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 5px gray;
+  background-color: white;
+  border-radius: 1em;
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translate(5%, -50%);
+  width: 450px;
+
+  .ant-form-item-label >label{
+    height: 100%;
+    font-size: 30px;
+  }
+
+  .input-otp__field {
+    background-color: white;
+  }
+
+  .ant-input-outlined:focus-within {
+    background-color: rgb(240, 240, 240);
+  }
+
+  h2 {
+    font-weight: 600;
+    color: black;
+    font-size: 1.8em;
+  }
+
+  h4{
+    margin-top: 0;
+    font-weight: 400;
+    font-size: 1.1em;
+    text-align: center;
+  }
+
+  .mail-link{
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: end;
+
+    p{
+      cursor: pointer;
+      color: #1677ff;
+    }
+  }
+
+  .ant-form-item {
+    &:last-child{
+      width: 90%;
+  
+      button.ant-btn {
+        width: 100%;
+        padding: 0 5px;
+      }
+    }
+  }
+
 }
