@@ -12,6 +12,9 @@
   .custom-title {
     margin-top: 2rem;
     text-align: center;
+    text-shadow: 2px 2px 5px rgb(255, 255, 255);
+    font-family: "Courier New", Courier, monospace;
+    font-size: 3rem;
   }
 }
 
@@ -70,12 +73,14 @@
       .button-container {
         display: flex;
         align-items: center;
-        // gap: 1em;
       }
 
       .icon {
         font-size: 1rem;
         color: #000;
+      }
+      .sort {
+        margin-top: 2rem;
       }
     }
   }
@@ -84,26 +89,25 @@
     flex: 1;
     display: flex;
     flex-wrap: wrap;
-    padding: 5rem 0;
+    padding: 4rem 0;
     gap: 3rem;
-    margin-top: 1vh;
 
     .advertisement {
       width: calc(100% / 4 - 3rem);
-      background-color: red;
+      background-color: rgb(166, 166, 166);
       padding: 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
-      transition: transform 0.2s ease;
+      transition: transform 0.4s ease;
 
       &:hover {
-        transform: translateY(-20px);
+        transform: translateY(-1rem);
       }
     }
 
     img {
       width: 100%;
-      height: 250px;
+      height: 50%;
       object-fit: cover;
       border-radius: 8px;
     }
@@ -111,12 +115,8 @@
     .pagination {
       width: 100%;
       display: flex;
-      justify-content: center; /* Căn giữa pagination */
-      margin-top: 30px; /* Khoảng cách giữa quảng cáo và pagination */
+      justify-content: center;
+      margin-top: 2rem;
     }
-    // .custom-pagination {
-    //   margin-top: 16px;
-    //   align-self: center;
-    // }
   }
 }

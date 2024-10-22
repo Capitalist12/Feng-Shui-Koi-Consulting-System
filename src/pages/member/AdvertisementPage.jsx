@@ -12,12 +12,16 @@ import { GiAquarium } from "react-icons/gi";
 import { RiAlignItemLeftLine } from "react-icons/ri";
 import EmblaCarousel from "../../components/Advertisement/embla/EmblaCarousel";
 import { Option } from "antd/es/mentions";
+import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
+import AdDetail from "../../components/Advertisement/AdDetails";
 
 function AdvertisementPage({ currentUser }) {
   const [ads, setAds] = useState([]);
   const [adsE, setAdsE] = useState([]);
   const [displayAds, setDisplayAds] = useState([]);
   const [sortValue, setSortValue] = useState("Sắp xếp theo:...");
+  const [selectedAd, setSelectedAd] = useState(null); // Thêm state cho quảng cáo đã chọn
+  const [isModalVisible, setIsModalVisible] = useState(false); // Thêm state cho modal
   const [editingAd, setEditingAd] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const adsPerPage = 8;
@@ -70,7 +74,7 @@ function AdvertisementPage({ currentUser }) {
     const filteredAds = ads.filter(
       (ad) => ad.category.categoryName === categoryName
     );
-    setDisplayAds(filteredAds); // Update display ads with filtered results
+    setDisplayAds(filteredAds);
     setCurrentPage(1);
     setSortValue("Sắp xếp theo:...");
   };
@@ -85,6 +89,16 @@ function AdvertisementPage({ currentUser }) {
   const indexOfLastAd = currentPage * adsPerPage;
   const indexOfFirstAd = indexOfLastAd - adsPerPage;
   const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd);
+
+  const showAdDetail = (ad) => {
+    setSelectedAd(ad);
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    setSelectedAd(null);
+  };
 
   return (
     <Layout>
@@ -141,29 +155,9 @@ function AdvertisementPage({ currentUser }) {
                   Feng Shui Items
                 </Button>
               </div>
-              {/* 
-              <div className="button-container">
-                <FaArrowTrendUp className="icon" />
-                <Button
-                  className="custom-search-button"
-                  style={{ width: "8rem" }}
-                  onClick={sortAdsByPriceAsc}
-                >
-                  Giá tăng dần
-                </Button>
-              </div>
 
-              <div className="button-container">
-                <FaArrowTrendDown className="icon" />
-                <Button
-                  className="custom-search-button"
-                  style={{ width: "8rem" }}
-                  onClick={sortAdsByPriceDesc}
-                >
-                  Giá giảm dần
-                </Button>
-              </div> */}
               <Select
+                className="sort"
                 value={sortValue}
                 style={{ width: 200 }}
                 onChange={(value) => {
@@ -177,8 +171,14 @@ function AdvertisementPage({ currentUser }) {
                   }
                 }}
               >
-                <Option value="asc">Giá thấp đến cao</Option>
-                <Option value="desc">Giá cao đến thấp</Option>
+                <Option value="asc">
+                  Giá thấp đến cao{" "}
+                  <FaArrowTrendUp style={{ marginLeft: "0.5rem" }} />
+                </Option>
+                <Option value="desc">
+                  Giá cao đến thấp{" "}
+                  <FaArrowTrendDown style={{ marginLeft: "0.5rem" }} />
+                </Option>
               </Select>
             </div>
           </div>
@@ -186,7 +186,11 @@ function AdvertisementPage({ currentUser }) {
 
         <div className="ads-list">
           {currentAds.map((ad) => (
-            <div key={ad.adID} className="advertisement">
+            <div
+              key={ad.adID}
+              className="advertisement"
+              onClick={() => showAdDetail(ad)}
+            >
               <h2>Mệnh: {ad.element}</h2>
               <h3>{ad.title}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
@@ -210,6 +214,14 @@ function AdvertisementPage({ currentUser }) {
           </div>
         </div>
       </section>
+      {/* Hiển thị modal khi đã chọn quảng cáo */}
+      {selectedAd && (
+        <AdDetail
+          ad={selectedAd}
+          visible={isModalVisible}
+          onClose={handleCloseModal}
+        />
+      )}
     </Layout>
   );
 }
