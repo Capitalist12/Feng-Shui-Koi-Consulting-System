@@ -6,6 +6,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectRespon
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.InvalidatedToken;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.InvalidatedToken;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
@@ -28,6 +29,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,9 +58,9 @@ public class AuthenticationServices {
     private Map<String, LocalDateTime> otpExpiry = new HashMap<>();
     ElementRepo elementRepo;
     ElementCalculationService elementCalculationService;
+    TransactionRepo transactionRepo;
     SubscriptionRepo subscriptionRepo;
     InvalidatedTokenRepository invalidatedTokenRepository;
-
 
     @NonFinal
     @Value("${jwt.singerKey}")
@@ -82,10 +84,10 @@ public class AuthenticationServices {
 
     //Method to register user
     public SignUpResponse registerUser(SignUpRequest request) {
-//        if (request.getOtp().isEmpty())
-//            throw new AppException(ErrorCode.OTP_REQUIRED);
-//        if (!validateOTP(request.getEmail().trim(), request.getOtp()))
-//            throw new AppException(ErrorCode.OTP_NOT_FOUND);
+        if (request.getOtp().isEmpty())
+            throw new AppException(ErrorCode.OTP_REQUIRED);
+        if (!validateOTP(request.getEmail().trim(), request.getOtp()))
+            throw new AppException(ErrorCode.OTP_NOT_FOUND);
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXIST);
         int elementId = elementCalculationService
@@ -103,10 +105,10 @@ public class AuthenticationServices {
 //        user.setPlanID("PP005");
         user.setElement(element);
         user.setDeleteStatus(false);
-//        clearOTP(request.getEmail().trim());
-//        emailService.sendEmail(request.getEmail(),
-//                "This is your password: " + request.getPassword(),
-//                "Create User Successful");
+        clearOTP(request.getEmail().trim());
+        emailService.sendEmail(request.getEmail(),
+                "This is your password: " + request.getPassword(),
+                "Create User Successful");
 
         return userMapper.toSignUpResponse(userRepository.save(user));
     }
@@ -114,11 +116,15 @@ public class AuthenticationServices {
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXITST);
-        String otp = generateOTP();
-        storeOTP(request.getEmail().trim(), otp);
-        emailService.sendEmail(request.getEmail().trim(),
-                "Your OTP Code: " + otp, "OTP for Consulting Website");
-        System.out.println("OTP sent to: " + request.getEmail().trim());
+        try {
+            String otp = generateOTP();
+            storeOTP(request.getEmail().trim(), otp);
+            emailService.sendEmail(request.getEmail().trim(),
+                    "Your OTP Code: " + otp, "OTP for Consulting Website");
+            System.out.println("OTP sent to: " + request.getEmail().trim());
+        } catch (MailException e) {
+            throw new AppException(ErrorCode.EMAIL_INVALID);
+        }
     }
 
     //Method to login user
@@ -267,7 +273,6 @@ public class AuthenticationServices {
                 .expirationTime(new Date(
                         Instant.now().plus(2, ChronoUnit.HOURS).toEpochMilli()
                 ))
-                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());

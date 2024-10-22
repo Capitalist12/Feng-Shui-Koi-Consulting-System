@@ -15,9 +15,9 @@ springdoc:
 
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB10"
+    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB13"
     username: root
-    password: root
+    password: 123456
 
   application:
     name: sendemail

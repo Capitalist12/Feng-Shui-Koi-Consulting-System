@@ -65,6 +65,11 @@ public class AdvertisementService {
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
 
+    public List<AdvertisementResponse> getAdByID(String adID){
+        return advertisementRepo.findById(adID).stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
+
     public List<AdvertisementResponse> getListAdvertisements(){
         return advertisementRepo.findAdsVerified().stream()
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
@@ -93,13 +98,13 @@ public class AdvertisementService {
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 
-    @Scheduled(fixedRate = 30000)  // Run every 30 seconds
+    @Scheduled(fixedRate = 120000)  // Run every 2 minutes
     public void deleteOldRejectedAdvertisements() {
-        // Get the timestamp of 30 seconds ago
-        LocalDateTime thirtySecondsAgo = LocalDateTime.now().minusSeconds(30);
+        // Get the timestamp of 2 minutes ago
+        LocalDateTime twoMinutesAgo = LocalDateTime.now().minusMinutes(2);
 
-        // Retrieve rejected advertisements older than 30 seconds
-        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(thirtySecondsAgo);
+        // Retrieve rejected advertisements older than 2 minutes
+        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(twoMinutesAgo);
 
         // Delete all old rejected ads from the database
         advertisementRepo.deleteAll(oldRejectedAds);
