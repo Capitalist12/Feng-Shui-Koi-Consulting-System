@@ -1,41 +1,31 @@
-.custom-title {
-  margin-top: 2rem;
+#sec1-ad {
+  background-image: url("../assets/images/ads.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   text-align: center;
-}
-.search-bar {
-  height: 2rem;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-}
-.filters {
-  width: 12rem;
-  height: 30vh;
-
-  .button-filter {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    height: 100%;
-
-    .button-container {
-      display: flex; // Sử dụng Flexbox
-      align-items: center; // Căn giữa theo chiều dọc
-      gap: 1em; // Khoảng cách giữa biểu tượng và nút
-    }
-
-    .icon {
-      font-size: 1rem;
-      color: #000;
-    }
+  justify-content: center;
+  height: 70vh;
+  .custom-title {
+    margin-top: 2rem;
+    text-align: center;
   }
 }
-// ben component searchbar
+
+// button phan search va filter
 .custom-search-button {
   background-color: rgb(0, 0, 0);
   border-color: rgb(0, 0, 0);
   color: white;
   margin-left: 1rem;
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: translateY(-0.3rem);
+  }
 
   &:hover {
     background-color: white !important; /* Màu nền khi hover */
@@ -44,43 +34,89 @@
     cursor: pointer;
   }
 }
-.custom-pagination {
-  margin-top: 16px;
-  align-self: center;
-}
 
-.ads-list {
+#sec2-ad {
   display: flex;
-  flex-wrap: wrap;
-  padding: 50px 200px;
-  gap: 3rem;
-  margin-top: 1vh;
+  justify-content: space-between;
 
-  .advertisement {
-    width: calc(25% - 3rem);
-    background-color: red;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    transition: transform 0.2s ease;
+  .search-filter {
+    margin-top: 2rem;
+    background-color: none;
+    width: 20vw;
+    height: 20vw;
+    display: flex;
+    flex-direction: column;
 
-    &:hover {
-      transform: translateY(-20px);
+    .search-bar {
+      text-align: left;
+      margin-left: 1rem;
+    }
+
+    .filters {
+      margin-left: 1vw;
+      justify-content: center;
+      text-align: center;
+      width: 12rem;
+      height: 17rem;
+      border: none;
+      background-color: none !important;
+
+      .button-filter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .button-container {
+        display: flex;
+        align-items: center;
+        // gap: 1em;
+      }
+
+      .icon {
+        font-size: 1rem;
+        color: #000;
+      }
     }
   }
 
-  img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-
-  /* Thêm phần này để căn giữa pagination */
-  .pagination {
-    width: 100%;
+  .ads-list {
+    flex: 1;
     display: flex;
-    justify-content: center; /* Căn giữa pagination */
-    margin-top: 30px; /* Khoảng cách giữa quảng cáo và pagination */
+    flex-wrap: wrap;
+    padding: 5rem 0;
+    gap: 3rem;
+    margin-top: 1vh;
+
+    .advertisement {
+      width: calc(100% / 4 - 3rem);
+      background-color: red;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: translateY(-20px);
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .pagination {
+      width: 100%;
+      display: flex;
+      justify-content: center; /* Căn giữa pagination */
+      margin-top: 30px; /* Khoảng cách giữa quảng cáo và pagination */
+    }
+    // .custom-pagination {
+    //   margin-top: 16px;
+    //   align-self: center;
+    // }
   }
 }
