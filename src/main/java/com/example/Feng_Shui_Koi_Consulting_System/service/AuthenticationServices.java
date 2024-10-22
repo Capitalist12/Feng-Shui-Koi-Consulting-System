@@ -29,6 +29,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -114,11 +115,15 @@ public class AuthenticationServices {
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXITST);
-        String otp = generateOTP();
-        storeOTP(request.getEmail().trim(), otp);
-        emailService.sendEmail(request.getEmail().trim(),
-                "Your OTP Code: " + otp, "OTP for Consulting Website");
-        System.out.println("OTP sent to: " + request.getEmail().trim());
+        try {
+            String otp = generateOTP();
+            storeOTP(request.getEmail().trim(), otp);
+            emailService.sendEmail(request.getEmail().trim(),
+                    "Your OTP Code: " + otp, "OTP for Consulting Website");
+            System.out.println("OTP sent to: " + request.getEmail().trim());
+        } catch (MailException e) {
+            throw new AppException(ErrorCode.EMAIL_INVALID);
+        }
     }
 
     //Method to login user
