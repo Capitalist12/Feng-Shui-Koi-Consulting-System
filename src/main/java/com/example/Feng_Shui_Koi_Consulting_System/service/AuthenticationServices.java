@@ -10,11 +10,8 @@ import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.UserMapper;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.InvalidatedTokenRepository;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.TransactionRepo;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.*;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundIdentityClient;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundUserClient;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -59,7 +56,7 @@ public class AuthenticationServices {
     private Map<String, LocalDateTime> otpExpiry = new HashMap<>();
     ElementRepo elementRepo;
     ElementCalculationService elementCalculationService;
-    TransactionRepo transactionRepo;
+    SubscriptionRepo subscriptionRepo;
     InvalidatedTokenRepository invalidatedTokenRepository;
 
 
@@ -125,14 +122,14 @@ public class AuthenticationServices {
     }
 
     //Method to login user
-    public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
+    public AuthenResponse loginUser(AuthenRequest request)  {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
         // Check for the transaction and subscription status
-        transactionRepo.findByUser_UserID(user.getUserID())
-                .ifPresent(transaction -> {
+        subscriptionRepo.findByUser_UserID(user.getUserID())
+                .ifPresent(subscriptions -> {
                     boolean isSubscriptionActive = checkSubscription(
-                            transaction.getSubscriptionID()
+                            subscriptions.getSubscriptionID()
                     );
                     if (!isSubscriptionActive) {
                         user.setRoleName(Roles.USER.toString());

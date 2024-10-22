@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,12 +52,20 @@ public class User {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "ElementID", nullable = false, referencedColumnName = "ElementID")
-    @JsonBackReference
+    @JsonIgnore
     Element element;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     Set<Advertisement> advertisements = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    Set<Transaction> transaction;
+
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    Subscriptions subscriptions;
 
     @Override
     public boolean equals(Object o) {
@@ -71,9 +80,7 @@ public class User {
         return Objects.hash(userID);
     }
 
-    @OneToOne(mappedBy = "user")
-    @JsonBackReference
-    Transaction transaction;
+
 
     // Lombok will generate getters and setters
 }

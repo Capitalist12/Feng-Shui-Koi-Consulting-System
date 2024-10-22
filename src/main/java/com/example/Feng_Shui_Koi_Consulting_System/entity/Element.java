@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -50,5 +51,18 @@ public class Element {
     @OneToMany(mappedBy = "element", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     Set<Advertisement> advertisement ;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Element)) return false;
+        Element element = (Element) o;
+        return Objects.equals(elementId, element.getElementId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(elementId);
+    }
 
 }
