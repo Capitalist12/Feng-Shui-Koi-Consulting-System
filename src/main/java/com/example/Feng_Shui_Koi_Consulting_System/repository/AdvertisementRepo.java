@@ -38,11 +38,8 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, String> 
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected'")
     List<Advertisement> findAdsRejected();
 
-//    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate <= :thirtyDaysAgo")
-//    List<Advertisement> findRejectedAdvertisementsOlderThan(@Param("thirtyDaysAgo") Date thirtyDaysAgo);
-
-    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate < :thirtySecondsAgo")
-    List<Advertisement> findRejectedAdvertisementsOlderThan(@Param("thirtySecondsAgo") LocalDateTime thirtySecondsAgo);
+    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate < :twoMinutesAgo")
+    List<Advertisement> findRejectedAdvertisementsOlderThan(@Param("twoMinutesAgo") LocalDateTime twoMinutesAgo);
 
 //    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate < :sevenDaysAgo")
 //    List<Advertisement> findRejectedAdvertisementsOlderThan(@Param("sevenDaysAgo") LocalDateTime sevenDaysAgo);

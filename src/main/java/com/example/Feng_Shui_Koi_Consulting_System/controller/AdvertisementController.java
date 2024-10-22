@@ -30,6 +30,13 @@ public class AdvertisementController {
                 .build();
     }
 
+    @GetMapping("/{adID}")
+    ApiResponse<List<AdvertisementResponse>> getAdByID(@PathVariable String adID){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getAdByID(adID))
+                .build();
+    }
+
     @GetMapping("/verified")
     ApiResponse<List<AdvertisementResponse>> getAds(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
