@@ -1,4 +1,4 @@
-.embla {
+.embla-ad {
   position: relative;
   margin-top: 3rem;
   width: 60%;
@@ -56,14 +56,14 @@
       color: rgb(67, 0, 0);
     }
   }
-  &__buttons-ad {
+  &__buttons {
     position: absolute;
     left: 0;
     display: flex;
     gap: 5rem;
   }
 
-  &__button-ad {
+  &__button {
     background: none;
     border: none;
     cursor: pointer;

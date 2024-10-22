@@ -33,22 +33,22 @@ const EmblaCarousel = ({ ads }) => {
   };
 
   return (
-    <div className="embla">
-      <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container">
+    <div className="embla-ad">
+      <div className="embla-ad__viewport" ref={emblaRef}>
+        <div className="embla-ad__container">
           {ads.map((ad, index) => (
-            <div className="embla__slide" key={index}>
-              <div className="embla__slide__content">
+            <div className="embla-ad__slide" key={index}>
+              <div className="embla-ad__slide__content">
                 <img
-                  className="embla__slide__img"
+                  className="embla-ad__slide__img"
                   src={ad.imagesAd[0]?.imageURL || ""}
                   alt={ad.title}
                 />
-                <div className="embla__slide__info">
+                <div className="embla-ad__slide__info">
                   <h2>{ad.title}</h2>
                   <p>{truncateDescription(ad.description, 50)}</p>{" "}
                   <h4>Giá: {ad.price} đồng</h4>
-                  <p className="embla__slide__created-date">
+                  <p className="embla-ad__slide__created-date">
                     Ngày đăng:{" "}
                     {new Date(ad.createdDate).toLocaleDateString("vi-VN")}
                   </p>
@@ -58,11 +58,11 @@ const EmblaCarousel = ({ ads }) => {
           ))}
         </div>
       </div>
-      <div className="embla__buttons-ad">
-        <button className="embla__button-ad" onClick={scrollPrev}>
+      <div className="embla-ad__buttons">
+        <button className="embla-ad__button" onClick={scrollPrev}>
           <FaAngleLeft />
         </button>
-        <button className="embla__button-ad" onClick={scrollNext}>
+        <button className="embla-ad__button" onClick={scrollNext}>
           <FaAngleRight />
         </button>
       </div>

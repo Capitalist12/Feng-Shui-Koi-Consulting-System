@@ -122,8 +122,8 @@ function AdvertisementPage({ currentUser }) {
             <Title style={{ marginTop: "2rem" }} level={4}>
               Bộ lọc tìm kiếm
             </Title>
-            <div className="button-filter">
-              <div className="button-container">
+            <div className="button-ad-filter">
+              <div className="button-ad-container">
                 <IoFishOutline className="icon" />
                 <Button
                   className="custom-search-button"
