@@ -149,29 +149,9 @@ function CompatibilityPage() {
         throw new Error("Không có dữ liệu tương thích từ phản hồi.");
       }
     } catch (error) {
-      console.error("Lỗi khi tính điểm tương thích:", error);
       message.error("Lỗi khi tính điểm tương thích: " + error.message);
     }
   };
-  useEffect(() => {
-    const handleScroll = () => {
-      const sec1Comp = document.getElementById("sec1-comp");
-      const scrollPosition = window.scrollY;
-
-      // Tính toán độ mờ của nền
-      const maxScroll = 300;
-      const opacity = Math.min(scrollPosition / maxScroll, 1); // Đảm bảo giá trị không vượt quá 1
-
-      // Cập nhật màu nền
-      sec1Comp.style.backgroundColor = `rgba(0, 0, 0, ${opacity})`;
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   return (
     <Layout>
@@ -221,10 +201,9 @@ function CompatibilityPage() {
       </section>
       <>
         <section id="sec2-comp">
-          <div className="background-sec2"></div>
-          <Row gutter={[24, 16]}>
-            <Col span={8}>
-              <div style={{ marginLeft: "2vw" }}>
+          <Row gutter={[32, 8]}>
+            <Col span={12}>
+              <div style={{ marginLeft: "2rem", marginTop: "5rem" }}>
                 <div className="custom-title">
                   <Title level={2}>Danh Sách Cá</Title>
                 </div>
@@ -242,30 +221,10 @@ function CompatibilityPage() {
               </div>
             </Col>
 
-            <Col span={8} className="selected-ele">
-              <div className="selected-ele">
-                {/* ????? */}
-                <CompatibilityForm
-                  selectedElement={selectedElement}
-                  setSelectedElement={setSelectedElement}
-                  handleCalculateCompatibility={handleCalculateCompatibility}
-                />
-                <SelectedItems
-                  className="tank-koi-selected"
-                  selectedFish={selectedFish}
-                  selectedTank={selectedTank}
-                  handleRemoveTank={handleRemoveTank}
-                  handleSelectFish={handleSelectFish}
-                />
-              </div>
-            </Col>
-
-            <Col span={8} style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ marginRight: "3vw" }}>
+            <Col span={12}>
+              <div style={{ marginRight: "3rem", marginTop: "5rem" }}>
                 <div className="custom-title">
-                  <Title level={2} style={{ marginTop: "13.5vh" }}>
-                    Danh Sách Hồ
-                  </Title>
+                  <Title level={2}>Danh Sách Hồ</Title>
                 </div>
                 <div className="custom-table">
                   <TankList
@@ -277,6 +236,23 @@ function CompatibilityPage() {
               </div>
             </Col>
           </Row>
+          <div className="selected-ele">
+            <div className="selected-ele">
+              {/* ????? */}
+              <SelectedItems
+                className="tank-koi-selected"
+                selectedFish={selectedFish}
+                selectedTank={selectedTank}
+                handleRemoveTank={handleRemoveTank}
+                handleSelectFish={handleSelectFish}
+              />
+              <CompatibilityForm
+                selectedElement={selectedElement}
+                setSelectedElement={setSelectedElement}
+                handleCalculateCompatibility={handleCalculateCompatibility}
+              />
+            </div>
+          </div>
         </section>
       </>
       <Result

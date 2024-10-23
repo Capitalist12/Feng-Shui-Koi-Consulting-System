@@ -24,10 +24,16 @@ const TankList = ({ tankData, handleSelectTank, isTankSelected }) => {
   ];
 
   return (
-    <div style={{ marginTop: "50px" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        marginTop: "4.5rem",
+      }}
+    >
       <Table
         className="tank-list-table"
-        style={{ width: "30vw", marginRight: "90px" }}
         columns={tankColumns}
         dataSource={tankData}
         rowKey="tankId"

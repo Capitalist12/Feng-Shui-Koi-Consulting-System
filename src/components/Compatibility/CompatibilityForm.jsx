@@ -12,24 +12,24 @@ const CompatibilityForm = ({
   return (
     <Card
       style={{
-        width: "40%",
-        height: "7em",
+        width: "15%",
+        height: "30%  ",
         marginBottom: "3rem",
         marginTop: "5em",
-        border: "5px solid black", // Viền card
-        boxShadow: "0 0 30px darkgrey", // Bóng đổ
+        border: "5px solid black",
+        boxShadow: "0 0 30px darkgrey",
         display: "flex",
-        justifyContent: "center", // Căn giữa theo chiều dọc
-        alignItems: "center", // Căn giữa theo chiều ngang
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Row
         gutter={16}
         style={{
           display: "flex",
-          flexDirection: "column", // Đảm bảo các phần tử được xếp theo cột
-          justifyContent: "center", // Căn giữa theo trục ngang
-          alignItems: "center", // Căn giữa theo trục dọc
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
           marginTop: "5px",
         }}
       >
