@@ -112,6 +112,7 @@ public class AuthenticationServices {
         return userMapper.toSignUpResponse(userRepository.save(user));
     }
 
+    //Sending the otp to user's email
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXITST);
@@ -167,6 +168,7 @@ public class AuthenticationServices {
                 .build();
     }
 
+    //Get the OTP if it's correct will change the user account's password
     public String resetPassword(ResetPasswordRequest request) {
         boolean isOtpValid = validateOTP(request.getEmail().trim(), request.getOtp());
 
@@ -208,14 +210,17 @@ public class AuthenticationServices {
     public boolean validateOTP(String email, String inputOtp) {
         String storedOTP = otpData.get(email);
         LocalDateTime expiryOTP = otpExpiry.get(email);
+        //Check the otp if it's exist
         if (storedOTP == null || expiryOTP == null) {
             return false;
         }
+        //Check the otp if it's expired
         if (expiryOTP.isBefore(LocalDateTime.now())) {
             otpData.remove(email);
             otpExpiry.remove(email);
             return false;
         }
+        //Check the otp if the input otp is the otp that send to your mail
         if (storedOTP.equals(inputOtp)) {
             otpData.remove(email);
             otpExpiry.remove(email);
@@ -224,6 +229,7 @@ public class AuthenticationServices {
         return false;
     }
 
+    //clean up the otp of the email
     public void clearOTP(String email) {
         otpData.remove(email);
         otpExpiry.remove(email);
