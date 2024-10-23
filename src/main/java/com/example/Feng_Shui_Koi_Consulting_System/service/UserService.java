@@ -1,9 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.DOBCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.PasswordCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UpdateProfileResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
@@ -92,6 +90,30 @@ public class UserService {
         userResponse.setNoDob(user.getDateOfBirth() == null);
 
         return userResponse;  // Return the modified response
+    }
+
+    public UpdateProfileResponse updateMyInfo(UpdateProfileRequest request) {
+        var context = SecurityContextHolder.getContext();
+        String email = context.getAuthentication().getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+
+        if (!request.getDateOfBirth().equals(user.getDateOfBirth())) {
+            int elementId = elementCalculationService
+                    .calculateElementId(request.getDateOfBirth());
+            Element element = elementRepo.findById(elementId)
+                    .orElseThrow(()-> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+            user.setElement(element);
+        }
+        userMapper.updateUserProfile(user, request);
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        return userMapper.toUpdateProfileResponse(userRepository.save(user));  // Return the modified response
     }
 
     public void createPassword( PasswordCreationRequest request) {

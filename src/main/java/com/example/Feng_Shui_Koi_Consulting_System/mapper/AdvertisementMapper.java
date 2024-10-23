@@ -32,7 +32,7 @@ public interface AdvertisementMapper {
 
     @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementName")
     @Mapping(target = "category", source = "category", qualifiedByName = "mapToCategoryResponse")
-    @Mapping(target = "user", source = "user", qualifiedByName = "mapToUserResponse")
+    @Mapping(target = "user", source = "user", qualifiedByName = "mapToUserName")
     @Mapping(target = "imagesAd", source = "imagesAd")
     AdvertisementResponse toAdvertisementResponse(Advertisement advertisement);
 
@@ -52,6 +52,10 @@ public interface AdvertisementMapper {
     default String mapToElementName(Element element) {
         return element.getElementName();  // Simple mapping from entity to string
     }
+    @Named("mapToUserName")
+    default String mapToUserName(User user) {
+        return user.getUsername();  // Simple mapping from entity to string
+    }
 
     @Named("mapToCategoryResponse")
     default CategoryResponse mapToCategoryResponse(Category category) {
@@ -59,6 +63,11 @@ public interface AdvertisementMapper {
                 .categoryName(category.getCategoryName())
                 .build();
     }
+//    @Named("mapToUser")
+//    default User mapToUser(String username, @Context UserService userService) {
+//        return userService.findByUsername(username);
+//
+//    }
 
     @Named("mapToUserResponse")
     default UserResponse mapToUserResponse(User user) {

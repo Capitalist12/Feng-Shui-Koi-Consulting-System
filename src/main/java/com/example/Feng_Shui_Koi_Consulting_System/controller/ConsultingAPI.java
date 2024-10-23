@@ -6,6 +6,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CompatibilityRequ
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ConsultingRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CompatibilityResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.service.ChatGptService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.CompatibilityService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ConsultingService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ElementCalculationService;
@@ -17,7 +18,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,10 +33,10 @@ public class ConsultingAPI {
     CompatibilityService compatibilityService;
 
     @PostMapping("/calculate")
-    public ApiResponse<Integer> calculateElementId(@RequestBody CalculateElementRequest request) {
-        int elementId = elementCalculationService.calculateElementId(request.getDob());
-        return ApiResponse.<Integer>builder()
-                .result(elementId)
+    public ApiResponse<String> calculateElementName(@RequestBody CalculateElementRequest request) {
+        String elementName = elementCalculationService.calculateElementName(request.getDob());
+        return ApiResponse.<String>builder()
+                .result(elementName)
                 .build();
     }
 

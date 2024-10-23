@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,15 +29,16 @@ public class SecurityConfig {
 
 
     private final String[] PUBLIC_ENDPOINT = {"/auth/login","/auth/signup","/auth/introspect"
-    ,"/auth/outbound/authentication", "/auth/verify-email", "/ad/verified", "/auth/reset-password"};
+    ,"/auth/outbound/authentication", "/auth/verify-email", "/auth/logout"
+    , "/ad/verified", "/auth/reset-password"};
     private final String[] SWAGGER = {
             "/koifish-docs/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-resources/**"
     };
 
-    @Value("${jwt.singerKey}")
-    private String signerKey;
+    @Autowired
+    private CustomJwtDecoder customJwtDecoder;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -50,9 +52,10 @@ public class SecurityConfig {
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
-                                .decoder(jwtDecoder())  // Configure JWT decoder
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())  // Set JWT converter
-                        )
+                                .decoder(customJwtDecoder)  // Configure JWT decoder
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))  // Set JWT converter
+
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 )
                         .cors(Customizer.withDefaults()) // Enable CORS
                         .csrf(AbstractHttpConfigurer::disable);  // Disable CSRF for non-browser clients
@@ -60,14 +63,7 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-    @Bean
-    JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    }
+
 
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {

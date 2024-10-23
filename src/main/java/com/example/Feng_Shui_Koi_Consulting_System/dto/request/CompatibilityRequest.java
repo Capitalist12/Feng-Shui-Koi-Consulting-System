@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.request;
 
+import com.example.Feng_Shui_Koi_Consulting_System.dto.chatgpt.ChatGptAIDto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,4 +15,6 @@ public class CompatibilityRequest {
     String userElement;
     Set<Set<String>> koiFishColors;
     String tankShape;
+    ChatGptAIDto chatGptAIDto;
+
 }

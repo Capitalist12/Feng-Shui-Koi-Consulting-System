@@ -37,7 +37,7 @@ public interface KoiFishMapper {
 
     @Mapping(target = "koiTypes", source = "koiTypes", qualifiedByName = "mapToKoiTypesResponse")
     @Mapping(target = "elements", source = "elements", qualifiedByName = "mapToElementResponse")
-    KoiFishResponse toKoiFishRespon(KoiFish koiFish);
+    KoiFishResponse toKoiFishResponse(KoiFish koiFish);
 
 
     @Named("mapToKoiType")
