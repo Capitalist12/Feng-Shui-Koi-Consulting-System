@@ -1,54 +1,32 @@
-// @keyframes highlight {
-//   0% {
-//     background-color: #ff8177; // Màu nền nhẹ
-//   }
-//   30% {
-//     background-color: #ff867a; // Màu nền nhẹ
-//   }
-//   50% {
-//     background-color: #ff8c7f; // Màu nền đậm hơn
-//   }
-//   70% {
-//     background-color: #f99185; // Màu nền đậm hơn
-//   }
-//   90% {
-//     background-color: #ff9a9e; // Trở lại màu nền nhẹ
-//   }
-//   100% {
-//     background-color: #f99185; // Giữ nguyên màu nền sau animation
-//   }
-// }
-
-html {
-  scroll-behavior: smooth; /* Bật hiệu ứng cuộn mượt mà */
+html,
+body {
+  overflow-x: hidden; // fix width full
+  width: 100%;
+  scroll-behavior: smooth;
 }
 
 #sec1-comp {
-  position: relative;
-  z-index: 1;
+  margin: 0;
+  padding: 0;
   background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
   height: 100vh;
   width: 100vw;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: scroll; // Cuộn theo trang
+  background-attachment: scroll;
 
-  background-color: rgba(0, 0, 0, 0); // Bắt đầu trong suốt
-  h2 {
-    margin-top: 25vh;
-    margin-left: 3vw;
-    color: white;
-    text-shadow: 3px 2px 1px rgba(0, 0, 0, 0.7);
-    position: absolute;
-  }
   .title {
-    // margin-top: 10vh;
-    margin-left: 1vw;
+    margin-top: 0;
+    margin-left: 2vw;
     font-size: 7em;
     font-weight: 800;
-    color: #ff6347; /* Màu sắc tiêu đề */
-    position: absolute; /* Để z-index có hiệu lực */
+    color: white;
+    text-shadow: 3px 3px 7px rgb(255, 0, 0);
+    // font-family: "Playwrite GB S", cursive;
+    h2 {
+      color: white;
+    }
   }
 
   .infor-data {
@@ -59,7 +37,7 @@ html {
     z-index: 2;
 
     h1 {
-      margin-top: 13vh;
+      // margin-top: 13vh;
       color: white;
       font-size: 2em;
       text-shadow: 5px 5px 1px rgba(0, 0, 0, 0.7);
@@ -142,14 +120,80 @@ html {
   // }
 }
 
+// #sec2-comp {
+//   position: relative;
+//   // padding: 20px;
+//   // margin: 20px 0;
+//   height: 100vh;
+//   width: 100vw;
+//   // background-image: url("../assets/images/pexels-amar-27155968.jpg");
+//   background-color: black;
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   background-size: cover;
+//   background-attachment: scroll; // Cuộn theo trang
+
+//   h2 {
+//     // css ca titlte table
+//     color: white;
+//     font-size: 3rem;
+//     text-align: center;
+//   }
+
+//   .custom-title {
+//     text-shadow: 5px 5px 1px red;
+//   }
+
+//   .custom-table {
+//     .ant-table {
+//       border: 5px solid #be0000;
+
+//       th {
+//         background-color: rgb(69, 69, 23) !important;
+//         color: white;
+//         text-align: center;
+//         font-size: 1.3em;
+//       }
+
+//       // Áp dụng cho hàng
+//       tr {
+//         // Hiệu ứng hover cho hàng chưa chọn
+//         &:hover {
+//           animation: highlight 0.3s ease-in-out !important;
+//           //   background-color: burlywood; // Màu nền khi hover
+//         }
+
+//         // Áp dụng cho hàng đã chọn
+//         &.selected-row {
+//           background-color: burlywood; // Màu nền cho hàng đã chọn
+//           animation: none !important; // Tắt animation cho hàng đã chọn
+//           transition: background-color 0.3s !important; // Thêm transition cho mượt mà
+
+//           // Tăng độ đậm khi hover qua hàng đã chọn
+//           //   &:hover {
+//           //     background-color: rgba(135, 206, 235, 1); // Đậm hơn khi hover
+//           //   }
+//         }
+//       }
+//     }
+//   }
+
+//   .selected-ele {
+//     display: flex;
+//     margin-top: 5vh;
+//     align-items: center;
+//     flex-direction: column;
+
+//     .tank-koi-selected {
+//     }
+//   }
+// }
+
 #sec2-comp {
   position: relative;
-  // padding: 20px;
-  // margin: 20px 0;
   height: 100vh;
   width: 100vw;
-  // background-image: url("../assets/images/pexels-amar-27155968.jpg");
-  background-color: black;
+  background-image: url("../assets/images/banner.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
