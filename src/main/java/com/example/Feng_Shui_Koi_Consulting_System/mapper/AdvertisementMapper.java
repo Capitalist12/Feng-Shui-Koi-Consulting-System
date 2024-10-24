@@ -1,8 +1,11 @@
 package com.example.Feng_Shui_Koi_Consulting_System.mapper;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.CategoryResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.ElementResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.*;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;

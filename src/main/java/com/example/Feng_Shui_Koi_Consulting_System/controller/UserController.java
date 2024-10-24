@@ -1,8 +1,8 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UpdateProfileResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.PasswordCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.*;
 import com.example.Feng_Shui_Koi_Consulting_System.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -71,7 +71,7 @@ public class UserController {
     }
 
     @PutMapping("/{userID}")
-    ApiResponse<UserResponse> updateUser(@PathVariable String userID, @RequestBody @Valid  UserUpdateRequest request){
+    ApiResponse<UserResponse> updateUser(@PathVariable String userID, @RequestBody @Valid UserUpdateRequest request){
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userID,request))
                 .build();
@@ -84,7 +84,7 @@ public class UserController {
     }
 
     @PostMapping("/create-dob")
-    ApiResponse<Void> createDOB(@RequestBody  DOBCreationRequest request){
+    ApiResponse<Void> createDOB(@RequestBody DOBCreationRequest request){
         userService.createDOB(request);
         return ApiResponse.<Void>builder()
                 .message("Date of birth and element has been updated!")

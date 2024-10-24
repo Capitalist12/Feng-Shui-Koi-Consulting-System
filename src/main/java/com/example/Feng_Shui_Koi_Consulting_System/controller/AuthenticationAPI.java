@@ -1,9 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.*;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AuthenticationServices;
 import com.example.Feng_Shui_Koi_Consulting_System.service.EmailService;
 import com.nimbusds.jose.JOSEException;
@@ -44,11 +42,6 @@ public class AuthenticationAPI {
             return ApiResponse.<SignUpResponse>builder()
                     .result(authenticationServices.registerUser(request))
                     .build();
-    }
-    @PostMapping("/token")
-    ApiResponse<AuthenResponse> authenticate(@RequestBody AuthenRequest request) {
-        var result = authenticationServices.authenticate(request);
-        return ApiResponse.<AuthenResponse>builder().result(result).build();
     }
 
     @PostMapping("/login")

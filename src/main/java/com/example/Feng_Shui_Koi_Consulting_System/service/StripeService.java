@@ -1,7 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.SessionDTO;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.PaymentSuccessfulResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.SessionDTO;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentSuccessfulResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Subscriptions;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Transaction;

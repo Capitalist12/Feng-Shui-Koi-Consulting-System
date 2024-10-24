@@ -1,12 +1,9 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CategoryRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.KoiTypeRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CategoryResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KTResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.CategoryRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.CategoryResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.CategoryService;
-import com.example.Feng_Shui_Koi_Consulting_System.service.KoiTypeService;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;

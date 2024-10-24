@@ -1,8 +1,8 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.SessionDTO;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.PaymentSuccessfulResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.SessionDTO;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentSuccessfulResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.StripeService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;

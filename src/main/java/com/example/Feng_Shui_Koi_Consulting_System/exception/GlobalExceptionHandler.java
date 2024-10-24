@@ -1,6 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.exception;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;

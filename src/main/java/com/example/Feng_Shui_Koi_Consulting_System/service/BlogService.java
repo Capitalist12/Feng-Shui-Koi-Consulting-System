@@ -1,8 +1,8 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.BlogRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.BlogResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CommentResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.blog.BlogRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.blog.BlogResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.comment.CommentResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Blog;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;

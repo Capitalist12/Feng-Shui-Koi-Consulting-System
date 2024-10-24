@@ -1,11 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.*;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.InvalidatedToken;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.InvalidatedToken;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
@@ -194,6 +190,7 @@ public class AuthenticationServices {
         var verifier = signedJWT.verify(jwsVerifier);
         if(!(expiryTime.after(new Date()) && verifier))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
+
         if(invalidatedTokenRepository.existsById(signedJWT
                 .getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -273,6 +270,7 @@ public class AuthenticationServices {
                 .expirationTime(new Date(
                         Instant.now().plus(2, ChronoUnit.HOURS).toEpochMilli()
                 ))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -287,20 +285,6 @@ public class AuthenticationServices {
         }
     }
 
-    public AuthenResponse authenticate(AuthenRequest request) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        var user = userRepository
-                .findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
-
-        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
-
-        if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
-
-        var token = generateToken(user);
-
-        return AuthenResponse.builder().token(token).authenticated(true).build();
-    }
 
     public AuthenResponse outboundAuthenticate(String code) {
         var response = outboundIdentityClient

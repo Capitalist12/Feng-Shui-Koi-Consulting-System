@@ -2,7 +2,7 @@ package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.chatgpt.ChatGptMessage;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.chatgpt.ChatGptResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CompatibilityRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.CompatibilityRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.proxy.ChatGptProxy;

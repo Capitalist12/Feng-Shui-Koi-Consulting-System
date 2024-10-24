@@ -1,7 +1,10 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ConsultingRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingFishResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingTankResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.fish.KoiTypesResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.ElementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;

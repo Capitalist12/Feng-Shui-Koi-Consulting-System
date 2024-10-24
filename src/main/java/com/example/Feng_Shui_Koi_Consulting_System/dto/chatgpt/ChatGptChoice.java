@@ -2,7 +2,6 @@ package com.example.Feng_Shui_Koi_Consulting_System.dto.chatgpt;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.util.List;
 
 @Data
 @Builder

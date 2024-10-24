@@ -1,7 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CompatibilityRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CompatibilityResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.CompatibilityRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.CompatibilityResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Tank;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
