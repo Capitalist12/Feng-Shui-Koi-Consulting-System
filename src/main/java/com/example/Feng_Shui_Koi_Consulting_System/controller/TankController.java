@@ -1,9 +1,9 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.TankResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.TankService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

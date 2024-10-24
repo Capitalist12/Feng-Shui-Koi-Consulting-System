@@ -1,6 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ExchangeTokenRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ExchangeTokenResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.ExchangeTokenRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.ExchangeTokenResponse;
 import feign.QueryMap;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

@@ -1,9 +1,9 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.VerifyAdRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.VerifyAdRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Advertisement;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;

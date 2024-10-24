@@ -1,7 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.*;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AdvertisementService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

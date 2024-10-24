@@ -1,8 +1,8 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CommentRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CommentResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.comment.CommentRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.comment.CommentResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.CommentService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

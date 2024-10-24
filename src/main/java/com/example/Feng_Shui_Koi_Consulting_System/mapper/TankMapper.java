@@ -1,9 +1,9 @@
 package com.example.Feng_Shui_Koi_Consulting_System.mapper;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ElementResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.TankResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.ElementResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Tank;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;

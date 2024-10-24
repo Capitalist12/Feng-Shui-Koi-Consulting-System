@@ -1,8 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.configuration;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.IntrospectRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
-import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.IntrospectRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AuthenticationServices;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;

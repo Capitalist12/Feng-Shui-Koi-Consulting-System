@@ -1,6 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.configuration;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

@@ -1,12 +1,11 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CalculateElementRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CompatibilityRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ConsultingRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CompatibilityResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.service.ChatGptService;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.CalculateElementRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.CompatibilityRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.CompatibilityResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.CompatibilityService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ConsultingService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ElementCalculationService;

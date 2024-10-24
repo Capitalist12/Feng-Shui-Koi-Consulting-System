@@ -1,11 +1,11 @@
 package com.example.Feng_Shui_Koi_Consulting_System.mapper;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UpdateProfileRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ProfileResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UpdateProfileResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.UpdateProfileRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.UserCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.UserUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.ProfileResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.UpdateProfileResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
@@ -13,8 +13,8 @@ import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import org.mapstruct.*;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.SignUpRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.SignUpRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.SignUpResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
