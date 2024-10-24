@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
 
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +20,7 @@ public class AdvertisementResponse {
     Float price;
     String element;
     CategoryResponse category;
-    String user;
+    User user;
     Set<Ads_Image> imagesAd;
     String status;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
