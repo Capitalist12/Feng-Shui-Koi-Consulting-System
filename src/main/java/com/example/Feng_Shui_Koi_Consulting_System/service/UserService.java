@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,12 @@ public class UserService {
      UserMapper userMapper;
      ElementRepo elementRepo;
      ElementCalculationService elementCalculationService;
+
+    //Constant for generating UserID
+    private static final String ID_PREFIX = "U";
+    private static final int ID_LENGTH = 10;
+    private final SecureRandom secureRandom = new SecureRandom();
+
 
     public UserResponse createUser(UserCreationRequest request) {
 
@@ -46,9 +53,25 @@ public class UserService {
     }
 
     private String generateUserID() {
-        // Implement a method to generate a unique user ID of length 10
-        return "U" + String.format("%09d", System.nanoTime() % 1000000000);
+        String userID;
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
+
+        do {
+            // Generate a random 9-digit number
+            int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+            userID = ID_PREFIX + randomNum;
+
+            attempts++;
+            if (attempts >= maxAttempts) {
+                throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+            }
+        } while (userRepository.existsById(userID));
+
+        return userID;
     }
+
+
 //@PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> geUsers(){
         return userRepository.findAll().stream()

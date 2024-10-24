@@ -15,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,11 @@ import java.util.stream.Collectors;
 public class BlogService {
     UserRepository userRepository;
     BlogRepo blogRepo;
+
+    //Constant for generating BlogID
+    private static final String ID_PREFIX = "BL";
+    private static final int ID_LENGTH = 10;
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public BlogResponse createBlog(BlogRequest request) {
         var context = SecurityContextHolder.getContext();
@@ -119,8 +125,25 @@ public class BlogService {
     public void deleteBlog(String blogID){
         blogRepo.deleteById(blogID);
     }
+
     public String generateBlogID(){
-        return "BLOG" + String.format("%05d", System.nanoTime() % 100000);
+        String blogID;
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
+
+        do {
+            // Generate a random 9-digit number
+            int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+            blogID = ID_PREFIX + randomNum;
+
+            attempts++;
+
+            if (attempts >= maxAttempts) {
+                throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+            }
+        } while (userRepository.existsById(blogID));
+
+        return blogID;
     }
 
     public String generateImage_Blog(){

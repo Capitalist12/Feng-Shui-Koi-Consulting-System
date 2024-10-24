@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +31,10 @@ public class CommentService {
     CommentRepo commentRepo;
     BlogRepo blogRepo;
     UserRepository userRepository;
-    Random random = new Random();
+
+    //Constants to generate CommentID
+    private static final int MIN_COMMENT_ID = 10000; // Keep minimum 5 digits
+    private static final int MAX_COMMENT_ID = Integer.MAX_VALUE; // Maximum possible integer value (2147483647)
 
     @Transactional
     public CommentResponse createComment(String blogId, CommentRequest request) {
@@ -170,6 +174,22 @@ public class CommentService {
     }
 
     private Integer generateCommentID() {
-        return random.nextInt(90000) + 10000; // Generates a number between 10000 and 99999
+        SecureRandom secureRandom = new SecureRandom();
+        Integer commentId;
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
+
+        do {
+            // Generate a random number between MIN_COMMENT_ID and MAX_COMMENT_ID
+            long range = (long) MAX_COMMENT_ID - MIN_COMMENT_ID;
+            commentId = (int) (secureRandom.nextDouble() * range) + MIN_COMMENT_ID;
+
+            attempts++;
+            if (attempts >= maxAttempts) {
+                throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+            }
+        } while (commentRepo.existsById(commentId));
+
+        return commentId;
     }
 }
