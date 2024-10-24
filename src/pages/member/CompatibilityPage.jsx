@@ -11,10 +11,12 @@ import Result from "../../components/Compatibility/Result";
 import "../../styles/CompatibilityPage.scss";
 import api from "../../config/axiosConfig";
 import { ArrowDownOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
 function CompatibilityPage() {
+  const navigate = useNavigate();
   const [load, setLoading] = useState(false);
   const [koiData, setKoiData] = useState([]);
   const [tankData, setTankData] = useState([]);
@@ -91,14 +93,24 @@ function CompatibilityPage() {
   };
 
   const handleCalculateCompatibility = async () => {
-    // check
+    //  access token từ lS và kiểm tra role
+    const accessToken = localStorage.getItem("accessToken");
+    const isMember =
+      accessToken && JSON.parse(accessToken).role.toUpperCase() === "MEMBER";
+
+    if (!isMember) {
+      message.error("Bạn phải là thành viên để tính toán độ tương thích.");
+      navigate("/errorMem"); // Điều hướng tới trang lỗi
+      return;
+    }
+
     if (selectedFish.length === 0 || !selectedTank || !selectedElement) {
       message.warning("Vui lòng chọn cá, hồ và yếu tố trước khi tính toán!");
       return;
     }
+
     setLoading(true);
 
-    // lay mau
     const selectedKoiColors = selectedFish.map((fish) =>
       fish.color.split(",").map((color) => color.trim())
     );
@@ -110,28 +122,21 @@ function CompatibilityPage() {
       koiFishColors: selectedKoiColors,
       tankShape: selectedTankShape,
       chatGptAIDto: {
-        model: "null", // Đặt mặc định là null
+        model: "null",
         messages: [
           {
-            role: "user", // Đặt mặc định là "user"
-            content: "string", // Đặt mặc định là "string"
+            role: "user",
+            content: "string",
           },
         ],
       },
     };
 
-    console.log("Payload gửi đến API:", payload);
-
     try {
-      // Gửi yêu cầu POST đến API
       const response = await api.post("compatibility", payload);
 
-      // Kiểm tra xem phản hồi có chứa dữ liệu kết quả không
       if (response.data && response.data.result) {
-        const result = response.data.result; // Lấy dữ liệu từ API
-
-        console.log("Phản hồi từ API:", result);
-
+        const result = response.data.result;
         const formattedAdvise = result.advise.split("\n").map((line, index) => (
           <span key={index}>
             {line}
@@ -156,6 +161,75 @@ function CompatibilityPage() {
       setLoading(false);
     }
   };
+
+  // const handleCalculateCompatibility = async () => {
+  //   const accessToken = localStorage.getItem("accessToken");
+  //   const isMember =
+  //     accessToken && JSON.parse(accessToken).role.toUpperCase() === "MEMBER";
+  //   if (isMember) {
+  //     message.error("Bạn phải là thành viên để tính toán độ tương thích.");
+  //     Navigate("/errorMem");
+  //     return;
+  //   }
+  //   // check
+  //   if (selectedFish.length === 0 || !selectedTank || !selectedElement) {
+  //     message.warning("Vui lòng chọn cá, hồ và yếu tố trước khi tính toán!");
+  //     return;
+  //   }
+  //   setLoading(true);
+
+  //   // lay mau
+  //   const selectedKoiColors = selectedFish.map((fish) =>
+  //     fish.color.split(",").map((color) => color.trim())
+  //   );
+  //   const selectedTankShape = selectedTank.shape;
+  //   const userElement = selectedElement;
+
+  //   const payload = {
+  //     userElement: userElement,
+  //     koiFishColors: selectedKoiColors,
+  //     tankShape: selectedTankShape,
+  //     chatGptAIDto: {
+  //       model: "null", // Đặt mặc định là null
+  //       messages: [
+  //         {
+  //           role: "user", // Đặt mặc định là "user"
+  //           content: "string", // Đặt mặc định là "string"
+  //         },
+  //       ],
+  //     },
+  //   };
+
+  //   try {
+  //     const response = await api.post("compatibility", payload);
+
+  //     // phản hồi có chứa dữ liệu kết quả không
+  //     if (response.data && response.data.result) {
+  //       const result = response.data.result;
+  //       const formattedAdvise = result.advise.split("\n").map((line, index) => (
+  //         <span key={index}>
+  //           {line}
+  //           <br />
+  //         </span>
+  //       ));
+
+  //       const formattedResult = {
+  //         ...result,
+  //         advise: formattedAdvise,
+  //       };
+
+  //       setResultData(formattedResult);
+  //       setIsModalVisible(true);
+  //       message.success("Tính điểm tương thích thành công!");
+  //     } else {
+  //       throw new Error("Không có dữ liệu tương thích từ phản hồi.");
+  //     }
+  //   } catch (error) {
+  //     message.error("Lỗi khi tính điểm tương thích: " + error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <Layout>

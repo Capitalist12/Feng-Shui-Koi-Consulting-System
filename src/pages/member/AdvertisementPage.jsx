@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../../config/axiosConfig";
 import "../../styles/Advertisement.scss";
 import Navbar from "../../components/Utils/Navbar";
-import { Layout, Button, Pagination, Card, Select } from "antd";
+import { Layout, Button, Pagination, Card, Select, Modal } from "antd";
 import CreateAdForm from "../../components/Advertisement/CreateAdForm";
 import EditAdForm from "../../components/Advertisement/EditAdForm";
 import SearchBar from "../../components/Advertisement/SearchBar";
@@ -14,15 +14,18 @@ import EmblaCarousel from "../../components/Advertisement/embla/EmblaCarousel";
 import { Option } from "antd/es/mentions";
 import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
 import AdDetail from "../../components/Advertisement/AdDetails";
+import { useNavigate } from "react-router-dom";
 
 function AdvertisementPage({ currentUser }) {
+  const navigate = useNavigate();
   const [ads, setAds] = useState([]);
   const [adsE, setAdsE] = useState([]);
   const [displayAds, setDisplayAds] = useState([]);
   const [sortValue, setSortValue] = useState("Sắp xếp theo:...");
-  const [selectedAd, setSelectedAd] = useState(null); // Thêm state cho quảng cáo đã chọn
-  const [isModalVisible, setIsModalVisible] = useState(false); // Thêm state cho modal
-  const [editingAd, setEditingAd] = useState(null);
+  const [selectedAd, setSelectedAd] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  // const [editingAd, setEditingAd] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const adsPerPage = 8;
 
@@ -98,6 +101,12 @@ function AdvertisementPage({ currentUser }) {
   const handleCloseModal = () => {
     setIsModalVisible(false);
     setSelectedAd(null);
+  };
+  const handleAdSubmit = (values) => {
+    // Gọi API để gửi dữ liệu của bài đăng
+    console.log("Submitted values:", values);
+    // Reset form hoặc thông báo thành công nếu cần
+    setShowForm(false); // Đóng form sau khi gửi
   };
 
   return (
@@ -180,6 +189,17 @@ function AdvertisementPage({ currentUser }) {
                   <FaArrowTrendDown style={{ marginLeft: "0.5rem" }} />
                 </Option>
               </Select>
+              <Button type="primary" onClick={() => setIsModalVisible(true)}>
+                Đăng bài
+              </Button>
+              <Modal
+                title="Đăng bài"
+                visible={isModalVisible}
+                onCancel={() => setIsModalVisible(false)}
+                footer={null} // Ẩn footer mặc định
+              >
+                <CreateAdForm onSubmit={handleAdSubmit} />
+              </Modal>
             </div>
           </div>
         </div>
@@ -200,7 +220,7 @@ function AdvertisementPage({ currentUser }) {
               <p className="ad-category">
                 Danh mục: {ad.category.categoryName}
               </p>
-              <Button onClick={() => setEditingAd(ad)}>Sửa</Button>
+              {/* <Button onClick={() => setEditingAd(ad)}>Sửa</Button> */}
             </div>
           ))}
           <div className="pagination">

@@ -29,11 +29,7 @@ const App = () => {
     },
     {
       path: "compatibility",
-      element: (
-        <Member>
-          <CompatibilityPage />,
-        </Member>
-      ),
+      element: <CompatibilityPage />,
     },
     {
       path: "pricing",

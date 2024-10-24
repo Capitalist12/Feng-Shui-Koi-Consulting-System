@@ -1,8 +1,7 @@
-import { Button, Select, Row, Col, Typography, Card } from "antd";
+import { Button, Select, Row, Col, Card } from "antd";
 import { OPTIONS } from "../../utils/constant";
 import "../../styles/CompatibilityForm.scss";
 
-const { Title } = Typography;
 const { Option } = Select;
 
 const CompatibilityForm = ({
