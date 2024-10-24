@@ -18,6 +18,8 @@ import BlogEditorPage from "./pages/blog/BlogEditorPage";
 import BlogPage from "./pages/blog/BlogPage";
 import BlogContent from "./components/Blog/BlogContent";
 import Blogs from "./components/Blog/Blogs";
+import Member from "./components/MemberRoute/Member";
+import ErrorMember from "./pages/error/ErrorMember";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -27,11 +29,15 @@ const App = () => {
     },
     {
       path: "compatibility",
-      element: <CompatibilityPage />,
+      element: (
+        <Member>
+          <CompatibilityPage />,
+        </Member>
+      ),
     },
     {
       path: "pricing",
-      element: <PricingPage />
+      element: <PricingPage />,
     },
     {
       path: "blog",
@@ -39,13 +45,13 @@ const App = () => {
       children: [
         {
           path: "",
-          element: <Blogs />
+          element: <Blogs />,
         },
         {
           path: ":blogId",
-          element: <BlogContent />
-        }
-      ]
+          element: <BlogContent />,
+        },
+      ],
     },
     {
       path: "editor",
@@ -53,7 +59,7 @@ const App = () => {
         <Admin>
           <BlogEditorPage />
         </Admin>
-      )
+      ),
     },
     {
       path: "ad",
@@ -98,6 +104,10 @@ const App = () => {
     {
       path: "user",
       element: <UserProfilePage />,
+    },
+    {
+      path: "errorMem",
+      element: <ErrorMember />,
     },
   ]);
 

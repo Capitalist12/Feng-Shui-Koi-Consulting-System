@@ -53,7 +53,9 @@ const SelectedItems = ({
                       type="primary"
                       danger
                       onClick={() => handleSelectFish(fish)}
-                      style={{ width: "2.5vw" }}
+                      style={{
+                        width: "3rem",
+                      }}
                     >
                       Xóa
                     </Button>
@@ -70,7 +72,7 @@ const SelectedItems = ({
           <h1>Hồ:</h1>
           <p>
             {selectedTank ? (
-              <div className="tank-selected">
+              <div className="selected">
                 <span>{selectedTank.shape}</span>
                 <Button type="primary" danger onClick={handleRemoveTank}>
                   Xóa

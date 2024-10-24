@@ -1,0 +1,17 @@
+.custom-button {
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(118, 18, 105);
+  color: rgb(118, 18, 105);
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: translateY(-0.5rem);
+  }
+
+  &:hover {
+    background-color: rgb(118, 18, 105) !important;
+    border-color: rgb(255, 255, 255) !important;
+    color: white !important;
+    cursor: pointer;
+  }
+}

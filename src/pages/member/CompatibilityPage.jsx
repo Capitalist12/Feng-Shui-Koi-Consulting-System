@@ -24,8 +24,8 @@ function CompatibilityPage() {
   const [selectedElement, setSelectedElement] = useState("");
   const [fishCount, setFishCount] = useState(0);
   const [tankCount, setTankCount] = useState(0);
-  const [resultData, setResultData] = useState(null); // Lưu kết quả tính toán
-  const [isModalVisible, setIsModalVisible] = useState(false); // Quản lý trạng thái modal
+  const [resultData, setResultData] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -74,7 +74,7 @@ function CompatibilityPage() {
     } else if (selectedFish.length <= 5) {
       setSelectedFish([...selectedFish, fish]);
     } else {
-      message.warning("Chỉ được chọn tối đa 3 con cá!");
+      message.warning("Chỉ được chọn tối đa 6 con cá!");
     }
   };
 
