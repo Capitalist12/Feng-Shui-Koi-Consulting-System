@@ -1,6 +1,5 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.user.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
