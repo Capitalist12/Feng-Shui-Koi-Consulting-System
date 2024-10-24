@@ -108,23 +108,23 @@ public class AdvertisementService {
     }
 
     //Scheduling the auto delete rejected ads that created for 2 mins
-    @Scheduled(fixedRate = 120000)  // Run every 2 minutes
+    @Scheduled(cron = "0 */2 * * * *")  // Run every 2 minutes
     public void deleteOldRejectedAdvertisements() {
         // Get the timestamp of 2 minutes ago
         LocalDateTime twoMinutesAgo = LocalDateTime.now().minusMinutes(2);
 
         // Retrieve rejected advertisements older than 2 minutes
-        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(twoMinutesAgo);
+        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan2Mins(twoMinutesAgo);
 
         // Delete all old rejected ads from the database
         advertisementRepo.deleteAll(oldRejectedAds);
     }
 
-//    @Scheduled(fixedRate = 86400000)
+//    @Scheduled(cron = "0 0 0 */7 * *")
 //    public void deleteOldRejectedAdvertisements() {
 //        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
 //
-//        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(sevenDaysAgo);
+//        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan7Days(sevenDaysAgo);
 //
 //        advertisementRepo.deleteAll(oldRejectedAds);
 //    }

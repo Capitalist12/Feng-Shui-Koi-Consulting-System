@@ -35,7 +35,7 @@ public interface AdvertisementMapper {
 
     @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementName")
     @Mapping(target = "category", source = "category", qualifiedByName = "mapToCategoryResponse")
-    @Mapping(target = "user", source = "user", qualifiedByName = "mapToUserName")
+    @Mapping(target = "user", source = "user", qualifiedByName = "mapToUserResponse")
     @Mapping(target = "imagesAd", source = "imagesAd")
     AdvertisementResponse toAdvertisementResponse(Advertisement advertisement);
 
