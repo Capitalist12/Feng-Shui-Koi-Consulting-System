@@ -12,10 +12,11 @@ const CompatibilityForm = ({
 }) => {
   return (
     <Card
+      className="card2"
       style={{
         marginBottom: "3rem",
         marginTop: "2rem",
-        border: "2px solid black",
+        border: "2px solid  rgb(118, 18, 105)",
         boxShadow: "0 0 30px darkgrey",
         display: "flex",
         justifyContent: "center",

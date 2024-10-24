@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
 body {
   overflow-x: hidden; // fix width full
   width: 100%;
@@ -176,8 +178,5 @@ body {
     margin-top: 5vh;
     align-items: center;
     flex-direction: column;
-
-    .tank-koi-selected {
-    }
   }
 }

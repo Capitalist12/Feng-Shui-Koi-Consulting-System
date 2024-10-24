@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Layout, Row, Col, Typography, message } from "antd";
+import { Layout, Row, Col, Typography, message, Spin } from "antd";
 import Navbar from "../../components/Utils/Navbar";
 import { getAllKoiFish } from "../../services/koiAPIService";
 import { fetchTank } from "../../services/tankAPIService";
@@ -15,11 +15,11 @@ import { ArrowDownOutlined } from "@ant-design/icons";
 const { Title } = Typography;
 
 function CompatibilityPage() {
+  const [load, setLoading] = useState(false);
   const [koiData, setKoiData] = useState([]);
   const [tankData, setTankData] = useState([]);
   const [selectedFish, setSelectedFish] = useState([]);
   const [selectedTank, setSelectedTank] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedElement, setSelectedElement] = useState("");
   const [fishCount, setFishCount] = useState(0);
@@ -96,6 +96,8 @@ function CompatibilityPage() {
       message.warning("Vui lòng chọn cá, hồ và yếu tố trước khi tính toán!");
       return;
     }
+    setLoading(true);
+
     // lay mau
     const selectedKoiColors = selectedFish.map((fish) =>
       fish.color.split(",").map((color) => color.trim())
@@ -150,6 +152,8 @@ function CompatibilityPage() {
       }
     } catch (error) {
       message.error("Lỗi khi tính điểm tương thích: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -240,17 +244,18 @@ function CompatibilityPage() {
             <div className="selected-ele">
               {/* ????? */}
               <SelectedItems
-                className="tank-koi-selected"
                 selectedFish={selectedFish}
                 selectedTank={selectedTank}
                 handleRemoveTank={handleRemoveTank}
                 handleSelectFish={handleSelectFish}
               />
-              <CompatibilityForm
-                selectedElement={selectedElement}
-                setSelectedElement={setSelectedElement}
-                handleCalculateCompatibility={handleCalculateCompatibility}
-              />
+              <Spin spinning={load}>
+                <CompatibilityForm
+                  selectedElement={selectedElement}
+                  setSelectedElement={setSelectedElement}
+                  handleCalculateCompatibility={handleCalculateCompatibility}
+                />
+              </Spin>
             </div>
           </div>
         </section>

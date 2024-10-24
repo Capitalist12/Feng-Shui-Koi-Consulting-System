@@ -7,7 +7,6 @@ import { IoReturnUpForwardSharp } from "react-icons/io5";
 const AdDetail = ({ ad, visible, onClose }) => {
   return (
     <Modal
-      c
       style={{ top: "20%" }}
       width={"35rem"}
       title={ad.title}

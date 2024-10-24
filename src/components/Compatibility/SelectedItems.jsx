@@ -25,7 +25,7 @@ const SelectedItems = ({
 
         <div id="koi">
           <h1>Cá Koi:</h1>
-          <p>
+          <h3>
             {maxSelectedFish.length > 0 ? (
               <div
                 style={{
@@ -65,12 +65,12 @@ const SelectedItems = ({
             ) : (
               "Chưa chọn (tối đa 6 con cá)"
             )}
-          </p>
+          </h3>
         </div>
 
         <div id="tank">
           <h1>Hồ:</h1>
-          <p>
+          <h3>
             {selectedTank ? (
               <div className="selected">
                 <span>{selectedTank.shape}</span>
@@ -81,7 +81,7 @@ const SelectedItems = ({
             ) : (
               "Chưa chọn (tối đa 1 hồ)"
             )}
-          </p>
+          </h3>
         </div>
       </Card>
     </div>

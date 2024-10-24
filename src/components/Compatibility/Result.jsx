@@ -1,37 +1,32 @@
 import React from "react";
-import { Modal, Typography } from "antd";
-
+import { Button, Modal, Typography } from "antd";
+import "../../styles/Result.scss";
 const { Title, Paragraph } = Typography;
 
 const Result = ({ isVisible, resultData, onClose }) => {
-  // // Hàm chuyển đổi ký tự xuống dòng thành <br />
-  // const formatAdvise = (advise) => {
-  //   return advise.split("<br/>").map((line, index) => (
-  //     <span key={index}>
-  //       {line}
-  //       <br />
-  //       <br />
-  //     </span>
-  //   ));
-  // };
-
   return (
     <Modal
       title="Kết Quả Tính Toán"
       visible={isVisible}
-      onOk={onClose}
+      style={{ top: "10%" }}
+      bodyStyle={{ textAlign: "center" }}
+      width={"50rem"}
       onCancel={onClose}
-      okText="OK"
+      footer={[
+        <Button key="back" onClick={onClose}>
+          Đóng
+        </Button>,
+      ]}
     >
       {resultData ? (
         <div>
-          <Title level={4}>Điểm tương thích:</Title>
+          <Title level={2}>Điểm tương thích:</Title>
           <Paragraph>
-            <strong>Điểm tương thích cá:</strong>{" "}
+            <strong style={{ fontWeight: "bold" }}>Điểm tương thích cá:</strong>{" "}
             {resultData.fishCompatibilityScore}%
           </Paragraph>
           <Paragraph>
-            <strong>Điểm tương thích hồ:</strong>{" "}
+            <strong style={{ fontWeight: "bold" }}>Điểm tương thích hồ:</strong>{" "}
             {resultData.tankCompatibilityScore}%
           </Paragraph>
           <Paragraph>
