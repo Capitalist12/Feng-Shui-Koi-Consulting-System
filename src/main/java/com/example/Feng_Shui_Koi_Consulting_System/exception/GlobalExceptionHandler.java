@@ -1,7 +1,9 @@
 package com.example.Feng_Shui_Koi_Consulting_System.exception;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
+import com.stripe.exception.StripeException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -62,6 +64,17 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(value = StripeException .class)
+    ResponseEntity<ApiResponse> handlingAuthorizationDeniedException(StripeException exception) {
+       int stripeErrorCode = exception.getStatusCode();
+       String stripeErrorMessage = exception.getMessage();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.builder()
+                        .code(stripeErrorCode)
+                        .message(stripeErrorMessage)
                         .build());
     }
 
