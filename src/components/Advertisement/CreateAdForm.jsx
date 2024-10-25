@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Form,
   Input,
+  InputNumber,
   Button,
   Select,
   message,
@@ -14,7 +15,6 @@ import { CATEGORY, OPTIONS } from "../../utils/constant";
 import { useNavigate } from "react-router-dom";
 import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
-// import {uploadFile} from
 
 const CreateAdForm = ({ onSubmit }) => {
   const [role, setRole] = useState("");
@@ -45,14 +45,13 @@ const CreateAdForm = ({ onSubmit }) => {
 
     try {
       if (fileList.length > 0) {
-        const uploadPromises = fileList.map((file) =>
+        const uploadImage = fileList.map((file) =>
           uploadFile(file.originFileObj)
         );
-        const urls = await Promise.all(uploadPromises);
-        values.imagesURL = urls; // Lưu tất cả các URL vào imagesURL
+        const urls = await Promise.all(uploadImage);
+        values.imagesURL = urls;
       }
 
-      // Gọi hàm onSubmit với các giá trị đã được cập nhật
       await onSubmit(values);
       message.success("Quảng cáo đã được gửi thành công!");
     } catch (error) {
@@ -99,14 +98,13 @@ const CreateAdForm = ({ onSubmit }) => {
   return (
     <div>
       <Form onFinish={handleFinish}>
-        {/* Hàng đầu tiên: Chọn Phân loại và Mệnh */}
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
               name="categoryName"
               label="Phân loại:"
-              labelCol={{ span: 24 }} // Đặt label đầy đủ chiều rộng
-              wrapperCol={{ span: 24 }} // Đặt ô nhập đầy đủ chiều rộng
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
               rules={[
                 { required: true, message: "Vui lòng chọn loại sản phẩm!" },
               ]}
@@ -157,10 +155,10 @@ const CreateAdForm = ({ onSubmit }) => {
           wrapperCol={{ span: 24 }}
           rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
         >
-          <Input type="number" style={{ width: "10rem" }} />
+          <InputNumber step={10000} style={{ width: "10rem" }} />
         </Form.Item>
 
-        <Form.Item label="image" name="image">
+        <Form.Item label="Hình ảnh:" name="imageURL">
           <Upload
             action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
             listType="picture-card"
@@ -172,9 +170,10 @@ const CreateAdForm = ({ onSubmit }) => {
           </Upload>
         </Form.Item>
 
-        {/* Nút đăng */}
         <Form.Item>
-          <Button htmlType="submit">Đăng</Button>
+          <Button size="large" htmlType="submit">
+            Đăng
+          </Button>
         </Form.Item>
       </Form>
       {previewImage && (

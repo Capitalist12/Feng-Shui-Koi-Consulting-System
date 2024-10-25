@@ -220,7 +220,17 @@ function AdvertisementPage({ currentUser }) {
               Đăng bài
             </Button>
             <Modal
-              title="Đăng bài"
+              title={
+                <div
+                  style={{
+                    textAlign: "center",
+                    fontSize: "2rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Đăng bài
+                </div>
+              }
               visible={isCreateAd}
               onCancel={() => setIsCreateAd(false)}
               footer={null}
@@ -240,10 +250,15 @@ function AdvertisementPage({ currentUser }) {
               <h2>Mệnh: {ad.element}</h2>
               <h3>{ad.title}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
-              {/* Hiển thị số lượng hình ảnh còn lại */}
-              {ad.imagesAd.length > 1 && <span>+{ad.imagesAd.length - 1}</span>}
-              <p>{truncateDescription(ad.description, 50)}</p>{" "}
-              <p>Giá: ${ad.price}</p>
+              {ad.imagesAd.length > 1 && (
+                <span style={{ fontStyle: "italic" }}>
+                  +{ad.imagesAd.length - 1} hình ảnh
+                </span>
+              )}
+              <h2 style={{ color: "green" }}>
+                Giá: {ad.price.toLocaleString()} VNĐ
+              </h2>
+              <p>Thông tin: {truncateDescription(ad.description, 50)}</p>{" "}
               <p className="ad-user">Người đăng: {ad.user}</p>
               <p className="ad-category">
                 Danh mục: {ad.category.categoryName}
@@ -262,7 +277,7 @@ function AdvertisementPage({ currentUser }) {
           </div>
         </div>
       </section>
-      {/* Hiển thị modal khi đã chọn quảng cáo */}
+      {/* modal khi đã chọn quảng cáo */}
       {selectedAd && (
         <AdDetail
           ad={selectedAd}
