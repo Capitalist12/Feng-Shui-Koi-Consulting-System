@@ -13,9 +13,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.repository.TransactionRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Customer;
-import com.stripe.model.CustomerSearchResult;
-import com.stripe.model.Subscription;
+import com.stripe.model.*;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.CustomerSearchParams;
@@ -31,6 +29,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -198,6 +199,7 @@ public class StripeService {
     }
 
     private void saveTransaction( String subscriptionId , User user ) throws StripeException {
+
         Transaction transaction = new Transaction();
         Subscription sub = Subscription.retrieve(subscriptionId);
         Long amountInCents = sub.getItems().getData().get(0).getPrice().getUnitAmount();
@@ -211,8 +213,24 @@ public class StripeService {
         transaction.setPrice(amountInDollars);
         transaction.setCreatedDay(createdDate);
         transaction.setUser(user);
+        transaction.setStatus(getTransactionStatus(sub).toUpperCase());
 
         transactionRepo.save(transaction);
+    }
+
+
+    private String getTransactionStatus(Subscription sub) throws StripeException {
+        String status = null;
+        String paymentIntentId = Invoice.retrieve(sub.getLatestInvoice()).getPaymentIntent();
+        Map<String, Object> chargeParams = new HashMap<>();
+        chargeParams.put("payment_intent", paymentIntentId); // Lọc theo PaymentIntent ID
+        List<Charge> charges = Charge.list(chargeParams).getData(); // Lấy các charge liên quan
+
+        if(!charges.isEmpty()) {
+            status = charges.get(0).getStatus();
+        }
+
+        return status;
     }
 
     private PaymentSuccessfulResponse createPaymentResponse(boolean checkout, String token, String role) {

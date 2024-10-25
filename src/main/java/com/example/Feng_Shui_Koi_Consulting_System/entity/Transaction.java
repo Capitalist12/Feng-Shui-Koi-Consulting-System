@@ -30,6 +30,9 @@ public class Transaction {
     @Column(name = "CreatedDay")
     LocalDateTime createdDay;
 
+    @Column(name = "Status")
+    String status;
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "UserID", nullable = false, referencedColumnName = "UserID")
     @JsonBackReference
