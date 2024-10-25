@@ -31,10 +31,10 @@ const App = () => {
       path: "compatibility",
       element: <CompatibilityPage />,
     },
-    {
-      path: "pricing",
-      element: <PricingPage />,
-    },
+    // {
+    //   path: "pricing",
+    //   element: <PricingPage />,
+    // },
     {
       path: "blog",
       element: <BlogPage />,

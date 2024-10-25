@@ -14,18 +14,19 @@ import EmblaCarousel from "../../components/Advertisement/embla/EmblaCarousel";
 import { Option } from "antd/es/mentions";
 import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
 import AdDetail from "../../components/Advertisement/AdDetails";
-import { useNavigate } from "react-router-dom";
+import { BiBeenHere } from "react-icons/bi";
+import { useForm } from "antd/es/form/Form";
 
 function AdvertisementPage({ currentUser }) {
-  const navigate = useNavigate();
+  const form = useForm();
   const [ads, setAds] = useState([]);
   const [adsE, setAdsE] = useState([]);
   const [displayAds, setDisplayAds] = useState([]);
   const [sortValue, setSortValue] = useState("Sắp xếp theo:...");
   const [selectedAd, setSelectedAd] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  // const [editingAd, setEditingAd] = useState(null);
+  const [isShowDetails, setIsShowDetails] = useState(false);
+  const [isCreateAd, setIsCreateAd] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const adsPerPage = 8;
 
@@ -95,18 +96,35 @@ function AdvertisementPage({ currentUser }) {
 
   const showAdDetail = (ad) => {
     setSelectedAd(ad);
-    setIsModalVisible(true);
+    setIsShowDetails(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalVisible(false);
+    setIsShowDetails(false);
     setSelectedAd(null);
   };
-  const handleAdSubmit = (values) => {
-    // Gọi API để gửi dữ liệu của bài đăng
-    console.log("Submitted values:", values);
-    // Reset form hoặc thông báo thành công nếu cần
-    setShowForm(false); // Đóng form sau khi gửi
+
+  const handleAdSubmit = async (values) => {
+    setLoading(true);
+    try {
+      await api.post("/ad", {
+        title: values.title,
+        description: values.description,
+        price: values.price,
+        element: values.element,
+        categoryName: values.categoryName,
+        imagesURL: values.imagesURL || [],
+      });
+
+      console.log("Submitted values:", values);
+      setIsCreateAd(false);
+      await fetchAds();
+      form.resetFields();
+    } catch (error) {
+      console.log("Lỗi khi gửi quảng cáo:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -122,7 +140,7 @@ function AdvertisementPage({ currentUser }) {
       </section>
 
       <section id="sec2-ad">
-        <div className="search-filter">
+        <div className="search-filter-post">
           <div className="search-bar">
             <SearchBar onSearch={handleSearch} />
           </div>
@@ -131,8 +149,8 @@ function AdvertisementPage({ currentUser }) {
             <Title style={{ marginTop: "2rem" }} level={4}>
               Bộ lọc tìm kiếm
             </Title>
-            <div className="button-ad-filter">
-              <div className="button-ad-container">
+            <div className="button-filter">
+              <div className="button-filter-container">
                 <IoFishOutline className="icon" />
                 <Button
                   className="custom-search-button"
@@ -189,18 +207,26 @@ function AdvertisementPage({ currentUser }) {
                   <FaArrowTrendDown style={{ marginLeft: "0.5rem" }} />
                 </Option>
               </Select>
-              <Button type="primary" onClick={() => setIsModalVisible(true)}>
-                Đăng bài
-              </Button>
-              <Modal
-                title="Đăng bài"
-                visible={isModalVisible}
-                onCancel={() => setIsModalVisible(false)}
-                footer={null} // Ẩn footer mặc định
-              >
-                <CreateAdForm onSubmit={handleAdSubmit} />
-              </Modal>
             </div>
+          </div>
+          <div className="createAd">
+            <h2>Click ngay để đăng bài quảng cáo !</h2>
+            <BiBeenHere className="icon" />
+            <Button
+              style={{ marginBottom: "1rem" }}
+              className="custom-search-button"
+              onClick={() => setIsCreateAd(true)}
+            >
+              Đăng bài
+            </Button>
+            <Modal
+              title="Đăng bài"
+              visible={isCreateAd}
+              onCancel={() => setIsCreateAd(false)}
+              footer={null}
+            >
+              <CreateAdForm onSubmit={handleAdSubmit} />
+            </Modal>
           </div>
         </div>
 
@@ -214,6 +240,8 @@ function AdvertisementPage({ currentUser }) {
               <h2>Mệnh: {ad.element}</h2>
               <h3>{ad.title}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
+              {/* Hiển thị số lượng hình ảnh còn lại */}
+              {ad.imagesAd.length > 1 && <span>+{ad.imagesAd.length - 1}</span>}
               <p>{truncateDescription(ad.description, 50)}</p>{" "}
               <p>Giá: ${ad.price}</p>
               <p className="ad-user">Người đăng: {ad.user}</p>
@@ -229,7 +257,7 @@ function AdvertisementPage({ currentUser }) {
               total={displayAds.length}
               pageSize={adsPerPage}
               onChange={(page) => setCurrentPage(page)}
-              style={{ textAlign: "center", marginTop: "16px" }}
+              style={{ textAlign: "center", marginTop: "3rem" }}
             />
           </div>
         </div>
@@ -238,7 +266,7 @@ function AdvertisementPage({ currentUser }) {
       {selectedAd && (
         <AdDetail
           ad={selectedAd}
-          visible={isModalVisible}
+          visible={isShowDetails}
           onClose={handleCloseModal}
         />
       )}

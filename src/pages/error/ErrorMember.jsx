@@ -8,17 +8,29 @@ const ErrorMember = () => {
   return (
     <Result
       status="403"
-      title={<span style={{ fontSize: "3rem" }}>403</span>}
+      title={<span style={{ fontSize: "3rem", color: "red" }}>403</span>}
       subTitle={
         <span style={{ fontSize: "2rem" }}>
-          Xin vui lòng nạp VIP để sử dụng dịch vụ !
+          Xin vui lòng nạp VIP để sử dụng dịch vụ!
         </span>
       }
-      extra={
-        <Button type="primary" size="large" onClick={() => navigate("/")}>
-          Back Home
-        </Button>
-      }
+      extra={[
+        <Button
+          type="primary"
+          size="large"
+          style={{ marginRight: "2rem" }}
+          onClick={() => navigate("/")}
+        >
+          Trang chủ
+        </Button>,
+        <Button
+          type="primary"
+          size="large"
+          onClick={() => navigate("/pricing")}
+        >
+          Nạp VIP
+        </Button>,
+      ]}
     />
   );
 };

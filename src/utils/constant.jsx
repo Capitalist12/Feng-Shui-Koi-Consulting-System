@@ -1,11 +1,13 @@
 import { FaFire, FaLeaf } from "react-icons/fa";
 import { FaMountainSun } from "react-icons/fa6";
-import { GiMetalBar } from "react-icons/gi";
+import { GiAquarium, GiMetalBar } from "react-icons/gi";
 import { IoIosWater } from "react-icons/io";
 import { GrUserAdmin } from "react-icons/gr";
 import { GrUserExpert } from "react-icons/gr";
 import { UserOutlined, LineChartOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
+import { IoFishOutline } from "react-icons/io5";
+import { RiAlignItemLeftLine } from "react-icons/ri";
 
 const KOI_ELEMENT_MAX_COUNT = 3;
 
@@ -37,6 +39,23 @@ const ELEMENT_VALUES = [
   { value: "Metal", label: "Metal", color: "#A9A9A9" },
 ];
 
+const CATEGORY = [
+  {
+    label: "Koi Fish",
+    value: "Koi Fish",
+    emoji: <IoFishOutline />,
+  },
+  {
+    label: "Aquarium Supplies",
+    value: "Aquarium Supplies",
+    emoji: <GiAquarium />,
+  },
+  {
+    label: "Feng Shui Items",
+    value: "Feng Shui Items",
+    emoji: <RiAlignItemLeftLine />,
+  },
+];
 const OPTIONS = [
   {
     label: "Hỏa",
@@ -137,4 +156,5 @@ export {
   DASHBOARD_ITEMS,
   ELEMENT_VALUES,
   ROLE_OPTIONS,
+  CATEGORY,
 };
