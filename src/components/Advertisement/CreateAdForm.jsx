@@ -124,7 +124,6 @@ const CreateAdForm = ({ onSubmit }) => {
             </Form.Item>
           </Col>
         </Row>
-
         <Form.Item
           name="title"
           label="Tiêu đề:"
@@ -132,7 +131,10 @@ const CreateAdForm = ({ onSubmit }) => {
           wrapperCol={{ span: 24 }}
           rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
         >
-          <Input />
+          <Input
+            maxLength={100}
+            placeholder="Nhập tiêu đề (tối đa 100 ký tự)"
+          />
         </Form.Item>
 
         <Form.Item
@@ -141,10 +143,13 @@ const CreateAdForm = ({ onSubmit }) => {
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
           rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
+          style={{ width: "100%" }} // chieu rong max
         >
           <Input.TextArea
-            style={{ minHeight: "8rem" }}
+            style={{ minHeight: "8rem", width: "100%" }} // chieu rong max
             placeholder="Thông tin chi tiết, liên lạc, số điện thoại,..."
+            autoSize={{ minRows: 4, maxRows: 10 }}
+            maxLength={500}
           />
         </Form.Item>
 
