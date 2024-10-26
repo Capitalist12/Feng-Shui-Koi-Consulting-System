@@ -110,10 +110,10 @@ public class AdvertisementService {
     @Scheduled(fixedRate = 60000)  // Run every 5 minutes
     public void deleteOldRejectedAdvertisements() {
         // Get the timestamp of 5 minutes ago
-        LocalDateTime twoMinutesAgo = LocalDateTime.now().minusMinutes(5);
+        LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);
 
         // Retrieve rejected advertisements older than 5 minutes
-        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan2Mins(twoMinutesAgo);
+        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan5Mins(fiveMinutesAgo);
 
         // Delete all old rejected ads from the database
         advertisementRepo.deleteAll(oldRejectedAds);
