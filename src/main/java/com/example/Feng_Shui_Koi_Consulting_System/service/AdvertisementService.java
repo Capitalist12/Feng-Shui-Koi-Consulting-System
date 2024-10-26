@@ -107,11 +107,10 @@ public class AdvertisementService {
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 
-    //Scheduling the auto delete rejected ads that created for 2 mins
-    @Scheduled(cron = "0 */2 * * * *")  // Run every 2 minutes
+    @Scheduled(fixedRate = 60000)  // Run every 2 minutes
     public void deleteOldRejectedAdvertisements() {
         // Get the timestamp of 2 minutes ago
-        LocalDateTime twoMinutesAgo = LocalDateTime.now().minusMinutes(2);
+        LocalDateTime twoMinutesAgo = LocalDateTime.now().minusMinutes(5);
 
         // Retrieve rejected advertisements older than 2 minutes
         List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan2Mins(twoMinutesAgo);

@@ -62,16 +62,15 @@ public class UserService {
 
     }
 
+    //admin update user's delete status and role
     public UserResponse updateUser(String userID, UserUpdateRequest request){
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
         userMapper.updateUser(user, request,
                 elementRepo);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRoleName(request.getRoleName());
         user.setDeleteStatus(request.isDeleteStatus());
         return userMapper.toUserResponse(userRepository.save(user));
-
     }
 
     public void deleteUser(String userID){
