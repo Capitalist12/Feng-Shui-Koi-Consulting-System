@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 public class CategoryController {
     CategoryService categoryService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ApiResponse<CategoryResponse> createCategory(@RequestBody CategoryRequest request){
         return ApiResponse.<CategoryResponse>builder()
@@ -28,6 +30,7 @@ public class CategoryController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     ApiResponse<List<CategoryResponse>>getCategory(){
         return ApiResponse.<List<CategoryResponse>>builder()
@@ -35,6 +38,7 @@ public class CategoryController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{categoryID}")
     ApiResponse<CategoryResponse> updateCategory(@PathVariable String categoryID, @RequestBody CategoryRequest request){
         return ApiResponse.<CategoryResponse>builder()
@@ -42,7 +46,7 @@ public class CategoryController {
                 .build();
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{categoryID}")
     String deleteUser(@PathVariable String categoryID){
         categoryService.deleteCategory(categoryID);

@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,7 @@ public class ConsultingAPI {
     ConsultingService consultingService;
     CompatibilityService compatibilityService;
 
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @PostMapping("/calculate")
     public ApiResponse<String> calculateElementName(@RequestBody CalculateElementRequest request) {
         String elementName = elementCalculationService.calculateElementName(request.getDob());
@@ -38,7 +40,7 @@ public class ConsultingAPI {
                 .result(elementName)
                 .build();
     }
-
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PostMapping("/compatibility")
     ApiResponse<CompatibilityResponse> calculateCompatibilityScore
             (@RequestBody CompatibilityRequest request) {
@@ -55,6 +57,7 @@ public class ConsultingAPI {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @PostMapping("/consulting")
     public ApiResponse<ConsultingResponse> getConsulting(@RequestBody ConsultingRequest request){
         var koiFishList = consultingService.koiFishList(request);
