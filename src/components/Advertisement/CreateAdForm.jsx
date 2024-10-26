@@ -163,7 +163,13 @@ const CreateAdForm = ({ onSubmit }) => {
           <InputNumber step={10000} style={{ width: "10rem" }} />
         </Form.Item>
 
-        <Form.Item label="Hình ảnh:" name="imageURL">
+        <Form.Item
+          label="Hình ảnh:"
+          name="imageURL"
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          rules={[{ required: true, message: "Vui lòng chọn ít nhất 1 hình!" }]}
+        >
           <Upload
             action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
             listType="picture-card"
@@ -171,15 +177,20 @@ const CreateAdForm = ({ onSubmit }) => {
             onPreview={handlePreview}
             onChange={handleChange}
           >
-            {fileList.length >= 8 ? null : uploadButton}
+            {fileList.length >= 5 ? null : uploadButton}
           </Upload>
         </Form.Item>
 
-        <Form.Item>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <Button size="large" htmlType="submit">
             Đăng
           </Button>
-        </Form.Item>
+        </div>
       </Form>
       {previewImage && (
         <Image

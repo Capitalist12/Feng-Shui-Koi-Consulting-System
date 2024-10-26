@@ -24,7 +24,6 @@ const EmblaCarousel = ({ ads }) => {
     }
   }, [emblaApi, ads.length]);
 
-  // Hàm cắt ngắn văn bản
   const truncateDescription = (description, maxLength) => {
     if (description.length > maxLength) {
       return description.slice(0, maxLength) + "...";

@@ -16,6 +16,7 @@ import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
 import AdDetail from "../../components/Advertisement/AdDetails";
 import { BiBeenHere } from "react-icons/bi";
 import { useForm } from "antd/es/form/Form";
+import ViewUserAdsButton from "../../components/Advertisement/ViewUserAdsButton";
 
 function AdvertisementPage({ currentUser }) {
   const form = useForm();
@@ -220,6 +221,7 @@ function AdvertisementPage({ currentUser }) {
               Đăng bài
             </Button>
             <Modal
+              width={"40rem"}
               title={
                 <div
                   style={{
@@ -237,6 +239,11 @@ function AdvertisementPage({ currentUser }) {
             >
               <CreateAdForm onSubmit={handleAdSubmit} />
             </Modal>
+
+            <div>
+              <ViewUserAdsButton />
+              {/* Các thành phần khác của trang */}
+            </div>
           </div>
         </div>
 
@@ -259,8 +266,8 @@ function AdvertisementPage({ currentUser }) {
                 Giá: {ad.price.toLocaleString()} VNĐ
               </h2>
               <p>Thông tin: {truncateDescription(ad.description, 50)}</p>{" "}
-              <p className="ad-user">Người đăng: {ad.user}</p>
-              <p className="ad-category">
+              {/* <p className="ad-user">Người đăng: {ad.user}</p> */}
+              <p style={{ fontStyle: "italic", marginTop: "1rem" }}>
                 Danh mục: {ad.category.categoryName}
               </p>
               {/* <Button onClick={() => setEditingAd(ad)}>Sửa</Button> */}

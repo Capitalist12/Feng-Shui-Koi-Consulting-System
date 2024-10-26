@@ -43,7 +43,6 @@ const AdDetail = ({ ad, visible, onClose }) => {
         </Button>,
       ]}
     >
-      {/* Bố cục chính của modal */}
       <div style={{ display: "flex", gap: "2rem" }}>
         <div style={{ flex: "1", textAlign: "center" }}>
           <Image
@@ -56,8 +55,10 @@ const AdDetail = ({ ad, visible, onClose }) => {
               objectFit: "contain",
             }}
           />
-          <p>Phân loại: {ad.category.categoryName}</p>
-          {/* Nút điều hướng hình ảnh nằm dưới ảnh */}
+          <p style={{ fontStyle: "italic" }}>
+            Phân loại: {ad.category.categoryName}
+          </p>
+          {/* 2 nut */}
           <div
             style={{
               display: "flex",
@@ -75,7 +76,6 @@ const AdDetail = ({ ad, visible, onClose }) => {
           </div>
         </div>
 
-        {/* Phần thông tin chi tiết */}
         <div
           style={{
             display: "flex",
@@ -90,15 +90,17 @@ const AdDetail = ({ ad, visible, onClose }) => {
           <h2 style={{ color: "green" }}>
             Giá: {ad.price.toLocaleString()} VNĐ
           </h2>
-          <h2>Thông tin chi tiết:</h2>
-          <p>{ad.description}</p>
+          <div>
+            <h2>Thông tin chi tiết:</h2>
+            <p>{ad.description}</p>
+          </div>
           <div
             style={{
               display: "flex",
               justifyContent: "center",
               fontStyle: "italic",
               color: "brown",
-              gap: "6rem",
+              gap: "5rem",
             }}
           >
             <p>
