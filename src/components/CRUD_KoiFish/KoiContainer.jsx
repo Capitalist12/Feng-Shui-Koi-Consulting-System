@@ -27,10 +27,6 @@ const KoiContainer = () => {
         setIsPaginate(!isPaginate);
     };
 
-    // if (isLoading) {
-    //     return <CircleLoading /> ;
-    // }
-
     return (
         <div>
             {isLoading && <CircleLoading />}

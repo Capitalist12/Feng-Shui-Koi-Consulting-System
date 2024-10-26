@@ -4,6 +4,7 @@ import { GiMetalBar } from "react-icons/gi";
 import { IoIosWater } from "react-icons/io";
 import { GrUserAdmin } from "react-icons/gr";
 import { GrUserExpert } from "react-icons/gr";
+import { MdOutlineSell } from "react-icons/md";
 import { UserOutlined, LineChartOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
 
@@ -40,35 +41,35 @@ const ELEMENT_VALUES = [
 const OPTIONS = [
   {
     label: "Hỏa",
-    value: "Fire",
+    value: "Hỏa",
     emoji: <FaFire />,
     desc: "Hỏa",
     color: "#f26d78",
   },
   {
     label: "Thổ",
-    value: "Earth",
+    value: "Thổ",
     emoji: <FaMountainSun />,
     desc: "Thổ",
     color: "#fece47",
   },
   {
     label: "Kim",
-    value: "Metal",
+    value: "Kim",
     emoji: <GiMetalBar />,
     desc: "Kim",
     color: "#a1978d",
   },
   {
     label: "Thủy",
-    value: "Water",
+    value: "Thủy",
     emoji: <IoIosWater />,
     desc: "Thủy",
     color: "#2c6db6",
   },
   {
     label: "Mộc",
-    value: "Wood",
+    value: "Mộc",
     emoji: <FaLeaf />,
     desc: "Mộc",
     color: "#5aba47",
@@ -125,6 +126,15 @@ const DASHBOARD_ITEMS = [
     key: "4",
     icon: <LineChartOutlined />,
     label: "Bảng thống kê",
+  },
+  {
+    key: "5",
+    icon: <MdOutlineSell/>,
+    label: (
+      <NavLink to="advertise" className="nav-link">
+        Quản lý bài đăng bán
+      </NavLink>
+    ),
   },
 ];
 

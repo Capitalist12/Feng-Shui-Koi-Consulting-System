@@ -159,7 +159,7 @@
                                         height: 100%;
                                         flex-direction: column;
                                         box-sizing: border-box;
-                                        padding: 5px 5px;
+                                        // padding: 5px 5px;
                                         position: relative;
 
 
@@ -172,13 +172,13 @@
                                             white-space: normal; // Cho phép văn bản ngắt dòng để phù hợp với thiết kế
                                             width: 100%;
                                         }
-
-                                        p {
-                                            position: absolute;
-                                            bottom: 0;
-                                            right: 2px;
+                                        .ant-space-item{
+                                            display: flex;
                                             color: rgb(168, 168, 168);
-                                            background-color: var(--background-inner-color);
+
+                                            p {
+                                                background-color: var(--background-inner-color);
+                                            }
                                         }
                                     }
 
@@ -242,7 +242,18 @@
                 &:last-child {
                     background-color: blue;
                     height: 30%;
+                    // display: flex;
+                    // flex-wrap: wrap;
                     box-sizing: border-box;
+
+                    .blog-item {
+                        // flex: 1 1 33.33%; /* Chiếm 1/3 chiều rộng của thẻ cha khi có không gian */
+                        // box-sizing: border-box;
+                        // padding: 10px;
+                    }
+
+                    
+
                 }
             }
         }
@@ -307,8 +318,13 @@
                 }
 
                 .content-body {
+
                     // height: 100%;
                     font-size: 1.15em;
+                    em {
+                        background-color: var(--border-color) !important;
+                    }
+
                 }
 
                 .content-header {
@@ -448,6 +464,7 @@
                             display: flex;
                             flex-direction: column;
                             justify-content: space-between;
+
                             a {
                                 display: -webkit-box;
                                 -webkit-box-orient: vertical;

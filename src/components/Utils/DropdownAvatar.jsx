@@ -2,8 +2,10 @@ import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Divider, Dropdown, Space, theme } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/Slices/userSlice";
+import { getToken } from "../../config/accessTokenConfig";
+import { logoutAuth } from "../../services/AuthAPIService";
 
 const { useToken } = theme;
 
@@ -22,7 +24,9 @@ const DropdownAvatar = (props) => {
         boxShadow: 'none',
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        const accesstoken = getToken();
+        await logoutAuth({token: accesstoken});
         localStorage.removeItem('accessToken');
         dispatch(logout());
         navigate("/");

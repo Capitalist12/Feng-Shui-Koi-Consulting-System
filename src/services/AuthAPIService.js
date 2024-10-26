@@ -49,5 +49,14 @@ const resetPassword = async (payload) => {
     }
 }
 
+const logoutAuth = async (payload) => {
+    try {
+        const response = await axios.post('auth/logout', payload);
+        return response;
+    } catch (err) {
+        toast.error(err.message);
+    }
+}
 
-export { loginAuth, googleLogin, verifyEmail, signup, resetPassword };
+
+export { loginAuth, googleLogin, verifyEmail, signup, resetPassword, logoutAuth };

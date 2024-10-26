@@ -1,8 +1,9 @@
-import { Col, Row } from "antd";
+import { Carousel, Col, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import imageTest from "../../assets/images/compatibility.jpg"
 import { getAllBlogs } from "../../services/blogAPIService";
+import { FaCommentAlt } from "react-icons/fa";
 
 const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
@@ -55,9 +56,16 @@ const Blogs = () => {
                                         <Link to={blog.blogID}>
                                             {blog.title}
                                         </Link>
-                                        <p>
-                                            {blog.createdDate}
-                                        </p>
+                                        <Space >
+                                            <span>
+                                                <FaCommentAlt />
+                                                &nbsp;
+                                                {blog.comments.length}
+                                            </span>
+                                            <p>
+                                                {blog.createdDate}
+                                            </p>
+                                        </Space>
                                     </div>
                                 </div>
                             </Row>
@@ -67,7 +75,52 @@ const Blogs = () => {
             </Row>
             <Row className="blogs-col-row">
                 <Col span={24}>
-
+                    {/* <BlogsCarousel/> */}
+                    {/* <div className="blog-item">
+                        <img src={imageTest} />
+                        <Link to="">
+                            Link test
+                        </Link>
+                        <p>
+                            20-10-2004
+                        </p>
+                    </div>
+                    <div className="blog-item">
+                        <img src={imageTest} />
+                        <Link to="">
+                            Link test
+                        </Link>
+                        <p>
+                            20-10-2004
+                        </p>
+                    </div>
+                    <div className="blog-item">
+                        <img src={imageTest} />
+                        <Link to="">
+                            Link test
+                        </Link>
+                        <p>
+                            20-10-2004
+                        </p>
+                    </div>
+                    <div className="blog-item">
+                        <img src={imageTest} />
+                        <Link to="">
+                            Link test
+                        </Link>
+                        <p>
+                            20-10-2004
+                        </p>
+                    </div>
+                    <div className="blog-item">
+                        <img src={imageTest} />
+                        <Link to="">
+                            Link test
+                        </Link>
+                        <p>
+                            20-10-2004
+                        </p>
+                    </div> */}
                 </Col>
             </Row>
         </Col>

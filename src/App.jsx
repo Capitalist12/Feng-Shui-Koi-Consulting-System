@@ -18,6 +18,7 @@ import BlogEditorPage from "./pages/blog/BlogEditorPage";
 import BlogPage from "./pages/blog/BlogPage";
 import BlogContent from "./components/Blog/BlogContent";
 import Blogs from "./components/Blog/Blogs";
+import AdvertiseManagementContainer from "./components/Advertise/AdvertiseManagementContainer";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -92,6 +93,10 @@ const App = () => {
         {
           path: "tank",
           element: <TankManagement />,
+        },
+        {
+          path: "advertise",
+          element: <AdvertiseManagementContainer />,
         },
       ],
     },
