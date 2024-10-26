@@ -1,19 +1,19 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.SessionDTO;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.PaymentSuccessfulResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.SessionDTO;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentSuccessfulResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Subscriptions;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Transaction;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.SubscriptionRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.TransactionRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Customer;
-import com.stripe.model.CustomerSearchResult;
-import com.stripe.model.Subscription;
+import com.stripe.model.*;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.CustomerSearchParams;
@@ -26,6 +26,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -40,7 +46,10 @@ public class StripeService {
     @Autowired
     private AuthenticationServices authenticationServices;
     @Autowired
+    private SubscriptionRepo subscriptionRepo;
+    @Autowired
     private TransactionRepo transactionRepo;
+
 
     @PostConstruct
     public void init(){
@@ -96,7 +105,7 @@ public class StripeService {
                                             .build()
                                     )
                                     .setCurrency("USD")
-                                    .setUnitAmountDecimal(BigDecimal.valueOf(Objects.equals(aPackage,"YEAR")?99.99 * 100:9.99*100))
+                                    .setUnitAmountDecimal(BigDecimal.valueOf(Objects.equals(aPackage,"YEAR")?23.88 * 100:1.99*100))
                                     //recurring
                                     .setRecurring(SessionCreateParams.LineItem.PriceData.Recurring.builder()
                                             .setInterval(Objects.equals(aPackage,"YEAR")?SessionCreateParams
@@ -136,7 +145,7 @@ public class StripeService {
                     .build();
             return retrieve.update(params);
         }catch (StripeException e) {
-            log.error("StripeService (cancelSubscription)", e);
+            log.error("StripeService (cancelSubscription): {}", e.getMessage());
         }
         return null;
     }
@@ -154,41 +163,82 @@ public class StripeService {
             userRepository.save(user);
             String token =  authenticationServices.generateToken(user);
 
-            Savetransaction(subscriptionId,user);
-            return PaymentSuccessfulResponse.builder()
-                    .checkout(true)
-                    .token(token)
-                    .role(user.getRoleName())
-                    .build();
-        }catch(StripeException e) {
-            log.error("Exception : ",e);
+            saveSubscription(subscriptionId, user);
+            saveTransaction(subscriptionId, user);
 
+            return createPaymentResponse(true, token, user.getRoleName());
+
+        }catch(StripeException e) {
+            log.error("StripeException: {}", e.getMessage());
         }
-        return PaymentSuccessfulResponse.builder()
-                .checkout(false)
-                .token(null)
-                .role(Roles.USER.toString())
-                .build();
+        return createPaymentResponse(false, null, Roles.USER.toString());
+
     }
 
     private User getUserLogin() {
         var context = SecurityContextHolder.getContext();
         String email = context.getAuthentication().getName();
-        User user = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(()-> new AppException(ErrorCode.EMAIL_NOT_EXIST));
-        return user;
+
     }
 
-    private void Savetransaction( String subscriptionId , User user ) throws StripeException {
-        Transaction transaction = transactionRepo.findByUser_UserID(user.getUserID())
-                .orElseGet(() -> Transaction.builder()
+    private void saveSubscription( String subscriptionId , User user ) throws StripeException {
+        Subscriptions subscriptions = subscriptionRepo.findByUser_UserID(user.getUserID())
+                .orElseGet(() -> Subscriptions.builder()
                         .user(user)
                         .build());
         Subscription sub = Subscription.retrieve(subscriptionId);
         String name = sub.getItems().getData().get(0).getPlan().getInterval();
-        transaction.setSubscriptionID(subscriptionId);
-        transaction.setSubscriptionName(name.toUpperCase());
+        Long amountInCents = sub.getItems().getData().get(0).getPrice().getUnitAmount();
+        double amountInDollars = amountInCents /100.0;
+        subscriptions.setSubscriptionID(subscriptionId);
+        subscriptions.setSubscriptionName(name.toUpperCase());
+        subscriptions.setPrice(amountInDollars);
+        subscriptionRepo.save(subscriptions);
+    }
+
+    private void saveTransaction( String subscriptionId , User user ) throws StripeException {
+
+        Transaction transaction = new Transaction();
+        Subscription sub = Subscription.retrieve(subscriptionId);
+        Long amountInCents = sub.getItems().getData().get(0).getPrice().getUnitAmount();
+        double amountInDollars = amountInCents /100.0;
+        String name = sub.getItems().getData().get(0).getPlan().getInterval();
+        Long createdTimestamp = sub.getCreated();
+        LocalDateTime createdDate = Instant.ofEpochSecond(createdTimestamp)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        transaction.setTransactionName(name.toUpperCase());
+        transaction.setPrice(amountInDollars);
+        transaction.setCreatedDay(createdDate);
+        transaction.setUser(user);
+        transaction.setStatus(getTransactionStatus(sub).toUpperCase());
+
         transactionRepo.save(transaction);
+    }
+
+
+    private String getTransactionStatus(Subscription sub) throws StripeException {
+        String status = null;
+        String paymentIntentId = Invoice.retrieve(sub.getLatestInvoice()).getPaymentIntent();
+        Map<String, Object> chargeParams = new HashMap<>();
+        chargeParams.put("payment_intent", paymentIntentId); // Lọc theo PaymentIntent ID
+        List<Charge> charges = Charge.list(chargeParams).getData(); // Lấy các charge liên quan
+
+        if(!charges.isEmpty()) {
+            status = charges.get(0).getStatus();
+        }
+
+        return status;
+    }
+
+    private PaymentSuccessfulResponse createPaymentResponse(boolean checkout, String token, String role) {
+        return PaymentSuccessfulResponse.builder()
+                .checkout(checkout)
+                .token(token)
+                .role(role)
+                .build();
     }
 
 

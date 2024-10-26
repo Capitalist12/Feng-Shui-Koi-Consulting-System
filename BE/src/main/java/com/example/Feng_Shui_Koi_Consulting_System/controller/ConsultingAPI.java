@@ -1,13 +1,11 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CalculateElementRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CompatibilityRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ConsultingRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CompatibilityResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingFishResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ConsultingTankResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.CalculateElementRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.CompatibilityRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.CompatibilityResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.CompatibilityService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ConsultingService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ElementCalculationService;
@@ -16,11 +14,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,6 +32,7 @@ public class ConsultingAPI {
     ConsultingService consultingService;
     CompatibilityService compatibilityService;
 
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @PostMapping("/calculate")
     public ApiResponse<String> calculateElementName(@RequestBody CalculateElementRequest request) {
         String elementName = elementCalculationService.calculateElementName(request.getDob());
@@ -42,7 +40,7 @@ public class ConsultingAPI {
                 .result(elementName)
                 .build();
     }
-
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PostMapping("/compatibility")
     ApiResponse<CompatibilityResponse> calculateCompatibilityScore
             (@RequestBody CompatibilityRequest request) {
@@ -59,6 +57,7 @@ public class ConsultingAPI {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @PostMapping("/consulting")
     public ApiResponse<ConsultingResponse> getConsulting(@RequestBody ConsultingRequest request){
         var koiFishList = consultingService.koiFishList(request);

@@ -15,7 +15,7 @@ springdoc:
 
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB10"
+    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB13"
     username: root
     password: 123456
 
@@ -40,12 +40,6 @@ spring:
       hibernate:
         globally_quoted_identifiers: true
 
-  ai:
-    openai:
-      api-key: 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
-      chat:
-        options:
-          model: gpt-3.5-turbo-0125
 
 outbound:
   client-id: "311482209289-pgh12mi0hos00orqsl2773ke1gdsdhjf.apps.googleusercontent.com"
@@ -58,6 +52,9 @@ jwt:
 api:
   stripe:
     key: sk_test_51Q7E6DF0U8Qubnpu6K2IVhs7Gj5GpEDEWTyDBuv4JeFGK0dphOZDXtGGcTCkR2LZOF8bOauwpVDfLaeqS5sdLXwt00J5sOw6wn
+
+chat-gpt:
+  key:
 
 
 

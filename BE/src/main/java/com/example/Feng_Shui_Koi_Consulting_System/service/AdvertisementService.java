@@ -1,8 +1,9 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AdvertisementResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.VerifyAdRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Ads_Image;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Advertisement;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
@@ -10,16 +11,16 @@ import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.AdvertisementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.AdvertisementRepo;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.CategoryRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,18 +36,19 @@ public class AdvertisementService {
     UserService userService;
     ElementRepo elementRepo;
     UserRepository userRepository;
-    //    UserRepository userRepository;
-    //    CategoryRepo categoryRepo;
+
+    //Constant for generating AdID
+    private static final String ID_PREFIX = "AD";
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public AdvertisementResponse createAdvertisement(AdvertisementCreationRequest request) {
-        var context = SecurityContextHolder.getContext();
-        String email = context.getAuthentication().getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
-
         Advertisement ad = advertisementMapper.toAdvertisement(request, elementRepo, categoryService);
-        ad.setAdID(generateAdID());
+        User user = userRepository.findByUsername(userService.getMyInfo().getUsername())
+                .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXIST)));
         ad.setUser(user);
+        ad.setAdID(generateAdID());
+        ad.setStatus("Pending");
+        ad.setCreatedDate(LocalDateTime.now());
 
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
             Set<Ads_Image> imagesAd = request.getImagesURL().stream()
@@ -60,23 +62,67 @@ public class AdvertisementService {
                     .collect(Collectors.toSet());
             ad.setImagesAd(imagesAd);
         }
-        return  advertisementMapper.toAdvertisementResponse(advertisementRepo.save(ad));
+        return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(ad));
     }
 
-    public List<AdvertisementResponse> getListAdvertisements(){
+    public List<AdvertisementResponse> getAllAdvertisements(){
         return advertisementRepo.findAll().stream()
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
 
-    public List<AdvertisementResponse> getAdvertisementByCategory(String categoryID){
-        return advertisementRepo.findByCategoryID(categoryID).stream()
+    public List<AdvertisementResponse> getAdByID(String adID){
+        return advertisementRepo.findById(adID).stream()
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
 
-    public List<AdvertisementResponse> getAdvertisementByUserID(String userID){
-        return advertisementRepo.findByUserID(userID).stream()
+    public List<AdvertisementResponse> getListAdvertisements(){
+        return advertisementRepo.findAdsVerified().stream()
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
+    public List<AdvertisementResponse> getListAdvertisementsPending(){
+        return advertisementRepo.findAdsPending().stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
+    public List<AdvertisementResponse> getListAdvertisementsRejected(){
+        return advertisementRepo.findAdsRejected().stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
+
+    public List<AdvertisementResponse> getAdvertisementByFilter(String categoryName, String username, String elementName){
+        return advertisementRepo.filterAdvertisements(categoryName, username, elementName).stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+    }
+
+    public AdvertisementResponse verifyAd(VerifyAdRequest request){
+        Advertisement advertisement = advertisementRepo.findById(request.getAdID())
+                .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
+        if(!request.getNewStatus().equals("Verified") && !request.getNewStatus().equals("Rejected")){
+            throw new AppException(ErrorCode.STATUS_INVALID);
+        }
+        advertisement.setStatus(request.getNewStatus());
+        return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
+    }
+
+    @Scheduled(fixedRate = 120000)  // Run every 2 minutes
+    public void deleteOldRejectedAdvertisements() {
+        // Get the timestamp of 2 minutes ago
+        LocalDateTime twoMinutesAgo = LocalDateTime.now().minusMinutes(2);
+
+        // Retrieve rejected advertisements older than 2 minutes
+        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(twoMinutesAgo);
+
+        // Delete all old rejected ads from the database
+        advertisementRepo.deleteAll(oldRejectedAds);
+    }
+
+//    @Scheduled(fixedRate = 86400000)
+//    public void deleteOldRejectedAdvertisements() {
+//        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+//
+//        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(sevenDaysAgo);
+//
+//        advertisementRepo.deleteAll(oldRejectedAds);
+//    }
 
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request){
         Advertisement advertisement = advertisementRepo.findById(adID)
@@ -93,10 +139,28 @@ public class AdvertisementService {
     }
 
     public String generateAdID(){
-        return "AD" + String.format("%05d", System.nanoTime() % 100000);
+
+            String adID;
+            int maxAttempts = 10; // Prevent infinite loop
+            int attempts = 0;
+
+            do {
+                // Generate a random 9-digit number
+                int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+                adID = ID_PREFIX + randomNum;
+
+                attempts++;
+
+                if (attempts >= maxAttempts) {
+                    throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+                }
+            } while (advertisementRepo.existsByAdID(adID));
+
+            return adID;
+
     }
 
     public String generateImage_Ads(){
-        return "A" + String.format("%05d", System.nanoTime() % 100000);
+        return "I" + String.format("%05d", System.nanoTime() % 100000);
     }
 }

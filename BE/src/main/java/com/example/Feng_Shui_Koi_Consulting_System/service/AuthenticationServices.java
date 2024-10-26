@@ -1,18 +1,14 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.*;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.InvalidatedToken;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.UserMapper;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.TransactionRepo;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.*;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundIdentityClient;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.httpclient.OutboundUserClient;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -29,6 +25,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,9 +37,7 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @Slf4j
@@ -59,6 +55,13 @@ public class AuthenticationServices {
     ElementRepo elementRepo;
     ElementCalculationService elementCalculationService;
     TransactionRepo transactionRepo;
+    SubscriptionRepo subscriptionRepo;
+    InvalidatedTokenRepository invalidatedTokenRepository;
+
+
+    //Constant for generating UserID
+    private static final String ID_PREFIX = "U";
+    private final SecureRandom secureRandom = new SecureRandom();
 
     @NonFinal
     @Value("${jwt.singerKey}")
@@ -82,10 +85,10 @@ public class AuthenticationServices {
 
     //Method to register user
     public SignUpResponse registerUser(SignUpRequest request) {
-//        if (request.getOtp().isEmpty())
-//            throw new AppException(ErrorCode.OTP_REQUIRED);
-//        if (!validateOTP(request.getEmail().trim(), request.getOtp()))
-//            throw new AppException(ErrorCode.OTP_NOT_FOUND);
+        if (request.getOtp().isEmpty())
+            throw new AppException(ErrorCode.OTP_REQUIRED);
+        if (!validateOTP(request.getEmail().trim(), request.getOtp()))
+            throw new AppException(ErrorCode.OTP_NOT_FOUND);
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXIST);
         int elementId = elementCalculationService
@@ -103,10 +106,10 @@ public class AuthenticationServices {
 //        user.setPlanID("PP005");
         user.setElement(element);
         user.setDeleteStatus(false);
-//        clearOTP(request.getEmail().trim());
-//        emailService.sendEmail(request.getEmail(),
-//                "This is your password: " + request.getPassword(),
-//                "Create User Successful");
+        clearOTP(request.getEmail().trim());
+        emailService.sendEmail(request.getEmail(),
+                "This is your password: " + request.getPassword(),
+                "Create User Successful");
 
         return userMapper.toSignUpResponse(userRepository.save(user));
     }
@@ -114,22 +117,26 @@ public class AuthenticationServices {
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXITST);
-        String otp = generateOTP();
-        storeOTP(request.getEmail().trim(), otp);
-        emailService.sendEmail(request.getEmail().trim(),
-                "Your OTP Code: " + otp, "OTP for Consulting Website");
-        System.out.println("OTP sent to: " + request.getEmail().trim());
+        try {
+            String otp = generateOTP();
+            storeOTP(request.getEmail().trim(), otp);
+            emailService.sendEmail(request.getEmail().trim(),
+                    "Your OTP Code: " + otp, "OTP for Consulting Website");
+            System.out.println("OTP sent to: " + request.getEmail().trim());
+        } catch (MailException e) {
+            throw new AppException(ErrorCode.EMAIL_INVALID);
+        }
     }
 
     //Method to login user
-    public AuthenResponse loginUser(AuthenRequest request) throws StripeException {
+    public AuthenResponse loginUser(AuthenRequest request)  {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
         // Check for the transaction and subscription status
-        transactionRepo.findByUser_UserID(user.getUserID())
-                .ifPresent(transaction -> {
+        subscriptionRepo.findByUser_UserID(user.getUserID())
+                .ifPresent(subscriptions -> {
                     boolean isSubscriptionActive = checkSubscription(
-                            transaction.getSubscriptionID()
+                            subscriptions.getSubscriptionID()
                     );
                     if (!isSubscriptionActive) {
                         user.setRoleName(Roles.USER.toString());
@@ -150,16 +157,51 @@ public class AuthenticationServices {
                 .build();
     }
 
-    public IntrospectResponse introspected(IntrospectResquest resquest) throws JOSEException, ParseException {
-        var token = resquest.getToken();
+    public IntrospectResponse introspected(IntrospectRequest request)
+            throws JOSEException, ParseException {
+
+        var token = request.getToken();
+        boolean isValid = true;
+
+        try {
+            verifyToken(token);
+        }catch (AppException e) {
+            isValid = false;
+        }
+
+        return IntrospectResponse.builder()
+                .valid(isValid)
+                .build();
+    }
+
+    public void logout(LogoutResquest request) throws ParseException, JOSEException {
+        var signToken = verifyToken(request.getToken());
+
+        String jit = signToken.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expiryTime(expiryTime)
+                .build();
+
+        invalidatedTokenRepository.save(invalidatedToken);
+    }
+
+    private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
 
         JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
-        Date expepityTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
         var verifier = signedJWT.verify(jwsVerifier);
-        return IntrospectResponse.builder()
-                .valid(expepityTime.after(new Date()) && verifier)
-                .build();
+        if(!(expiryTime.after(new Date()) && verifier))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        if(invalidatedTokenRepository.existsById(signedJWT
+                .getJWTClaimsSet().getJWTID()))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        return signedJWT;
+
     }
 
     public String resetPassword(ResetPasswordRequest request) {
@@ -233,6 +275,7 @@ public class AuthenticationServices {
                 .expirationTime(new Date(
                         Instant.now().plus(2, ChronoUnit.HOURS).toEpochMilli()
                 ))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -247,20 +290,6 @@ public class AuthenticationServices {
         }
     }
 
-    public AuthenResponse authenticate(AuthenRequest request) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        var user = userRepository
-                .findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
-
-        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
-
-        if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
-
-        var token = generateToken(user);
-
-        return AuthenResponse.builder().token(token).authenticated(true).build();
-    }
 
     public AuthenResponse outboundAuthenticate(String code) {
         var response = outboundIdentityClient
@@ -307,8 +336,22 @@ public class AuthenticationServices {
     }
 
     private String generateUserID() {
-        // Implement a method to generate a unique user ID of length 10
-        return "U" + String.format("%09d", System.nanoTime() % 1000000000);
+        String userID;
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
+
+        do {
+            // Generate a random 9-digit number
+            int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+            userID = ID_PREFIX + randomNum;
+
+            attempts++;
+            if (attempts >= maxAttempts) {
+                throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+            }
+        } while (userRepository.existsById(userID));
+
+        return userID;
     }
 
     public boolean checkSubscription(String subscriptionId) {
@@ -325,6 +368,14 @@ public class AuthenticationServices {
             log.error("Exception: ", e);
         }
         return false;
+    }
+
+    @Scheduled(cron = "0 0 */5 * * ?")
+    public void deleteInvalidatedToken() {
+        List<InvalidatedToken> invalidToken= invalidatedTokenRepository.findAll();
+        if(invalidToken.size() == 30) {
+            invalidatedTokenRepository.deleteAll(invalidToken);
+        }
     }
 
 }

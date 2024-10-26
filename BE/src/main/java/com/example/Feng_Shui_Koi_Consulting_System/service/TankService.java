@@ -1,13 +1,11 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.TankUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.ElementResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.TankResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankUpdateRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Tank;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
-import com.example.Feng_Shui_Koi_Consulting_System.mapper.ElementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.TankMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.TankRepo;
@@ -16,9 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.security.SecureRandom;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +25,10 @@ public class TankService {
      TankRepo tankRepo;
      TankMapper tankMapper;
      ElementRepo elementRepo;
+
+    //Constant for generating UserID
+    private static final String ID_PREFIX = "TA";
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public TankResponse createTank(TankCreationRequest request){
 
@@ -66,6 +67,22 @@ public class TankService {
     }
 
     public String generateTankID(){
-        return "TA" + String.format("%05d", System.nanoTime() % 100000);
+        String tankID;
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
+
+        do {
+            // Generate a random 9-digit number
+            int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+            tankID = ID_PREFIX + randomNum;
+
+            attempts++;
+
+            if (attempts >= maxAttempts) {
+                throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+            }
+        } while (tankRepo.existsById(tankID));
+
+        return tankID;
     }
 }

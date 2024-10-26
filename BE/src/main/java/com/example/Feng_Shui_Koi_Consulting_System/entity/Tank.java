@@ -1,11 +1,9 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Entity
 @Data
@@ -24,5 +22,6 @@ public class Tank {
 
     @ManyToOne
     @JoinColumn(name = "ElementID", nullable = false, referencedColumnName = "ElementID")
+    @JsonIgnore
     Element elementTank;
 }

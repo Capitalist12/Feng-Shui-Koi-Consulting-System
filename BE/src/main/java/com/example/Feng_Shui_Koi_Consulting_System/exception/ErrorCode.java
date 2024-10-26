@@ -34,7 +34,20 @@ public enum ErrorCode {
     AD_NOT_EXIST(1024, "Advertisement not found", HttpStatus.NOT_FOUND),
     SESSION_ID_NULL(1025, "SessionID is null", HttpStatus.BAD_REQUEST ),
     CATEGORY_NOT_EXIST(1026, "Category not found", HttpStatus.NOT_FOUND),
-    OTP_REQUIRED(1027, "OTP required", HttpStatus.BAD_REQUEST );
+    OTP_REQUIRED(1027, "OTP required", HttpStatus.BAD_REQUEST ),
+    BLOG_NOT_FOUND(1028, "BlogID not found", HttpStatus.BAD_REQUEST ),
+    COMMENT_NOT_FOUND(1029, "Comment not found", HttpStatus.BAD_REQUEST ),
+    STATUS_INVALID(1030, "Status invalid", HttpStatus.BAD_REQUEST),
+    CHATGPT_NOT_RESPONSE(1031, "OpenAI API Gateway Timeout", HttpStatus.GATEWAY_TIMEOUT ),
+    NULL_POINTER_EXCEPTION(1032, "An unexpected error occurred", HttpStatus.BAD_REQUEST),
+    INVALID_REQUEST(1033, "Invalid request", HttpStatus.BAD_REQUEST),
+    PASSWORD_NOT_MATCH(1034, "Please enter your current password correctly", HttpStatus.BAD_REQUEST),
+    CHATGPT_API_ERROR(1035, "Connection error to ChatGPT", HttpStatus.BAD_GATEWAY),
+    UNABLE_TO_GENERATE_UNIQUE_ID(1006,"User ID existed", HttpStatus.BAD_REQUEST);
+
+
+
+
 
     private int code;
     private String message;

@@ -1,9 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
-
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.*;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.AuthenResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.IntrospectResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.SignUpResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.*;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AuthenticationServices;
 import com.example.Feng_Shui_Koi_Consulting_System.service.EmailService;
 import com.nimbusds.jose.JOSEException;
@@ -45,11 +42,6 @@ public class AuthenticationAPI {
                     .result(authenticationServices.registerUser(request))
                     .build();
     }
-    @PostMapping("/token")
-    ApiResponse<AuthenResponse> authenticate(@RequestBody AuthenRequest request) {
-        var result = authenticationServices.authenticate(request);
-        return ApiResponse.<AuthenResponse>builder().result(result).build();
-    }
 
     @PostMapping("/login")
     ApiResponse<AuthenResponse> loginUser(@RequestBody @Valid  AuthenRequest request) throws StripeException {
@@ -60,10 +52,17 @@ public class AuthenticationAPI {
     }
 
     @PostMapping("/introspect")
-    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectResquest request) throws ParseException, JOSEException {
+    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
         var valid = authenticationServices.introspected(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(valid)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutResquest request) throws ParseException, JOSEException {
+        authenticationServices.logout(request);
+        return ApiResponse.<Void>builder()
                 .build();
     }
 

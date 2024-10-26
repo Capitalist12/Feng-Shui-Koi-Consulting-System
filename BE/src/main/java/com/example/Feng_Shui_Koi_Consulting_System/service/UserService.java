@@ -1,10 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.DOBCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.PasswordCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserCreationRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.UserUpdateRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.UserResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.authentication.PasswordCreationRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.*;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
@@ -22,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +31,11 @@ public class UserService {
      UserMapper userMapper;
      ElementRepo elementRepo;
      ElementCalculationService elementCalculationService;
+
+    //Constant for generating UserID
+    private static final String ID_PREFIX = "U";
+    private final SecureRandom secureRandom = new SecureRandom();
+
 
     public UserResponse createUser(UserCreationRequest request) {
 
@@ -49,9 +52,25 @@ public class UserService {
     }
 
     private String generateUserID() {
-        // Implement a method to generate a unique user ID of length 10
-        return "U" + String.format("%09d", System.nanoTime() % 1000000000);
+        String userID;
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
+
+        do {
+            // Generate a random 9-digit number
+            int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+            userID = ID_PREFIX + randomNum;
+
+            attempts++;
+            if (attempts >= maxAttempts) {
+                throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+            }
+        } while (userRepository.existsById(userID));
+
+        return userID;
     }
+
+
 //@PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> geUsers(){
         return userRepository.findAll().stream()
@@ -92,6 +111,30 @@ public class UserService {
         userResponse.setNoDob(user.getDateOfBirth() == null);
 
         return userResponse;  // Return the modified response
+    }
+
+    public UpdateProfileResponse updateMyInfo(UpdateProfileRequest request) {
+        var context = SecurityContextHolder.getContext();
+        String email = context.getAuthentication().getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+
+        if (!request.getDateOfBirth().equals(user.getDateOfBirth())) {
+            int elementId = elementCalculationService
+                    .calculateElementId(request.getDateOfBirth());
+            Element element = elementRepo.findById(elementId)
+                    .orElseThrow(()-> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
+            user.setElement(element);
+        }
+        userMapper.updateUserProfile(user, request);
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        return userMapper.toUpdateProfileResponse(userRepository.save(user));  // Return the modified response
     }
 
     public void createPassword( PasswordCreationRequest request) {

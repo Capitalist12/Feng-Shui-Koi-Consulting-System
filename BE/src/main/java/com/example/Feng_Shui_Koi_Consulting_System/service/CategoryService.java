@@ -1,21 +1,15 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CategoryRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.KoiTypeRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CategoryResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KTResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.CategoryRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.CategoryResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Category;
-import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiTypes;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.CategoryMapper;
-import com.example.Feng_Shui_Koi_Consulting_System.mapper.KoiTypeMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.CategoryRepo;
-import com.example.Feng_Shui_Koi_Consulting_System.repository.KoiTypeRepo;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

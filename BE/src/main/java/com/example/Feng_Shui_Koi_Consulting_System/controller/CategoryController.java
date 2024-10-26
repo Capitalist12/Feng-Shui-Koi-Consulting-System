@@ -1,17 +1,15 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.ApiResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CategoryRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.KoiTypeRequest;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CategoryResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KTResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.CategoryRequest;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.CategoryResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.CategoryService;
-import com.example.Feng_Shui_Koi_Consulting_System.service.KoiTypeService;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +22,7 @@ import java.util.List;
 public class CategoryController {
     CategoryService categoryService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ApiResponse<CategoryResponse> createCategory(@RequestBody CategoryRequest request){
         return ApiResponse.<CategoryResponse>builder()
@@ -31,6 +30,7 @@ public class CategoryController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     ApiResponse<List<CategoryResponse>>getCategory(){
         return ApiResponse.<List<CategoryResponse>>builder()
@@ -38,6 +38,7 @@ public class CategoryController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{categoryID}")
     ApiResponse<CategoryResponse> updateCategory(@PathVariable String categoryID, @RequestBody CategoryRequest request){
         return ApiResponse.<CategoryResponse>builder()
@@ -45,7 +46,7 @@ public class CategoryController {
                 .build();
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{categoryID}")
     String deleteUser(@PathVariable String categoryID){
         categoryService.deleteCategory(categoryID);
