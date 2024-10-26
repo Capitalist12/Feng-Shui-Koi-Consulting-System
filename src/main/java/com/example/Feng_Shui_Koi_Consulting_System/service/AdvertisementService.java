@@ -39,7 +39,6 @@ public class AdvertisementService {
 
     //Constant for generating AdID
     private static final String ID_PREFIX = "AD";
-    private static final int ID_LENGTH = 10;
     private final SecureRandom secureRandom = new SecureRandom();
 
     public AdvertisementResponse createAdvertisement(AdvertisementCreationRequest request) {
