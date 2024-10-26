@@ -22,9 +22,10 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
 
-    private final String[] PUBLIC_ENDPOINT = {"/auth/login","/auth/signup","/auth/introspect"
-    ,"/auth/outbound/authentication", "/auth/verify-email", "/auth/logout"
-    , "/ad/verified", "/auth/reset-password"};
+    private final String[] PUBLIC_ENDPOINT = {
+            "/auth/login","/auth/signup","/auth/introspect", "/auth/reset-password"
+            ,"/auth/outbound/authentication", "/auth/verify-email", "/auth/logout"
+            ,"/ad", "/blog" };
     private final String[] SWAGGER = {
             "/koifish-docs/v3/api-docs/**",
             "/swagger-ui/**",
