@@ -134,6 +134,7 @@ public class AdvertisementService {
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
         advertisementMapper
                 .updateAdvertisement(advertisement, request, elementRepo, categoryService);
+        advertisement.setStatus("Pending");
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 
