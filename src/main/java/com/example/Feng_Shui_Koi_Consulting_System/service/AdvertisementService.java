@@ -112,6 +112,7 @@ public class AdvertisementService {
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 
+    //delete ads has been rejected for 5 minutes
     @Scheduled(fixedRate = 60000)  // Run every 5 minutes
     public void deleteOldRejectedAdvertisements() {
         // Get the timestamp of 5 minutes ago
