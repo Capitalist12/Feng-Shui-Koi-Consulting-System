@@ -34,7 +34,6 @@ public class UserService {
 
     //Constant for generating UserID
     private static final String ID_PREFIX = "U";
-    private static final int ID_LENGTH = 10;
     private final SecureRandom secureRandom = new SecureRandom();
 
 

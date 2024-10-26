@@ -29,7 +29,6 @@ public class BlogService {
 
     //Constant for generating BlogID
     private static final String ID_PREFIX = "BL";
-    private static final int ID_LENGTH = 10;
     private final SecureRandom secureRandom = new SecureRandom();
 
     public BlogResponse createBlog(BlogRequest request) {
