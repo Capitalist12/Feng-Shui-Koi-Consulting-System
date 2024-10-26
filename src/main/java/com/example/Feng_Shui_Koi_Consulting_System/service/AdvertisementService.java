@@ -84,7 +84,12 @@ public class AdvertisementService {
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
-    //Get list of rejected ads
+    //Get list of rejected ads of user
+    public List<AdvertisementResponse> getListAdvertisementsRejectedOfUser() {
+        return advertisementRepo.findAdsRejectedOfUser(userService.getMyInfo().getUserID()).stream()
+                .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
+    }
+
     public List<AdvertisementResponse> getListAdvertisementsRejected() {
         return advertisementRepo.findAdsRejected().stream()
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());

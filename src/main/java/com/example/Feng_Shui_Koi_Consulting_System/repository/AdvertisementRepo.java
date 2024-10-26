@@ -38,6 +38,9 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, String> 
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected'")
     List<Advertisement> findAdsRejected();
 
+    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.user.id = :userID")
+    List<Advertisement> findAdsRejectedOfUser(@Param("userID") String userID);
+
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate < :fiveMinutesAgo")
     List<Advertisement> findRejectedAdvertisementsOlderThan5Mins(@Param("fiveMinutesAgo") LocalDateTime fiveMinutesAgo);
 

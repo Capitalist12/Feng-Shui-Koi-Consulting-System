@@ -51,10 +51,17 @@ public class AdvertisementController {
                 .build();
     }
 
-    @GetMapping("/rejected")
+    @GetMapping("/rejected-all")
     ApiResponse<List<AdvertisementResponse>> getAdsRejected(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
                 .result(advertisementService.getListAdvertisementsRejected())
+                .build();
+    }
+
+    @GetMapping("/rejected")
+    ApiResponse<List<AdvertisementResponse>> getAdsRejectedOfUser(){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getListAdvertisementsRejectedOfUser())
                 .build();
     }
 
