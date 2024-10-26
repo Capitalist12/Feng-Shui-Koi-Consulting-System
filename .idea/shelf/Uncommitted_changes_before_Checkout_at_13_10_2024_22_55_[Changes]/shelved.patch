@@ -1,0 +1,90 @@
+Index: src/main/java/com/example/Feng_Shui_Koi_Consulting_System/repository/AdvertisementRepo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.Feng_Shui_Koi_Consulting_System.repository;\r\n\r\nimport com.example.Feng_Shui_Koi_Consulting_System.entity.Advertisement;\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\nimport org.springframework.data.jpa.repository.Query;\r\nimport org.springframework.data.repository.query.Param;\r\nimport org.springframework.stereotype.Repository;\r\n\r\nimport java.util.List;\r\nimport java.util.Optional;\r\n\r\n@Repository\r\npublic interface AdvertisementRepo extends JpaRepository<Advertisement, String> {\r\n//    @Query(\"SELECT ad FROM Advertisement ad JOIN ad.category c WHERE c.categoryId = :categoryID\")\r\n//    List<Advertisement> findByCategoryID(@Param(\"categoryID\") String categoryId);\r\n//    @Query(\"SELECT ad FROM Advertisement ad JOIN ad.user u WHERE u.userID = :userID\")\r\n//    List<Advertisement> findByUserID(@Param(\"userID\") String userId);\r\n//    @Query(\"SELECT ad FROM Advertisement ad JOIN ad.element e WHERE e.elementId = :elementID\")\r\n//    List<Advertisement> findByElementID(@Param(\"elementID\") String elementId);\r\n    boolean existsByAdID(String adID);\r\n    Optional<Advertisement> findByTitle(String title);\r\n//    @Query(\"SELECT ad FROM Advertisement ad JOIN ad.CategoryID c WHERE c.categoryId = :categoryID\")\r\n//    List<Advertisement> findByCategoryID(@Param(\"categoryID\") String categoryID);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/repository/AdvertisementRepo.java b/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/repository/AdvertisementRepo.java
+--- a/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/repository/AdvertisementRepo.java	(revision c8504fad336dc4eb4ae3534b5392a08e8176c30e)
++++ b/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/repository/AdvertisementRepo.java	(date 1728832335009)
+@@ -11,12 +11,12 @@
+ 
+ @Repository
+ public interface AdvertisementRepo extends JpaRepository<Advertisement, String> {
+-//    @Query("SELECT ad FROM Advertisement ad JOIN ad.category c WHERE c.categoryId = :categoryID")
+-//    List<Advertisement> findByCategoryID(@Param("categoryID") String categoryId);
+-//    @Query("SELECT ad FROM Advertisement ad JOIN ad.user u WHERE u.userID = :userID")
+-//    List<Advertisement> findByUserID(@Param("userID") String userId);
+-//    @Query("SELECT ad FROM Advertisement ad JOIN ad.element e WHERE e.elementId = :elementID")
+-//    List<Advertisement> findByElementID(@Param("elementID") String elementId);
++    @Query("SELECT ad FROM Advertisement ad JOIN ad.category c WHERE c.categoryID = :categoryID")
++    List<Advertisement> findByCategoryID(@Param("categoryID") String categoryId);
++    @Query("SELECT ad FROM Advertisement ad JOIN ad.user u WHERE u.userID = :userID")
++    List<Advertisement> findByUserID(@Param("userID") String userId);
++    @Query("SELECT ad FROM Advertisement ad JOIN ad.element e WHERE e.elementId = :elementID")
++    List<Advertisement> findByElementID(@Param("elementID") String elementId);
+     boolean existsByAdID(String adID);
+     Optional<Advertisement> findByTitle(String title);
+ //    @Query("SELECT ad FROM Advertisement ad JOIN ad.CategoryID c WHERE c.categoryId = :categoryID")
+Index: src/main/java/com/example/Feng_Shui_Koi_Consulting_System/mapper/AdvertisementMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.Feng_Shui_Koi_Consulting_System.mapper;\r\n\r\nimport com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationRequest;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.entity.*;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.service.AdvertisementService;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.service.CategoryService;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.service.KoiTypeService;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.service.UserService;\r\nimport org.mapstruct.*;\r\n\r\nimport java.util.Set;\r\nimport java.util.stream.Collectors;\r\n\r\n@Mapper(componentModel = \"spring\")\r\npublic interface AdvertisementMapper {\r\n    @Mapping(source = \"element\", target = \"element\", qualifiedByName = \"mapToElement\")\r\n    @Mapping(target = \"category\", source = \"categoryName\", qualifiedByName = \"mapToCategory\")\r\n    @Mapping(target = \"user\", source = \"username\", qualifiedByName = \"mapToUser\")\r\n    @Mapping(target = \"imagesAd\", ignore = true)\r\n    Advertisement toAdvertisement(AdvertisementCreationRequest request,\r\n                                  @Context ElementRepo elementRepo,\r\n                                  @Context CategoryService categoryService,\r\n                                  @Context UserService userService\r\n                                  );\r\n\r\n    @Mapping(target = \"element\", source = \"element\", qualifiedByName = \"mapToElement\")\r\n    @Mapping(target = \"category\", source = \"categoryName\", qualifiedByName = \"mapToCategory\")\r\n    @Mapping(target = \"user\", source = \"username\", qualifiedByName = \"mapToUser\")\r\n    @Mapping(target = \"imagesAd\", ignore = true)\r\n    void updateAdvertisement(@MappingTarget Advertisement advertisement, AdvertisementUpdateRequest request,\r\n                             @Context ElementRepo elementRepo,\r\n                             @Context CategoryService categoryService,\r\n                             @Context UserService userService);\r\n\r\n    @Mapping(target = \"element\", source = \"element\", qualifiedByName = \"mapToElementName\")\r\n    @Mapping(target = \"category\", source = \"category\", qualifiedByName = \"mapToCategoryResponse\")\r\n    @Mapping(target = \"user\", source = \"user\", qualifiedByName = \"mapToUserResponse\")\r\n    @Mapping(target = \"imagesAd\", source = \"imagesAd\")\r\n    AdvertisementResponse toAdvertisementResponse(Advertisement advertisement);\r\n\r\n\r\n    @Named(\"mapToCategory\")\r\n    default Category mapToCategory(String categoryName, @Context CategoryService categoryService) {\r\n        return categoryService.findByCategoryName(categoryName);\r\n    }\r\n\r\n    @Named(\"mapToElement\")\r\n    default Element mapToElement(String element, @Context ElementRepo elementRepo) {\r\n        Element destiny =  elementRepo.findByElementName(element)\r\n                .orElseThrow(() -> new AppException(ErrorCode.ELEMENT_NOT_EXIST));\r\n        return destiny;\r\n    }\r\n\r\n    @Named(\"mapToElementName\")\r\n    default String mapToElementName(Element element) {\r\n        return element.getElementName();  // Simple mapping from entity to string\r\n    }\r\n\r\n    @Named(\"mapToCategoryResponse\")\r\n    default CategoryResponse mapToCategoryResponse(Category category) {\r\n        return CategoryResponse.builder()\r\n                .categoryName(category.getCategoryName())\r\n                .build();\r\n    }\r\n    @Named(\"mapToUser\")\r\n    default User mapToUser(String username, @Context UserService userService) {\r\n        return userService.findByUsername(username);\r\n\r\n    }\r\n\r\n    @Named(\"mapToUserResponse\")\r\n    default UserResponse mapToUserResponse(User user) {\r\n        return UserResponse.builder()\r\n                .username(user.getUsername())\r\n                .build();\r\n    }\r\n\r\n    @Named(\"mapToElementResponse\")\r\n    default Set<ElementResponse> mapToElementResponse(Set<Element> elements) {\r\n        return elements.stream()\r\n                .map(element -> ElementResponse.builder()\r\n                        .elementId(element.getElementId())\r\n                        .elementName(element.getElementName())\r\n                        .description(element.getDescription())\r\n                        .quantity(element.getQuantity())\r\n                        .direction(element.getDirection())\r\n                        .value(element.getValue())\r\n                        .color(element.getColor())\r\n                        .generation(element.getGeneration())\r\n                        .inhibition(element.getInhibition())\r\n                        .build())\r\n                .collect(Collectors.toSet());\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/mapper/AdvertisementMapper.java b/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/mapper/AdvertisementMapper.java
+--- a/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/mapper/AdvertisementMapper.java	(revision c8504fad336dc4eb4ae3534b5392a08e8176c30e)
++++ b/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/mapper/AdvertisementMapper.java	(date 1728834792309)
+@@ -2,16 +2,12 @@
+ 
+ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementCreationRequest;
+ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.AdvertisementUpdateRequest;
+-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishCreationRequest;
+-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.FishUpdateRequest;
+ import com.example.Feng_Shui_Koi_Consulting_System.dto.response.*;
+ import com.example.Feng_Shui_Koi_Consulting_System.entity.*;
+ import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
+ import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
+ import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
+-import com.example.Feng_Shui_Koi_Consulting_System.service.AdvertisementService;
+ import com.example.Feng_Shui_Koi_Consulting_System.service.CategoryService;
+-import com.example.Feng_Shui_Koi_Consulting_System.service.KoiTypeService;
+ import com.example.Feng_Shui_Koi_Consulting_System.service.UserService;
+ import org.mapstruct.*;
+ 
+Index: src/main/java/com/example/Feng_Shui_Koi_Consulting_System/mapper/CategoryMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.Feng_Shui_Koi_Consulting_System.mapper;\r\n\r\nimport com.example.Feng_Shui_Koi_Consulting_System.dto.request.CategoryRequest;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.dto.request.KoiTypeRequest;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.dto.response.CategoryResponse;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.dto.response.KTResponse;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiTypesResponse;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.entity.Category;\r\nimport com.example.Feng_Shui_Koi_Consulting_System.entity.KoiTypes;\r\nimport org.mapstruct.Mapper;\r\nimport org.mapstruct.MappingTarget;\r\n\r\n@Mapper(componentModel = \"spring\")\r\npublic interface CategoryMapper {\r\n    Category toCategory(CategoryRequest request);\r\n    CategoryResponse toCategoryResponse(Category category);\r\n    void updateCategory(@MappingTarget Category category, CategoryRequest request);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/mapper/CategoryMapper.java b/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/mapper/CategoryMapper.java
+--- a/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/mapper/CategoryMapper.java	(revision c8504fad336dc4eb4ae3534b5392a08e8176c30e)
++++ b/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/mapper/CategoryMapper.java	(date 1728834792312)
+@@ -1,12 +1,8 @@
+ package com.example.Feng_Shui_Koi_Consulting_System.mapper;
+ 
+ import com.example.Feng_Shui_Koi_Consulting_System.dto.request.CategoryRequest;
+-import com.example.Feng_Shui_Koi_Consulting_System.dto.request.KoiTypeRequest;
+ import com.example.Feng_Shui_Koi_Consulting_System.dto.response.CategoryResponse;
+-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KTResponse;
+-import com.example.Feng_Shui_Koi_Consulting_System.dto.response.KoiTypesResponse;
+ import com.example.Feng_Shui_Koi_Consulting_System.entity.Category;
+-import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiTypes;
+ import org.mapstruct.Mapper;
+ import org.mapstruct.MappingTarget;
+ 
+Index: src/main/java/com/example/Feng_Shui_Koi_Consulting_System/dto/response/CalculateElementResponse.java
+===================================================================
+diff --git a/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/dto/response/CalculateElementResponse.java b/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/dto/response/CalculateElementResponse.java
+new file mode 100644
+--- /dev/null	(date 1728834891582)
++++ b/src/main/java/com/example/Feng_Shui_Koi_Consulting_System/dto/response/CalculateElementResponse.java	(date 1728834891582)
+@@ -0,0 +1,4 @@
++package com.example.Feng_Shui_Koi_Consulting_System.dto.response;
++
++public class CalculateElementResponse {
++}
