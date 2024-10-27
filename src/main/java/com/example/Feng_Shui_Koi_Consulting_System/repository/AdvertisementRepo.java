@@ -32,6 +32,9 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, String> 
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Verified'")
     List<Advertisement> findAdsVerified();
 
+    @Query("SELECT ad FROM Advertisement ad WHERE ad.user.id = :userID")
+    List<Advertisement> findAdsOfUser(@Param("userID") String userID);
+
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Pending'")
     List<Advertisement> findAdsPending();
 

@@ -37,6 +37,13 @@ public class AdvertisementController {
                 .build();
     }
 
+    @GetMapping("/get-my-ads")
+    ApiResponse<List<AdvertisementResponse>> getAdsOfUser(){
+        return  ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getAdByUser())
+                .build();
+    }
+
     @GetMapping("/verified")
     ApiResponse<List<AdvertisementResponse>> getAds(){
         return ApiResponse.<List<AdvertisementResponse>>builder()

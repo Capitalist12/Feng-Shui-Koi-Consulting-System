@@ -66,10 +66,17 @@ public class AdvertisementService {
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
-    //Get list of advertisement that have the id require
+    //Get list of advertisements that have the id require
     public List<AdvertisementResponse> getAdByID(String adID) {
         return advertisementRepo.findById(adID).stream()
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
+    }
+
+    //Get list of advertisements of user
+    public List<AdvertisementResponse> getAdByUser() {
+        String userID = userService.getMyInfo().getUserID();
+        return advertisementRepo.findAdsOfUser(userID).stream()
+                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
 
     //Get list of verified ads
