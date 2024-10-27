@@ -1,11 +1,13 @@
-import { Button } from "antd";
+import { Button, Typography } from "antd";
 import api from "../../config/axiosConfig";
 import { toast } from "react-toastify";
 import TankTable from "./TankTable";
 import TankForm from "./TankForm";
 import uploadFile from "../../utils/file";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
+const { Title } = Typography;
 function TankManagement() {
   const [datas, setDatas] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -80,8 +82,13 @@ function TankManagement() {
     }
   };
 
+  const userName = useSelector((state) => state.user);
+
   return (
     <div>
+      <Title level={2}>
+        Chào {userName}, chào mừng tới với Tank Management{" "}
+      </Title>
       <Button type="primary" onClick={handleAddNew}>
         + Add
       </Button>

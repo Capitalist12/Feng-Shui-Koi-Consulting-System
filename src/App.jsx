@@ -8,9 +8,8 @@ import UserProfilePage from "./pages/user/profile/UserProfilePage";
 import TankManagement from "./components/CRUD_Tank/TankManagement";
 import Admin from "./components/AdminRoute/Admin";
 import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
-import UserManagement from "./components/CRUD_User/UserManagement";
+import UserManagement from "./components/CRUD_User2/UserManagement";
 import CompatibilityPage from "./pages/member/CompatibilityPage";
-import ManageUser from "./components/CRUD_User2/ManageUser";
 import Authenticate from "./components/LoginForm/Authenticate";
 import AdvertisementPage from "./pages/member/AdvertisementPage";
 import PricingPage from "./pages/PricingPage";
@@ -20,6 +19,7 @@ import BlogContent from "./components/Blog/BlogContent";
 import Blogs from "./components/Blog/Blogs";
 import Member from "./components/MemberRoute/Member";
 import ErrorMember from "./pages/error/ErrorMember";
+import Statistic from "./components/Overview/Statistic";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -31,6 +31,7 @@ const App = () => {
       path: "compatibility",
       element: <CompatibilityPage />,
     },
+
     // {
     //   path: "pricing",
     //   element: <PricingPage />,
@@ -84,16 +85,20 @@ const App = () => {
       ),
       children: [
         {
-          path: "koi",
-          element: <KoiContainer />,
+          path: "statistic",
+          element: <Statistic />,
         },
         {
           path: "users",
-          element: <ManageUser />,
+          element: <UserManagement />,
         },
         {
           path: "tank",
           element: <TankManagement />,
+        },
+        {
+          path: "koi",
+          element: <KoiContainer />,
         },
       ],
     },

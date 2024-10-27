@@ -107,10 +107,11 @@ const WEIGHT_OPTIONS = [
 const DASHBOARD_ITEMS = [
   {
     key: "1",
-    icon: <UserOutlined />,
+    icon: <LineChartOutlined />,
+
     label: (
-      <NavLink to="koi" className="nav-link">
-        Quản lý cá Koi
+      <NavLink to="statistic" className="nav-link">
+        Bảng thống kê
       </NavLink>
     ),
   },
@@ -125,7 +126,7 @@ const DASHBOARD_ITEMS = [
   },
   {
     key: "3",
-    icon: <LineChartOutlined />,
+    icon: <GiAquarium />,
     label: (
       <NavLink to="tank" className="nav-link">
         Quản lý hồ cá
@@ -134,9 +135,27 @@ const DASHBOARD_ITEMS = [
   },
   {
     key: "4",
-    icon: <LineChartOutlined />,
-    label: "Bảng thống kê",
+    icon: <IoFishOutline />,
+    label: (
+      <NavLink to="koi" className="nav-link">
+        Quản lý cá Koi
+      </NavLink>
+    ),
   },
+];
+const MONTHS = [
+  "Tháng 1",
+  "Tháng 2",
+  "Tháng 3",
+  "Tháng 4",
+  "Tháng 5",
+  "Tháng 6",
+  "Tháng 7",
+  "Tháng 8",
+  "Tháng 9",
+  "Tháng 10",
+  "Tháng 11",
+  "Tháng 12",
 ];
 
 export {
@@ -148,4 +167,5 @@ export {
   DASHBOARD_ITEMS,
   ROLE_OPTIONS,
   CATEGORY,
+  MONTHS,
 };
