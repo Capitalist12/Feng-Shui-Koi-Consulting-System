@@ -23,6 +23,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get all ads doesnt care about status
     @GetMapping
     ApiResponse<List<AdvertisementResponse>> getAllAds(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -30,6 +31,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get ad by ad ID
     @GetMapping("/{adID}")
     ApiResponse<List<AdvertisementResponse>> getAdByID(@PathVariable String adID){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -37,6 +39,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get member's ads
     @GetMapping("/get-my-ads")
     ApiResponse<List<AdvertisementResponse>> getAdsOfUser(){
         return  ApiResponse.<List<AdvertisementResponse>>builder()
@@ -44,6 +47,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get Verified ads
     @GetMapping("/verified")
     ApiResponse<List<AdvertisementResponse>> getAds(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -51,6 +55,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get pending ads
     @GetMapping("/pending")
     ApiResponse<List<AdvertisementResponse>> getAdsPending(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -58,6 +63,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get all rejected ads
     @GetMapping("/rejected-all")
     ApiResponse<List<AdvertisementResponse>> getAdsRejected(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -65,6 +71,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get member's rejectedAds
     @GetMapping("/rejected")
     ApiResponse<List<AdvertisementResponse>> getAdsRejectedOfUser(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -72,6 +79,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Find ads by filter
     @PostMapping("/filter")
     ApiResponse<List<AdvertisementResponse>> getAdByFilter(@RequestBody FindAdByFilterRequest request){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -82,13 +90,13 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Update Ad Status
     @PostMapping("/updateAdStatus")
     ApiResponse<AdvertisementResponse> updateAdStatus(@RequestBody VerifyAdRequest request){
         return ApiResponse.<AdvertisementResponse>builder()
                 .result(advertisementService.verifyAd(request))
                 .build();
     }
-
 
     @PutMapping("/{adID}")
     ApiResponse<AdvertisementResponse> updateAd(@PathVariable String adID, @RequestBody AdvertisementUpdateRequest request){
