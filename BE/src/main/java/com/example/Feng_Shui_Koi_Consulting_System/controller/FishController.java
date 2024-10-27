@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/fish")
 public class FishController {
 
-     FishService fishService;
+    FishService fishService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping

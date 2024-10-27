@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TankController {
-     TankService tankService;
+    TankService tankService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping

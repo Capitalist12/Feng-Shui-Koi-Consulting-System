@@ -24,7 +24,7 @@ public class AuthenticationAPI {
 
     @PostMapping("/outbound/authentication")
     ApiResponse<AuthenResponse> outboundAuthenticate(
-        @RequestParam("code") String code){
+            @RequestParam("code") String code){
         var result = authenticationServices.outboundAuthenticate(code);
         return ApiResponse.<AuthenResponse>builder().result(result).build();
 
@@ -38,9 +38,9 @@ public class AuthenticationAPI {
 
     @PostMapping("/signup")
     ApiResponse<SignUpResponse> registerUser(@RequestBody @Valid SignUpRequest request) {
-            return ApiResponse.<SignUpResponse>builder()
-                    .result(authenticationServices.registerUser(request))
-                    .build();
+        return ApiResponse.<SignUpResponse>builder()
+                .result(authenticationServices.registerUser(request))
+                .build();
     }
 
     @PostMapping("/login")
