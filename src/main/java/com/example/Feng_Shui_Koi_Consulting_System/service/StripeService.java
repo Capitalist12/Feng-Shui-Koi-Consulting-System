@@ -1,7 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.SessionDTO;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentSuccessfulResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentlResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Subscriptions;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Transaction;
@@ -88,7 +88,7 @@ public class StripeService {
             SessionCreateParams.Builder  sessionCreateParamsBuilder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
                     .setCustomer(customer.getId())
-                    .setSuccessUrl(clientURL + "/success-subscription?session_id={CHECKOUT_SESSION_ID}")
+                    .setSuccessUrl(clientURL + "/success-subscription?session_id={CHECKOUT_SESSION_ID}&user_id=" + user.getUserID())
                     .setCancelUrl(clientURL + "/failure");
 
             String aPackage = String.valueOf(request.getData().get("PACKAGE"));
@@ -150,7 +150,7 @@ public class StripeService {
         return null;
     }
 
-    public PaymentSuccessfulResponse handleSubscriptionCompletion(String userID, String sessionID) {
+    public PaymentlResponse handleSubscriptionCompletion(String userID, String sessionID) {
         try {
             if(sessionID == null) throw new AppException(ErrorCode.SESSION_ID_NULL);
             Session fetchedSession = Session.retrieve(sessionID);
@@ -172,7 +172,20 @@ public class StripeService {
             log.error("StripeException: {}", e.getMessage());
         }
         return createPaymentResponse(false, null, Roles.USER.toString());
+    }
 
+    public PaymentlResponse handleSubscriptionFalse() {
+
+            Transaction transaction =  Transaction.builder()
+            .transactionName("NULL")
+            .price(0.0)
+            .status("FALSE")
+            .createdDay(LocalDateTime.now())
+            .user(getUserLogin())
+            .build();
+            transactionRepo.save(transaction);
+
+        return createPaymentResponse(false, null, Roles.USER.toString());
     }
 
     private User getUserLogin() {
@@ -233,8 +246,8 @@ public class StripeService {
         return status;
     }
 
-    private PaymentSuccessfulResponse createPaymentResponse(boolean checkout, String token, String role) {
-        return PaymentSuccessfulResponse.builder()
+    private PaymentlResponse createPaymentResponse(boolean checkout, String token, String role) {
+        return PaymentlResponse.builder()
                 .checkout(checkout)
                 .token(token)
                 .role(role)
