@@ -23,7 +23,7 @@ const ViewUserAdsButton = () => {
     if (role === "MEMBER") {
       // Lấy tên người dùng từ localStorage
       const userName = JSON.parse(localStorage.getItem("persist:root")).user;
-      //   const userName = user ? JSON.parse(user).username : ""; // Thay đổi đây để lấy đúng username
+      //   const userName = user ? JSON.parse(user).username : "";
       console.log(userName);
       if (userName) {
         navigate(`/user-ads/${userName}`);

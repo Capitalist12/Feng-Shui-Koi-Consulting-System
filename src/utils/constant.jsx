@@ -31,14 +31,6 @@ const ROLE_OPTIONS = [
   },
 ];
 
-const ELEMENT_VALUES = [
-  { value: "Fire", label: "Fire", color: "#FF4500" },
-  { value: "Water", label: "Water", color: "#1E90FF" },
-  { value: "Earth", label: "Earth", color: "#8B4513" },
-  { value: "Wood", label: "Wood", color: "#228B22" },
-  { value: "Metal", label: "Metal", color: "#A9A9A9" },
-];
-
 const CATEGORY = [
   {
     label: "Koi Fish",
@@ -154,7 +146,6 @@ export {
   SIZE_OPTIONS,
   WEIGHT_OPTIONS,
   DASHBOARD_ITEMS,
-  ELEMENT_VALUES,
   ROLE_OPTIONS,
   CATEGORY,
 };

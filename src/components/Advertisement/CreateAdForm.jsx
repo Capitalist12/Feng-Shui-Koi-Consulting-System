@@ -39,7 +39,7 @@ const CreateAdForm = ({ onSubmit }) => {
   const handleFinish = async (values) => {
     if (role !== "MEMBER") {
       message.error("Bạn phải là thành viên để đăng quảng cáo.");
-      navigate("/errorMem"); // Điều hướng tới trang lỗi
+      navigate("/errorMem");
       return;
     }
 

@@ -1,21 +1,30 @@
-import React, { useEffect } from "react";
-import UserCRUD from "./Template"; // Đảm bảo đường dẫn này đúng
-import { Form, Input, Select, DatePicker, Switch, Col, Row } from "antd";
-import MultiSelectElement from "../CRUD_KoiFish/CreateKoiForm/MultiSelectElement";
-import UploadAvatar from "./UploadAvatar";
-import { ROLE_OPTIONS, USER_ELEMENT_COUNT } from "../../utils/constant";
+import { Button, message, Modal, Popconfirm, Table } from "antd";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useForm } from "antd/es/form/Form";
+import {
+  fetchUsers,
+  createUser,
+  updateUser,
+  deleteUser,
+} from "../../services/userAPIService";
+import UserModal from "./UserModal";
+import api from "../../config/axiosConfig";
 
 function ManageUser() {
-  const [form] = Form.useForm();
+  const [datas, setDatas] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [form] = useForm();
+  const [loading, setLoading] = useState(false);
 
   const column = [
     {
-      title: "User ID",
+      title: "ID",
       dataIndex: "userID",
       key: "userID",
     },
     {
-      title: "Username",
+      title: "Name",
       dataIndex: "username",
       key: "username",
     },
@@ -25,137 +34,118 @@ function ManageUser() {
       key: "email",
     },
     {
-      title: "Role",
-      dataIndex: "roleName",
-      key: "roleName",
-    },
-    {
-      title: "Date of Birth",
-      dataIndex: "dateOfBirth",
-      key: "dateOfBirth",
-    },
-    {
       title: "Mệnh",
       dataIndex: "element",
       key: "element",
     },
     {
-      title: "Avatar",
-      dataIndex: "imageLink",
-      key: "imageLink",
+      title: "Action",
+      dataIndex: "userID",
+      key: "userID",
+      render: (userID, user) => (
+        <>
+          <Button
+            type="primary"
+            onClick={() => {
+              setShowModal(true);
+              form.setFieldsValue(user);
+            }}
+          >
+            Edit
+          </Button>
+
+          <Popconfirm
+            title="Delete"
+            description="Delete?"
+            onConfirm={() => handleDelete(userID)}
+          >
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
+        </>
+      ),
     },
   ];
 
-  const formItems = (
-    <>
-      <Form.Item name="userID" hidden>
-        <Input />
-      </Form.Item>
+  const fetchData = async () => {
+    try {
+      const response = await fetchUsers();
+      setDatas(response.data.result);
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
 
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="username"
-            label="Username"
-            rules={[{ required: true, message: "Hãy nhập username!" }]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={[
-              { type: "email", message: "Hãy nhập email hợp lệ!" },
-              { required: true, message: "Hãy nhập email!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-      </Row>
+  const handleCreateUser = async (values) => {
+    setLoading(true);
+    try {
+      await api.post("/user", {
+        username: values.username,
+        dateOfBirth: values.dateOfBirth,
+        email: values.email,
+        password: values.password,
+        roleName: values.roleName,
+        element: values.element,
+        imageLink: values.imageLink || [], // Sử dụng imageLink thay vì imageURL
+        planID: "null",
+        deleteStatus: "null",
+      });
+      message.success("User created successfully!");
+      fetchData(); // Lấy lại dữ liệu nếu cần
+      form.resetFields(); // Đặt lại các trường trong form
+      setShowModal(false); // Đóng modal
+    } catch (err) {
+      console.error(err);
+      message.error("Có lỗi xảy ra khi tạo user.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="roleName"
-            label="Vai trò"
-            rules={[{ required: true, message: "Hãy chọn vai trò!" }]}
-          >
-            <Select options={ROLE_OPTIONS} placeholder="Chọn vai trò" />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="dateOfBirth"
-            label="Ngày sinh"
-            rules={[{ required: true, message: "Nhập ngày tháng năm sinh!" }]}
-          >
-            <DatePicker style={{ width: "100%" }} />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      {/* Element (Mệnh) and Avatar Fields */}
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="element"
-            label="Mệnh"
-            rules={[{ required: true, message: "Hãy chọn Element!" }]}
-          >
-            <MultiSelectElement
-              data={[]}
-              customeStyle={{ width: "100%" }}
-              maxCount={USER_ELEMENT_COUNT}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="imageURL" label="Avatar">
-            <UploadAvatar
-              value={
-                form.getFieldValue("imageURL")
-                  ? [form.getFieldValue("imageURL")]
-                  : []
-              }
-              onChange={(url) => form.setFieldsValue({ imageURL: url })}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      {/* Delete Status Field */}
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="deleteStatus"
-            label="Trạng thái xóa"
-            valuePropName="checked"
-          >
-            <Switch />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="planID" label="PlanID">
-            <Input />
-          </Form.Item>
-        </Col>
-      </Row>
-    </>
-  );
+  const handleDelete = async (userID) => {
+    try {
+      await deleteUser(userID);
+      toast.success("Successfully deleted!");
+      fetchData();
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
 
   useEffect(() => {
-    const clearForm = () => {
-      form.resetFields();
-    };
-    clearForm();
-  }, [form]);
+    fetchData();
+  }, []);
 
   return (
     <div>
-      <UserCRUD column={column} formItems={formItems} path="users" />
+      <Button onClick={() => setShowModal(true)}>Add</Button>
+      <Table
+        dataSource={datas.map((data) => ({ ...data, key: data.userID }))}
+        columns={column}
+      />
+      <Modal
+        width={"40rem"}
+        title={
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: "2rem",
+              fontWeight: "bold",
+            }}
+          >
+            Thông tin người dùng
+          </div>
+        }
+        visible={showModal}
+        onCancel={() => {
+          setShowModal(false);
+          form.resetFields();
+        }}
+        footer={null}
+      >
+        <UserModal onSubmit={handleCreateUser} loading={loading} form={form} />
+      </Modal>
     </div>
   );
 }

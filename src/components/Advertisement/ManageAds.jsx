@@ -14,12 +14,12 @@ const UserAdsPage = () => {
       setLoading(true);
       try {
         const response = await api.post(`/ad/filter`, {
-          username: username, // Chỉ gửi username
-          categoryName: "", // Bỏ qua categoryName
-          elementName: "", // Bỏ qua elementName
+          username: username,
+          categoryName: "",
+          elementName: "",
         });
 
-        setAds(response.data); // Giả sử API trả về mảng bài đăng
+        setAds(response.data.result);
       } catch (error) {
         console.error("Error fetching ads:", error);
         message.error("Không thể tải bài đăng.");
@@ -64,13 +64,12 @@ const UserAdsPage = () => {
   ];
 
   const editAd = (id) => {
-    // Điều hướng đến trang chỉnh sửa bài đăng
     navigate(`/edit-ad/${id}`);
   };
 
   const deleteAd = async (id) => {
     try {
-      const response = await axios.delete(`/ad/${id}`); // Gọi API xóa bài đăng
+      const response = await axios.delete(`/ad/${id}`);
 
       if (response.status === 200) {
         // Cập nhật danh sách bài đăng sau khi xóa

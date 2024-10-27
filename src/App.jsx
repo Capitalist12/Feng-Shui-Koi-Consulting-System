@@ -89,7 +89,7 @@ const App = () => {
         },
         {
           path: "users",
-          element: <UserManagement />,
+          element: <ManageUser />,
         },
         {
           path: "tank",

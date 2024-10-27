@@ -237,7 +237,7 @@ function AdvertisementPage({ currentUser }) {
               onCancel={() => setIsCreateAd(false)}
               footer={null}
             >
-              <CreateAdForm onSubmit={handleAdSubmit} />
+              <CreateAdForm onSubmit={handleAdSubmit} loading={loading} />
             </Modal>
 
             <div>
