@@ -19,6 +19,7 @@ import BlogPage from "./pages/blog/BlogPage";
 import BlogContent from "./components/Blog/BlogContent";
 import Blogs from "./components/Blog/Blogs";
 import AdvertiseManagementContainer from "./components/Advertise/AdvertiseManagementContainer";
+import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -32,7 +33,11 @@ const App = () => {
     },
     {
       path: "pricing",
-      element: <PricingPage />
+      element: <PricingPage />,
+    },
+    {
+      path: "success-subscription",
+      element: <PaymentSuccessPage />
     },
     {
       path: "blog",

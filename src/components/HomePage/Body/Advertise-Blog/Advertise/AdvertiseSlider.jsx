@@ -9,6 +9,8 @@ import {
 import useEmblaCarousel from 'embla-carousel-react'
 
 import { getVerifiedAdvertise } from "../../../../../services/advertiseAPIService.js";
+import { Badge } from "antd";
+import { compareWithCurrentTime } from "../../../../../utils/helper.js";
 
 export default function AdvertiseSlider() {
   const [advertise, setAdvertise] = useState([]);
@@ -36,19 +38,29 @@ export default function AdvertiseSlider() {
           {
             (advertise && advertise.length > 0) &&
             advertise.map((item, index) => (
-              <AdvertiseCardItem />
+              <div key={index} className="embla__slide">
+                {
+                  compareWithCurrentTime(item.createdDate) ?
+                    <Badge.Ribbon text="Mới nhất" color="red">
+
+                      <AdvertiseCardItem data={item} />
+                    </Badge.Ribbon>
+                    :
+                    <AdvertiseCardItem data={item} />
+                }
+              </div>
             ))
           }
         </div>
-      </div>
-
-      <div className="embla__controls">
-        <div className="embla__buttons">
-          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+        <div className="embla__controls">
+          <div className="embla__buttons">
+            <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+            <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+          </div>
         </div>
-
       </div>
+
+
     </section>
   )
 }

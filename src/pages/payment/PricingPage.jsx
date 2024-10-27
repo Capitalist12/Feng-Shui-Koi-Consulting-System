@@ -3,6 +3,8 @@ import { Card, Button, Col, Row } from "antd";
 import "../styles/PricingPage.scss";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
+import { buyPackage } from "../services/paymentAPIService";
+import { toast } from "react-toastify";
 
 const List = ({ children }) => {
     return <p>{children}</p>;
@@ -30,10 +32,11 @@ const PricingPage = () => {
                 <Row gutter={16} justify="center">
                     <PricingCard
                         type="Gói tháng"
-                        price="99,000VNĐ"
+                        price="49.999 VNĐ"
                         subscription="tháng"
                         description="Mở khóa tính năng dành cho hội viên."
                         buttonText="Đăng ký ngay!"
+                        packageTime="MONTH"
                     >
                         <List>
                             <label>Thời hạn: </label>
@@ -63,10 +66,11 @@ const PricingPage = () => {
 
                     <PricingCard
                         type="Gói năm"
-                        price="999,000VNĐ"
+                        price="459.000 VNĐ"
                         subscription="năm"
                         description="Tiết kiệm lên đến 200,000VNĐ và sở hữu các tính năng bao gồm của gói tháng và thêm tính năng độc quyền không giới hạn👑."
                         buttonText="Đăng ký ngay!"
+                        packageTime="YEAR"
                         active={true}
                     >
                         <List>
@@ -110,7 +114,13 @@ const PricingCard = ({
     subscription,
     buttonText,
     active,
+    packageTime
 }) => {
+    const handleBuyPackage = async (time) => {
+        const response = await buyPackage(time);
+        response.status === 200 && response.data.code === 1000 ? window.location.href = response.data.result.sessionURL : toast.error("Lỗi khi mua gói")
+    }
+
     return (
         <Col xs={24} sm={12} md={8}>
             <Card
@@ -126,7 +136,11 @@ const PricingCard = ({
                 </h2>
                 <p>{description}</p>
                 <div>{children}</div>
-                <Button className={active ? "rainbow-button" : ""} type={active ? "primary" : "default"}>
+                <Button 
+                onClick={() => handleBuyPackage(packageTime)}
+                className={active ? "rainbow-button" : ""} 
+                type={active ? "primary" : "default"}
+                >
                     {buttonText}
                 </Button>
             </Card>

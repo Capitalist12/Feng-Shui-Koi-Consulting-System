@@ -14,46 +14,39 @@
             display: flex;
             align-items: center;
 
-            span.ant-input-affix-wrapper.ant-input-outlined {
-
-                background-color: #181818;
-                border-radius: 15px;
-                color: white;
-
-                .ant-input {
-                    &::placeholder {
-                        color: white;
-                    }
-
-                    &:focus {
-                        border-color: #ffffff;
-                        outline: 0;
-                        -webkit-box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
-                        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
-                    }
-                }
-
+            .pricing-btn {
+                color: #ffffff !important;
+                background-color: #ffb700;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 30px;
+                border-radius: 5px;
+                padding: 0 7px;
             }
 
         }
 
         li.ant-menu-overflow-item.ant-menu-item.ant-menu-item-disabled.ant-menu-item-only-child {
             &.login {
+                margin-left: auto;
+
                 span.ant-menu-title-content {
                     display: flex;
                     align-items: center;
                     gap: 1em;
                     color: #ffffff;
-
                     text-decoration: none;
                     background-color: #1677ff;
                     border-radius: 5px;
                     padding: 0 8px;
                     height: 40px;
+
                 }
             }
 
             &.register {
+                margin-left: 0.5em;
                 margin-right: 2em;
 
                 span.ant-menu-title-content {

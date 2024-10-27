@@ -16,40 +16,33 @@ const AdvertiseBlogContainer = () => {
                             CÁC BÀI ĐĂNG BÁN LIÊN QUAN
                         </h2>
                     </Row>
-                    <Row style={{ position: 'relative' }}>
-                        <Link
-                            to=""
-                            style={{
-                                color: 'white',
-                                textDecoration: 'underline',
-                                fontSize: '1.2em',
-                                position: 'absolute',
-                                right: '7em',
-                                top: '2em'
-                            }}
-                        >
-                            Xem tất cả
-                        </Link>
-                    </Row>
-                    <Row>
-                        <AdvertiseSlider />
-                    </Row>
-                    <Row>
-                        <div
-                            style={{
-                                color: 'white',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '100%',
-                                position: 'absolute',
-                                bottom: 0,
-                                fontSize: '1.2em'
-                            }}
-                        >
-                            <p>Xem thêm nhiều bài đăng mua bán về cá koi, vật phẩm trang trí hồ cá theo phong thủy tại mục &nbsp;</p>
-                            <Link to="" style={{ color: 'white', textDecoration: 'underline' }}>MUA/BÁN</Link>
-                        </div>
+                    <Row
+                        style={{
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <Row>
+                            <AdvertiseSlider />
+                        </Row>
+                        <Row>
+                            <div
+                                style={{
+                                    color: 'white',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '100%',
+                                    fontSize: '1.2em'
+                                }}
+                            >
+                                <p>Xem thêm nhiều bài đăng mua bán về cá koi, vật phẩm trang trí hồ cá theo phong thủy tại mục &nbsp;</p>
+                                <Link to="" style={{ color: 'white', textDecoration: 'underline' }}>MUA/BÁN</Link>
+                            </div>
+                        </Row>
                     </Row>
                 </Col>
                 <Col lg={7} xl={8} className='blog' style={{ backgroundColor: 'black' }}>
@@ -59,7 +52,7 @@ const AdvertiseBlogContainer = () => {
                         </h2>
                     </Row>
                     <Divider style={{ backgroundColor: 'white' }} />
-                    <Row style={{ height: '60px'}}>
+                    <Row style={{ height: '60px' }}>
                         <Link to="" style={{ color: 'white', textDecoration: 'underline' }}>Xem thêm</Link>
                     </Row>
                     <Row>

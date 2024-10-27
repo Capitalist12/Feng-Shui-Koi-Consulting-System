@@ -1,29 +1,63 @@
 import React from 'react';
-import { Card } from 'antd';
+import { Card, Tag, Tooltip } from 'antd';
 import { NavLink } from 'react-router-dom';
+import TestImage from "../../../../../assets/images/amduong.png"
+import { OPTIONS } from '../../../../../utils/constant';
+import { timeDifference } from '../../../../../utils/helper';
+
 const { Meta } = Card;
 
-const AdvertiseCardItem = ({data}) => (
+const AdvertiseCardItem = ({ data }) => (
     <Card
+        className='advertise-card-item'
         hoverable
-        size='small'        
-        cover={<img alt="example" style={{maxHeight: '300px', objectFit: 'cover'}} src="https://firebasestorage.googleapis.com/v0/b/fengshui-koi-consulting-system.appspot.com/o/Astral%20Koi%20Fish%2C%20Kerri%20McDonald.jpeg?alt=media&token=db5c0cf7-3869-45bc-8865-59e5ae29f6cb" />}
+        size='small'
+        cover={<img alt="example" style={{ height: '300px', objectFit: 'cover' }} src={data.imagesAd[0]?.imageURL || TestImage} />}
     >
         <Meta
-            title={<NavLink>Helofd</NavLink>}
-            description={<h3 style={{margin: 0, color: 'red'}}>fdsffVNĐ</h3>} />
-            <p>
-                Giống: Sanke
-            </p>
-            <p>
-                Kích thước: &gt; 90 cm
-            </p>
-            <p>
-                Cân nặng: 5 - 7 kg
-            </p>
-            <p>
-                Mệnh: Hỏa
-            </p>
+            title={<NavLink>{data.title}</NavLink>}
+            description={<h3 style={{ margin: 0, color: 'red' }}>{data.price} VNĐ</h3>}
+        />
+        <p>
+            Mệnh:
+            &nbsp;
+            {
+                OPTIONS
+                    .filter(option => option.value === data.element)
+                    .map((filteredOption, index) => (
+                        <Tag
+                            key={index}
+                            color={filteredOption.color || 'default'}
+                            style={{
+                                marginInlineEnd: 4,
+                                minWidth: "60px"
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-around',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                {filteredOption.emoji}
+                                {filteredOption.label}
+                            </div>
+                        </Tag>
+                    ))
+            }
+        </p>
+        <p>
+            Mô tả: {data.description}
+        </p>
+        <p>
+            Người bán: {data.user}
+        </p>
+        <span className='advertise-createdDate'>
+            <Tooltip placement="bottom" title={data.createdDate}>
+                {timeDifference(data.createdDate)}
+            </Tooltip>
+        </span>
     </Card>
 );
 export default AdvertiseCardItem;

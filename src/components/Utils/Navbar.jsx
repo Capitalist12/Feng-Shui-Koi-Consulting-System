@@ -3,57 +3,67 @@ import { Input, Menu } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import DropdownAvatar from "./DropdownAvatar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getToken } from "../../config/accessTokenConfig";
+import { getToken, getUserRole } from "../../config/accessTokenConfig";
 import "../../styles/homepage/header/Navbar.scss";
+import { FaCrown } from "react-icons/fa";
 
 const Navbar = () => {
-    const [current, setCurrent] = useState();
-    const token = getToken();
-    const location = useLocation();
-    const navigate = useNavigate();
+  const [current, setCurrent] = useState();
+  const token = getToken();
+  const role = getUserRole();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-      // Cập nhật current dựa trên đường dẫn hiện tại
-      const path = location.pathname.split("/");
-      setCurrent(path[1] || "");
-    }, [location.pathname]); // Theo dõi sự thay đổi của đường dẫn
+  useEffect(() => {
+    // Cập nhật current dựa trên đường dẫn hiện tại
+    const path = location.pathname.split("/");
+    setCurrent(path[1] || "");
+  }, [location.pathname]); // Theo dõi sự thay đổi của đường dẫn
 
-    const items = [
-        { label: 'TRANG CHỦ', key: '' },
-        { label: 'MUA / BÁN', key: 'ad' },
-        { label: 'BLOG & TIN TỨC', key: 'blog' },
-        { label: 'ĐỘ TƯƠNG HỢP', key: 'compatibility' },
-        { 
-          label: <Input suffix={<SearchOutlined />} placeholder="Tìm kiếm..." />, 
-          key: 'search', 
-          disabled: true, 
-          style: { marginLeft: 'auto', cursor: 'default' }
+  const items = [
+    { label: 'TRANG CHỦ', key: '' },
+    { label: 'MUA / BÁN', key: 'ad' },
+    { label: 'BLOG & TIN TỨC', key: 'blog' },
+    { label: 'ĐỘ TƯƠNG HỢP', key: 'compatibility' },
+    ...(role && role !== "MEMBER"
+      ? [
+        {
+          label: (
+            <Link to="/pricing" className="pricing-btn">
+              <FaCrown /> &nbsp; Nâng cấp
+            </Link>
+          ),
+          key: "pricing",
+          style: { marginLeft: "auto" },
+          disabled: true,
+        }
+      ]
+      : []),
+    ...(token
+      ? [
+        {
+          label: <DropdownAvatar/>,
+          key: 'avatar',
+          disabled: true,
+          style: { marginRight: '2em', marginLeft: 'auto' }
         },
-        ...(token
-          ? [
-              { 
-                label: <DropdownAvatar />, 
-                key: 'avatar', 
-                disabled: true, 
-                style: { marginRight: '2em' } 
-              },
-            ]
-          : [
-              { 
-                label: <Link to="http://localhost:5173/login">Đăng nhập</Link>, 
-                key: 'login', 
-                disabled: true,
-                className: 'login' 
-              },
-              { 
-                label: <Link to="signup">Đăng ký</Link>, 
-                key: 'register', 
-                disabled: true,
-                className: 'register' 
-              },
-            ]
-        )
-      ];
+      ]
+      : [
+        {
+          label: <Link to="login">Đăng nhập</Link>,
+          key: 'login',
+          disabled: true,
+          className: 'login'
+        },
+        {
+          label: <Link to="signup">Đăng ký</Link>,
+          key: 'register',
+          disabled: true,
+          className: 'register'
+        },
+      ]
+    )
+  ];
 
   const onClick = (e) => {
     console.log("click ", e);

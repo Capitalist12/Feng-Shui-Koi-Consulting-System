@@ -8,6 +8,8 @@ import { MdOutlineSell } from "react-icons/md";
 import { UserOutlined, LineChartOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
 
+const TOKEN_EXPIRY_TIME_IN_MINUTE = 60;
+
 const KOI_ELEMENT_MAX_COUNT = 3;
 
 const USER_ELEMENT_COUNT = 1;
@@ -147,4 +149,5 @@ export {
   DASHBOARD_ITEMS,
   ELEMENT_VALUES,
   ROLE_OPTIONS,
+  TOKEN_EXPIRY_TIME_IN_MINUTE
 };

@@ -32,4 +32,16 @@ function timeDifference(date) {
     }
 }
 
-export { handleScroll, timeDifference };
+function compareWithCurrentTime(date) {
+    const now = new Date();
+    const pastDate = new Date(date);
+    
+    const diffInMilliseconds = now - pastDate;
+
+    const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+
+    return diffInDays < 7;
+
+}
+
+export { handleScroll, timeDifference, compareWithCurrentTime };

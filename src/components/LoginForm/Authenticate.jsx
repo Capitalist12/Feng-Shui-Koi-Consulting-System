@@ -11,6 +11,7 @@ import "../../styles/Authenticate.scss";
 import { GoogleURL } from "../../config/googleConfig";
 import { toast } from "react-toastify";
 import { saveToken } from "../../config/accessTokenConfig";
+import { TOKEN_EXPIRY_TIME_IN_MINUTE } from "../../utils/constant";
 
 export default function Authenticate() {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function Authenticate() {
 
                 if (response.status === 200 && response.data.code === 1000) {
                     dispatch(login(response?.data?.result?.username));
-                    saveToken(response.data.result.token, response.data.result.roleName, 30)
+                    saveToken(response.data.result.token, response.data.result.roleName, TOKEN_EXPIRY_TIME_IN_MINUTE)
                     const info = await getInfo();
 
                     if (info.data.result.noPassword || info.data.result.noDob) {
