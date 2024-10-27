@@ -98,7 +98,7 @@ const TableKoi = (props) => {
                 />
             </Table>
 
-            {selectedKoi && <KoiDrawer open={open} onClose={onClose} data={selectedKoi} getMatchedOptions={getMatchedOptions} fetchAPI={props.fetchAPI} />}
+            {selectedKoi && <KoiDrawer open={open} onClose={onClose} data={selectedKoi} getMatchedOptions={getMatchedOptions} fetchAPI={props.fetchAPI} updateDrawer={setSelectedKoi}/>}
         </>
     );
 

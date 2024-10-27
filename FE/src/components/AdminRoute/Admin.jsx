@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Outlet, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 const Admin = ({ children }) => {
     const navigation = useNavigate();
-    const isAdmin = useSelector((store) => store?.user?.roleName)?.toUpperCase();
+    const localData = localStorage.getItem('accessToken');
+    const isAdmin = JSON.parse(localData)?.roleName?.toUpperCase();
 
 
     useEffect(() => {
         if (isAdmin !== "ADMIN") {
-            navigation("/login");
+            navigation("/");
         }
     }, []);
     

@@ -1,0 +1,213 @@
+// @keyframes highlight {
+//   0% {
+//     background-color: #ff8177; // Màu nền nhẹ
+//   }
+//   30% {
+//     background-color: #ff867a; // Màu nền nhẹ
+//   }
+//   50% {
+//     background-color: #ff8c7f; // Màu nền đậm hơn
+//   }
+//   70% {
+//     background-color: #f99185; // Màu nền đậm hơn
+//   }
+//   90% {
+//     background-color: #ff9a9e; // Trở lại màu nền nhẹ
+//   }
+//   100% {
+//     background-color: #f99185; // Giữ nguyên màu nền sau animation
+//   }
+// }
+
+html {
+  scroll-behavior: smooth; /* Bật hiệu ứng cuộn mượt mà */
+}
+
+#sec1-comp {
+  position: relative;
+  z-index: 1;
+  background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll; // Cuộn theo trang
+
+  background-color: rgba(0, 0, 0, 0); // Bắt đầu trong suốt
+  h2 {
+    margin-top: 25vh;
+    margin-left: 3vw;
+    color: white;
+    text-shadow: 3px 2px 1px rgba(0, 0, 0, 0.7);
+    position: absolute;
+  }
+  .title {
+    margin-top: 10vh;
+    margin-left: 1vw;
+    font-size: 7em;
+    font-weight: 800;
+    color: #ff6347; /* Màu sắc tiêu đề */
+    position: absolute; /* Để z-index có hiệu lực */
+  }
+
+  .infor-data {
+    width: 100%;
+    height: 30vh;
+    position: absolute;
+    bottom: 25%;
+    z-index: 2;
+
+    h1 {
+      margin-top: 13vh;
+      color: white;
+      font-size: 2em;
+      text-shadow: 5px 5px 1px rgba(0, 0, 0, 0.7);
+    }
+
+    .data {
+      height: 25vh;
+      width: 100%;
+      font-family: serif;
+
+      div {
+        width: 50%;
+        height: 100%;
+        margin: auto;
+        font-size: 2em;
+        background-color: rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        border-radius: 15px;
+        border-style: groove;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+
+        p {
+          color: white;
+          text-align: center;
+          width: 90%;
+          font-size: 4rem;
+          font-weight: 600;
+        }
+      }
+    }
+    .scroll-button {
+      position: absolute;
+      bottom: 20px; /* Căn chỉnh vị trí nút */
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgb(69, 69, 23); /* Màu nền */
+      border: none;
+      border-radius: 50%; /* Hình tròn */
+      width: 5vw;
+      height: 7vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s; /* Thêm transform vào transition */
+
+      &:hover {
+        background-color: yellow; /* Màu khi hover */
+        transform: translateX(-50%) scale(1.1); /* Phóng to nhẹ */
+      }
+
+      svg {
+        width: 20px; /* Kích thước icon */
+        height: 20px;
+        fill: white; /* Màu icon */
+      }
+    }
+  }
+
+  // .background-sec1 {
+  //   background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
+  //   height: 100vh;
+  //   width: 100%;
+  //   background-position: center;
+  //   background-repeat: no-repeat;
+  //   background-size: cover;
+  //   background-attachment: scroll;
+  //   position: fixed;
+  //   top: 0;
+  //   left: 0;
+  //   z-index: 2;
+  //   pointer-events: none;
+  //   opacity: 1; // Đặt giá trị mặc định là 1
+  //   transition: opacity 0.3s ease; // Thêm transition cho mượt mà
+  // }
+}
+
+#sec2-comp {
+  position: relative;
+  // padding: 20px;
+  // margin: 20px 0;
+  height: 100vh;
+  width: 100vw;
+  // background-image: url("../assets/images/pexels-amar-27155968.jpg");
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll; // Cuộn theo trang
+
+  h2 {
+    // css ca titlte table
+    color: white;
+    font-size: 3rem;
+    text-align: center;
+  }
+
+  .custom-title {
+    text-shadow: 5px 5px 1px red;
+  }
+
+  .custom-table {
+    .ant-table {
+      border: 5px solid #be0000;
+
+      th {
+        background-color: rgb(69, 69, 23) !important;
+        color: white;
+        text-align: center;
+        font-size: 1.3em;
+      }
+
+      // Áp dụng cho hàng
+      tr {
+        // Hiệu ứng hover cho hàng chưa chọn
+        &:hover {
+          animation: highlight 0.3s ease-in-out !important;
+          //   background-color: burlywood; // Màu nền khi hover
+        }
+
+        // Áp dụng cho hàng đã chọn
+        &.selected-row {
+          background-color: burlywood; // Màu nền cho hàng đã chọn
+          animation: none !important; // Tắt animation cho hàng đã chọn
+          transition: background-color 0.3s !important; // Thêm transition cho mượt mà
+
+          // Tăng độ đậm khi hover qua hàng đã chọn
+          //   &:hover {
+          //     background-color: rgba(135, 206, 235, 1); // Đậm hơn khi hover
+          //   }
+        }
+      }
+    }
+  }
+
+  .selected-ele {
+    display: flex;
+    margin-top: 5vh;
+    align-items: center;
+    flex-direction: column;
+
+    .tank-koi-selected {
+    }
+  }
+}

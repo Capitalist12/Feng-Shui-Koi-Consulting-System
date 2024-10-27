@@ -1,13 +1,13 @@
-import React from 'react';
-import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Flex } from 'antd';
-import { FcGoogle } from 'react-icons/fc';
+import React from "react";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input, Flex } from "antd";
+import { FcGoogle } from "react-icons/fc";
 import { loginAuth } from "../../services/AuthAPIService";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth";
-import { googleProvider } from "../../config/firebase";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { login } from "../../redux/Slices/userSlice.js";
+import { GoogleURL } from '../../config/googleConfig.js';
+import { saveToken } from '../../config/accessTokenConfig.js';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -15,41 +15,25 @@ const LoginForm = () => {
 
   const onFinish = async (values) => {
     const { email, password } = values;
-    const response = await loginAuth({email, password});
+    const response = await loginAuth({ email, password });
 
-    if(response.status === 200 && response.data.code === 1000){
-      dispatch(login(response.data.result));
+    if (response.status === 200 && response.data.code === 1000) {
+      dispatch(login(response.data.result.username));
+      saveToken(response.data.result.token, response.data.result.roleName, 30);
 
       const role = response.data.result.roleName.toUpperCase();
 
-      (role !== "ADMIN") ? navigate("/") : navigate("/dashboard"); 
-
+      role !== "ADMIN" ? navigate("/") : navigate("/dashboard");
     }
-
   };
 
   const handleLoginGoogle = () => {
-    const auth = getAuth();
-    signInWithPopup(auth, googleProvider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-
-        const user = result.user;
-        // login google thành công thì qua trang user
-        navigate("/user");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
+    window.location.href = GoogleURL();
   };
 
   return (
     <Form
-      className='login-form'
+      className="login-form"
       name="login"
       initialValues={{
         remember: true,
@@ -69,7 +53,7 @@ const LoginForm = () => {
           },
         ]}
       >
-        <Input prefix={<MailOutlined />} type='email' placeholder="Email" />
+        <Input prefix={<MailOutlined />} type="email" placeholder="Email" />
       </Form.Item>
       <label htmlFor="password">Mật khẩu</label>
       <Form.Item
@@ -98,7 +82,7 @@ const LoginForm = () => {
         <Button className="login-btn" onClick={handleLoginGoogle} block>
           Đăng nhập bằng Google <FcGoogle />
         </Button>
-        hoặc <Link to="/register">Đăng kí ngay !</Link>
+        hoặc <Link to="/signup">Đăng kí ngay !</Link>
       </Form.Item>
     </Form>
   );

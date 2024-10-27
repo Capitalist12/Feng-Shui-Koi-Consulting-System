@@ -7,9 +7,16 @@ import { useForm } from "antd/es/form/Form.js";
 import { createKoiFish } from "../../../services/koiAPIService";
 import { toast } from "react-toastify";
 import { PlusOutlined, CloseOutlined, CheckOutlined } from "@ant-design/icons";
-import { getAllKoiType, createNewKoiType } from '../../../services/koiTypeService';
-import { SIZE_OPTIONS, WEIGHT_OPTIONS, KOI_ELEMENT_MAX_COUNT } from '../../../utils/constant';
-import TextArea from 'antd/es/input/TextArea';
+import {
+  getAllKoiType,
+  createNewKoiType,
+} from "../../../services/koiTypeService";
+import {
+  SIZE_OPTIONS,
+  WEIGHT_OPTIONS,
+  KOI_ELEMENT_MAX_COUNT,
+} from "../../../utils/constant";
+import TextArea from "antd/es/input/TextArea";
 
 const InputForm = (props) => {
   const { close, save, fetchAPI } = props;
@@ -59,6 +66,7 @@ const InputForm = (props) => {
       } finally {
         // clear old data
         setTypeInput("");
+        setSelectedElement([]);
         form.resetFields();
         await fetchAPI();
         save();
@@ -68,6 +76,7 @@ const InputForm = (props) => {
 
   const cancelForm = () => {
     setAddType(false);
+    setSelectedElement([]);
     setTypeInput("");
     form.resetFields();
     save();
@@ -76,6 +85,7 @@ const InputForm = (props) => {
   const cancelCreateKoiType = () => {
     setAddType(false);
     setTypeInput("");
+    setSelectedElement([]);
   };
 
   const createKoiType = async (newType) => {
@@ -223,22 +233,27 @@ const InputForm = (props) => {
         )}
       </Form.Item>
 
-            <Form.Item
-                label="Mệnh"
-                name="element"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Vui lòng chọn ít nhất một mệnh!',
-                        validator: (_, value) =>
-                            value && value.length > 0
-                                ? Promise.resolve()
-                                : Promise.reject(new Error('Vui lòng chọn ít nhất một mệnh!')),
-                    },
-                ]}
-            >
-                <MultiSelectElement data={selectedElement} onChange={setSelectedElement} customeStyle={{width: '100%'}} maxCount={KOI_ELEMENT_MAX_COUNT}/>
-            </Form.Item>
+      <Form.Item
+        label="Mệnh"
+        name="element"
+        rules={[
+          {
+            required: true,
+            message: "Vui lòng chọn ít nhất một mệnh!",
+            validator: (_, value) =>
+              value && value.length > 0
+                ? Promise.resolve()
+                : Promise.reject(new Error("Vui lòng chọn ít nhất một mệnh!")),
+          },
+        ]}
+      >
+        <MultiSelectElement
+          data={selectedElement}
+          onChange={setSelectedElement}
+          customeStyle={{ width: "100%" }}
+          maxCount={KOI_ELEMENT_MAX_COUNT}
+        />
+      </Form.Item>
 
       <Form.Item label="Thông tin" name="description">
         <TextArea
@@ -268,7 +283,7 @@ const InputForm = (props) => {
           },
         ]}
       >
-        <UploadImage />
+        <UploadImage MAX_COUNT={5} uploadType={"picture-card"}/>
       </Form.Item>
 
       <Form.Item style={{ textAlign: "right" }}>

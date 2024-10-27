@@ -1,7 +1,7 @@
-import loginVideo from "../../assets/video/Login-video.mp4"; // Đảm bảo bạn có video này
-import "../../styles/RegisterPage.scss"; // Tạo hoặc điều chỉnh file CSS này
+import loginVideo from "../../assets/video/Login-video.mp4";
+import "../../styles/RegisterPage.scss";
 import "../../javaScript/LoginPageScript.js";
-import RegisterForm from "../../components/RegisterForm/RegisterForm.jsx"; // Import RegisterForm
+import RegisterForm from "../../components/RegisterForm/RegisterForm.jsx";
 
 const RegisterPage = () => {
   return (

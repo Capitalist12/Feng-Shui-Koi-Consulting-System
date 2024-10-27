@@ -49,28 +49,28 @@ function TankManagement() {
     {
       title: "Description",
       key: "description",
-      render: (text, record) => {
+      render: (record) => {
         return record.elementTank?.description || "N/A";
       },
     },
     {
       title: "Direction",
       key: "direction",
-      render: (text, record) => {
+      render: (record) => {
         return record.elementTank?.direction || "N/A";
       },
     },
     {
       title: "Element ID",
       key: "elementId",
-      render: (text, record) => {
+      render: (record) => {
         return record.elementTank?.elementId || "N/A";
       },
     },
     {
       title: "Element",
       key: "elementName",
-      render: (text, record) => {
+      render: (record) => {
         return record.elementTank?.elementName || "N/A";
       },
     },
@@ -219,6 +219,7 @@ function TankManagement() {
                   options={ELEMENT_VALUES}
                   onChange={handleElementChange}
                   defaultValue={selectedTank?.elementTank?.elementId}
+                  placeholder="Chọn bản mệnh"
                 />
               </Form.Item>
             </Col>
