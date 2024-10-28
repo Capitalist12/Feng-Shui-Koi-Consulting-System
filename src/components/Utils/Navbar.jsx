@@ -6,6 +6,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getToken, getUserRole } from "../../config/accessTokenConfig";
 import "../../styles/homepage/header/Navbar.scss";
 import { FaCrown } from "react-icons/fa";
+import { GrUserAdmin } from "react-icons/gr";
 
 const Navbar = () => {
   const [current, setCurrent] = useState();
@@ -15,7 +16,6 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Cập nhật current dựa trên đường dẫn hiện tại
     const path = location.pathname.split("/");
     setCurrent(path[1] || "");
   }, [location.pathname]); // Theo dõi sự thay đổi của đường dẫn
@@ -25,7 +25,7 @@ const Navbar = () => {
     { label: 'MUA / BÁN', key: 'ad' },
     { label: 'BLOG & TIN TỨC', key: 'blog' },
     { label: 'ĐỘ TƯƠNG HỢP', key: 'compatibility' },
-    ...(role && role !== "MEMBER"
+    ...(role && role === "User"
       ? [
         {
           label: (
@@ -38,14 +38,33 @@ const Navbar = () => {
           disabled: true,
         }
       ]
-      : []),
+      : role === "Admin" ?
+      [
+        {
+          label: (
+            <Link to="/dashboard" className="admin-btn">
+              <GrUserAdmin />
+              &nbsp; Quản lý
+            </Link>
+          ),
+          key: "admin",
+          style: { marginLeft: "auto" },
+          disabled: true,
+        }
+      ]
+      :
+      []
+    ),
     ...(token
       ? [
         {
-          label: <DropdownAvatar/>,
+          label: <DropdownAvatar />,
           key: 'avatar',
           disabled: true,
-          style: { marginRight: '2em', marginLeft: 'auto' }
+          style: {
+            marginRight: '2em',
+            marginLeft: role !== "User" ? '0.2em' : 'auto'
+          }
         },
       ]
       : [
@@ -66,7 +85,7 @@ const Navbar = () => {
   ];
 
   const onClick = (e) => {
-    console.log("click ", e);
+    if (e.disabled) return;
     setCurrent(e.key);
     navigate(`/${e.key}`);
   };

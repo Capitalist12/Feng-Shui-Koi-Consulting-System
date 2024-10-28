@@ -1,9 +1,9 @@
 import React from "react";
 import { Card, Button, Col, Row } from "antd";
-import "../styles/PricingPage.scss";
+import "../../styles/PricingPage.scss";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
-import { buyPackage } from "../services/paymentAPIService";
+import { buyPackage } from "../../services/paymentAPIService";
 import { toast } from "react-toastify";
 
 const List = ({ children }) => {

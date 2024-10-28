@@ -13,7 +13,7 @@ import CompatibilityPage from "./pages/member/CompatibilityPage";
 import ManageUser from "./components/CRUD_User2/ManageUser";
 import Authenticate from "./components/LoginForm/Authenticate";
 import AdvertisementPage from "./pages/member/AdvertisementPage";
-import PricingPage from "./pages/PricingPage";
+import PricingPage from "./pages/payment/PricingPage";
 import BlogEditorPage from "./pages/blog/BlogEditorPage";
 import BlogPage from "./pages/blog/BlogPage";
 import BlogContent from "./components/Blog/BlogContent";

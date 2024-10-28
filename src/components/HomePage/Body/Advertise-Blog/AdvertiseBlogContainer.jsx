@@ -1,11 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Col, Divider, Row } from "antd";
 import AdvertiseSlider from "./Advertise/AdvertiseSlider";
 import BlogCardItem from "./Blog/BlogCardItem";
 import "../../../../styles/homepage/body/advertise-blog/AdvertiseBlogContainer.scss";
+import { getAllBlogs } from "../../../../services/blogAPIService";
 
 const AdvertiseBlogContainer = () => {
+
+    const [blogs, setBlogs] = useState([]);
+    const [topThreeBlog, setTopThreeBlog] = useState([]);
+
+    const fetchAPI = async () => {
+        const response = await getAllBlogs();
+        response.status === 200 && response.data.code === 1000 ? setBlogs(response.data.result) : setBlogs()
+    }
+
+    const getRandomThreeBlogs = (array, count = 3) => {
+        const shuffled = [...array].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
+    }
+
+    useEffect(() => {
+        fetchAPI();
+    },[])
+    
+    useEffect(() => {
+        setTopThreeBlog(getRandomThreeBlogs(blogs));
+    }, [blogs]);
 
     return (
         <section id='blog-advertise-section'>
@@ -45,31 +67,25 @@ const AdvertiseBlogContainer = () => {
                         </Row>
                     </Row>
                 </Col>
-                <Col lg={7} xl={8} className='blog' style={{ backgroundColor: 'black' }}>
+                <Col lg={7} xl={8} className='blog' style={{ backgroundColor: 'black', height: '100%' }}>
                     <Row>
                         <h2>
                             Blog kiến thức, chia sẻ kinh nghiệm
                         </h2>
                     </Row>
                     <Divider style={{ backgroundColor: 'white' }} />
-                    <Row style={{ height: '60px' }}>
-                        <Link to="" style={{ color: 'white', textDecoration: 'underline' }}>Xem thêm</Link>
-                    </Row>
-                    <Row>
-                        <Col span={22}>
-                            <BlogCardItem />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={22}>
-                            <BlogCardItem />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={22}>
-                            <BlogCardItem />
-                        </Col>
-                    </Row>
+                    {
+                        (topThreeBlog && topThreeBlog.length > 0)
+                        &&
+                        topThreeBlog.map((item, index) => (
+
+                            <Row key={index}>
+                                <Col span={23}>
+                                    <BlogCardItem data={item}/>
+                                </Col>
+                            </Row>
+                        ))
+                    }
                 </Col>
             </Row>
         </section>

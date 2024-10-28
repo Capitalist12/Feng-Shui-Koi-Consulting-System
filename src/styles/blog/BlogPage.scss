@@ -125,6 +125,7 @@
                                     width: 90%;
                                     box-sizing: border-box;
                                     overflow: hidden;
+                                    position: relative;
 
                                     @media (max-width: 1300px) {
                                         display: flex;
@@ -172,11 +173,17 @@
                                             white-space: normal; // Cho phép văn bản ngắt dòng để phù hợp với thiết kế
                                             width: 100%;
                                         }
-                                        .ant-space-item{
-                                            display: flex;
-                                            color: rgb(168, 168, 168);
 
+                                        .blog-info {
+                                            margin-top: auto;
+                                            display: flex;
+                                            flex-direction: row;
+                                            align-items: center;
+                                            justify-content: space-around;
+                                            max-height: 30px;
+                                            
                                             p {
+                                                color: rgb(168, 168, 168);
                                                 background-color: var(--background-inner-color);
                                             }
                                         }
@@ -252,7 +259,7 @@
                         // padding: 10px;
                     }
 
-                    
+
 
                 }
             }
@@ -321,6 +328,7 @@
 
                     // height: 100%;
                     font-size: 1.15em;
+
                     em {
                         background-color: var(--border-color) !important;
                     }
@@ -489,6 +497,37 @@
                 }
             }
 
+        }
+
+        .create-post-btn {
+            position: fixed;
+            z-index: 5;
+            background-color: #ccc;
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 1.5em;
+            bottom: 2em;
+            right: 2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: rgb(88, 88, 88);
+            width: fit-content;
+            transition: all 0.5s ease;
+        
+            .create-post-btn-text {
+                display: none;
+                transition: all 0.5s ease;
+            }
+        
+            &:hover {
+                width: fit-content;
+
+                .create-post-btn-text {
+                    display: inline-block;
+                }
+            }
         }
     }
 }
