@@ -1,18 +1,18 @@
 #navbar-section {
-    height: 60px;
-    position: sticky;
-    top: 0;
-    width: 100%;
-    z-index: 3;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 3;
 
-    .navbar {
-        background-color: #353535;
-        height: 100%;
+  .navbar {
+    background-color: #353535;
+    height: 100%;
 
-        li.ant-menu-overflow-item.ant-menu-item.ant-menu-item-only-child {
-            color: white;
-            display: flex;
-            align-items: center;
+    li.ant-menu-overflow-item.ant-menu-item.ant-menu-item-only-child {
+      color: white;
+      display: flex;
+      align-items: center;
 
             .pricing-btn {
                 color: white !important;
@@ -71,3 +71,4 @@
 
     }
 }
+

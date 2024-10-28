@@ -19,16 +19,7 @@ const KoiList = ({
       title: "Màu sắc",
       dataIndex: "color",
       key: "color",
-      width: 100,
-      render: (color) => (
-        <div>
-          {color.split(",").map((clr, index) => (
-            <span key={index} style={{ display: "block" }}>
-              {clr.trim()}
-            </span>
-          ))}
-        </div>
-      ),
+      width: 50,
     },
     {
       title: "Chọn",
@@ -51,14 +42,16 @@ const KoiList = ({
   console.log("Filtered Fish Data:", filteredFishData); // Kiểm tra dữ liệu sau khi lọc
 
   return (
-    <div>
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
       <Input
         placeholder="Tìm kiếm theo màu sắc hoặc loại cá"
         value={searchTerm}
         onChange={handleSearchTermChange}
-        style={{ marginBottom: "2vh", height: "2rem" }}
+        style={{ marginBottom: "1rem", width: "20rem" }}
       />
-      <div style={{}}>
+      <div>
         <Table
           columns={koiColumns}
           dataSource={filteredFishData}
@@ -66,7 +59,7 @@ const KoiList = ({
           pagination={false}
           rowClassName={(fish) => (isKoiSelected(fish) ? "selected-row" : "")}
           sticky
-          scroll={{ y: 330 }}
+          scroll={{ y: 360 }}
         />
       </div>
     </div>

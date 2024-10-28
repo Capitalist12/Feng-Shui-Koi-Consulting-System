@@ -1,0 +1,43 @@
+.custom-button {
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(6, 0, 94);
+  color: rgb(6, 0, 94);
+  font-weight: 700;
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: translateY(-0.5rem);
+  }
+
+  &:hover {
+    background-color: rgb(6, 0, 94) !important;
+    border-color: rgb(255, 255, 255) !important;
+    color: white !important;
+    cursor: pointer;
+  }
+}
+.card2 {
+  background-image: url("../assets/images/229de82707895cfd927de51a260daf8d.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.card2::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: inherit;
+  background-size: inherit;
+  background-position: inherit;
+  background-repeat: inherit;
+  filter: blur(0.1em);
+  z-index: 1;
+}
+
+.card2 > * {
+  position: relative;
+  z-index: 2;
+}

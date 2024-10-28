@@ -1,12 +1,14 @@
 import { FaFire, FaLeaf } from "react-icons/fa";
 import { FaMountainSun } from "react-icons/fa6";
-import { GiMetalBar } from "react-icons/gi";
+import { GiAquarium, GiMetalBar } from "react-icons/gi";
 import { IoIosWater } from "react-icons/io";
 import { GrUserAdmin } from "react-icons/gr";
 import { GrUserExpert } from "react-icons/gr";
 import { MdOutlineSell } from "react-icons/md";
 import { UserOutlined, LineChartOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
+import { IoFishOutline } from "react-icons/io5";
+import { RiAlignItemLeftLine } from "react-icons/ri";
 
 const TOKEN_EXPIRY_TIME_IN_MINUTE = 60;
 
@@ -32,17 +34,27 @@ const ROLE_OPTIONS = [
   },
 ];
 
-const ELEMENT_VALUES = [
-  { value: "Fire", label: "Fire", color: "#FF4500" },
-  { value: "Water", label: "Water", color: "#1E90FF" },
-  { value: "Earth", label: "Earth", color: "#8B4513" },
-  { value: "Wood", label: "Wood", color: "#228B22" },
-  { value: "Metal", label: "Metal", color: "#A9A9A9" },
+const CATEGORY = [
+  {
+    label: "Koi Fish",
+    value: "Koi Fish",
+    emoji: <IoFishOutline />,
+  },
+  {
+    label: "Aquarium Supplies",
+    value: "Aquarium Supplies",
+    emoji: <GiAquarium />,
+  },
+  {
+    label: "Feng Shui Items",
+    value: "Feng Shui Items",
+    emoji: <RiAlignItemLeftLine />,
+  },
 ];
-
 const OPTIONS = [
   {
     label: "Hỏa",
+    value: "Hỏa",
     value: "Hỏa",
     emoji: <FaFire />,
     desc: "Hỏa",
@@ -51,12 +63,14 @@ const OPTIONS = [
   {
     label: "Thổ",
     value: "Thổ",
+    value: "Thổ",
     emoji: <FaMountainSun />,
     desc: "Thổ",
     color: "#fece47",
   },
   {
     label: "Kim",
+    value: "Kim",
     value: "Kim",
     emoji: <GiMetalBar />,
     desc: "Kim",
@@ -65,12 +79,14 @@ const OPTIONS = [
   {
     label: "Thủy",
     value: "Thủy",
+    value: "Thủy",
     emoji: <IoIosWater />,
     desc: "Thủy",
     color: "#2c6db6",
   },
   {
     label: "Mộc",
+    value: "Mộc",
     value: "Mộc",
     emoji: <FaLeaf />,
     desc: "Mộc",
@@ -99,10 +115,11 @@ const WEIGHT_OPTIONS = [
 const DASHBOARD_ITEMS = [
   {
     key: "1",
-    icon: <UserOutlined />,
+    icon: <LineChartOutlined />,
+
     label: (
-      <NavLink to="koi" className="nav-link">
-        Quản lý cá Koi
+      <NavLink to="statistic" className="nav-link">
+        Bảng thống kê
       </NavLink>
     ),
   },
@@ -117,7 +134,7 @@ const DASHBOARD_ITEMS = [
   },
   {
     key: "3",
-    icon: <LineChartOutlined />,
+    icon: <GiAquarium />,
     label: (
       <NavLink to="tank" className="nav-link">
         Quản lý hồ cá
@@ -126,8 +143,12 @@ const DASHBOARD_ITEMS = [
   },
   {
     key: "4",
-    icon: <LineChartOutlined />,
-    label: "Bảng thống kê",
+    icon: <IoFishOutline />,
+    label: (
+      <NavLink to="koi" className="nav-link">
+        Quản lý cá Koi
+      </NavLink>
+    ),
   },
   {
     key: "5",
@@ -140,6 +161,22 @@ const DASHBOARD_ITEMS = [
   },
 ];
 
+const MONTHS = [
+  "Tháng 1",
+  "Tháng 2",
+  "Tháng 3",
+  "Tháng 4",
+  "Tháng 5",
+  "Tháng 6",
+  "Tháng 7",
+  "Tháng 8",
+  "Tháng 9",
+  "Tháng 10",
+  "Tháng 11",
+  "Tháng 12",
+];
+
+
 export {
   KOI_ELEMENT_MAX_COUNT,
   USER_ELEMENT_COUNT,
@@ -147,7 +184,8 @@ export {
   SIZE_OPTIONS,
   WEIGHT_OPTIONS,
   DASHBOARD_ITEMS,
-  ELEMENT_VALUES,
   ROLE_OPTIONS,
-  TOKEN_EXPIRY_TIME_IN_MINUTE
+  TOKEN_EXPIRY_TIME_IN_MINUTE,
+  CATEGORY,
+  MONTHS,
 };

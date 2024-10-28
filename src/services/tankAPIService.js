@@ -33,4 +33,12 @@ const deleteTank = async (id) => {
     }  
 }  
 
-export { fetchTank, createTank, updateTank, deleteTank };
+const countAllTank = async () => {
+    const response = await fetchTank();
+    if (response && response.data) {
+        return response.data.result.length; 
+    }
+    return 0; 
+}
+
+export { fetchTank, createTank, updateTank, deleteTank,countAllTank };

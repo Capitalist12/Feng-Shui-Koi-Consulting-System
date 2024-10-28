@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import FormModal from "./CreateKoiForm/FormModal";
-import { Tooltip } from "antd";
+import { Tooltip, Typography } from "antd";
 import { TbLetterP, TbNumber1 } from "react-icons/tb";
 import TableKoi from "./KoiTable/TableKoi";
 import { getAllKoiFish } from "../../services/koiAPIService";

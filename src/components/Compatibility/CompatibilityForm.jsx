@@ -1,7 +1,7 @@
-import { Button, Select, Row, Col, Typography, Card } from "antd";
+import { Button, Select, Row, Col, Card } from "antd";
 import { OPTIONS } from "../../utils/constant";
+import "../../styles/CompatibilityForm.scss";
 
-const { Title } = Typography;
 const { Option } = Select;
 
 const CompatibilityForm = ({
@@ -11,26 +11,24 @@ const CompatibilityForm = ({
 }) => {
   return (
     <Card
+      className="card2"
       style={{
-        width: "40%",
-        height: "7em",
         marginBottom: "3rem",
-        marginTop: "5em",
-        border: "5px solid black", // Viền card
-        boxShadow: "0 0 30px darkgrey", // Bóng đổ
+        marginTop: "2rem",
+        border: "2px solid  rgb(118, 18, 105)",
+        boxShadow: "0 0 30px darkgrey",
         display: "flex",
-        justifyContent: "center", // Căn giữa theo chiều dọc
-        alignItems: "center", // Căn giữa theo chiều ngang
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Row
         gutter={16}
         style={{
           display: "flex",
-          flexDirection: "column", // Đảm bảo các phần tử được xếp theo cột
-          justifyContent: "center", // Căn giữa theo trục ngang
-          alignItems: "center", // Căn giữa theo trục dọc
-          marginTop: "5px",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <Col span={24}>
@@ -40,8 +38,8 @@ const CompatibilityForm = ({
             style={{
               width: "7rem",
               height: "2.5rem",
+              marginBottom: "1rem",
             }}
-            // optionLabelProp="label"
           >
             {OPTIONS.map((option) => (
               <Option
@@ -54,7 +52,7 @@ const CompatibilityForm = ({
                   <span
                     style={{
                       backgroundColor: option.color,
-                      // color: "white",
+                      color: "white",
                       padding: "2px 8px",
                       borderRadius: "50%",
                     }}
@@ -67,12 +65,13 @@ const CompatibilityForm = ({
           </Select>
         </Col>
         <Button
+          className="custom-button"
           type="primary"
+          size="large"
           onClick={handleCalculateCompatibility}
           style={{
             marginTop: "0.5em",
             justifyItems: "center",
-            // marginBottom: "2rem",
           }}
         >
           Tính toán độ tương hợp

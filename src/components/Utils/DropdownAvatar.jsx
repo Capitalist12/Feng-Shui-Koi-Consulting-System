@@ -10,19 +10,19 @@ import { logoutAuth } from "../../services/AuthAPIService";
 const { useToken } = theme;
 
 const DropdownAvatar = (props) => {
-    const { user } = props;
-    const dispatch = useDispatch();
-    const { token } = useToken();
-    const navigate = useNavigate();
+  const { user } = props;
+  const dispatch = useDispatch();
+  const { token } = useToken();
+  const navigate = useNavigate();
 
-    const contentStyle = {
-        backgroundColor: token.colorBgElevated,
-        borderRadius: token.borderRadiusLG,
-        boxShadow: token.boxShadowSecondary,
-    };
-    const menuStyle = {
-        boxShadow: 'none',
-    };
+  const contentStyle = {
+    backgroundColor: token.colorBgElevated,
+    borderRadius: token.borderRadiusLG,
+    boxShadow: token.boxShadowSecondary,
+  };
+  const menuStyle = {
+    boxShadow: "none",
+  };
 
     const handleLogout = async () => {
         const accesstoken = getToken();

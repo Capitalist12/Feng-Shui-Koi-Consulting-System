@@ -42,4 +42,12 @@ const getKoiFish = async (id) => {
     }
 }
 
-export { getAllKoiFish, createKoiFish, deleteKoiFish, updateKoiFish, getKoiFish };
+const countAllKoiFish = async () => {
+    const response = await getAllKoiFish();
+    if (response && response.data) {
+        return response.data.result.length; 
+    }
+    return 0; 
+}
+
+export { getAllKoiFish, createKoiFish, deleteKoiFish, updateKoiFish, getKoiFish,countAllKoiFish };

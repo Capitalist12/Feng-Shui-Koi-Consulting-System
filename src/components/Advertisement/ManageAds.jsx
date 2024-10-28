@@ -1,111 +1,108 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Table, Button, message } from "antd";
+import { useParams, useNavigate } from "react-router-dom";
 import api from "../../config/axiosConfig";
-import { Form, Input, Button, Upload, message, Spin } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
 
-// Hàm giả lập để upload hình ảnh lên Firebase Storage
-const uploadImageToFirebase = async (file) => {
-  // Implement your upload logic here
-  // Example return statement
-  return "url_to_uploaded_image"; // Trả về URL hình ảnh đã upload
-};
-
-const ManageAds = ({ ad, currentUser, onSave }) => {
-  const [form] = Form.useForm();
-  const [isEditing, setIsEditing] = useState(!!ad);
-  const [loading, setLoading] = useState(false); // Trạng thái loading
+const UserAdsPage = () => {
+  const { username } = useParams();
+  const [ads, setAds] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (ad) {
-      form.setFieldsValue(ad);
-    }
-  }, [ad, form]);
+    const fetchUserAds = async () => {
+      setLoading(true);
+      try {
+        const response = await api.post(`/ad/filter`, {
+          username: username,
+          categoryName: "",
+          elementName: "",
+        });
 
-  useEffect(() => {
-    if (currentUser.role !== "Member") {
-      message.error("Bạn không có quyền truy cập vào trang này.");
-      // Có thể điều hướng đến trang khác hoặc ẩn component
-    }
-  }, [currentUser]);
-
-  const handleUpload = async (file) => {
-    const imageUrl = await uploadImageToFirebase(file); // Hàm upload hình ảnh của bạn
-    return imageUrl; // Trả về URL của hình ảnh
-  };
-
-  const handleSubmit = async (values) => {
-    setLoading(true); // Bắt đầu loading
-    try {
-      // Nếu có hình ảnh mới được upload
-      if (values.images) {
-        const uploadedImageUrl = await handleUpload(values.images.file);
-        values.imagesURL = [uploadedImageUrl]; // Thêm URL vào giá trị gửi đi
+        setAds(response.data.result);
+      } catch (error) {
+        console.error("Error fetching ads:", error);
+        message.error("Không thể tải bài đăng.");
+      } finally {
+        setLoading(false);
       }
+    };
 
-      if (isEditing) {
-        await api.put(`/ad/${ad.adID}`, values);
-        message.success("Quảng cáo đã được chỉnh sửa!");
-      } else {
-        await api.post("/ad", { ...values, user: currentUser.username });
-        message.success("Quảng cáo đã được đăng!");
-      }
-      onSave();
-    } catch (error) {
-      message.error("Có lỗi xảy ra khi đăng/chỉnh sửa quảng cáo.");
-    } finally {
-      setLoading(false); // Kết thúc loading
-    }
-  };
+    fetchUserAds();
+  }, [username]);
 
-  const uploadProps = {
-    beforeUpload: (file) => {
-      return false; // Ngăn không cho upload tự động
+  const columns = [
+    {
+      title: "Tiêu đề",
+      dataIndex: "title",
+      key: "title",
     },
+    {
+      title: "Mô tả",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "Giá",
+      dataIndex: "price",
+      key: "price",
+    },
+    {
+      title: "Thao tác",
+      key: "action",
+      render: (text, record) => (
+        <>
+          <Button type="link" onClick={() => editAd(record.id)}>
+            Chỉnh sửa
+          </Button>
+          <Button type="link" onClick={() => deleteAd(record.id)}>
+            Xóa
+          </Button>
+        </>
+      ),
+    },
+  ];
+
+  const editAd = (id) => {
+    navigate(`/edit-ad/${id}`);
+  };
+
+  const deleteAd = async (id) => {
+    try {
+      const response = await axios.delete(`/ad/${id}`);
+
+      if (response.status === 200) {
+        // Cập nhật danh sách bài đăng sau khi xóa
+        setAds((prevAds) => prevAds.filter((ad) => ad.id !== id));
+        message.success("Bài đăng đã được xóa.");
+      }
+    } catch (error) {
+      console.error("Error deleting ad:", error);
+      message.error("Không thể xóa bài đăng.");
+    }
   };
 
   return (
-    <Spin spinning={loading}>
-      <Form form={form} onFinish={handleSubmit} layout="vertical">
-        <Form.Item name="title" label="Tiêu đề" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="description"
-          label="Mô tả"
-          rules={[{ required: true }]}
-        >
-          <Input.TextArea />
-        </Form.Item>
-        <Form.Item name="price" label="Giá" rules={[{ required: true }]}>
-          <Input type="number" />
-        </Form.Item>
-        <Form.Item
-          name="categoryName"
-          label="Loại bài đăng"
-          rules={[{ required: true }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item label="Hình ảnh">
-          {isEditing && ad.imagesAd.length > 0 ? (
-            <img
-              src={ad.imagesAd[0].imageURL}
-              alt="Ad"
-              style={{ width: "100px", height: "auto", marginBottom: "10px" }}
-            />
-          ) : null}
-          <Upload {...uploadProps}>
-            <Button icon={<UploadOutlined />}>Chọn file</Button>
-          </Upload>
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            {isEditing ? "Chỉnh sửa" : "Đăng bài"}
-          </Button>
-        </Form.Item>
-      </Form>
-    </Spin>
+    <div style={{ padding: "20px" }}>
+      <h2>Bài đăng của {username}</h2>
+      <Button
+        type="primary"
+        style={{ marginBottom: "20px" }}
+        onClick={() => navigate("/create-ad")}
+      >
+        Thêm bài đăng mới
+      </Button>
+      <Table
+        columns={columns}
+        dataSource={ads}
+        loading={loading}
+        rowKey="id" // Giả sử mỗi bài đăng có ID duy nhất
+      />
+      {ads.length === 0 && !loading && (
+        <p>Không có bài đăng nào được tìm thấy.</p>
+      )}
+    </div>
   );
 };
 
-export default ManageAds;
+export default UserAdsPage;

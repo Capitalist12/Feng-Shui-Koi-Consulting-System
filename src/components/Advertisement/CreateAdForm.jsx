@@ -1,96 +1,211 @@
-import React, { useState } from "react";
-import { Form, Input, Button, Select, Upload, message } from "antd";
-import api from "../../config/axiosConfig";
+import { useState, useEffect } from "react";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Select,
+  message,
+  Row,
+  Col,
+  Upload,
+  Image,
+} from "antd";
+import { CATEGORY, OPTIONS } from "../../utils/constant";
+import { useNavigate } from "react-router-dom";
+import uploadFile from "../../utils/file";
+import { PlusOutlined } from "@ant-design/icons";
 
-const { Option } = Select;
+const CreateAdForm = ({ onSubmit }) => {
+  const [role, setRole] = useState("");
+  const navigate = useNavigate();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [fileList, setFileList] = useState([]);
 
-const CreateAdForm = ({ currentUser, fetchAds }) => {
-  const [form] = Form.useForm();
-  const [images, setImages] = useState([]);
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      try {
+        const { role } = JSON.parse(accessToken);
+        setRole(role.toUpperCase());
+      } catch (error) {
+        console.error("Invalid token format", error);
+        localStorage.removeItem("accessToken");
+      }
+    }
+  }, []);
 
   const handleFinish = async (values) => {
+    if (role !== "MEMBER") {
+      message.error("Bạn phải là thành viên để đăng quảng cáo.");
+      navigate("/errorMem");
+      return;
+    }
+
     try {
-      await api.post("/ad", {
-        ...values,
-        imagesURL: images,
-      });
-      message.success("Đã đăng quảng cáo thành công!");
-      form.resetFields();
-      setImages([]);
-      fetchAds(); // Cập nhật danh sách quảng cáo
+      if (fileList.length > 0) {
+        const uploadImage = fileList.map((file) =>
+          uploadFile(file.originFileObj)
+        );
+        const urls = await Promise.all(uploadImage);
+        values.imagesURL = urls;
+      }
+
+      await onSubmit(values);
+      message.success("Quảng cáo đã được gửi thành công!");
     } catch (error) {
-      message.error("Đăng quảng cáo không thành công!");
+      console.error("Lỗi khi tải ảnh hoặc gửi quảng cáo:", error);
+      message.error("Có lỗi xảy ra khi gửi quảng cáo. Vui lòng thử lại.");
     }
   };
 
-  const handleImageChange = (fileList) => {
-    const newImages = fileList.map((file) => file.originFileObj);
-    setImages(newImages);
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
   };
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: "none",
+      }}
+      type="button"
+    >
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </button>
+  );
 
   return (
-    <Form form={form} layout="vertical" onFinish={handleFinish}>
-      <Form.Item
-        label="Tiêu đề"
-        name="title"
-        rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label="Mô tả"
-        name="description"
-        rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
-      >
-        <Input.TextArea />
-      </Form.Item>
-      <Form.Item
-        label="Giá"
-        name="price"
-        rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
-      >
-        <Input type="number" />
-      </Form.Item>
-      <Form.Item
-        label="Mệnh"
-        name="element"
-        rules={[{ required: true, message: "Vui lòng chọn mệnh!" }]}
-      >
-        <Select>
-          <Option value="Metal">Kim</Option>
-          <Option value="Earth">Thổ</Option>
-          <Option value="Water">Thủy</Option>
-          <Option value="Fire">Hỏa</Option>
-          <Option value="Wood">Mộc</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label="Danh mục"
-        name="categoryName"
-        rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
-      >
-        <Select>
-          <Option value="Koi Fish">Cá Koi</Option>
-          <Option value="Aquarium Supplies">Thiết bị hồ cá</Option>
-          <Option value="Feng Shui Items">Vật phẩm phong thủy</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item label="Hình ảnh" name="images">
-        <Upload
-          beforeUpload={() => false} // Ngăn chặn tự động upload
-          onChange={({ fileList }) => handleImageChange(fileList)}
-          fileList={images}
-          multiple
+    <div>
+      <Form onFinish={handleFinish}>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="categoryName"
+              label="Phân loại:"
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              rules={[
+                { required: true, message: "Vui lòng chọn loại sản phẩm!" },
+              ]}
+            >
+              <Select options={CATEGORY} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="element"
+              label="Mệnh:"
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              rules={[{ required: true, message: "Vui lòng chọn mệnh!" }]}
+            >
+              <Select options={OPTIONS} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item
+          name="title"
+          label="Tiêu đề:"
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
         >
-          <Button>Chọn hình ảnh</Button>
-        </Upload>
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Đăng quảng cáo
-        </Button>
-      </Form.Item>
-    </Form>
+          <Input
+            maxLength={100}
+            placeholder="Nhập tiêu đề (tối đa 100 ký tự)"
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="description"
+          label="Mô tả:"
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
+          style={{ width: "100%" }} // chieu rong max
+        >
+          <Input.TextArea
+            style={{ minHeight: "8rem", width: "100%" }} // chieu rong max
+            placeholder="Thông tin chi tiết, liên lạc, số điện thoại,..."
+            autoSize={{ minRows: 4, maxRows: 10 }}
+            maxLength={500}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="price"
+          label="Giá (đơn vị VNĐ):"
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
+        >
+          <InputNumber step={10000} style={{ width: "10rem" }} />
+        </Form.Item>
+
+        <Form.Item
+          label="Hình ảnh:"
+          name="imageURL"
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          rules={[{ required: true, message: "Vui lòng chọn ít nhất 1 hình!" }]}
+        >
+          <Upload
+            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+            listType="picture-card"
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleChange}
+          >
+            {fileList.length >= 5 ? null : uploadButton}
+          </Upload>
+        </Form.Item>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Button size="large" htmlType="submit">
+            Đăng
+          </Button>
+        </div>
+      </Form>
+      {previewImage && (
+        <Image
+          wrapperStyle={{
+            display: "none",
+          }}
+          preview={{
+            visible: previewOpen,
+            onVisibleChange: (visible) => setPreviewOpen(visible),
+            afterOpenChange: (visible) => !visible && setPreviewImage(""),
+          }}
+          src={previewImage}
+        />
+      )}
+    </div>
   );
 };
 

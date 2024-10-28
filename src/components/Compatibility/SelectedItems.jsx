@@ -9,7 +9,6 @@ const SelectedItems = ({
   handleRemoveTank,
   handleSelectFish,
 }) => {
-  // Giới hạn số lượng cá tối đa là 6
   const maxSelectedFish = selectedFish.slice(0, 6);
 
   return (
@@ -17,7 +16,7 @@ const SelectedItems = ({
       <Card
         style={{
           background: "transparent",
-          border: "none", // xoa vien
+          border: "none", // xóa viền
         }}
       >
         <Title level={2.5} className="title">
@@ -26,7 +25,7 @@ const SelectedItems = ({
 
         <div id="koi">
           <h1>Cá Koi:</h1>
-          <p>
+          <h3>
             {maxSelectedFish.length > 0 ? (
               <div
                 style={{
@@ -34,46 +33,46 @@ const SelectedItems = ({
                   height: "2rem",
                   gridTemplateColumns:
                     maxSelectedFish.length > 3 ? "repeat(2, 1fr)" : "1fr",
-                  gap: "0.2rem",
+                  gap: "1rem",
                 }}
               >
                 {maxSelectedFish.map((fish, index) => (
-                  <span
+                  <div
                     key={fish.id}
-                    // style={{
-                    //   display: "flex",
-                    //   justifyContent: "space-between", // Căn đều khoảng cách giữa tên và nút X
-                    //   alignItems: "center", // Căn giữa theo trục dọc
-                    //   marginBottom: "5px", // Tạo khoảng cách giữa các dòng cá
-                    //   marginRight: "10px",
-                    //   gap: "10px",
-                    // }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
                   >
-                    {/* Hiển thị số thứ tự */}
-                    <span>{index + 1}.</span> {/* Đánh số bắt đầu từ 1 */}
-                    {fish.name}
+                    {/* Số thứ tự */}
+                    <span>
+                      {index + 1}. {fish.name}
+                    </span>
                     <Button
                       type="primary"
                       danger
                       onClick={() => handleSelectFish(fish)}
-                      style={{ width: "2.5vw" }}
+                      style={{
+                        width: "3rem",
+                      }}
                     >
                       Xóa
                     </Button>
-                  </span>
+                  </div>
                 ))}
               </div>
             ) : (
               "Chưa chọn (tối đa 6 con cá)"
             )}
-          </p>
+          </h3>
         </div>
 
         <div id="tank">
           <h1>Hồ:</h1>
-          <p>
+          <h3>
             {selectedTank ? (
-              <div className="tank-selected">
+              <div className="selected">
                 <span>{selectedTank.shape}</span>
                 <Button type="primary" danger onClick={handleRemoveTank}>
                   Xóa
@@ -82,7 +81,7 @@ const SelectedItems = ({
             ) : (
               "Chưa chọn (tối đa 1 hồ)"
             )}
-          </p>
+          </h3>
         </div>
       </Card>
     </div>

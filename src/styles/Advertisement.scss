@@ -1,52 +1,139 @@
-.custom-nav {
-  margin-bottom: 50px;
-}
-
-.custom-title {
-  margin-top: 100px;
-}
-.custom-pagination {
-  margin-top: 16px;
-  align-self: center; /* Căn giữa pagination */
-}
-.layout {
-  .background-ads {
-    background-color: green !important;
+#sec1-ad {
+  background-image: url("../assets/images/ads.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+  .custom-title {
+    margin-top: 2rem;
+    text-align: center;
+    text-shadow: 2px 2px 5px rgb(255, 255, 255);
+    font-family: "Courier New", Courier, monospace;
+    font-size: 3rem;
   }
 }
 
-.ads-list {
+// button phan search va filter
+.custom-search-button {
+  background-color: rgb(0, 0, 0);
+  border-color: rgb(0, 0, 0);
+  color: white;
+  margin-left: 1rem;
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: translateY(-0.3rem);
+  }
+
+  &:hover {
+    background-color: white !important; /* Màu nền khi hover */
+    border-color: rgb(0, 0, 0) !important; /* Màu viền khi hover */
+    color: rgb(0, 0, 0) !important;
+    cursor: pointer;
+  }
+}
+
+#sec2-ad {
   display: flex;
-  flex-wrap: wrap;
-  padding: 50px 200px;
-  gap: 3rem;
-  margin-top: 1vh;
+  justify-content: space-between;
 
-  .advertisement {
-    width: calc(25% - 3rem);
-    background-color: red;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    transition: transform 0.2s ease;
+  .search-filter-post {
+    margin-top: 2rem;
+    background-color: none;
+    width: 20vw;
+    height: 20vw;
+    display: flex;
+    flex-direction: column;
 
-    &:hover {
-      transform: translateY(-20px);
+    .search-bar {
+      text-align: left;
+      margin-left: 1rem;
+    }
+
+    .filters {
+      margin-left: 1vw;
+      justify-content: center;
+      text-align: center;
+      width: 12rem;
+      height: 17rem;
+      border: none;
+      background-color: none !important;
+
+      .button-filter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .button-filter-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .icon {
+        font-size: 1.2rem;
+        color: #000;
+      }
+      .sort {
+        margin-top: 2rem;
+      }
+    }
+    .createAd {
+      border-radius: 12px;
+      box-shadow: 0 0 1rem rgb(120, 116, 116);
+      margin-top: 6rem;
+      margin-left: 2rem;
+      text-align: center;
+      width: 15rem;
+      transition: transform 0.4s ease;
+
+      &:hover {
+        transform: translateY(-1rem);
+      }
     }
   }
 
-  img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-
-  /* Thêm phần này để căn giữa pagination */
-  .pagination {
-    width: 100%;
+  .ads-list {
+    flex: 1;
     display: flex;
-    justify-content: center; /* Căn giữa pagination */
-    margin-top: 30px; /* Khoảng cách giữa quảng cáo và pagination */
+    flex-wrap: wrap;
+    padding: 6rem 0;
+    // 6rem để có chỗ hiện nút view lịch sử xem
+
+    gap: 2rem;
+
+    .advertisement {
+      width: calc(100% / 4 - 2rem);
+      height: 60vh;
+      background-color: white;
+      padding: 10px;
+      box-shadow: 0px 0px 1rem rgb(170, 170, 170);
+      border-radius: 8px;
+      text-align: center;
+      transition: transform 0.4s ease;
+
+      &:hover {
+        transform: translateY(-1rem);
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 50%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .pagination {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
   }
 }
