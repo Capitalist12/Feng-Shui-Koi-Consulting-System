@@ -111,8 +111,6 @@ public class AuthenticationServices {
 
     //Sending the otp to user's email
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
-        if (userRepository.existsByEmail(request.getEmail()))
-            throw new AppException(ErrorCode.EMAIL_EXITST);
         try {
             String otp = generateOTP();
             storeOTP(request.getEmail().trim(), otp);

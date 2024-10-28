@@ -23,7 +23,7 @@ public class AdvertisementController {
                 .build();
     }
 
-    //Get all ads doesnt care about status
+    //Get all ads doesn't care about status
     @GetMapping
     ApiResponse<List<AdvertisementResponse>> getAllAds(){
         return ApiResponse.<List<AdvertisementResponse>>builder()

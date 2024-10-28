@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface AdvertisementRepo extends JpaRepository<Advertisement, String> {
+    //Get Ad by Filter of category, username and element
     @Query("SELECT ad FROM Advertisement ad " +
             "JOIN ad.category c " +
             "JOIN ad.user u " +
@@ -25,28 +26,36 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, String> 
             @Param("username") String username,
             @Param("elementName") String elementName);
 
+    //find ad by id
     boolean existsByAdID(String adID);
 
-    Optional<Advertisement> findByTitle(String title);
+//    Optional<Advertisement> findByTitle(String title);
 
+    //find verified ads
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Verified'")
     List<Advertisement> findAdsVerified();
 
+    //find user's ads
     @Query("SELECT ad FROM Advertisement ad WHERE ad.user.id = :userID")
     List<Advertisement> findAdsOfUser(@Param("userID") String userID);
 
+    //find all pending ads
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Pending'")
     List<Advertisement> findAdsPending();
 
+    //find rejected ads
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected'")
     List<Advertisement> findAdsRejected();
 
+    //Get user's rejected ads
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.user.id = :userID")
     List<Advertisement> findAdsRejectedOfUser(@Param("userID") String userID);
 
+    //Find ads older than 5 minutes
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate < :fiveMinutesAgo")
     List<Advertisement> findRejectedAdvertisementsOlderThan5Mins(@Param("fiveMinutesAgo") LocalDateTime fiveMinutesAgo);
 
+    //Find ads older than 7 days
     @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate < :sevenDaysAgo")
     List<Advertisement> findRejectedAdvertisementsOlderThan7Days(@Param("sevenDaysAgo") LocalDateTime sevenDaysAgo);
 }
