@@ -69,13 +69,13 @@ const Navbar = () => {
       ]
       : [
         {
-          label: <Link to="login">Đăng nhập</Link>,
+          label: <Link to="/login">Đăng nhập</Link>,
           key: 'login',
           disabled: true,
           className: 'login'
         },
         {
-          label: <Link to="signup">Đăng ký</Link>,
+          label: <Link to="/signup">Đăng ký</Link>,
           key: 'register',
           disabled: true,
           className: 'register'
