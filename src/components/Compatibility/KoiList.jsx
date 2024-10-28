@@ -59,7 +59,7 @@ const KoiList = ({
           pagination={false}
           rowClassName={(fish) => (isKoiSelected(fish) ? "selected-row" : "")}
           sticky
-          scroll={{ y: 325 }}
+          scroll={{ y: 360 }}
         />
       </div>
     </div>

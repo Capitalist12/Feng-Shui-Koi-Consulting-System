@@ -32,10 +32,10 @@ const App = () => {
       element: <CompatibilityPage />,
     },
 
-    // {
-    //   path: "pricing",
-    //   element: <PricingPage />,
-    // },
+    {
+      path: "pricing",
+      element: <PricingPage />,
+    },
     {
       path: "blog",
       element: <BlogPage />,

@@ -14,6 +14,7 @@ function UserForm({ visible, onClose, onSubmit, selectedUser, loading }) {
         username: selectedUser.username,
         email: selectedUser.email,
         dateOfBirth: selectedUser.dateOfBirth || "",
+        roleName: selectedUser.roleName || "",
         element: selectedUser.element || "",
         imageLink: selectedUser.imageLink || "",
         planID: selectedUser.planID || "",
@@ -30,7 +31,6 @@ function UserForm({ visible, onClose, onSubmit, selectedUser, loading }) {
 
   const handleFormSubmit = async (values) => {
     try {
-      // Chỉ gửi giá trị deleteStatus
       await onSubmit({ deleteStatus: values.deleteStatus });
       message.success("Chỉnh sửa người dùng thành công");
       onClose();
@@ -81,8 +81,33 @@ function UserForm({ visible, onClose, onSubmit, selectedUser, loading }) {
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item name="deleteStatus" label="Trạng thái xóa">
+            <Form.Item
+              name="deleteStatus"
+              label="Trạng thái xóa"
+              valuePropName="checked"
+            >
               <Switch />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name="roleName" label="Vai trò">
+              <Input disabled />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="noPassword"
+              label="No Password"
+              valuePropName="checked"
+            >
+              <Switch disabled />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name="noDob" label="No Dob" valuePropName="checked">
+              <Switch disabled />
             </Form.Item>
           </Col>
         </Row>

@@ -12,8 +12,7 @@ function UserManagement() {
   const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null); // Thêm biến để lưu người dùng được chọn
-
+  const [selectedUser, setSelectedUser] = useState(null);
   const fetchUsers = async () => {
     try {
       const response = await api.get("users");
@@ -41,7 +40,6 @@ function UserManagement() {
     try {
       setLoading(true);
 
-      // Lấy thông tin cũ từ selectedUser
       const payload = {
         userID: selectedUser.userID,
         username: selectedUser.username,
@@ -53,7 +51,7 @@ function UserManagement() {
         deleteStatus: values.deleteStatus,
       };
 
-      await api.put(`users/${selectedUser.userID}`, payload); // Cập nhật thông tin người dùng
+      await api.put(`users/${selectedUser.userID}`, payload);
 
       toast.success("Chỉnh sửa thông tin thành công");
       fetchUsers();
@@ -62,6 +60,28 @@ function UserManagement() {
       toast.error(err.response?.data || "Chỉnh sửa thông tin thất bại");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (userID, deleteStatus) => {
+    try {
+      const userToUpdate = users.find((user) => user.userID === userID);
+      const payload = {
+        password: userToUpdate.password,
+        email: userToUpdate.email,
+        dateOfBirth: userToUpdate.dateOfBirth,
+        element: userToUpdate.element,
+        imageLink: userToUpdate.imageLink,
+        roleName: userToUpdate.roleName,
+        planID: userToUpdate.planID,
+        deleteStatus: deleteStatus,
+      };
+
+      await api.put(`users/${userID}`, payload);
+      toast.success("Cập nhật trạng thái thành công");
+      fetchUsers();
+    } catch (err) {
+      toast.error(err.response?.data || "Cập nhật trạng thái thất bại");
     }
   };
 
@@ -85,6 +105,7 @@ function UserManagement() {
         users={users}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
+        handleStatusChange={handleStatusChange}
       />
       <UserForm
         visible={showModal}

@@ -13,7 +13,16 @@ function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
       form.setFieldsValue({
         tankId: selectedTank.tankId,
         shape: selectedTank.shape,
-        elementName: selectedTank.elementTank.elementName,
+        elementName: selectedTank.elementTank?.elementName,
+        elementTank: {
+          description: selectedTank.elementTank?.description || "",
+          quantity: selectedTank.elementTank?.quantity || "",
+          direction: selectedTank.elementTank?.direction || "",
+          value: selectedTank.elementTank?.value || "",
+          color: selectedTank.elementTank?.color || "",
+          generation: selectedTank.elementTank?.generation || "",
+          inhibition: selectedTank.elementTank?.inhibition || "",
+        },
       });
       setFileList(
         selectedTank.imageURL ? [{ url: selectedTank.imageURL }] : []
@@ -22,7 +31,7 @@ function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
       form.resetFields();
       setFileList([]);
     }
-  }, [visible, selectedTank]);
+  }, [visible, selectedTank, form]);
 
   const handleFormSubmit = async (values) => {
     onSubmit(values, fileList);
@@ -65,13 +74,55 @@ function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
               <Select
                 options={OPTIONS}
                 onChange={handleElementChange}
-                // defaultValue={selectedTank?.elementName}
                 placeholder="Chọn bản mệnh"
               />
             </Form.Item>
           </Col>
         </Row>
-        <ImageUploader fileList={fileList} setFileList={setFileList} />
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item name={["elementTank", "description"]} label="Mô tả">
+              <Input readOnly />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name={["elementTank", "quantity"]} label="Số lượng">
+              <Input readOnly />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item name={["elementTank", "direction"]} label="Hướng">
+              <Input readOnly />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name={["elementTank", "color"]}
+              label="Màu sắc cá nên nuôi"
+            >
+              <Input readOnly />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item name={["elementTank", "generation"]} label="Tương sinh">
+              <Input readOnly />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name={["elementTank", "inhibition"]} label="Tương khắc">
+              <Input readOnly />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <ImageUploader fileList={fileList} setFileList={setFileList} />
+          </Col>
+        </Row>
       </Form>
     </Modal>
   );

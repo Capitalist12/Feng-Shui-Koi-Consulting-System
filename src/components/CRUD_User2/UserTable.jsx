@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Popconfirm, Table, Avatar, Switch } from "antd";
 
-function UserTable({ users, handleEdit, handleDelete, handleStatusChange }) {
+function UserTable({ users, handleEdit, handleDelete }) {
   const columns = [
     { title: "ID", dataIndex: "userID", key: "userID" },
     { title: "Tên", dataIndex: "username", key: "username" },
@@ -12,17 +12,7 @@ function UserTable({ users, handleEdit, handleDelete, handleStatusChange }) {
       key: "imageLink",
       render: (image) => <Avatar src={image} alt="" />,
     },
-    {
-      title: "deleteStatus",
-      dataIndex: "deleteStatus",
-      key: "deleteStatus",
-      render: (deleteStatus, user) => (
-        <Switch
-          checked={deleteStatus}
-          onChange={(checked) => handleStatusChange(user.userID, checked)}
-        />
-      ),
-    },
+    { title: "Mệnh", dataIndex: "element", key: "element" },
     {
       title: "Action",
       dataIndex: "userID",
