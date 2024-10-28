@@ -10,7 +10,7 @@ const Admin = ({ children }) => {
 
   useEffect(() => {
     if (isAdmin !== "ADMIN") {
-      navigation("/dashboard");
+      navigation("/");
     }
   }, []);
 

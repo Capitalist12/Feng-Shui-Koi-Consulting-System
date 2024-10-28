@@ -25,7 +25,7 @@ const Navbar = () => {
     { label: 'MUA / BÁN', key: 'ad' },
     { label: 'BLOG & TIN TỨC', key: 'blog' },
     { label: 'ĐỘ TƯƠNG HỢP', key: 'compatibility' },
-    ...(role && role === "User"
+    ...(role && role?.toUpperCase() === "USER"
       ? [
         {
           label: (
@@ -38,7 +38,7 @@ const Navbar = () => {
           disabled: true,
         }
       ]
-      : role === "Admin" ?
+      : role?.toUpperCase() === "ADMIN" ?
       [
         {
           label: (
@@ -63,7 +63,7 @@ const Navbar = () => {
           disabled: true,
           style: {
             marginRight: '2em',
-            marginLeft: role !== "User" ? '0.2em' : 'auto'
+            marginLeft: role?.toUpperCase() === "USER" || role?.toUpperCase() === "ADMIN" ? '0.2em' : 'auto'
           }
         },
       ]

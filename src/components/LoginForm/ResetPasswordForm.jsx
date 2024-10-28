@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import OTPForm from "../RegisterForm/OTPForm";
 import { useNavigate } from "react-router-dom";
 
-const ResetPasswordForm = ({ setIsLoading, setCurrentStep, currentStep, verifiedMail, setVerifiedMail, resetPassData, setResetPassData, setVerifiedOTP }) => {
+const ResetPasswordForm = ({setIsForgetPassword, setIsLoading, setCurrentStep, currentStep, verifiedMail, setVerifiedMail, resetPassData, setResetPassData, setVerifiedOTP }) => {
     const navigate = useNavigate();
 
     const handleOnFinish = async (values) => {
@@ -45,9 +45,11 @@ const ResetPasswordForm = ({ setIsLoading, setCurrentStep, currentStep, verified
             setIsLoading(true);
             resetPassData.newPassword = values.password;
             const response = await resetPassword(resetPassData);
+            console.log(response)
             if(response.status === 200) {
                 toast.success("Đổi mật khẩu thành công!");
                 navigate("/login");
+                setIsForgetPassword(false)
             }
         } finally {
             setIsLoading(false);

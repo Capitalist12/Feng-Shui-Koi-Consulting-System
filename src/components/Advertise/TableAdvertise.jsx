@@ -74,7 +74,7 @@ const TableAdvertise = (props) => {
             item.status === 'Pending' && (
               <Space>
                 <Button color="danger" variant="outlined" onClick={() => rejectAd("Rejected", item.adID)}>Từ chối</Button>
-                <Button type="primary">Chấp nhận</Button>
+                <Button type="primary" onClick={() => rejectAd("Verified", item.adID)}>Chấp nhận</Button>
               </Space>
             )
           ]}

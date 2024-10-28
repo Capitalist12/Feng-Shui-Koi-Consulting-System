@@ -247,7 +247,8 @@
                 }
 
                 &:last-child {
-                    background-color: blue;
+                    border-top: 1 solid white;
+                    background-color: var(--background-inner-color);
                     height: 30%;
                     // display: flex;
                     // flex-wrap: wrap;

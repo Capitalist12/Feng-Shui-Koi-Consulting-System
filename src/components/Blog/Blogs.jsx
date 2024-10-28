@@ -35,7 +35,7 @@ const Blogs = () => {
 
     return (
         <>
-            {role === "Admin" &&
+            {role?.toUpperCase() === "ADMIN" &&
                 <Link className="create-post-btn" to='/editor'>
                     <IoIosCreate />
                     <span className="create-post-btn-text">Tạo bài viết</span>

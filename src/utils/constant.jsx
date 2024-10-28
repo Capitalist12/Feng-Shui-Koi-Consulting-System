@@ -51,10 +51,10 @@ const CATEGORY = [
     emoji: <RiAlignItemLeftLine />,
   },
 ];
+
 const OPTIONS = [
   {
     label: "Hỏa",
-    value: "Hỏa",
     value: "Hỏa",
     emoji: <FaFire />,
     desc: "Hỏa",
@@ -63,14 +63,12 @@ const OPTIONS = [
   {
     label: "Thổ",
     value: "Thổ",
-    value: "Thổ",
     emoji: <FaMountainSun />,
     desc: "Thổ",
     color: "#fece47",
   },
   {
     label: "Kim",
-    value: "Kim",
     value: "Kim",
     emoji: <GiMetalBar />,
     desc: "Kim",
@@ -79,14 +77,12 @@ const OPTIONS = [
   {
     label: "Thủy",
     value: "Thủy",
-    value: "Thủy",
     emoji: <IoIosWater />,
     desc: "Thủy",
     color: "#2c6db6",
   },
   {
     label: "Mộc",
-    value: "Mộc",
     value: "Mộc",
     emoji: <FaLeaf />,
     desc: "Mộc",

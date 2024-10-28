@@ -12,22 +12,6 @@ import { verifyEmail } from "../../services/AuthAPIService";
 
 const RegisterForm = ({ setVerifiedMail, setIsVerifiedMail, setIsLoading, setCurrentStep, setRegisterData }) => {
 
-  // Gửi yêu cầu OTP khi nhấn đăng ký lần đầu
-  const handleRequestOtp = async (values) => {
-    try {
-      setLoading(true);
-      await api.post("auth/verify-email", { email: values.email });
-
-      toast.success("OTP đã được gửi đến email của bạn. Vui lòng kiểm tra!");
-      setIsOtpVisible(true); // Hiển thị form nhập OTP
-    } catch (error) {
-      toast.error("Gửi OTP thất bại. Vui lòng thử lại.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Thực hiện đăng ký khi OTP hợp lệ
   const handleRegister = async (values) => {
     setIsLoading(true);
 
@@ -51,13 +35,11 @@ const RegisterForm = ({ setVerifiedMail, setIsVerifiedMail, setIsLoading, setCur
   };
 
   const onFinish = (values) => {
-    if (!isOtpVisible) {
-      handleRequestOtp(values); // Gọi API gửi OTP nếu chưa nhập OTP
-    } else if (values.password !== values.confirmPassword) {
+    if (values.password !== values.confirmPassword) {
       toast.error("Mật khẩu không khớp!");
-    } else {
-      handleRegister(values); // Gọi API đăng ký khi OTP hợp lệ
+      return;
     }
+    handleRegister(values);
   };
 
   return (

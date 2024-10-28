@@ -67,7 +67,8 @@ const LoginPage = () => {
                       },
                     ]}
                   />
-                  <ResetPasswordForm 
+                  <ResetPasswordForm
+                  setIsForgetPassword={setIsForgetPassword}
                   setIsLoading={setIsLoading} 
                   setCurrentStep={setCurrentStep} 
                   currentStep={currentStep} 
