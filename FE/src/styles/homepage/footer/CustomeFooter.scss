@@ -1,0 +1,100 @@
+#footer-section {
+    height: 300px;
+    
+    footer {
+        height: 100%;
+        background-color: #353535;
+        color: white;
+    
+        .footer-social {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            margin-left: 10em;
+    
+            a {
+                text-align: center;
+                margin-bottom: 10px;
+                color: white;
+                font-size: 1.1em;
+                border-radius: 1em;
+                padding: 5px 10px;
+                width: 80px;
+                box-shadow: none;
+                transition: all 0.4s ease;
+            }
+    
+            .social-github {
+                background-color: #0d1117;
+    
+                &:hover {
+                    box-shadow: 0 0 5px white;
+                }
+    
+            }
+    
+            .social-discord {
+                background-color: #5865f2;
+    
+                &:hover {
+                    box-shadow: 0 0 5px white;
+                }
+    
+            }
+        }
+    
+        .footer-contributors {
+    
+            // display: ;
+            .contributors-group {
+                margin-bottom: 15px;
+    
+                .ant-avatar-group {
+                    display: flex;
+                    gap: 0;
+                    transition: all 0.4s ease;
+    
+                    &:hover {
+                        gap: 10px;
+                    }
+                }
+            }
+    
+            .contributors-info-container {
+                display: flex;
+                flex-direction: column;
+                font-size: 1.1em;
+    
+                .contributor-info {
+                    color: white;
+                    margin-bottom: 10px;
+    
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+    
+            }
+    
+            #FE-contributors {
+                margin-left: 20px;
+            }
+        }
+    
+        .footer-help {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20%;
+    
+            a {
+                margin-bottom: 15px;
+                color: white;
+                font-size: 1.1em;
+    
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}

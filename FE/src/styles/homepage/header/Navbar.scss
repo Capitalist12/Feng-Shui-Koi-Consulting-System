@@ -1,0 +1,74 @@
+#navbar-section {
+  height: 60px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+
+  .navbar {
+    background-color: #353535;
+    height: 100%;
+
+    li.ant-menu-overflow-item.ant-menu-item.ant-menu-item-only-child {
+      color: white;
+      display: flex;
+      align-items: center;
+
+            .pricing-btn {
+                color: white !important;
+                background-color: #ffb700;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 30px;
+                border-radius: 5px;
+                padding: 0 7px;
+            }
+
+
+            .admin-btn {
+                color: white !important;
+                background-color: #1677ff;
+                height: 40px;
+                padding: 0 7px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: none;
+                border-radius: 5px;
+            }
+        }
+
+        li.ant-menu-overflow-item.ant-menu-item.ant-menu-item-disabled.ant-menu-item-only-child {
+            &.login {
+                margin-left: auto;
+
+                span.ant-menu-title-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 1em;
+                    color: #ffffff;
+                    text-decoration: none;
+                    background-color: #1677ff;
+                    border-radius: 5px;
+                    padding: 0 8px;
+                    height: 40px;
+
+                }
+            }
+
+            &.register {
+                margin-left: 0.5em;
+                margin-right: 2em;
+
+                span.ant-menu-title-content {
+                    color: white;
+                    text-decoration: underline;
+                }
+            }
+
+        }
+
+    }
+}
+

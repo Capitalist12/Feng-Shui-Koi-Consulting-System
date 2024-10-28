@@ -1,0 +1,153 @@
+@font-face {
+  font-family: "Japan-Wave";
+  /* Name your font family */
+  src: url("../assets/font/Japan\ wave.ttf");
+  /* Locate the .ttf file within your directory*/
+}
+
+body {
+  font-family: "Japan-Wave", sans-serif;
+  /* Use the font family */
+}
+
+.main-title {
+  font-size: 5em;
+  font-weight: bold;
+  position: absolute;
+  top: 40%;
+  left: 0.5em;
+}
+
+#register-form-container {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(0, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 600px;
+  height: 80vh;
+
+  .register-step {
+    width: 400px;
+    transition: all 0.5s ease;
+
+    .ant-steps-item-title {
+      cursor: pointer;
+    }
+  }
+
+  .register-form {
+    background-color: white;
+    width: 100%;
+    padding: 4em 2em 2em 2em;
+    border-radius: 1em;
+
+    .ant-form-item {
+      margin: 5px;
+    }
+
+    .register-btn {
+      margin-bottom: 0.7em;
+      border-radius: 2em;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2em;
+      margin: 0;
+    }
+  }
+
+  .otp-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 5px gray;
+    background-color: white;
+    border-radius: 1em;
+    width: 450px;
+  
+    .ant-form-item-label>label {
+      height: 100%;
+      font-size: 30px;
+    }
+  
+    .input-otp__field {
+      background-color: white;
+    }
+  
+    .ant-input-outlined:focus-within {
+      background-color: rgb(240, 240, 240);
+    }
+  
+    h2 {
+      font-weight: 600;
+      color: black;
+      font-size: 1.8em;
+    }
+  
+    h4 {
+      margin-top: 0;
+      font-weight: 400;
+      font-size: 1.1em;
+      text-align: center;
+    }
+  
+    .mail-link {
+      width: 90%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: end;
+  
+      p {
+        cursor: pointer;
+        color: #1677ff;
+      }
+    }
+  
+    .ant-form-item {
+      &:last-child {
+        width: 90%;
+  
+        button.ant-btn {
+          width: 100%;
+          padding: 0 5px;
+        }
+      }
+    }
+  
+  }
+}
+
+.ripple {
+  width: 10px;
+  height: 10px;
+  background-color: transparent;
+  position: fixed;
+  border-radius: 50%;
+  border: 1px solid #ffffff59;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(15);
+    opacity: 0.05;
+  }
+}
+
+
+video {
+  width: 100vw;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+

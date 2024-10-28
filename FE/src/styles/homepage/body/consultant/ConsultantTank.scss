@@ -1,0 +1,75 @@
+#consultant-tank-title{
+    width: 100%;
+    h1{
+        margin-left: auto;
+        margin-right: 40px;
+        color: #fff;
+
+        @media (min-width: 1300px) {
+            margin-right: 90px;
+        }
+    }
+}
+
+#consultant-tank-container {
+    height: 50vh;
+    width: 100%;
+
+    .image {
+        display: flex;
+        justify-content: center;
+        width: 70%;
+        height: 80%;
+        border-radius: 20px;
+
+        @media (max-width: 1300px) {
+            width: 90%;
+            height: 75%;
+        }
+
+        .ant-image {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+
+            .ant-image-img {
+                background-color: rgba(255, 255, 255, 0.05);
+                object-fit: cover;
+                border: 1px solid rgb(151, 151, 151);
+                border-radius: 10px;
+                width: 100%;
+
+                &:hover {
+                    object-fit: cover;
+                }
+            }
+
+            .ant-image-mask {
+                border-radius: 10px;
+            }
+        }
+    }
+
+    .content {
+        background-color: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        color: white;
+        border-radius: 20px;
+        width: 90%;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+
+        div{
+            display: flex;
+            justify-content: end;
+            margin-right: 30px;
+            margin-top: 20px;
+            font-size: 1.25em;
+
+            label {
+                color: #ccc;
+            }
+        }
+    }
+}

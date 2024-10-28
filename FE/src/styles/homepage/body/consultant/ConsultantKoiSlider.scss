@@ -1,0 +1,189 @@
+#consultant-koi-title{
+    width: 100%;
+    h1{
+        margin-right: auto;
+        margin-left: 40px;
+        color: #fff;
+
+        @media (min-width: 1300px) {
+            margin-left: 40px;
+        }
+    }
+}
+
+#consultant-slider-container {
+    min-height: 70vh;
+
+    #image-info-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .info-container {
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            color: white;
+            border-radius: 20px;
+            width: 90%;
+            height: 95%;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+
+            .content {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                flex: 2 1 66.67%;
+                gap: 15px;
+
+                @media (min-width: 1200px) {
+                    flex: 2 1 80%;
+                }
+
+                h1 {
+                    margin: 20px 0 0 30px;
+                    font-style: 100;
+                    font-size: 2em;
+                    margin-bottom: 0;
+                }
+
+                .text {
+                    margin-bottom: 12px;
+                    font-size: 1.25em;
+                    width: 100%;
+
+                    label {
+                        color: #ccc;
+                        margin: 0 0 20px 30px;
+
+                    }
+
+                    p {
+                        width: 90%;
+                        text-align: justify;
+                        margin: 0 0 0 30px;
+                        padding-right: 50px;
+                    }
+                }
+
+            }
+
+            .image {
+                flex: 2 1 33.33%;
+                display: flex;
+
+                h2 {
+                    font-size: 1.2em;
+                    font-weight: 500;
+                    margin: 0;
+                }
+
+                .ant-image {
+                    opacity: 0;
+                    visibility: hidden;
+                    animation: slideUp 0.5s ease-out forwards;
+                    margin: 10px 0 20px 0;
+                    margin-right: 15px;
+
+                    &:nth-child(2) {
+                        animation-delay: 0s;
+                    }
+
+                    &:nth-child(3) {
+                        animation-delay: 0.2s;
+                    }
+
+                    &:nth-child(4) {
+                        animation-delay: 0.4s;
+                    }
+
+                    &:nth-child(5) {
+                        animation-delay: 0.5s;
+                    }
+
+                    .ant-image-img {
+                        background-color: rgba(255, 255, 255, 0.05);
+                        object-fit: contain;
+                        border: 1px solid rgb(151, 151, 151);
+                        border-radius: 10px;
+                        width: 180px;
+                        height: 130px;
+
+                        &:hover {
+                            object-fit: cover;
+                        }
+                    }
+
+                    .ant-image-mask {
+                        border-radius: 10px;
+                    }
+                }
+
+                @media (min-width: 1200px) {
+                    flex: 2 1 20%;
+                }
+            }
+        }
+
+    }
+}
+
+.toolbar-wrapper {
+    padding: 0px 24px;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 100px;
+}
+
+.toolbar-wrapper .anticon {
+    padding: 12px;
+    cursor: pointer;
+}
+
+.toolbar-wrapper .anticon[disabled] {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
+.toolbar-wrapper .anticon:hover {
+    opacity: 0.3;
+}
+
+.ant-image-preview-switch-left,
+.ant-image-preview-switch-right {
+    background-color: #1f1f1f;
+    font-weight: bold;
+    box-shadow: 0 0 0 white;
+    transition: all 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 0 5px white;
+    }
+}
+
+div.ant-image-preview-footer {
+    background-color: #1f1f1f;
+    opacity: 1;
+    border-radius: 40px;
+
+    .ant-image-preview-progress {
+        margin-bottom: 0;
+        font-size: 1.5em;
+
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+    }
+}
