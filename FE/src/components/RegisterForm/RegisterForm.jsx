@@ -1,45 +1,36 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  LockOutlined,
   MailOutlined,
   UserOutlined,
   CalendarOutlined,
-  CheckCircleOutlined,
 } from "@ant-design/icons";
 import { Button, Form, Input, DatePicker } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import api from "../../config/axiosConfig";
-import moment from "moment";
-// import "../../styles/RegisterPage.scss";
+import "../../styles/RegisterPage.scss";
+import { verifyEmail } from "../../services/AuthAPIService";
 
-const RegisterForm = () => {
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+const RegisterForm = ({ setVerifiedMail, setIsVerifiedMail, setIsLoading, setCurrentStep, setRegisterData }) => {
 
   const handleRegister = async (values) => {
+    setIsLoading(true);
+
     try {
-      const userData = {
-        username: values.username,
-        password: values.password,
-        email: values.email,
-        dateOfBirth: values.dateOfBirth.format("YYYY-MM-DD"),
-      };
-
-      setLoading(true);
-
-      const response = await api.post("auth/signup", userData);
-
-      if (response.status === 201 || response.status === 200) {
-        toast.success("Đăng ký thành công! Vui lòng đăng nhập sau 2s...");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
+      const otpResponse = await verifyEmail(values.email);
+      if (otpResponse.status === 200) {
+        setRegisterData({
+          username: values.username,
+          password: values.password,
+          email: values.email,
+          dateOfBirth: values.dateOfBirth.format("YYYY-MM-DD"),
+        });
+        setCurrentStep(1);
+        setVerifiedMail(values.email);
+        setIsVerifiedMail(true);
       }
-    } catch (error) {
-      toast.error("Đăng ký thất bại. Vui lòng thử lại.");
+
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -54,7 +45,7 @@ const RegisterForm = () => {
   return (
     <Form
       labelCol={{
-        span: 24, // day input xuong hang 2
+        span: 24,
       }}
       className="register-form"
       initialValues={{ remember: true }}
@@ -70,6 +61,7 @@ const RegisterForm = () => {
       >
         <Input prefix={<UserOutlined />} placeholder="Tên đăng nhập" />
       </Form.Item>
+
       <Form.Item
         className="form-item"
         name="email"
@@ -81,34 +73,7 @@ const RegisterForm = () => {
       >
         <Input prefix={<MailOutlined />} placeholder="Email" />
       </Form.Item>
-      <Form.Item
-        className="form-item"
-        name="password"
-        label="Mật khẩu"
-        rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
-      >
-        <Input.Password prefix={<LockOutlined />} placeholder="Mật khẩu" />
-      </Form.Item>
-      <Form.Item
-        label="Xác nhận mật khẩu"
-        name="confirmPassword"
-        rules={[
-          {
-            required: true,
-            message: "Confirm Password is required",
-          },
-          ({ getFieldValue }) => ({
-            validator(rule, value) {
-              if (!value || value === getFieldValue("password")) {
-                return Promise.resolve();
-              }
-              return Promise.reject("Passwords do not match");
-            },
-          }),
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
+
       <Form.Item
         className="form-item"
         name="dateOfBirth"
@@ -121,15 +86,56 @@ const RegisterForm = () => {
           placeholder="Ngày tháng năm sinh"
         />
       </Form.Item>
-      <Form.Item className="link-item">
-        <Link to="/login">Đã có tài khoản? Đăng nhập ngay!</Link>
+
+      <Form.Item
+        name="password"
+        label="Mật khẩu"
+        rules={[
+          {
+            required: true,
+            message: 'Vui lòng nhập mật khẩu!',
+          },
+        ]}
+        hasFeedback
+      >
+        <Input.Password placeholder="Mật khẩu" />
       </Form.Item>
+
+      <Form.Item
+        name="confirmPassword"
+        label="Xác nhận mật khẩu"
+        dependencies={['password']}
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: 'Vui lòng xác nhận mật khẩu!',
+          },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue('password') === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(new Error('Mật khẩu không trùng khớp!'));
+            },
+          }),
+        ]}
+      >
+        <Input.Password placeholder="Xác nhận mật khẩu" />
+      </Form.Item>
+
+      <Form.Item className="link-item">
+        Đã có tài khoản?
+        <Link to="/login"> Đăng nhập ngay!</Link>
+      </Form.Item>
+
       <Form.Item>
-        <Button type="primary" htmlType="submit" block loading={loading}>
+        <Button type="primary" htmlType="submit" block>
           Đăng ký
         </Button>
       </Form.Item>
     </Form>
+
   );
 };
 

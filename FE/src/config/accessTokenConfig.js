@@ -14,7 +14,6 @@ const saveToken = (token, role, expiryTimeInMinute) => {
     localStorage.setItem('accessToken', JSON.stringify(tokenData));
 }
 
-
 const getToken = () => {
     const tokenDataString = localStorage.getItem('accessToken');
     if (!tokenDataString) return null;
@@ -33,4 +32,22 @@ const getToken = () => {
     return tokenData.token;
 };
 
-export {saveToken, getToken};
+const getUserRole = () => {
+    const tokenDataString = localStorage.getItem('accessToken');
+    if (!tokenDataString) return null;
+
+    const tokenData = JSON.parse(tokenDataString);
+    const now = new Date();
+
+    // Kiểm tra nếu token đã hết hạn
+    if (now.getTime() > tokenData.expiry) {
+        localStorage.removeItem('accessToken');
+        const dispatch = useDispatch();
+        dispatch(logout())
+        return null;
+    }
+
+    return tokenData.role;
+};
+
+export {saveToken, getToken, getUserRole};

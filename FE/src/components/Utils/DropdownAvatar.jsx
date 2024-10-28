@@ -2,28 +2,33 @@ import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Divider, Dropdown, Space, theme } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/Slices/userSlice";
+import { getToken } from "../../config/accessTokenConfig";
+import { logoutAuth } from "../../services/AuthAPIService";
 
 const { useToken } = theme;
 
 const DropdownAvatar = (props) => {
-    const { user } = props;
-    const dispatch = useDispatch();
-    const { token } = useToken();
-    const navigate = useNavigate();
+  const { user } = props;
+  const dispatch = useDispatch();
+  const { token } = useToken();
+  const navigate = useNavigate();
 
-    const contentStyle = {
-        backgroundColor: token.colorBgElevated,
-        borderRadius: token.borderRadiusLG,
-        boxShadow: token.boxShadowSecondary,
-    };
-    const menuStyle = {
-        boxShadow: 'none',
-    };
+  const contentStyle = {
+    backgroundColor: token.colorBgElevated,
+    borderRadius: token.borderRadiusLG,
+    boxShadow: token.boxShadowSecondary,
+  };
+  const menuStyle = {
+    boxShadow: "none",
+  };
 
-    const handleLogout = (user) => {
-        dispatch(logout(user));
+    const handleLogout = async () => {
+        const accesstoken = getToken();
+        await logoutAuth({token: accesstoken});
+        localStorage.removeItem('accessToken');
+        dispatch(logout());
         navigate("/");
     };
 
@@ -59,7 +64,7 @@ const DropdownAvatar = (props) => {
                             padding: 8,
                         }}
                     >
-                        <Button type="primary" onClick={() => handleLogout(user)}>Đăng xuất</Button>
+                        <Button type="primary" onClick={() => handleLogout()}>Đăng xuất</Button>
                     </Space>
                 </div>
             )}
@@ -67,7 +72,7 @@ const DropdownAvatar = (props) => {
             <a onClick={(e) => e.preventDefault()}>
                 <Space style={{ color: "black" }}>
                     <Avatar size='default' icon={<UserOutlined />} />
-                    {user?.username}
+                    {user && user}
                 </Space>
             </a>
         </Dropdown>

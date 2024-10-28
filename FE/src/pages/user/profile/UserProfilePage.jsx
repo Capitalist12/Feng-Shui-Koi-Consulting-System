@@ -4,6 +4,7 @@ import '../../../styles/UserProfilePage.scss'
 import { AntDesignOutlined } from "@ant-design/icons";
 import background from '../../../assets/images/user-background.png'
 import { getInfo } from "../../../services/userInfoAPIService";
+import Navbar from "../../../components/Utils/Navbar";
 
 const UserProfilePage = () => {
     const [userInfo, setUserInfo] = useState();
@@ -18,6 +19,8 @@ const UserProfilePage = () => {
 
 
     return (
+        <>
+            <Navbar />
         <Row
             className="profile-container"
         >
@@ -67,6 +70,7 @@ const UserProfilePage = () => {
                 </div>
             </Col>
         </Row >
+        </>
     );
 }
 

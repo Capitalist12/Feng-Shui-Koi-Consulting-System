@@ -21,7 +21,7 @@ const createUser = async (payload) => {
   }
 };
 
-// Cập nhật thông tin người dùng
+
 const updateUser = async (id, payload) => {
   try {
     const response = await axios.put(`users/${id}`, payload);
@@ -31,7 +31,7 @@ const updateUser = async (id, payload) => {
   }
 };
 
-// Xóa người dùng
+
 const deleteUser = async (id) => {
   try {
     const response = await axios.delete(`users/${id}`);
@@ -41,24 +41,15 @@ const deleteUser = async (id) => {
   }
 };
 
-// Lấy tất cả vai trò (Roles)
-const getAllRoles = async () => {
+const fetchUserDetails = async (userID) => {
   try {
-    const response = await axios.get("roles");
+    const response = await axios.get(`users/${userID}`);
     return response;
   } catch (err) {
     toast.error(err.message);
+    throw err; // Ném lại lỗi để xử lý trong phần gọi hàm
   }
 };
 
-// Lấy tất cả các gói (Plans)
-const getAllPlans = async () => {
-  try {
-    const response = await axios.get("plans");
-    return response;
-  } catch (err) {
-    toast.error(err.message);
-  }
-};
 
-export { fetchUsers, createUser, updateUser, deleteUser, getAllRoles, getAllPlans };
+export { fetchUsers, createUser, updateUser, deleteUser,fetchUserDetails};

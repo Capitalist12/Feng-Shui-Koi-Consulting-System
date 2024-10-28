@@ -1,55 +1,50 @@
-// @keyframes highlight {
-//   0% {
-//     background-color: #ff8177; // Màu nền nhẹ
-//   }
-//   30% {
-//     background-color: #ff867a; // Màu nền nhẹ
-//   }
-//   50% {
-//     background-color: #ff8c7f; // Màu nền đậm hơn
-//   }
-//   70% {
-//     background-color: #f99185; // Màu nền đậm hơn
-//   }
-//   90% {
-//     background-color: #ff9a9e; // Trở lại màu nền nhẹ
-//   }
-//   100% {
-//     background-color: #f99185; // Giữ nguyên màu nền sau animation
-//   }
-// }
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
-html {
-  scroll-behavior: smooth; /* Bật hiệu ứng cuộn mượt mà */
+body {
+  overflow-x: hidden; // fix width full
+  width: 100%;
+  scroll-behavior: smooth;
 }
 
 #sec1-comp {
   position: relative;
-  z-index: 1;
-  background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
-  background-size: cover;
   height: 100vh;
   width: 100vw;
+  background-image: url("../assets/images/leo-bayard-eLBa_U2lRD8-unsplash.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: scroll; // Cuộn theo trang
+  background-attachment: scroll;
 
-  background-color: rgba(0, 0, 0, 0); // Bắt đầu trong suốt
-  h2 {
-    margin-top: 25vh;
-    margin-left: 3vw;
-    color: white;
-    text-shadow: 3px 2px 1px rgba(0, 0, 0, 0.7);
+  &::before {
+    content: "";
     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(100deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+    z-index: 1;
+    pointer-events: none;
   }
   .title {
-    margin-top: 10vh;
-    margin-left: 1vw;
+    position: relative;
+    z-index: 2; /* Nội dung trên lớp phủ */
+    margin-top: 2rem;
+    margin-left: 4vw;
     font-size: 7em;
     font-weight: 800;
-    color: #ff6347; /* Màu sắc tiêu đề */
-    position: absolute; /* Để z-index có hiệu lực */
+    color: white;
+    text-shadow: 3px 3px 5px rgb(0, 255, 21);
+    font-family: "Playball";
+    font-optical-sizing: auto;
+    font-style: oblique;
+    z-index: 2;
+
+    h2 {
+      color: rgb(255, 255, 255);
+      text-shadow: 3px 3px 5px rgb(181, 101, 47);
+    }
   }
 
   .infor-data {
@@ -60,7 +55,6 @@ html {
     z-index: 2;
 
     h1 {
-      margin-top: 13vh;
       color: white;
       font-size: 2em;
       text-shadow: 5px 5px 1px rgba(0, 0, 0, 0.7);
@@ -84,9 +78,11 @@ html {
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
         border-radius: 15px;
         border-style: groove;
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
+        transition: transform 0.5s ease;
 
+        &:hover {
+          transform: translateY(-1rem);
+        }
         p {
           color: white;
           text-align: center;
@@ -96,61 +92,43 @@ html {
         }
       }
     }
+
     .scroll-button {
       position: absolute;
-      bottom: 20px; /* Căn chỉnh vị trí nút */
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background-color: rgb(69, 69, 23); /* Màu nền */
-      border: none;
-      border-radius: 50%; /* Hình tròn */
-      width: 5vw;
-      height: 7vh;
+      background-color: rgb(133, 122, 122);
+      border: solid 3px;
+      border-radius: 50%;
+      width: 9rem;
+      height: 5rem;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s; /* Thêm transform vào transition */
+      transition: background-color 0.3s, transform 0.3s;
 
       &:hover {
-        background-color: yellow; /* Màu khi hover */
-        transform: translateX(-50%) scale(1.1); /* Phóng to nhẹ */
+        background-color: rgb(255, 255, 255);
+        transform: translateX(-50%) scale(1.1);
       }
 
       svg {
-        width: 20px; /* Kích thước icon */
-        height: 20px;
-        fill: white; /* Màu icon */
+        width: 2rem;
+        height: 3rem;
+        fill: rgb(0, 0, 0);
       }
     }
   }
-
-  // .background-sec1 {
-  //   background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
-  //   height: 100vh;
-  //   width: 100%;
-  //   background-position: center;
-  //   background-repeat: no-repeat;
-  //   background-size: cover;
-  //   background-attachment: scroll;
-  //   position: fixed;
-  //   top: 0;
-  //   left: 0;
-  //   z-index: 2;
-  //   pointer-events: none;
-  //   opacity: 1; // Đặt giá trị mặc định là 1
-  //   transition: opacity 0.3s ease; // Thêm transition cho mượt mà
-  // }
 }
 
 #sec2-comp {
   position: relative;
-  // padding: 20px;
-  // margin: 20px 0;
-  height: 100vh;
+  // height: 150vh;
   width: 100vw;
-  // background-image: url("../assets/images/pexels-amar-27155968.jpg");
-  background-color: black;
+  // background-image: url("../assets/images/banner.png");
+  background-color: grey;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -164,38 +142,32 @@ html {
   }
 
   .custom-title {
-    text-shadow: 5px 5px 1px red;
+    text-shadow: 5px 5px 1em rgb(0, 0, 0);
   }
 
   .custom-table {
     .ant-table {
-      border: 5px solid #be0000;
+      border: 3px solid #ffffff;
+      width: 50rem;
 
       th {
-        background-color: rgb(69, 69, 23) !important;
+        background-color: rgb(0, 0, 0);
         color: white;
         text-align: center;
         font-size: 1.3em;
       }
 
-      // Áp dụng cho hàng
       tr {
-        // Hiệu ứng hover cho hàng chưa chọn
-        &:hover {
-          animation: highlight 0.3s ease-in-out !important;
-          //   background-color: burlywood; // Màu nền khi hover
-        }
+        text-align: center;
 
-        // Áp dụng cho hàng đã chọn
+        // áp dụng cho hàng đã chọn
         &.selected-row {
-          background-color: burlywood; // Màu nền cho hàng đã chọn
-          animation: none !important; // Tắt animation cho hàng đã chọn
-          transition: background-color 0.3s !important; // Thêm transition cho mượt mà
+          background-color: rgb(155, 155, 155) !important;
+          transition: background-color 1.5s ease;
 
-          // Tăng độ đậm khi hover qua hàng đã chọn
-          //   &:hover {
-          //     background-color: rgba(135, 206, 235, 1); // Đậm hơn khi hover
-          //   }
+          // &:hover {
+          //   background-color: rgb(155, 155, 155) !important;
+          // }
         }
       }
     }
@@ -206,8 +178,5 @@ html {
     margin-top: 5vh;
     align-items: center;
     flex-direction: column;
-
-    .tank-koi-selected {
-    }
   }
 }

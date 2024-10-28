@@ -3,7 +3,7 @@ import React from "react";
 import Navbar from "../../components/Utils/Navbar.jsx";
 import { Outlet } from "react-router-dom";
 import CustomeFooter from "../../components/HomePage/Footer/CustomeFooter.jsx";
-import "../../styles/BlogPage.scss";
+import "../../styles/blog/BlogPage.scss";
 
 const BlogPage = () => {
     return (

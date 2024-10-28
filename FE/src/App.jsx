@@ -8,16 +8,20 @@ import UserProfilePage from "./pages/user/profile/UserProfilePage";
 import TankManagement from "./components/CRUD_Tank/TankManagement";
 import Admin from "./components/AdminRoute/Admin";
 import KoiContainer from "./components/CRUD_KoiFish/KoiContainer";
-import UserManagement from "./components/CRUD_User/UserManagement";
+import UserManagement from "./components/CRUD_User2/UserManagement";
 import CompatibilityPage from "./pages/member/CompatibilityPage";
-import ManageUser from "./components/CRUD_User2/ManageUser";
 import Authenticate from "./components/LoginForm/Authenticate";
 import AdvertisementPage from "./pages/member/AdvertisementPage";
-import PricingPage from "./pages/PricingPage";
+import PricingPage from "./pages/payment/PricingPage";
 import BlogEditorPage from "./pages/blog/BlogEditorPage";
 import BlogPage from "./pages/blog/BlogPage";
 import BlogContent from "./components/Blog/BlogContent";
 import Blogs from "./components/Blog/Blogs";
+import Member from "./components/MemberRoute/Member";
+import ErrorMember from "./pages/error/ErrorMember";
+import Statistic from "./components/Overview/Statistic";
+import AdvertiseManagementContainer from "./components/Advertise/AdvertiseManagementContainer";
+import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -29,9 +33,14 @@ const App = () => {
       path: "compatibility",
       element: <CompatibilityPage />,
     },
+
     {
       path: "pricing",
-      element: <PricingPage />
+      element: <PricingPage />,
+    },
+    {
+      path: "success-subscription",
+      element: <PaymentSuccessPage />
     },
     {
       path: "blog",
@@ -39,13 +48,13 @@ const App = () => {
       children: [
         {
           path: "",
-          element: <Blogs />
+          element: <Blogs />,
         },
         {
           path: ":blogId",
-          element: <BlogContent />
-        }
-      ]
+          element: <BlogContent />,
+        },
+      ],
     },
     {
       path: "editor",
@@ -53,7 +62,7 @@ const App = () => {
         <Admin>
           <BlogEditorPage />
         </Admin>
-      )
+      ),
     },
     {
       path: "ad",
@@ -82,8 +91,8 @@ const App = () => {
       ),
       children: [
         {
-          path: "koi",
-          element: <KoiContainer />,
+          path: "statistic",
+          element: <Statistic />,
         },
         {
           path: "users",
@@ -93,11 +102,23 @@ const App = () => {
           path: "tank",
           element: <TankManagement />,
         },
+        {
+          path: "koi",
+          element: <KoiContainer />,
+        },
+        {
+          path: "advertise",
+          element: <AdvertiseManagementContainer />,
+        },
       ],
     },
     {
       path: "user",
       element: <UserProfilePage />,
+    },
+    {
+      path: "errorMem",
+      element: <ErrorMember />,
     },
   ]);
 

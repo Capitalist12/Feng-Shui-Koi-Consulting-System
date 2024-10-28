@@ -4,7 +4,7 @@ import ReactQuill from 'react-quill';
 import EditorToolbar, { modules, formats } from "../../components/RichTextEditor/EditorToolbar.jsx";
 import { storage } from "../../config/firebase.js";
 import 'react-quill/dist/quill.snow.css';
-import "../../styles/BlogEditorPage.scss";
+import "../../styles/blog/BlogEditorPage.scss";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import Title from "antd/es/typography/Title.js";
 import UploadImage from "../../components/CRUD_KoiFish/CreateKoiForm/UploadImage.jsx";

@@ -46,6 +46,7 @@ const FormModal = (props) => {
           close={handleCancel}
           save={handleOk}
           fetchAPI={props.fetchAPI}
+          setIsLoading={props.setIsLoading}
         />
       </Modal>
     </>

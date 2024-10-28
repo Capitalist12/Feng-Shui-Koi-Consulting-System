@@ -1,357 +1,350 @@
 @font-face {
-    font-family: 'Japan-Wave';
-    src: url('../assets/font/Japan\ wave.ttf');
+  font-family: "Japan-Wave";
+  src: url("../assets/font/Japan\ wave.ttf");
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 
-    section {
-        z-index: 2;
-        position: relative;
+  section {
+    z-index: 2;
+    position: relative;
+  }
+
+  .input-yearOfBirth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    background-color: black;
+    min-height: 100vh;
+
+    h1 {
+      color: white;
+      font-size: 3em;
+      margin-bottom: 2em;
+      z-index: 2;
     }
 
-    
+    .input-form {
+      text-align: center;
+      z-index: 2;
 
-    .input-yearOfBirth-container {
+      label {
+        font-size: 1.5em;
+      }
+    }
+
+    .note {
+      color: white;
+      z-index: 2;
+
+      h2 {
+        margin-top: 4em;
+      }
+
+      a {
+        color: #1677ff;
+        cursor: pointer;
+
+        &:visited {
+          color: #1677ff;
+        }
+      }
+    }
+
+    .background-effect {
+      background-image: url(../../assets/images/background.png);
+      height: 100%;
+      width: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      position: fixed; // Đảm bảo không ảnh hưởng đến chiều cao trang
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .background-effect-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.55));
+      z-index: 1;
+    }
+  }
+
+  #consultant-section {
+    min-height: 100vh;
+    background-color: black;
+    position: relative;
+    overflow: hidden;
+
+    .element-image-container {
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      margin-top: 2em;
+      height: 90%;
+      border-radius: 50%;
+      // -webkit-animation: blink 7.0s linear infinite;
+      // -moz-animation: blink 7.0s linear infinite;
+      // -ms-animation: blink 7.0s linear infinite;
+      // -o-animation: blink 7.0s linear infinite;
+      // animation: blink 7.0s linear infinite;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: -30%;
+        right: -200%;
+        width: 30%;
+        height: 200%;
+        opacity: 0;
+        transform: rotate(30deg);
+        background: rgba(255, 255, 255, 0.13);
+        background: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0.13) 0%,
+          rgba(255, 255, 255, 0.13) 77%,
+          rgba(255, 255, 255, 0.35) 92%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        animation: shine 3s 1s infinite;
+        animation-delay: 10s;
+      }
+
+      @keyframes shine {
+        to {
+          opacity: 1;
+          right: 210%;
+        }
+      }
+
+      @keyframes blink {
+        0% {
+          box-shadow: 0 0 15px red;
+        }
+
+        50% {
+          box-shadow: 0 0 35px tomato;
+        }
+
+        100% {
+          box-shadow: 0 0 15px red;
+        }
+      }
+
+      @-webkit-keyframes blink {
+        0% {
+          box-shadow: 0 0 30px red;
+        }
+
+        50% {
+          box-shadow: 0 0 35px tomato;
+        }
+
+        100% {
+          box-shadow: 0 0 30px red;
+        }
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .consultant-item-row1 {
+      width: 100%;
+      height: 35vh;
+
+      .col {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        color: white;
-        background-color: black;
-        min-height: 100vh;
-
-        h1 {
-            color: white;
-            font-size: 3em;
-            margin-bottom: 2em;
-            z-index: 2;
-        }
-
-        .input-form {
-            text-align: center;
-            z-index: 2;
-
-            label {
-                font-size: 1.5em;
-            }
-        }
-
-        .note {
-            color: white;
-            z-index: 2;
-
-            h2 {
-                margin-top: 4em;
-            }
-
-            a {
-                color: #1677ff;
-                cursor: pointer;
-
-                &:visited {
-                    color: #1677ff;
-                }
-            }
-        }
-
-
-
-        .background-effect {
-            background-image: url(../../assets/images/background.png);
-            height: 100%;
-            width: 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-attachment: fixed;
-            position: fixed; // Đảm bảo không ảnh hưởng đến chiều cao trang
-            top: 0;
-            left: 0;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-
-        .background-effect-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.55));
-            z-index: 1;
-        }
+      }
     }
 
-    #consultant-section {
-        min-height: 100vh;
-        background-color: black;
-        position: relative;
-        overflow: hidden;
-
-        .element-image-container {
-            display: inline-block;
-            position: relative;
-            overflow: hidden;
-            margin-top: 2em;
-            height: 90%;
-            border-radius: 50%;
-            // -webkit-animation: blink 7.0s linear infinite;
-            // -moz-animation: blink 7.0s linear infinite;
-            // -ms-animation: blink 7.0s linear infinite;
-            // -o-animation: blink 7.0s linear infinite;
-            // animation: blink 7.0s linear infinite;
-
-            &::after {
-                content: "";
-                position: absolute;
-                top: -30%;
-                right: -200%;
-                width: 30%;
-                height: 200%;
-                opacity: 0;
-                transform: rotate(30deg);
-                background: rgba(255, 255, 255, 0.13);
-                background: linear-gradient(to right,
-                        rgba(255, 255, 255, 0.13) 0%,
-                        rgba(255, 255, 255, 0.13) 77%,
-                        rgba(255, 255, 255, 0.35) 92%,
-                        rgba(255, 255, 255, 0.00) 100%);
-                animation: shine 3s 1s infinite;
-                animation-delay: 10s;
-            }
-
-            @keyframes shine {
-                to {
-                    opacity: 1;
-                    right: 210%;
-                }
-            }
-
-            @keyframes blink {
-                0% {
-                    box-shadow: 0 0 15px red;
-                }
-
-                50% {
-                    box-shadow: 0 0 35px tomato;
-                }
-
-                100% {
-                    box-shadow: 0 0 15px red;
-                }
-            }
-
-            @-webkit-keyframes blink {
-                0% {
-                    box-shadow: 0 0 30px red;
-                }
-
-                50% {
-                    box-shadow: 0 0 35px tomato;
-                }
-
-                100% {
-                    box-shadow: 0 0 30px red;
-                }
-            }
-
-
-            img {
-                display: block;
-                width: 100%;
-                height: 100%;
-            }
-        }
-
-
-
-        .consultant-item-row1 {
-            width: 100%;
-            height: 35vh;
-
-            .col {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-            }
-        }
-
-
-        .background-effect {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 30vh;
-            z-index: -1;
-            background: linear-gradient(to top, rgba(255, 31, 31, 0.3), rgba(255, 0, 0, 0.1), rgba(255, 0, 0, 0.0));
-        }
-
+    .background-effect {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 30vh;
+      z-index: -1;
+      background: linear-gradient(
+        to top,
+        rgba(255, 31, 31, 0.3),
+        rgba(255, 0, 0, 0.1),
+        rgba(255, 0, 0, 0)
+      );
     }
-
+  }
 }
 
 #spinning-effect-container {
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+
+  #skip-effect {
     z-index: 5;
+    color: #dfdfdf;
+    position: absolute;
+    top: 85vh;
+    left: 50%;
+    cursor: pointer;
+    transform: translateX(-50%);
+    text-shadow: none;
+    transition: all 0.2s ease;
 
-    #skip-effect{
-        z-index: 5;
-        color: #dfdfdf;
-        position: absolute;
-        top: 85vh;
-        left: 50%;
-        cursor: pointer;
-        transform: translateX(-50%);
-        text-shadow: none;
-        transition: all 0.2s ease;
+    &:hover {
+      color: white;
+      text-shadow: 0 0 5px white;
+    }
+  }
 
-        &:hover{
-            color: white;
-            text-shadow: 0 0 5px white;
-        }
+  .element {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: absolute;
+    background-size: contain;
+    opacity: 1;
+    offset-path: circle(250px at center); /* Quỹ đạo hình tròn ban đầu */
+    animation: spin 3s linear infinite, shrinkCircle 1s forwards ease 1.5s,
+      fadeOut 1s forwards ease 2s;
+    animation-composition: accumulate, replace;
+  }
+
+  /* Hiệu ứng xoay */
+  @keyframes spin {
+    0% {
+      offset-distance: 0;
+    }
+    100% {
+      offset-distance: 300%;
+    }
+  }
+
+  /* Hiệu ứng thu nhỏ */
+  @keyframes shrinkCircle {
+    0% {
+      offset-path: circle(250px at center);
+    }
+    100% {
+      offset-path: circle(0px at center);
+    }
+  }
+
+  .element:nth-child(1) {
+    offset-distance: 0%;
+    background-image: url("../../assets/images/elements-image/earth.png");
+  }
+
+  .element:nth-child(2) {
+    offset-distance: 20%;
+    background-image: url("../../assets/images/elements-image/wood.png");
+  }
+
+  .element:nth-child(3) {
+    offset-distance: 40%;
+    background-image: url("../../assets/images/elements-image/metal.png");
+  }
+
+  .element:nth-child(4) {
+    offset-distance: 60%;
+    background-image: url("../../assets/images/elements-image/fire.png");
+  }
+
+  .element:nth-child(5) {
+    offset-distance: 80%;
+    background-image: url("../../assets/images/elements-image/water.png");
+  }
+
+  #spinning-effect {
+    background-image: url("../../assets/images/questionmark.png");
+    background-size: cover;
+    border-radius: 50%;
+    height: 200px;
+    width: 200px;
+    z-index: 5;
+    opacity: 1;
+    animation: flip 3s infinite;
+    transform-style: preserve-3d;
+    /* Bảo toàn hiển thị 3D */
+  }
+
+  @keyframes flip {
+    0% {
+      transform: rotateY(0deg);
+      background-image: url("../../assets/images/elements-image/earth.png");
     }
 
-    .element {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        position: absolute;
-        background-size: contain;
-        opacity: 1;
-        offset-path: circle(250px at center); /* Quỹ đạo hình tròn ban đầu */
-        animation: spin 3s linear infinite, 
-                shrinkCircle 1s forwards ease 1.5s, 
-                fadeOut 1s forwards ease 2s ;
-        animation-composition: accumulate, replace;
-    }
-    
-    /* Hiệu ứng xoay */
-    @keyframes spin {
-        0% {
-            offset-distance: 0;
-        }
-        100% {
-            offset-distance: 300%;
-        }
-    }
-    
-    /* Hiệu ứng thu nhỏ */
-    @keyframes shrinkCircle {
-        0% {
-            offset-path: circle(250px at center);
-        }
-        100% {
-            offset-path: circle(0px at center);
-        }
-    }
-    
-    .element:nth-child(1) {
-        offset-distance: 0%;
-        background-image: url('../../assets/images/elements-image/earth.png');
-    }
-    
-    .element:nth-child(2) {
-        offset-distance: 20%;
-        background-image: url('../../assets/images/elements-image/wood.png');
-    }
-    
-    .element:nth-child(3) {
-        offset-distance: 40%;
-        background-image: url('../../assets/images/elements-image/metal.png');
-    }
-    
-    .element:nth-child(4) {
-        offset-distance: 60%;
-        background-image: url('../../assets/images/elements-image/fire.png');
-    }
-    
-    .element:nth-child(5) {
-        offset-distance: 80%;
-        background-image: url('../../assets/images/elements-image/water.png');
+    10% {
+      transform: rotateY(180deg);
+      background-image: url("../../assets/images/questionmark.png");
     }
 
-
-    #spinning-effect {
-        background-image: url("../../assets/images/questionmark.png");
-        background-size: cover;
-        border-radius: 50%;
-        height: 200px;
-        width: 200px;
-        z-index: 5;
-        opacity: 1;
-        animation: flip 3s infinite;
-        transform-style: preserve-3d;
-        /* Bảo toàn hiển thị 3D */
+    25% {
+      transform: rotateY(360deg);
+      background-image: url("../../assets/images/elements-image/fire.png");
     }
 
-    @keyframes flip {
-        0% {
-            transform: rotateY(0deg);
-            background-image: url('../../assets/images/elements-image/earth.png');
-        }
-
-        10% {
-            transform: rotateY(180deg);
-            background-image: url('../../assets/images/questionmark.png');
-        }
-
-        25% {
-            transform: rotateY(360deg);
-            background-image: url('../../assets/images/elements-image/fire.png');
-        }
-
-        40% {
-            transform: rotateY(540deg);
-            background-image: url('../../assets/images/questionmark.png');
-        }
-
-        50% {
-            transform: rotateY(900deg);
-            background-image: url('../../assets/images/elements-image/water.png');
-        }
-
-        60% {
-            transform: rotateY(1080deg);
-            background-image: url('../../assets/images/questionmark.png');
-        }
-
-        75% {
-            transform: rotateY(1260deg);
-            background-image: url('../../assets/images/elements-image/wood.png');
-        }
-
-        90% {
-            transform: rotateY(1420deg);
-            background-image: url('../../assets/images/questionmark.png');
-        }
-
-        100% {
-            transform: rotateY(1800deg);
-            background-image: url('../../assets/images/elements-image/metal.png');
-        }
+    40% {
+      transform: rotateY(540deg);
+      background-image: url("../../assets/images/questionmark.png");
     }
 
-    @keyframes fadeOut {
-        0%{
-            opacity: 1;
-        }
-        100%{
-            opacity: 0;
-        }
-
+    50% {
+      transform: rotateY(900deg);
+      background-image: url("../../assets/images/elements-image/water.png");
     }
+
+    60% {
+      transform: rotateY(1080deg);
+      background-image: url("../../assets/images/questionmark.png");
+    }
+
+    75% {
+      transform: rotateY(1260deg);
+      background-image: url("../../assets/images/elements-image/wood.png");
+    }
+
+    90% {
+      transform: rotateY(1420deg);
+      background-image: url("../../assets/images/questionmark.png");
+    }
+
+    100% {
+      transform: rotateY(1800deg);
+      background-image: url("../../assets/images/elements-image/metal.png");
+    }
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 }
