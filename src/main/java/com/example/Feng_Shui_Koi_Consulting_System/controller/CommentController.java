@@ -29,7 +29,6 @@ public class CommentController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @GetMapping
     public ApiResponse<List<CommentResponse>> getCommentsByBlogID(
             @PathVariable String blogID) {
