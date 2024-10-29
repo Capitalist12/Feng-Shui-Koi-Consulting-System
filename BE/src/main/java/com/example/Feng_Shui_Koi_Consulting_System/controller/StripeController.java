@@ -1,10 +1,10 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentSuccessfulRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.SessionDTO;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentSuccessfulResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentlResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.StripeService;
-import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -24,12 +24,8 @@ public class StripeController {
 
     @PostMapping("/session/subscription")
     @ResponseBody
-    public ApiResponse<SessionDTO> createSubscriptionSession(@RequestBody SessionDTO model,
-                                                             HttpSession session) {
+    public ApiResponse<SessionDTO> createSubscriptionSession(@RequestBody SessionDTO model) {
         SessionDTO afterPayment = stripeService.createSubscriptionSession(model);
-        session.setAttribute("SessionID", afterPayment.getSessionID());
-        session.setAttribute("UserID", afterPayment.getUserID());
-
         return ApiResponse.<SessionDTO>builder()
                 .result(afterPayment)
                 .build();
@@ -37,11 +33,17 @@ public class StripeController {
 
     @PutMapping("/payment-success")
     @ResponseBody
-    public ApiResponse<PaymentSuccessfulResponse> paymentSuccessfull(HttpSession session) {
-        String sessionID = (String) session.getAttribute("SessionID");
-        String userID = (String) session.getAttribute("UserID");
-        return ApiResponse.<PaymentSuccessfulResponse>builder()
-                .result(stripeService.handleSubscriptionCompletion(userID,sessionID)    )
+    public ApiResponse<PaymentlResponse> paymentSuccessfull(@RequestBody PaymentSuccessfulRequest request) {
+        return ApiResponse.<PaymentlResponse>builder()
+                .result(stripeService.handleSubscriptionCompletion(request.getUserID(),request.getSessionID())    )
+                .build();
+    }
+
+    @PutMapping("/payment-false")
+    @ResponseBody
+    public ApiResponse<PaymentlResponse> paymentSuccessfull() {
+        return ApiResponse.<PaymentlResponse>builder()
+                .result(stripeService.handleSubscriptionFalse()    )
                 .build();
     }
 }

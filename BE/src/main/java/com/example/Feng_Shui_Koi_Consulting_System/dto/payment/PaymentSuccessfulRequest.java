@@ -8,8 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PaymentSuccessfulResponse {
-    boolean checkout;
-    String token;
-    String role;
+public class PaymentSuccessfulRequest {
+    String userID;
+    String sessionID;
 }

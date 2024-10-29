@@ -29,7 +29,6 @@ public class FishController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     ApiResponse<List<KoiFishResponse>> getFish(){
         return ApiResponse.<List<KoiFishResponse>>builder()
@@ -37,7 +36,6 @@ public class FishController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{fishId}")
     ApiResponse<KoiFishResponse> getFishByID(@PathVariable("fishId") String fishId){
         return ApiResponse.<KoiFishResponse>builder()
