@@ -28,7 +28,7 @@ public class TankController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping
     ApiResponse<List<TankResponse>> getTank(){
         return ApiResponse.<List<TankResponse>>builder()
@@ -36,7 +36,7 @@ public class TankController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("/{tankId}")
     ApiResponse<TankResponse> getTank(@PathVariable("tankId") String tankId){
         return ApiResponse.<TankResponse>builder()
