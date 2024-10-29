@@ -4,10 +4,13 @@ import { GiAquarium, GiMetalBar } from "react-icons/gi";
 import { IoIosWater } from "react-icons/io";
 import { GrUserAdmin } from "react-icons/gr";
 import { GrUserExpert } from "react-icons/gr";
+import { MdOutlineSell } from "react-icons/md";
 import { UserOutlined, LineChartOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
 import { IoFishOutline } from "react-icons/io5";
 import { RiAlignItemLeftLine } from "react-icons/ri";
+
+const TOKEN_EXPIRY_TIME_IN_MINUTE = 60;
 
 const KOI_ELEMENT_MAX_COUNT = 3;
 
@@ -48,6 +51,7 @@ const CATEGORY = [
     emoji: <RiAlignItemLeftLine />,
   },
 ];
+
 const OPTIONS = [
   {
     label: "Hỏa",
@@ -142,7 +146,17 @@ const DASHBOARD_ITEMS = [
       </NavLink>
     ),
   },
+  {
+    key: "5",
+    icon: <MdOutlineSell/>,
+    label: (
+      <NavLink to="advertise" className="nav-link">
+        Quản lý bài đăng bán
+      </NavLink>
+    ),
+  },
 ];
+
 const MONTHS = [
   "Tháng 1",
   "Tháng 2",
@@ -158,6 +172,7 @@ const MONTHS = [
   "Tháng 12",
 ];
 
+
 export {
   KOI_ELEMENT_MAX_COUNT,
   USER_ELEMENT_COUNT,
@@ -166,6 +181,7 @@ export {
   WEIGHT_OPTIONS,
   DASHBOARD_ITEMS,
   ROLE_OPTIONS,
+  TOKEN_EXPIRY_TIME_IN_MINUTE,
   CATEGORY,
   MONTHS,
 };

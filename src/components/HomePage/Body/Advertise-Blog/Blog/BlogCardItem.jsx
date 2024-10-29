@@ -1,14 +1,28 @@
+import { Space } from "antd";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { FaCommentAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-const BlogCardItem = () => {
+const BlogCardItem = ({ data }) => {
     return (
         <div className="blog-container">
             <div style={{ height: '75%' }}>
-                <img src="https://firebasestorage.googleapis.com/v0/b/fengshui-koi-consulting-system.appspot.com/o/an%20don.jpg?alt=media&token=56afb25f-41f9-459c-bf60-05b56a40e9a6" />
+                <img src={data.imageURL} />
             </div>
             <div className="blog-title">
-                <NavLink>Tiêu đề trang chia sẽ kinh nghiệm, blog, tư vấn phong thủy cá koi và hồ cá</NavLink>
+                <Link to={`blog/${data.blogID}`}>{data.title}f sf sdfs fsdffs dfsdfsd sdf</Link>
+            </div>
+            <div className="blog-info">
+                <Space >
+                    <span>
+                        <FaCommentAlt />
+                        &nbsp;
+                        {data.comments.length}
+                    </span>
+                    <p>
+                        {data.createdDate}
+                    </p>
+                </Space>
             </div>
         </div>
     )

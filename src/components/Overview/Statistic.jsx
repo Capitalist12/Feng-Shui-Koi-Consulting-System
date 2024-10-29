@@ -87,7 +87,7 @@ const Statistics = () => {
             {error ? (
               <p>{error}</p>
             ) : (
-              <p>{revenue !== null ? `${revenue} VNĐ` : "Đang tải..."}</p>
+              <p>{revenue !== null ? `${revenue } USD` : "Đang tải..."}</p>
             )}
             <div className="range">
               <div className="fill"></div>

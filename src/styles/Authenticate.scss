@@ -1,13 +1,11 @@
 @keyframes slideIn {
     from {
         transform: translate(-150%, -50%);
-        /* Xuất phát từ ngoài màn hình bên trái */
         opacity: 0;
     }
 
     to {
         transform: translate(-50%, -50%);
-        /* Về giữa màn hình */
         opacity: 1;
     }
 }

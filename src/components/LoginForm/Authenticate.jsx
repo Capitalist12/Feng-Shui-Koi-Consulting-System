@@ -15,6 +15,7 @@ import "../../styles/Authenticate.scss";
 import { GoogleURL } from "../../config/googleConfig";
 import { toast } from "react-toastify";
 import { saveToken } from "../../config/accessTokenConfig";
+import { TOKEN_EXPIRY_TIME_IN_MINUTE } from "../../utils/constant";
 
 export default function Authenticate() {
   const navigate = useNavigate();
@@ -26,18 +27,15 @@ export default function Authenticate() {
       const authCodeRegex = /code=([^&]+)/;
       const isMatch = window.location.href.match(authCodeRegex);
 
-      if (isMatch) {
-        const authCode = isMatch[1];
-        const response = await googleLogin(authCode);
+            if (isMatch) {
+                const authCode = isMatch[1];
+                const response = await googleLogin(authCode);
+                // console
 
-        if (response.status === 200 && response.data.code === 1000) {
-          dispatch(login(response?.data?.result?.username));
-          saveToken(
-            response.data.result.token,
-            response.data.result.roleName,
-            60
-          );
-          const info = await getInfo();
+                if (response.status === 200 && response.data.code === 1000) {
+                    dispatch(login(response?.data?.result?.username));
+                    saveToken(response.data.result.token, response.data.result.roleName, TOKEN_EXPIRY_TIME_IN_MINUTE)
+                    const info = await getInfo();
 
           if (info.data.result.noPassword || info.data.result.noDob) {
             setIsShowForm(true);

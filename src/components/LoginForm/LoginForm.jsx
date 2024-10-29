@@ -1,29 +1,35 @@
 import React from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Flex } from "antd";
+import { Button, Form, Input, Flex } from "antd";
 import { FcGoogle } from "react-icons/fc";
 import { loginAuth } from "../../services/AuthAPIService";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/Slices/userSlice.js";
-import { GoogleURL } from "../../config/googleConfig.js";
-import { saveToken } from "../../config/accessTokenConfig.js";
+import { GoogleURL } from '../../config/googleConfig.js';
+import { saveToken } from '../../config/accessTokenConfig.js';
+import { TOKEN_EXPIRY_TIME_IN_MINUTE } from "../../utils/constant.jsx";
 
-const LoginForm = () => {
+const LoginForm = ({setIsForgetPassword, setIsLoading}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onFinish = async (values) => {
-    const { email, password } = values;
-    const response = await loginAuth({ email, password });
-
-    if (response.status === 200 && response.data.code === 1000) {
-      dispatch(login(response.data.result.username));
-      saveToken(response.data.result.token, response.data.result.roleName, 60);
-
-      const role = response.data.result.roleName.toUpperCase();
-
-      role !== "ADMIN" ? navigate("/") : navigate("/dashboard");
+    setIsLoading(true);
+    try{
+      const { email, password } = values;
+      const response = await loginAuth({ email, password });
+  
+      if (response.status === 200 && response.data.code === 1000) {
+        dispatch(login(response.data.result.username));
+        saveToken(response.data.result.token, response.data.result.roleName, TOKEN_EXPIRY_TIME_IN_MINUTE);
+  
+        const role = response.data.result.roleName.toUpperCase();
+  
+        role !== "ADMIN" ? navigate("/") : navigate("/dashboard");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -43,6 +49,7 @@ const LoginForm = () => {
       }}
       onFinish={onFinish}
     >
+      <h3>Đăng nhập</h3>
       <label htmlFor="email">Email</label>
       <Form.Item
         name="email"
@@ -69,10 +76,7 @@ const LoginForm = () => {
       </Form.Item>
       <Form.Item>
         <Flex justify="space-between" align="center">
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Ghi nhớ tôi</Checkbox>
-          </Form.Item>
-          <Link to="">Quên mật khẩu ?</Link>
+          <Link to="" onClick={() => setIsForgetPassword(true)}>Quên mật khẩu ?</Link>
         </Flex>
       </Form.Item>
       <Form.Item>

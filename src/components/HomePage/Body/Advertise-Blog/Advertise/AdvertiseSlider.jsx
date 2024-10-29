@@ -1,50 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AdvertiseCardItem from "./AdvertiseCardItem.jsx";
 
-//slick carousel library
-import Slider from "@ant-design/react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import {
+  PrevButton,
+  NextButton,
+  usePrevNextButtons
+} from './AdvertiseSliderArrowButtons'
+import useEmblaCarousel from 'embla-carousel-react'
+
+import { getVerifiedAdvertise } from "../../../../../services/advertiseAPIService.js";
+import { Badge } from "antd";
+import { compareWithCurrentTime } from "../../../../../utils/helper.js";
 
 export default function AdvertiseSlider() {
-  const settings = {
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: false,
-    autoplaySpeed: 3000,
-    responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            infinite: true,
-            dots: true
-          }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            initialSlide: 1
-          }
-        }
-      ]
-  };
+  const [advertise, setAdvertise] = useState([]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'center' });
+  const {
+    prevBtnDisabled,
+    nextBtnDisabled,
+    onPrevButtonClick,
+    onNextButtonClick
+  } = usePrevNextButtons(emblaApi);
+
+  const fetchAPI = async () => {
+    const response = await getVerifiedAdvertise();
+    response.status === 200 && response.data.code === 1000 ? setAdvertise(response.data.result) : setAdvertise([]);
+  }
+
+  useEffect(() => {
+    fetchAPI();
+  }, []);
 
   return (
-    <div className="slider-container">
-      <Slider {...settings}>
-        <AdvertiseCardItem/>
-        <AdvertiseCardItem/>
-        <AdvertiseCardItem/>
-        <AdvertiseCardItem/>
-        <AdvertiseCardItem/>
-      </Slider>
-    </div>
-  );
+    <section className="embla">
+      <div className="embla__viewport" ref={emblaRef}>
+        <div className="embla__container">
+          {
+            (advertise && advertise.length > 0) &&
+            advertise.map((item, index) => (
+              <div key={index} className="embla__slide">
+                {
+                  compareWithCurrentTime(item.createdDate) ?
+                    <Badge.Ribbon text="Mới nhất" color="red">
+
+                      <AdvertiseCardItem data={item} />
+                    </Badge.Ribbon>
+                    :
+                    <AdvertiseCardItem data={item} />
+                }
+              </div>
+            ))
+          }
+        </div>
+        <div className="embla__controls">
+          <div className="embla__buttons">
+            <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+            <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+          </div>
+        </div>
+      </div>
+
+
+    </section>
+  )
 }

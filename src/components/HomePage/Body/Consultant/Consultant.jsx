@@ -39,27 +39,27 @@ const Consultant = (props) => {
 
     useEffect(() => {
         switch (element) {
-            case 'Fire':
+            case 'Hỏa':
                 setDisplayElementTitle('Hỏa');
                 setDisplayElementImage(FireElementImage);
                 setDisplayElementStyle({ boxShadow: '0 0 25px tomato' })
                 break;
-            case 'Wood':
+            case 'Mộc':
                 setDisplayElementTitle('Mộc');
                 setDisplayElementImage(WoodElementImage);
                 setDisplayElementStyle({ boxShadow: '0 0 25px #69db58' })
                 break;
-            case 'Water':
-                setDisplayElementTitle('Nước');
+            case 'Thủy':
+                setDisplayElementTitle('Thủy');
                 setDisplayElementImage(WaterElementImage);
                 setDisplayElementStyle({ boxShadow: '0 0 25px #699dd5' })
                 break;
-            case 'Metal':
+            case 'Kim':
                 setDisplayElementTitle('Kim');
                 setDisplayElementImage(MetalElementImage);
                 setDisplayElementStyle({ boxShadow: '0 0 25px gray' })
                 break;
-            case 'Earth':
+            case 'Thổ':
                 setDisplayElementTitle('Thổ');
                 setDisplayElementImage(EarthElementImage);
                 setDisplayElementStyle({ boxShadow: '0 0 25px #e8ca49' })

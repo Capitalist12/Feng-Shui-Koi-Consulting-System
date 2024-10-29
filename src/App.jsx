@@ -12,7 +12,7 @@ import UserManagement from "./components/CRUD_User2/UserManagement";
 import CompatibilityPage from "./pages/member/CompatibilityPage";
 import Authenticate from "./components/LoginForm/Authenticate";
 import AdvertisementPage from "./pages/member/AdvertisementPage";
-import PricingPage from "./pages/PricingPage";
+import PricingPage from "./pages/payment/PricingPage";
 import BlogEditorPage from "./pages/blog/BlogEditorPage";
 import BlogPage from "./pages/blog/BlogPage";
 import BlogContent from "./components/Blog/BlogContent";
@@ -20,6 +20,8 @@ import Blogs from "./components/Blog/Blogs";
 import Member from "./components/MemberRoute/Member";
 import ErrorMember from "./pages/error/ErrorMember";
 import Statistic from "./components/Overview/Statistic";
+import AdvertiseManagementContainer from "./components/Advertise/AdvertiseManagementContainer";
+import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -35,6 +37,10 @@ const App = () => {
     {
       path: "pricing",
       element: <PricingPage />,
+    },
+    {
+      path: "success-subscription",
+      element: <PaymentSuccessPage />
     },
     {
       path: "blog",
@@ -99,6 +105,10 @@ const App = () => {
         {
           path: "koi",
           element: <KoiContainer />,
+        },
+        {
+          path: "advertise",
+          element: <AdvertiseManagementContainer />,
         },
       ],
     },
