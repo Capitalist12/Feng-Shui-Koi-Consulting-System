@@ -39,17 +39,16 @@ const UserProfilePage = () => {
     try {
       const { currentPassword, newPassword, ...otherData } = updatedData;
 
-      // Tạo payload để gửi xuống API
       const finalData = {
         ...otherData,
         currentPassword,
-        newPassword: newPassword || currentPassword, // Gửi mật khẩu hiện tại nếu không có mật khẩu mới
+        newPassword: newPassword || currentPassword,
       };
 
       const response = await updateUserInfo(finalData);
 
       if (response.status === 200) {
-        setUserInfo((prev) => ({ ...prev, ...otherData })); // Cập nhật dữ liệu đã chỉnh sửa
+        setUserInfo((prev) => ({ ...prev, ...otherData }));
         message.success("Cập nhật thông tin thành công!");
       } else {
         message.error("Có lỗi xảy ra khi cập nhật thông tin.");
@@ -75,9 +74,7 @@ const UserProfilePage = () => {
               src={userInfo?.imageLink}
             />
             <p>{userInfo?.username}</p>
-            <Button type="primary" onClick={handleEditClick}>
-              Chỉnh sửa thông tin
-            </Button>
+            <Button onClick={handleEditClick}>Chỉnh sửa thông tin</Button>
           </div>
         </Col>
         <Col className="user-info-col" xs={24} sm={24} md={12} lg={12}>
@@ -103,7 +100,6 @@ const UserProfilePage = () => {
         </Col>
       </Row>
 
-      {/* Hiển thị modal chỉnh sửa thông tin */}
       <EditProfile
         visible={isModalVisible}
         onClose={handleModalClose}

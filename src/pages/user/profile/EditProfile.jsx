@@ -32,15 +32,10 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
         confirmPassword: "",
         imageLink: userInfo.imageLink || "",
       });
-
-      // Nếu có ảnh, set fileList để hiển thị
       if (userInfo.imageLink) {
         setFileList([
           {
-            uid: "-1", // Khóa duy nhất cho ảnh
-            name: "avatar.png", // Tên ảnh
-            status: "done", // Trạng thái
-            url: userInfo.imageLink, // Liên kết ảnh
+            url: userInfo.imageLink,
           },
         ]);
       }
@@ -65,7 +60,7 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
           ? values.dateOfBirth.format("YYYY-MM-DD")
           : null,
         currentPassword: values.currentPassword,
-        newPassword: values.newPassword || values.currentPassword,
+        newPassword: values.newPassword || values.currentPassword, // ko set pass mới thì gửi đi pass cũ
         imageLink: values.imageLink,
       };
 
@@ -137,12 +132,25 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
   return (
     <div>
       <Modal
-        title="Chỉnh sửa thông tin"
+        width={"40rem"}
+        title={
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: "2rem",
+              fontWeight: "bold",
+              marginBottom: "2rem",
+            }}
+          >
+            Chỉnh sửa thông tin
+          </div>
+        }
         visible={visible}
         onCancel={onClose}
         onOk={handleSave}
         okText="Lưu"
         cancelText="Hủy"
+        okButtonProps={{ loading: submitting }}
       >
         <Form form={form} layout="vertical">
           <Row gutter={16}>

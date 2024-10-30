@@ -22,6 +22,7 @@ import ErrorMember from "./pages/error/ErrorMember";
 import Statistic from "./components/Overview/Statistic";
 import AdvertiseManagementContainer from "./components/Advertise/AdvertiseManagementContainer";
 import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
+import UserAds from "./pages/user/history/UserAds";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -40,7 +41,7 @@ const App = () => {
     },
     {
       path: "success-subscription",
-      element: <PaymentSuccessPage />
+      element: <PaymentSuccessPage />,
     },
     {
       path: "blog",
@@ -115,6 +116,10 @@ const App = () => {
     {
       path: "user",
       element: <UserProfilePage />,
+    },
+    {
+      path: "/my-ads",
+      element: <UserAds />,
     },
     {
       path: "errorMem",

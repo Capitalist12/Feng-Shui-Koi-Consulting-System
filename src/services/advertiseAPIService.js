@@ -10,6 +10,15 @@ const getAllAdvertises = async () => {
     }
 }
 
+const getUserAds = async () => {
+    try {
+        const response = await axios.get('ad/get-my-ads');
+        return response.data;
+    } catch (err) {
+        toast.error(err.message);
+    }
+}
+
 const getVerifiedAdvertise = async () => {
     try {
         const response = await axios.get('ad/verified');
@@ -46,4 +55,4 @@ const updateAdvertiseStatus = async (payload) => {
     }
 }
 
-export { getAllAdvertises, getVerifiedAdvertise, getPendingAdvertises, getRejectedAdvertise, updateAdvertiseStatus };
+export { getAllAdvertises, getVerifiedAdvertise, getPendingAdvertises, getRejectedAdvertise, updateAdvertiseStatus, getUserAds };

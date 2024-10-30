@@ -1,128 +1,131 @@
 .profile-container {
+  height: 100vh;
+  color: white;
+  position: relative;
+
+  .background {
     height: 100vh;
-    color: white;
+    width: 100%;
+    z-index: 0;
+    position: absolute;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+  }
 
-    .background {
-        height: 100vh;
+  .user-avatar-col {
+    position: relative;
+
+    @media (max-width: 767px) {
+      height: 30vh;
+    }
+
+    .user-avatar {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translate(0, -50%);
+      background-color: rgba(255, 255, 255, 0.1);
+      width: 75%;
+      height: 70%;
+      display: flex;
+      gap: 1.5em;
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+      border-right: 1px solid lightgray;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+
+      p {
+        font-size: 1.8em;
+        font-weight: bold;
+      }
+
+      div {
         width: 100%;
-        z-index: 0;
         position: absolute;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: cover;
+        bottom: 1em;
+        text-align: center;
+        color: #969696;
+      }
+
+      @media (min-width: 992px) {
+        width: 70%;
+      }
+
+      @media (min-width: 1200px) {
+        width: 40%;
+      }
+    }
+  }
+
+  .user-info-col {
+    position: relative;
+
+    @media (max-width: 767px) {
+      height: 70vh;
     }
 
+    .user-info {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translate(0, -50%);
+      background-color: rgba(255, 255, 255, 0.1);
+      width: 85%;
+      height: 70%;
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      font-size: 1.3em;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
 
-    .user-avatar-col {
-        position: relative;
+      h2 {
+        position: absolute;
+        top: 10px;
+        margin-left: 1em;
+        font-size: 1.5em;
+      }
 
-        @media (max-width: 767px) {
-            height: 30vh;
+      div {
+        display: flex;
+        align-items: center;
+        margin-left: 1.5em;
+        padding-right: 1.5em;
+
+        span {
+          width: 100px;
+          font-weight: bold;
         }
 
-        .user-avatar {
-            position: absolute;
-            top: 50%;
-            right: 0;
-            transform: translate(0, -50%);
-            background-color: rgba(255, 255, 255, 0.1);
-            width: 75%;
-            height: 70%;
-            display: flex;
-            gap: 1.5em;
-            border-top-left-radius: 20px;
-            border-bottom-left-radius: 20px;
-            border-right: 1px solid lightgray;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-
-            p {
-                font-size: 1.8em;
-            }
-
-            div {
-                width: 100%;
-                position: absolute;
-                bottom: 1em;
-                text-align: center;
-                color: #969696;
-            }
-
-            @media (min-width: 992px) {
-                width: 70%;
-            }
-
-            @media (min-width: 1200px) {
-                width: 40%;
-            }
+        p {
+          margin-left: 10px;
         }
+
+        @media (max-width: 900px) {
+          flex-direction: column;
+          align-items: start;
+
+          p {
+            margin-left: 0;
+          }
+        }
+      }
+
+      @media (min-width: 992px) {
+        width: 80%;
+      }
+
+      @media (min-width: 1200px) {
+        width: 55%;
+      }
     }
-
-    .user-info-col {
-        position: relative;
-
-        @media (max-width: 767px) {
-            height: 70vh;
-        }
-
-        .user-info {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translate(0, -50%);
-            background-color: rgba(255, 255, 255, 0.1);
-            width: 85%;
-            height: 70%;
-            border-top-right-radius: 20px;
-            border-bottom-right-radius: 20px;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            font-size: 1.3em;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-
-            h2 {
-                position: absolute;
-                top: 10px;
-                margin-left: 1em;
-            }
-
-            div {
-                display: flex;
-                align-items: center;
-                margin-left: 1.5em;
-                padding-right: 1.5em;
-
-                span {
-                    width: 100px;
-                }
-
-                p {
-                    margin-left: 10px;
-                }
-
-                @media (max-width: 900px) {
-                    flex-direction: column;
-                    align-items: start;
-
-                    p {
-                        margin-left: 0;
-                    }
-                }
-            }
-
-            @media (min-width: 992px) {
-                width: 80%;
-            }
-
-            @media (min-width: 1200px) {
-                width: 55%;
-            }
-        }
-    }
+  }
 }
