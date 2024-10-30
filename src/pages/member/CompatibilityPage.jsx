@@ -52,19 +52,11 @@ function CompatibilityPage() {
 
   const fetchTankData = async () => {
     try {
-      const response = await fetchTank(); // Gọi API lấy dữ liệu hồ
-      console.log("Tank API Response:", response); // Kiểm tra phản hồi từ API
+      const response = await fetchTank();
 
-      // Kiểm tra xem có thuộc tính result hay không
-      if (Array.isArray(response.data.result)) {
-        const data = response.data.result; // Lấy danh sách các hồ
-        setTankCount(data.length); // Đếm số lượng hồ
-        setTankData(data); // Lưu dữ liệu vào state
-      } else {
-        throw new Error(
-          "Result is not an array: " + JSON.stringify(response.data)
-        );
-      }
+      const data = response.data.result;
+      setTankCount(data.length);
+      setTankData(data);
     } catch (error) {
       message.error("Error fetching tank data: " + error.message);
     }

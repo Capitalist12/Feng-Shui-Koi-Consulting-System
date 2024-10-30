@@ -29,7 +29,7 @@ const deleteTank = async (id) => {
         const response = await api.delete(`tank/${id}`);  
         return response;  
     } catch (err) {  
-        toast.error(err.message); // Ném lỗi ra component
+        toast.error(err.message); 
     }  
 }  
 

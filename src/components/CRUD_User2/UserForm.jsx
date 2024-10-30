@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Input, Modal, Row, message, Switch } from "antd";
-import { useForm } from "antd/es/form/Form";
 import ImageUploader from "./ImageUploader.jsx";
+import { useForm } from "antd/lib/form/Form.js";
 
 function UserForm({ visible, onClose, onSubmit, selectedUser, loading }) {
-  const [form] = useForm();
+  const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
