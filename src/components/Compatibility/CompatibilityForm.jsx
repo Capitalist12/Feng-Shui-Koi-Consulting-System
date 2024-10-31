@@ -1,3 +1,4 @@
+import React from "react";
 import { Button, Select, Row, Col, Card } from "antd";
 import { OPTIONS } from "../../utils/constant";
 import "../../styles/CompatibilityForm.scss";
