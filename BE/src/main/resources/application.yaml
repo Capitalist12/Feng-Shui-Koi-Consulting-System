@@ -15,9 +15,9 @@ springdoc:
 
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB13"
-    username: root
-    password: 123456
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USER}
+    password: ${DATASOURCE_PASSWORD}
 
   application:
     name: sendemail
@@ -39,6 +39,9 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
+
+frontend:
+  url: ${FRONTEND_URL}
 
 
 outbound:

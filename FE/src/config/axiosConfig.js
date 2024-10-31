@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getToken } from "./accessTokenConfig";
 
-const baseUrl = "http://localhost:8080";
+const baseUrl = import.meta.env.VITE_API_URL;
 
 const apiconfig = {
   baseUrl: baseUrl,
