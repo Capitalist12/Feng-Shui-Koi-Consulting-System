@@ -9,8 +9,6 @@ lerna-debug.log*
 
 node_modules
 assets/video/*
-dist
-dist-ssr
 *.local
 
 # Editor directories and files
