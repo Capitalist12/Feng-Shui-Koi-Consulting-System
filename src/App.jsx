@@ -14,7 +14,6 @@ import CompatibilityPage from "./pages/member/CompatibilityPage";
 import Authenticate from "./components/LoginForm/Authenticate";
 import AdvertisementPage from "./pages/member/AdvertisementPage";
 import PricingPage from "./pages/payment/PricingPage";
-import BlogEditorPage from "./pages/blog/BlogEditorPage";
 import BlogPage from "./pages/blog/BlogPage";
 import BlogContent from "./components/Blog/BlogContent";
 import Blogs from "./components/Blog/Blogs";
@@ -57,14 +56,6 @@ const App = () => {
           element: <BlogContent />,
         },
       ],
-    },
-    {
-      path: "editor",
-      element: (
-        <Admin>
-          <BlogEditorPage />
-        </Admin>
-      ),
     },
     {
       path: "ad",
