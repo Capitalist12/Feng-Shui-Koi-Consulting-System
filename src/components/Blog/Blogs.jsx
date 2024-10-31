@@ -84,53 +84,62 @@ const Blogs = () => {
                     </Col>
                 </Row>
                 <Row className="blogs-col-row">
-                    <Col span={24}>
-                        {/* <BlogsCarousel/> */}
+                    <Col span={24} className="blogs-col-row-container">
+                        {blogs && blogs.length > 5
+                            &&
+                            blogs
+                                .filter((item) => !randomBlogs.some((randomBlog) => randomBlog.blogID === item.blogID))
+                                .map((filteredBlog) => (
+                                    <div className="blog-item" key={filteredBlog.blogID}>
+                                        <img src={filteredBlog.imageURL} />
+                                        <div className="blog-info">
+                                            <Link to={filteredBlog.blogID}>
+                                                {filteredBlog.title}
+                                            </Link>
+
+                                            <p>
+                                                {filteredBlog.createdDate}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                        }
+                        <div className="blog-item">
+                            <img src={imageTest} />
+                            <Link to="">
+                                Link test
+                            </Link>
+                            <p>
+                                20-10-2004
+                            </p>
+                        </div>
+                        <div className="blog-item">
+                            <img src={imageTest} />
+                            <Link to="">
+                                Link test
+                            </Link>
+                            <p>
+                                20-10-2004
+                            </p>
+                        </div>
+                        <div className="blog-item">
+                            <img src={imageTest} />
+                            <Link to="">
+                                Link test
+                            </Link>
+                            <p>
+                                20-10-2004
+                            </p>
+                        </div>
                         {/* <div className="blog-item">
-                        <img src={imageTest} />
-                        <Link to="">
-                            Link test
-                        </Link>
-                        <p>
-                            20-10-2004
-                        </p>
-                    </div>
-                    <div className="blog-item">
-                        <img src={imageTest} />
-                        <Link to="">
-                            Link test
-                        </Link>
-                        <p>
-                            20-10-2004
-                        </p>
-                    </div>
-                    <div className="blog-item">
-                        <img src={imageTest} />
-                        <Link to="">
-                            Link test
-                        </Link>
-                        <p>
-                            20-10-2004
-                        </p>
-                    </div>
-                    <div className="blog-item">
-                        <img src={imageTest} />
-                        <Link to="">
-                            Link test
-                        </Link>
-                        <p>
-                            20-10-2004
-                        </p>
-                    </div>
-                    <div className="blog-item">
-                        <img src={imageTest} />
-                        <Link to="">
-                            Link test
-                        </Link>
-                        <p>
-                            20-10-2004
-                        </p>
-                    </div> */}
+                            <img src={imageTest} />
+                            <Link to="">
+                                Link test
+                            </Link>
+                            <p>
+                                20-10-2004
+                            </p>
+                        </div> */}
                     </Col>
                 </Row>
             </Col>

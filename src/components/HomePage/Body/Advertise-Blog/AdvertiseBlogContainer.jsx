@@ -5,6 +5,7 @@ import AdvertiseSlider from "./Advertise/AdvertiseSlider";
 import BlogCardItem from "./Blog/BlogCardItem";
 import "../../../../styles/homepage/body/advertise-blog/AdvertiseBlogContainer.scss";
 import { getAllBlogs } from "../../../../services/blogAPIService";
+import { height, width } from "@mui/system";
 
 const AdvertiseBlogContainer = () => {
 
@@ -43,7 +44,7 @@ const AdvertiseBlogContainer = () => {
                             height: '100%',
                             display: 'flex',
                             flexDirection: 'column',
-                            justifyContent: 'center',
+                            justifyContent: 'space-around',
                             alignItems: 'center'
                         }}
                     >

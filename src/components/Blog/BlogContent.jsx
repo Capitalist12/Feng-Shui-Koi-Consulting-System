@@ -8,6 +8,7 @@ import { IoMdShareAlt } from "react-icons/io";
 import { handleScroll } from "../../utils/helper";
 import { FaCommentAlt, FaCopy, FaMoon } from "react-icons/fa";
 import { IoSunny } from "react-icons/io5";
+import BackToTopBtn from "../Utils/BackToTopBtn";
 
 const BlogContent = () => {
     const [blogInfo, setBlogInfo] = useState("");
@@ -65,6 +66,7 @@ const BlogContent = () => {
     }, [blogInfo])
 
     return (
+        <>
         <Col className={isDarkMode ? "dark-mode blog-content-col" : "light-mode blog-content-col"}>
             <Col xl={3} className="action-container">
                 <div className="action-buttons">
@@ -137,6 +139,8 @@ const BlogContent = () => {
                 </div>
             </Modal>
         </Col>
+        <BackToTopBtn />
+        </>
     );
 };
 
