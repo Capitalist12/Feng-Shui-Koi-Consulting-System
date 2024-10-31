@@ -1,6 +1,6 @@
 import { Button, Card, Typography } from "antd";
 import "../../../src/styles/SelectedItems.scss";
-
+import React from "react";
 const { Title } = Typography;
 
 const SelectedItems = ({

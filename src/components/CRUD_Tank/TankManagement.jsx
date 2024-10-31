@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import TankTable from "./TankTable";
 import TankForm from "./TankForm";
 import uploadFile from "../../utils/file";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const { Title } = Typography;

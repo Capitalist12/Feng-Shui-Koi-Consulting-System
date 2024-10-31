@@ -2,7 +2,7 @@ import loginVideo from "../../assets/video/Login-video.mp4";
 import "../../styles/RegisterPage.scss";
 import "../../javaScript/LoginPageScript.js";
 import RegisterForm from "../../components/RegisterForm/RegisterForm.jsx";
-import { useState } from "react";
+import React, { useState } from "react";
 import { CircleLoading } from "../../components/Utils/Loading.jsx";
 import OTPForm from "../../components/RegisterForm/OTPForm.jsx";
 import { Steps } from "antd";
@@ -25,7 +25,7 @@ const RegisterPage = () => {
       setIsVerifiedMail(!isVerifiedMail);
       setDisabledStep(false);
     }
-  }
+  };
 
   const handleFinish = async (values) => {
     // if (!values.otp || values.otp.includes(undefined) || values.otp.includes(""))
@@ -37,7 +37,7 @@ const RegisterPage = () => {
     //   ]);
 
     if (values.otp && values.otp.length === 6) {
-      const otp = values.otp.join('');
+      const otp = values.otp.join("");
 
       if (!registerData) {
         setIsVerifiedMail(false);
@@ -51,7 +51,7 @@ const RegisterPage = () => {
         const response = await signup(registerData);
         if (response.status === 200) {
           toast.success("Xác thực thành công!");
-          navigate('/login');
+          navigate("/login");
         }
       } finally {
         setIsLoading(false);
@@ -79,31 +79,29 @@ const RegisterPage = () => {
             onChange={onChange}
             items={[
               {
-                title: 'Đăng ký thông tin',
+                title: "Đăng ký thông tin",
               },
               {
-                title: 'Xác thực email',
-                disabled: disabledStep
+                title: "Xác thực email",
+                disabled: disabledStep,
               },
             ]}
           />
-          {
-            isVerifiedMail
-              ?
-              <OTPForm
-                verifiedMail={verifiedMail}
-                handleFinish={handleFinish}
-                setIsLoading={setIsLoading}
-              />
-              :
-              <RegisterForm
-                setRegisterData={setRegisterData}
-                setVerifiedMail={setVerifiedMail}
-                setIsVerifiedMail={setIsVerifiedMail}
-                setIsLoading={setIsLoading}
-                setCurrentStep={setCurrentStep}
-              />
-          }
+          {isVerifiedMail ? (
+            <OTPForm
+              verifiedMail={verifiedMail}
+              handleFinish={handleFinish}
+              setIsLoading={setIsLoading}
+            />
+          ) : (
+            <RegisterForm
+              setRegisterData={setRegisterData}
+              setVerifiedMail={setVerifiedMail}
+              setIsVerifiedMail={setIsVerifiedMail}
+              setIsLoading={setIsLoading}
+              setCurrentStep={setCurrentStep}
+            />
+          )}
         </div>
       </div>
     </>

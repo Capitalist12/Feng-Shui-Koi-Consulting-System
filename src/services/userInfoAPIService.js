@@ -31,5 +31,13 @@ const updatePassword = async (newPassword) => {
         toast.error(err.message);
     }
 }
+const updateUserInfo = async (userInfo) => {
+    try {
+        const response = await axios.put('users/update-info', userInfo);
+        return response;
+    } catch (err) {
+        toast.error(err.message);
+    }
+}
 
-export {getInfo, updateDob, updatePassword};
+export { getInfo, updateDob, updatePassword, updateUserInfo };

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Form, Input, Spin } from "antd";
 import Title from "antd/es/typography/Title";
@@ -27,15 +27,19 @@ export default function Authenticate() {
       const authCodeRegex = /code=([^&]+)/;
       const isMatch = window.location.href.match(authCodeRegex);
 
-            if (isMatch) {
-                const authCode = isMatch[1];
-                const response = await googleLogin(authCode);
-                // console
+      if (isMatch) {
+        const authCode = isMatch[1];
+        const response = await googleLogin(authCode);
+        // console
 
-                if (response.status === 200 && response.data.code === 1000) {
-                    dispatch(login(response?.data?.result?.username));
-                    saveToken(response.data.result.token, response.data.result.roleName, TOKEN_EXPIRY_TIME_IN_MINUTE)
-                    const info = await getInfo();
+        if (response.status === 200 && response.data.code === 1000) {
+          dispatch(login(response?.data?.result?.username));
+          saveToken(
+            response.data.result.token,
+            response.data.result.roleName,
+            TOKEN_EXPIRY_TIME_IN_MINUTE
+          );
+          const info = await getInfo();
 
           if (info.data.result.noPassword || info.data.result.noDob) {
             setIsShowForm(true);
