@@ -5,6 +5,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.*;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AdvertisementService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class AdvertisementController {
     AdvertisementService advertisementService;
 
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PostMapping
     ApiResponse<AdvertisementResponse> createAd(@RequestBody AdvertisementCreationRequest request){
         return ApiResponse.<AdvertisementResponse>builder()
@@ -23,6 +25,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get all ads doesn't care about status
     @GetMapping
     ApiResponse<List<AdvertisementResponse>> getAllAds(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -30,6 +33,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get ad by ad ID
     @GetMapping("/{adID}")
     ApiResponse<List<AdvertisementResponse>> getAdByID(@PathVariable String adID){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -37,6 +41,15 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get member's ads
+    @GetMapping("/get-my-ads")
+    ApiResponse<List<AdvertisementResponse>> getAdsOfUser(){
+        return  ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getAdByUser())
+                .build();
+    }
+
+    //Get Verified ads
     @GetMapping("/verified")
     ApiResponse<List<AdvertisementResponse>> getAds(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -44,6 +57,8 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get pending ads
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/pending")
     ApiResponse<List<AdvertisementResponse>> getAdsPending(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -51,13 +66,24 @@ public class AdvertisementController {
                 .build();
     }
 
-    @GetMapping("/rejected")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/rejected-all")
     ApiResponse<List<AdvertisementResponse>> getAdsRejected(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
                 .result(advertisementService.getListAdvertisementsRejected())
                 .build();
     }
 
+    //Get member's rejectedAds
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @GetMapping("/rejected")
+    ApiResponse<List<AdvertisementResponse>> getAdsRejectedOfUser(){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getListAdvertisementsRejectedOfUser())
+                .build();
+    }
+
+    //Find ads by filter
     @PostMapping("/filter")
     ApiResponse<List<AdvertisementResponse>> getAdByFilter(@RequestBody FindAdByFilterRequest request){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -68,6 +94,8 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Update Ad Status
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/updateAdStatus")
     ApiResponse<AdvertisementResponse> updateAdStatus(@RequestBody VerifyAdRequest request){
         return ApiResponse.<AdvertisementResponse>builder()
@@ -75,7 +103,7 @@ public class AdvertisementController {
                 .build();
     }
 
-
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PutMapping("/{adID}")
     ApiResponse<AdvertisementResponse> updateAd(@PathVariable String adID, @RequestBody AdvertisementUpdateRequest request){
         return ApiResponse.<AdvertisementResponse>builder()
@@ -83,6 +111,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @DeleteMapping("/{adID}")
     String deleteAd(@PathVariable String adID){
         advertisementService.deleteAdvertisement(adID);

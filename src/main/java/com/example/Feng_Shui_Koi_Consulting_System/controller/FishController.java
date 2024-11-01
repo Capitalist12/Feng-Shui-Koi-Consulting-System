@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +20,9 @@ import java.util.List;
 @RequestMapping("/fish")
 public class FishController {
 
-     FishService fishService;
+    FishService fishService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ApiResponse<KoiFishResponse> createFish(@Valid @RequestBody FishCreationRequest request){
         return ApiResponse.<KoiFishResponse>builder()
@@ -42,6 +44,7 @@ public class FishController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{fishId}")
     ApiResponse<KoiFishResponse> updateFish(@PathVariable String fishId , @Valid @RequestBody FishUpdateRequest request){
         return ApiResponse.<KoiFishResponse>builder()
@@ -49,6 +52,7 @@ public class FishController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{fishId}")
     String deleteFish(@PathVariable String fishId){
         fishService.deleteFish(fishId);

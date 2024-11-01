@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ public class DashBoardController {
 
     DashBoardService dashBoardService;
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/revenue/monthly")
     public ApiResponse<Map<String, Double>> getRevenueByMonth() {
         return ApiResponse.<Map<String, Double>>builder()
@@ -29,6 +30,7 @@ public class DashBoardController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/dashboard")
     public ApiResponse<Map<String, Object>> getUserDashBoard() {
         return ApiResponse.<Map<String, Object>>builder()
