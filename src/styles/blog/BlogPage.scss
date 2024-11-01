@@ -71,6 +71,7 @@
                                 box-sizing: border-box;
                                 background-color: #353535;
                                 position: relative;
+                                max-height: 600px;
 
                                 img {
                                     object-fit: cover;
@@ -252,10 +253,8 @@
                     // background-color: var(--background-inner-color);
                     min-height: fit-content;
 
-                    // box-sizing: border-box;
                     .blogs-col-row-container {
                         padding: 20px 10px;
-                        border: 1px solid red;
                         display: flex;
                         gap: 20px;
                         flex-wrap: wrap;
@@ -266,7 +265,7 @@
                             display: flex;
                             // height: 200px;
                             // background-color: red;
-                            border: 1px solid #1a73e8;
+                            max-height: 160px;
                             flex: 1 1 30%;
                             // box-sizing: border-box;
 

@@ -8,8 +8,8 @@ const Admin = ({ children }) => {
   const isAdmin = JSON.parse(localData)?.role?.toUpperCase();
 
   useEffect(() => {
-    if (isAdmin === "ADMIN") {
-      navigation("/dashboard");
+    if (isAdmin !== "ADMIN") {
+      navigation("/");
     }
   }, []);
 
