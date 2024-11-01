@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface AdvertisementMapper {
+
     @Mapping(source = "element", target = "element", qualifiedByName = "mapToElement")
     @Mapping(target = "category", source = "categoryName", qualifiedByName = "mapToCategory")
     @Mapping(target = "imagesAd", ignore = true)

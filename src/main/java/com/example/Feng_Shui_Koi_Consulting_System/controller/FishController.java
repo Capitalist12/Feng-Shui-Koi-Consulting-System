@@ -5,6 +5,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.fish.FishCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.fish.FishUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.fish.KoiFishResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.FishService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,7 +22,7 @@ public class FishController {
      FishService fishService;
 
     @PostMapping
-    ApiResponse<KoiFishResponse> createFish(@RequestBody FishCreationRequest request){
+    ApiResponse<KoiFishResponse> createFish(@Valid @RequestBody FishCreationRequest request){
         return ApiResponse.<KoiFishResponse>builder()
                 .result(fishService.createFish(request))
                 .build();
@@ -42,7 +43,7 @@ public class FishController {
     }
 
     @PutMapping("/{fishId}")
-    ApiResponse<KoiFishResponse> updateFish(@PathVariable String fishId , @RequestBody FishUpdateRequest request){
+    ApiResponse<KoiFishResponse> updateFish(@PathVariable String fishId , @Valid @RequestBody FishUpdateRequest request){
         return ApiResponse.<KoiFishResponse>builder()
                 .result(fishService.updateFish(fishId, request))
                 .build();

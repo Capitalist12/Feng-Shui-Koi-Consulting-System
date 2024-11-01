@@ -43,7 +43,16 @@ public enum ErrorCode {
     INVALID_REQUEST(1033, "Invalid request", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_MATCH(1034, "Please enter your current password correctly", HttpStatus.BAD_REQUEST),
     CHATGPT_API_ERROR(1035, "Connection error to ChatGPT", HttpStatus.BAD_GATEWAY),
-    UNABLE_TO_GENERATE_UNIQUE_ID(1006,"User ID existed", HttpStatus.BAD_REQUEST);
+    UNABLE_TO_GENERATE_UNIQUE_ID(1036,"User ID existed", HttpStatus.BAD_REQUEST),
+    UNKNOWN_COLORS(1037, "Unknow Element", HttpStatus.NOT_FOUND),
+    TANK_INVALID(1038, "Tank invalid", HttpStatus.BAD_REQUEST),
+    ELEMENT_INVALID(1039, "Element invalid", HttpStatus.BAD_REQUEST),
+    NAME_INVALID(1040, "The name must not contain special characters or numbers and cannot be empty", HttpStatus.BAD_REQUEST),
+    KOI_INVALID(1041, "Koi invalid", HttpStatus.BAD_REQUEST);
+
+
+
+
 
 
 

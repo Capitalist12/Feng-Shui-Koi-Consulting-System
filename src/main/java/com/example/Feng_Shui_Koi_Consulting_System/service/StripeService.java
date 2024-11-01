@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentSuccessfulRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.SessionDTO;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentlResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
@@ -150,14 +151,14 @@ public class StripeService {
         return null;
     }
 
-    public PaymentlResponse handleSubscriptionCompletion(String userID, String sessionID) {
+    public PaymentlResponse handleSubscriptionCompletion(PaymentSuccessfulRequest request) {
         try {
-            if(sessionID == null) throw new AppException(ErrorCode.SESSION_ID_NULL);
-            Session fetchedSession = Session.retrieve(sessionID);
+            if(request.getSessionID() == null) throw new AppException(ErrorCode.SESSION_ID_NULL);
+            Session fetchedSession = Session.retrieve(request.getSessionID());
             String subscriptionId = fetchedSession.getSubscription();
             cancelSubscription(subscriptionId);
 
-            User user = userRepository.findById(userID)
+            User user = userRepository.findById(request.getUserID())
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
             user.setRoleName(String.valueOf(Roles.MEMBER));
             userRepository.save(user);

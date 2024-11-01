@@ -33,7 +33,7 @@ public class CompatibilityService {
     public String elementFromColor(String color) {
         return elementRepo.findByColor(color)
                 .map(Element::getElementName)
-                .orElse("Unknow Element");
+                .orElseThrow(() -> new AppException(ErrorCode.UNKNOWN_COLORS));
     }
 
     public String elementFromShape(String shape) {
