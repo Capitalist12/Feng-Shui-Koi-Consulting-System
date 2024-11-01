@@ -48,7 +48,8 @@ public enum ErrorCode {
     TANK_INVALID(1038, "Tank invalid", HttpStatus.BAD_REQUEST),
     ELEMENT_INVALID(1039, "Element invalid", HttpStatus.BAD_REQUEST),
     NAME_INVALID(1040, "The name must not contain special characters or numbers and cannot be empty", HttpStatus.BAD_REQUEST),
-    KOI_INVALID(1041, "Koi invalid", HttpStatus.BAD_REQUEST);
+    KOI_INVALID(1041, "Koi invalid", HttpStatus.BAD_REQUEST),
+    SUBSCRIPTION_EXIST(1041, "Your subscription is still valid, please renew after it has expired", HttpStatus.BAD_REQUEST);
 
 
 

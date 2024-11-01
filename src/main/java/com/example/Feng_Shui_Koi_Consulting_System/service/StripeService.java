@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @Service
@@ -50,6 +51,7 @@ public class StripeService {
     private SubscriptionRepo subscriptionRepo;
     @Autowired
     private TransactionRepo transactionRepo;
+
 
 
     @PostConstruct
@@ -79,10 +81,25 @@ public class StripeService {
 
     }
 
+    public boolean checkUserSubcription() {
+        AtomicBoolean valid = new AtomicBoolean(true);
+        User user = getUserLogin();
+         subscriptionRepo.findByUser_UserID(user.getUserID())
+                 .ifPresent(subscriptions -> {
+                     boolean isActive = authenticationServices.checkSubscription(subscriptions
+                             .getSubscriptionID());
+                     if(isActive) {
+                         valid.set(false);
+                     }
+                 });
+        return valid.get();
+    }
+
     public SessionDTO createSubscriptionSession(SessionDTO request) {
         try {
 
             User user = getUserLogin();
+            if(!checkUserSubcription()) throw new AppException(ErrorCode.SUBSCRIPTION_EXIST);
             Customer customer = findOrCreateCustomer(user.getEmail(),user.getUsername());
             String clientURL = "http://localhost:8080";
 
