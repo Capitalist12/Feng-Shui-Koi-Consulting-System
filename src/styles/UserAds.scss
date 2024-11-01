@@ -1,0 +1,60 @@
+.user-ads {
+  .title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .ads-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .ad-item {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      width: 80%;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+      .ad-title {
+        font-size: 18px;
+        color: #333;
+      }
+
+      .ad-description {
+        font-size: 14px;
+        color: #666;
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    button {
+      margin: 0 5px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+
+      &.active {
+        background-color: #0056b3;
+      }
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+}

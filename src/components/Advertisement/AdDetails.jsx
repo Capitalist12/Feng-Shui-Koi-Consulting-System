@@ -5,14 +5,12 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 const AdDetail = ({ ad, visible, onClose }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
-  // Hàm để chuyển sang ảnh trước
   const handlePrevious = () => {
     setCurrentImage((prevIndex) =>
       prevIndex === 0 ? ad.imagesAd.length - 1 : prevIndex - 1
     );
   };
 
-  // Hàm để chuyển sang ảnh tiếp theo
   const handleNext = () => {
     setCurrentImage((prevIndex) =>
       prevIndex === ad.imagesAd.length - 1 ? 0 : prevIndex + 1

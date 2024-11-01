@@ -14,7 +14,7 @@ const DropdownAvatar = (props) => {
   const dispatch = useDispatch();
   const { token } = useToken();
   const navigate = useNavigate();
-
+  // console.log(user);
   const contentStyle = {
     backgroundColor: token.colorBgElevated,
     borderRadius: token.borderRadiusLG,
@@ -72,8 +72,16 @@ const DropdownAvatar = (props) => {
     >
       <a onClick={(e) => e.preventDefault()}>
         <Space style={{ color: "black" }}>
-          <Avatar size="default" icon={<UserOutlined />} />
-          {user && user}
+          <Avatar
+            size="default"
+            icon={
+              user && user.imageLink ? (
+                <img src={user.imageLink} />
+              ) : (
+                <UserOutlined />
+              )
+            }
+          />
         </Space>
       </a>
     </Dropdown>

@@ -240,10 +240,10 @@ function AdvertisementPage({ currentUser }) {
               <CreateAdForm onSubmit={handleAdSubmit} loading={loading} />
             </Modal>
 
-            <div>
+            {/* <div>
               <ViewUserAdsButton />
               {/* Các thành phần khác của trang */}
-            </div>
+            {/* </div> */}
           </div>
         </div>
 

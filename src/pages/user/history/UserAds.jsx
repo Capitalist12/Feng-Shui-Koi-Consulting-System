@@ -1,67 +1,188 @@
 import React, { useEffect, useState } from "react";
-import { message } from "antd";
-import { getUserAds } from "../../../services/advertiseAPIService"; // Đường dẫn đến file chứa hàm getUserAds
+import { Link } from "react-router-dom";
+import AdDetails from "../../../components/Advertisement/AdDetails"; // Nhập component hiển thị chi tiết bài viết
+import "../../../styles/UserAds.scss"; // Nhập file SCSS
+import api from "../../../config/axiosConfig";
+import AdDetail from "../../../components/Advertisement/AdDetails";
+import { Layout, Pagination } from "antd";
+import SearchBar from "../../../components/Advertisement/SearchBar";
+import Title from "antd/es/typography/Title";
+import Navbar from "../../../components/Utils/Navbar";
+import { useForm } from "antd/lib/form/Form";
 
 const UserAds = () => {
+  const form = useForm();
   const [ads, setAds] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [adsE, setAdsE] = useState([]);
+  const [displayAds, setDisplayAds] = useState([]);
+  const [sortValue, setSortValue] = useState("Sắp xếp theo:...");
+  const [selectedAd, setSelectedAd] = useState(null);
+  const [isShowDetails, setIsShowDetails] = useState(false);
+  const [isCreateAd, setIsCreateAd] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const adsPerPage = 8;
+
+  const fetchAds = async () => {
+    try {
+      const response = await api.get("/ad/verified");
+
+      setAds(response.data.result);
+      setAdsE(response.data.result); // set cho Embla
+      setDisplayAds(response.data.result);
+      setSortValue("Sắp xếp theo:...");
+    } catch (e) {
+      console.log("Error fetching ads: ", e);
+    }
+  };
 
   useEffect(() => {
-    const fetchAds = async () => {
-      try {
-        const response = await getUserAds(); // Gọi hàm getUserAds
-        if (Array.isArray(response.result) && response.result.length > 0) {
-          setAds(response.result); // Lưu dữ liệu bài đăng vào state
-        } else {
-          message.error("Không tìm thấy bài đăng nào.");
-        }
-      } catch (error) {
-        message.error("Có lỗi xảy ra khi kết nối với máy chủ.");
-      } finally {
-        setLoading(false); // Kết thúc trạng thái loading
-      }
-    };
-
     fetchAds();
   }, []);
 
+  const handleSearch = async (keyword) => {
+    // format input
+    if (!keyword || keyword.trim() === "") {
+      await fetchAds(); // hien all ads
+      return;
+    }
+    const lowerCaseKeyword = keyword.toLowerCase();
+    const filteredAds = ads.filter(
+      (ad) =>
+        ad.title.toLowerCase().includes(lowerCaseKeyword) ||
+        ad.element.toLowerCase().includes(lowerCaseKeyword) ||
+        ad.price.toString().includes(keyword)
+    );
+    setDisplayAds(filteredAds);
+    setSortValue("Sắp xếp theo:...");
+  };
+
+  const sortPriceAsc = () => {
+    const sortedAds = [...displayAds].sort((a, b) => a.price - b.price);
+    setDisplayAds(sortedAds);
+  };
+
+  const sortPriceDes = () => {
+    const sortedAds = [...displayAds].sort((a, b) => b.price - a.price);
+    setDisplayAds(sortedAds);
+  };
+
+  const handleCategoryFilter = async (categoryName) => {
+    const filteredAds = ads.filter(
+      (ad) => ad.category.categoryName === categoryName
+    );
+    setDisplayAds(filteredAds);
+    setCurrentPage(1);
+    setSortValue("Sắp xếp theo:...");
+  };
+
+  const truncateDescription = (description, maxLength) => {
+    if (description.length > maxLength) {
+      return description.slice(0, maxLength) + "...";
+    }
+    return description;
+  };
+
+  const indexOfLastAd = currentPage * adsPerPage;
+  const indexOfFirstAd = indexOfLastAd - adsPerPage;
+  const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd);
+
+  const showAdDetail = (ad) => {
+    setSelectedAd(ad);
+    setIsShowDetails(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsShowDetails(false);
+    setSelectedAd(null);
+  };
+
+  const handleAdSubmit = async (values) => {
+    setLoading(true);
+    try {
+      await api.post("/ad", {
+        title: values.title,
+        description: values.description,
+        price: values.price,
+        element: values.element,
+        categoryName: values.categoryName,
+        imagesURL: values.imagesURL || [],
+      });
+
+      console.log("Submitted values:", values);
+      setIsCreateAd(false);
+      await fetchAds();
+      form.resetFields();
+    } catch (error) {
+      console.log("Lỗi khi gửi quảng cáo:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>
-      {loading ? (
-        <p>Đang tải...</p>
-      ) : (
-        <div>
-          {ads.length > 0 ? (
-            ads.map((ad) => (
-              <div key={ad.adID} className="ad-card">
-                <h3>{ad.title}</h3>
-                <p>{ad.description.replace(/\n/g, "<br/>")}</p>{" "}
-                {/* Thay thế \n bằng <br/> để hiển thị đúng định dạng */}
-                <p>Giá: {ad.price.toLocaleString()} VND</p>{" "}
-                {/* Hiển thị giá với định dạng tiền tệ */}
-                <p>Loại: {ad.element}</p>
-                <p>Danh mục: {ad.category.categoryName}</p>
-                <p>Trạng thái: {ad.status}</p>
-                <p>
-                  Ngày tạo: {new Date(ad.createdDate).toLocaleString()}
-                </p>{" "}
-                {/* Chuyển đổi định dạng ngày */}
-                {ad.imagesAd.map((image) => (
-                  <img
-                    key={image.adImageId}
-                    src={image.imageURL}
-                    alt={ad.title}
-                    style={{ width: "100px", margin: "5px" }}
-                  />
-                ))}
-              </div>
-            ))
-          ) : (
-            <p>Không có bài đăng nào.</p>
-          )}
+    <Layout>
+      <Navbar />
+      <section id="sec1-ad">
+        <Title level={1} className="custom-title">
+          SHOP VỚI NHỮNG MẶT HÀNG VỀ CÁ KOI PHONG THỦY
+          <h2>Thuận mua vừa bán - Không mua cũng được</h2>
+        </Title>
+      </section>
+
+      <section id="sec2-ad">
+        <div className="search-filter-post">
+          <div className="search-bar">
+            <SearchBar onSearch={handleSearch} />
+          </div>
         </div>
+
+        <div className="ads-list">
+          {currentAds.map((ad) => (
+            <div
+              key={ad.adID}
+              className="advertisement"
+              onClick={() => showAdDetail(ad)}
+            >
+              <h2>Mệnh: {ad.element}</h2>
+              <h3>{ad.title}</h3>
+              <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
+              {ad.imagesAd.length > 1 && (
+                <span style={{ fontStyle: "italic" }}>
+                  +{ad.imagesAd.length - 1} hình ảnh
+                </span>
+              )}
+              <h2 style={{ color: "green" }}>
+                Giá: {ad.price.toLocaleString()} VNĐ
+              </h2>
+              <p>Thông tin: {truncateDescription(ad.description, 50)}</p>{" "}
+              {/* <p className="ad-user">Người đăng: {ad.user}</p> */}
+              <p style={{ fontStyle: "italic", marginTop: "1rem" }}>
+                Danh mục: {ad.category.categoryName}
+              </p>
+              {/* <Button onClick={() => setEditingAd(ad)}>Sửa</Button> */}
+            </div>
+          ))}
+          <div className="pagination">
+            <Pagination
+              current={currentPage}
+              total={displayAds.length}
+              pageSize={adsPerPage}
+              onChange={(page) => setCurrentPage(page)}
+              style={{ textAlign: "center", marginTop: "3rem" }}
+            />
+          </div>
+        </div>
+      </section>
+      {/* modal khi đã chọn quảng cáo */}
+      {selectedAd && (
+        <AdDetail
+          ad={selectedAd}
+          visible={isShowDetails}
+          onClose={handleCloseModal}
+        />
       )}
-    </div>
+    </Layout>
   );
 };
 
