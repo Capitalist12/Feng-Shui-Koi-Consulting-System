@@ -287,7 +287,7 @@ const InputForm = (props) => {
           },
         ]}
       >
-        <UploadImage MAX_COUNT={5} uploadType={"picture-card"}/>
+        <UploadImage data={[]} MAX_COUNT={5} uploadType={"picture-card"}/>
       </Form.Item>
 
       <Form.Item style={{ textAlign: "right" }}>

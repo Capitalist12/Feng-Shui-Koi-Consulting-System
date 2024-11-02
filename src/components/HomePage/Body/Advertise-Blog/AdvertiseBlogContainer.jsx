@@ -5,7 +5,6 @@ import AdvertiseSlider from "./Advertise/AdvertiseSlider";
 import BlogCardItem from "./Blog/BlogCardItem";
 import "../../../../styles/homepage/body/advertise-blog/AdvertiseBlogContainer.scss";
 import { getAllBlogs } from "../../../../services/blogAPIService";
-import { height, width } from "@mui/system";
 
 const AdvertiseBlogContainer = () => {
 
@@ -63,7 +62,7 @@ const AdvertiseBlogContainer = () => {
                                 }}
                             >
                                 <p>Xem thêm nhiều bài đăng mua bán về cá koi, vật phẩm trang trí hồ cá theo phong thủy tại mục &nbsp;</p>
-                                <Link to="" style={{ color: 'white', textDecoration: 'underline' }}>MUA/BÁN</Link>
+                                <Link to="/ad" style={{ color: 'white', textDecoration: 'underline' }}>MUA/BÁN</Link>
                             </div>
                         </Row>
                     </Row>

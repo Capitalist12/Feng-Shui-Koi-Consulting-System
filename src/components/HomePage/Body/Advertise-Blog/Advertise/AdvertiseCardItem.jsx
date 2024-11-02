@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Tag, Tooltip } from 'antd';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import TestImage from "../../../../../assets/images/amduong.png"
 import { OPTIONS } from '../../../../../utils/constant';
 import { timeDifference } from '../../../../../utils/helper';
@@ -15,7 +15,7 @@ const AdvertiseCardItem = ({ data }) => (
         cover={<img alt="example" style={{ height: '300px', objectFit: 'cover' }} src={data.imagesAd[0]?.imageURL || TestImage} />}
     >
         <Meta
-            title={<NavLink>{data.title}</NavLink>}
+            title={<Link to={`/ad`}>{data.title}</Link>}
             description={<h3 style={{ margin: 0, color: 'red' }}>{data.price} VNĐ</h3>}
         />
         <p>

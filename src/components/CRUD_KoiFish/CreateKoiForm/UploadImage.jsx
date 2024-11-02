@@ -14,9 +14,11 @@ const getBase64 = (file) =>
     };
   });
 
-const UploadImage = ({ value = [], onChange, MAX_COUNT, uploadType }) => {
+const UploadImage = ({ data, setKoiImage, onChange, MAX_COUNT, uploadType }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
+  const [image, setImage] = useState(data);
+
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -28,6 +30,8 @@ const UploadImage = ({ value = [], onChange, MAX_COUNT, uploadType }) => {
 
   const handleChange = ({ fileList: newFileList }) => {
     // console.log(">>> check list: ", newFileList)
+    setImage(newFileList);
+    setKoiImage && setKoiImage(newFileList);
     onChange?.(newFileList.filter((file) => file.size <= MAX_SIZE)); // Use `onChange` to update form state
   };
 
@@ -74,14 +78,14 @@ const UploadImage = ({ value = [], onChange, MAX_COUNT, uploadType }) => {
         // action="https://66e7ed93b17821a9d9da9375.mockapi.io/koi"
         beforeUpload={handleImageSize}
         listType={uploadType}
-        fileList={value} // Bind to form's `value`
+        fileList={image}
         onPreview={handlePreview}
         onChange={handleChange}
         maxCount={MAX_COUNT}
         multiple
         accept="image/png, image/jpeg"
       >
-        {value.length >= MAX_COUNT ? null : uploadButton}
+        {image.length >= MAX_COUNT ? null : uploadButton}
       </Upload>
 
       {previewImage && (
@@ -98,8 +102,8 @@ const UploadImage = ({ value = [], onChange, MAX_COUNT, uploadType }) => {
           src={previewImage}
         />
       )}
-      <span style={{ color: value.length === MAX_COUNT ? "red" : "black" }}>
-        {value.length} / {MAX_COUNT}
+      <span style={{ color: image.length === MAX_COUNT ? "red" : "black" }}>
+        {image.length} / {MAX_COUNT}
       </span>
     </>
   );

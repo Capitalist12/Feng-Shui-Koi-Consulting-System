@@ -73,6 +73,16 @@
                                 position: relative;
                                 max-height: 600px;
 
+                                .blog-tag {
+                                    position: absolute;
+                                    top: 0;
+                                    right: 0;
+                                    background-color: #f5222d;
+                                    padding: 5px 20px;
+                                    border-bottom-left-radius: 20px;
+                                    color: white;
+                                }
+
                                 img {
                                     object-fit: cover;
                                     width: 100%;
@@ -200,7 +210,6 @@
                                 box-sizing: border-box;
 
                                 .blogs-col-row-col-row {
-
                                     width: 45%;
                                     height: 50%;
 
@@ -263,9 +272,9 @@
 
                         .blog-item {
                             display: flex;
-                            // height: 200px;
-                            // background-color: red;
                             max-height: 160px;
+                            // max-height: 500px;
+                            // background-color: red;
                             flex: 1 1 30%;
                             // box-sizing: border-box;
 
@@ -275,14 +284,32 @@
                                 object-fit: cover;
                             }
 
-                            .blog-info{
+                            .blog-info {
                                 display: flex;
                                 flex-direction: column;
                                 justify-content: space-between;
+                                width: 100%;
 
-                                p{
-                                    text-align: end;
-                                    color: rgb(168, 168, 168); 
+                                p {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: end;
+                                    color: rgb(168, 168, 168);
+                                }
+                            }
+
+                            &:nth-child(3n + 1):last-child {
+                                border-top: 1px solid #808080;
+                                min-height: 350px;
+                                width: 100%;
+
+                                img {
+                                    width: 60%;
+                                    max-width: 750px;
+                                }
+
+                                .blog-info {
+                                    font-size: 1.4em;
                                 }
                             }
                         }
@@ -441,15 +468,42 @@
                         gap: 15px;
 
                         .ant-card {
-                            width: 90%;
+                            width: 95%;
+                            height: 100%;
+                            max-width: 600px;
                             min-width: none;
                             display: flex;
+                            margin: auto;
 
                             .ant-card-cover {
+                                width: 50%;
+                                height: 100%;
+
                                 img {
                                     border-radius: 8px 0 0 8px;
                                     height: 100%;
                                     width: 100%;
+                                    object-fit: cover;
+                                }
+                            }
+
+                            .ant-card-body {
+                                width: 50%;
+                                height: 100%;
+
+                                p {
+                                    width: 100%;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    line-clamp: 2;
+                                }
+
+                                .advertise-createdDate {
+                                    position: absolute;
+                                    bottom: 5px;
+                                    right: 10px;
+                                    margin-top: auto;
+                                    font-style: italic;
                                 }
                             }
 

@@ -16,12 +16,19 @@ import Title from 'antd/es/typography/Title';
 //scss
 import "../../styles/homepage/HomePage.scss";
 import { handleScroll } from '../../utils/helper.js';
+import QuickLoginForm from '../../components/HomePage/Body/InputDOB/QuickLoginForm.jsx';
+import { CircleLoading } from '../../components/Utils/Loading.jsx';
 
 const HomePage = () => {
     const [consultantElementData, setConsultantElementData] = useState(null);
     const [isRotate, setIsRotate] = useState(false);
     const [isSpinning, setIsSpinning] = useState(false);
     const [isShowConsultant, setIsShowConsultant] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    
+    const [isLoggedin, setIsLoggedin] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     let rotateTimeout;
     let spinningTimeout;
 
@@ -86,6 +93,7 @@ const HomePage = () => {
 
     return (
         <div>
+            {isLoading && <CircleLoading/>}
             {(isRotate || isSpinning) &&
                 (<div id='spinning-effect-container'>
                     {isRotate &&
@@ -116,6 +124,8 @@ const HomePage = () => {
                 </div>)
             }
 
+            {isLoggedin && <QuickLoginForm setIsLoading={setIsLoading} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} setIsLoggedin={setIsLoggedin}/>}
+
             <HomePageBanner />
 
             <Navbar />
@@ -124,7 +134,7 @@ const HomePage = () => {
                 <div ref={containerRef} className='input-yearOfBirth-container'>
                     <h1>TRA CỨU PHONG THỦY CÁ KOI VÀ HỒ CÁ</h1>
                     <div className='input-form'>
-                        <InputDOBForm setdata={setConsultantElementData} />
+                        <InputDOBForm setIsModalOpen={setIsModalOpen} setShowForm={setIsLoggedin} setdata={setConsultantElementData} />
                     </div>
                     <div className='note'>
                         <h2>

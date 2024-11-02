@@ -14,6 +14,8 @@ import { FaMoon } from "react-icons/fa";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
 import Navbar from "../../components/Utils/Navbar.jsx";
+import MyRichTextEditor from "../../components/RichTextEditor/EditorToolbar.jsx";
+import Tiptap from "../../components/RichTextEditor/EditorToolbar.jsx";
 
 const BlogEditorPage = () => {
     const [value, setValue] = useState("");
@@ -69,7 +71,7 @@ const BlogEditorPage = () => {
 
     return (
         <section id="blog-editor-section">
-            <Navbar/>
+            <Navbar />
             <Row className="container">
                 <Col className="editor" span={12}>
                     <Title level={2}>Chỉnh sửa</Title>
@@ -101,7 +103,7 @@ const BlogEditorPage = () => {
                                 },
                             ]}
                         >
-                            <UploadImage MAX_COUNT={1} uploadType={"picture"} />
+                            <UploadImage data={[]} MAX_COUNT={1} uploadType={"picture"} />
                         </Form.Item>
                         <div style={{ width: '100%', height: 500 }}>
                             <div ref={quillRef} />
@@ -131,6 +133,7 @@ const BlogEditorPage = () => {
                     </div>
                 </Col>
             </Row>
+            <Tiptap />
         </section>
     );
 };

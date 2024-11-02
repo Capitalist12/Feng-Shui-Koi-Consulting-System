@@ -1,20 +1,19 @@
-// import React from "react";
+// src/Tiptap.tsx
+import { EditorProvider, FloatingMenu, BubbleMenu } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 
-// import { useQuill } from "react-quilljs";
-// // or const { useQuill } = require('react-quilljs');
+// define your extension array
+const extensions = [StarterKit]
 
-// import "quill/dist/quill.snow.css"; // Add css for snow theme
-// // or import 'quill/dist/quill.bubble.css'; // Add css for bubble theme
+const content = '<p>Hello World!</p>'
 
-// export default () => {
-//   const { quill, quillRef } = useQuill({ placeholder: "123" });
+const Tiptap = () => {
+  return (
+    <EditorProvider extensions={extensions} content={content}>
+      <FloatingMenu editor={null}>This is the floating menu</FloatingMenu>
+      <BubbleMenu editor={null}>This is the bubble menu</BubbleMenu>
+    </EditorProvider>
+  )
+}
 
-//   console.log(quill); // undefined > Quill Object
-//   console.log(quillRef); // { current: undefined } > { current: Quill Editor Reference }
-
-//   return (
-//     <div style={{ width: 500, height: 300 }}>
-//       <div ref={quillRef} />
-//     </div>
-//   );
-// };
+export default Tiptap

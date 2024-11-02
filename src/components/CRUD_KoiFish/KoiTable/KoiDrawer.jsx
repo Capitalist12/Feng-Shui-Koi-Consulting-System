@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Col, Divider, Drawer, Input, Row, Select, Tag } from "antd";
+import { Col, Divider, Drawer, Input, Row, Select, Tag, Upload } from "antd";
 import { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS } from "../../../utils/constant";
 import "../../../styles/KoiDrawer.scss";
 import { DeleteOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
@@ -11,6 +11,8 @@ import { FiEdit } from "react-icons/fi";
 import TextArea from "antd/es/input/TextArea";
 import MultiSelectElement from "../CreateKoiForm/MultiSelectElement";
 import { updateKoiFish, getKoiFish } from "../../../services/koiAPIService";
+import UploadImage from "../CreateKoiForm/UploadImage";
+import uploadFile from "../../../utils/file";
 
 const drawerSize = 640;
 const charWidth = 15;
@@ -29,12 +31,14 @@ const KoiDrawer = (props) => {
   const [koiName, setKoiName] = useState(data.name);
   const [koiSize, setKoiSize] = useState(data.size ? data.size : "");
   const [koiWeight, setKoiWeight] = useState(data.weight ? data.weight : "");
-  const [koiElements, setKoiElements] = useState(data.elements.map((item) => {return item.elementName}));
+  const [koiElements, setKoiElements] = useState(data.elements.map((item) => { return item.elementName }));
 
   const [koiColor, setKoiColor] = useState(data.color);
   const [koiType, setKoiType] = useState(data.koiTypes.typeName);
   const [koiDescription, setKoiDescription] = useState(data.description);
-
+  const [koiImage, setKoiImage] = useState(data.imagesFish?.map((item, index) => ({
+    url: item.imageURL
+  })))
   const [isConfirm, setIsConfirm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -56,14 +60,21 @@ const KoiDrawer = (props) => {
   };
 
   const updateKoi = async () => {
+    const url = await Promise.all(
+      koiImage?.map(async (image) => {
+        if (image?.url) return image.url;
+        if (image?.originFileObj) return await uploadFile(image?.originFileObj);        
+      })
+    );
+
+      console.log(url)
     const payload = {
       name: koiName,
       size: koiSize,
       weight: koiWeight,
       color: koiColor,
       description: koiDescription,
-      // imagesURL: Array.isArray(data.imagesFish) ? data.imagesFish : [data.imagesFish],
-      imagesURL: [],
+      imagesURL: Array.isArray(url) ? url : [url],
       koiTypeName: koiType,
       elements: Array.isArray(koiElements) ? koiElements : [koiElements]
     };
@@ -168,19 +179,23 @@ const KoiDrawer = (props) => {
         </div>
 
         <Row>
-          <Col
-            span={24}
-            style={{
-              textAlign: "center",
-              marginBottom: "1em",
-              backgroundColor: "#f5f5f5",
-              borderRadius: "5px",
-            }}
-          >
-            <ImageCarousel images={data.imagesFish} />
-          </Col>
+          {isEdit ?
+            <UploadImage data={koiImage} setKoiImage={setKoiImage} MAX_COUNT={5} uploadType={"picture-card"} />
+            :
+            <Col
+              span={24}
+              style={{
+                textAlign: "center",
+                marginBottom: "1em",
+                backgroundColor: "#f5f5f5",
+                borderRadius: "5px",
+              }}
+            >
+              <ImageCarousel images={data.imagesFish} />
+            </Col>
+          }
 
-          <Col>
+          <Col span={24}>
             <DescriptionItem title="Mã" content={data.id} />
           </Col>
 
