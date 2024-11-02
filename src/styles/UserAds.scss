@@ -1,22 +1,15 @@
-// .user-ads {
-//   .title {
-//     text-align: center;
-//     font-size: 24px;
-//     margin-bottom: 20px;
-//   }
-
 #sec1-my-ads {
-  height: 300px;
+  height: 20vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: red;
+  border-bottom: 5px solid red;
 
   .custom-title {
-    font-size: 36px;
+    font-size: 3rem;
     font-weight: bold;
-    color: #333;
+    text-shadow: 0px 0px 2px red;
   }
 
   h2 {
@@ -25,51 +18,80 @@
   }
 }
 
-.ads-list {
-  .ad-item {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    margin: 10px 0;
-    width: 80%;
-    transition: background-color 0.3s;
+.title-my-ads {
+  margin-left: 2rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+#sec2-ad {
+  .my-ads-filters {
+    margin-top: 2rem;
+    background-color: none;
+    width: 20vw;
+    height: 20vw;
+    display: flex;
+    flex-direction: column;
 
-    &:hover {
-      background-color: #f0f0f0;
+    .search-bar {
+      text-align: left;
+      margin-left: 1rem;
     }
 
-    .ad-title {
-      font-size: 18px;
-      color: #333;
-    }
+    .filters {
+      margin-left: 1vw;
+      justify-content: center;
+      text-align: center;
+      width: 12rem;
+      height: 17rem;
+      border: none;
+      background-color: none !important;
 
-    .ad-description {
-      font-size: 14px;
-      color: #666;
+      .button-filter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .button-filter-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .icon {
+        font-size: 1.2rem;
+        color: #000;
+      }
     }
   }
-}
+  .ads-list {
+    .ad-item {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      width: 80%;
+      transition: background-color 0.3s;
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+      &:hover {
+        background-color: #f0f0f0;
+      }
 
-  button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
+      .ad-title {
+        font-size: 18px;
+        color: #333;
+      }
 
-    &.active {
-      background-color: #0056b3;
+      .ad-description {
+        font-size: 14px;
+        color: #666;
+      }
     }
+  }
 
-    &:hover {
-      background-color: #0056b3;
-    }
+  .pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
   }
 }
