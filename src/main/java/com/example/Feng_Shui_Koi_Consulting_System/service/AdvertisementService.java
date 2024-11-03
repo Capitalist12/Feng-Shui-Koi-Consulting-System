@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -150,9 +152,28 @@ public class AdvertisementService {
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request) {
         Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
-        advertisementMapper
-                .updateAdvertisement(advertisement, request, elementRepo, categoryService);
+        advertisementMapper.updateAdvertisement(advertisement, request, elementRepo, categoryService);
         advertisement.setStatus("Pending");
+        Set<Ads_Image> currentImages = advertisement.getImagesAd();
+        Map<String, Ads_Image> existingImagesMap = currentImages.stream()
+                .collect(Collectors.toMap(Ads_Image::getImageURL, image -> image));
+        List<String> newImageIds = new ArrayList<>();
+        if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
+            // Remove images not in the updated list
+            currentImages.removeIf(image -> !request.getImagesURL().contains(image.getImageURL()));
+            // Add new images that are not already in the current collection
+            for (String imageUrl : request.getImagesURL()) {
+                if (!existingImagesMap.containsKey(imageUrl)) {
+                    Ads_Image newImage = new Ads_Image();
+                    String newImageId = generateImage_Ads();
+                    newImage.setAdImageId(newImageId);
+                    newImage.setImageURL(imageUrl);
+                    newImage.setAdvertisement(advertisement);
+                    currentImages.add(newImage);
+                    newImageIds.add(newImageId);
+                }
+            }
+        }
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 
