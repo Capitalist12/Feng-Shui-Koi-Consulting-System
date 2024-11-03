@@ -46,7 +46,7 @@ const EmblaCarousel = ({ ads }) => {
                 <div className="embla-ad__slide__info">
                   <h2>{ad.title}</h2>
                   <p>{truncateDescription(ad.description, 50)}</p>{" "}
-                  <h4>Giá: {ad.price} đồng</h4>
+                  <h4>Giá: {ad.price.toLocaleString()} đồng</h4>
                   <p className="embla-ad__slide__created-date">
                     Ngày đăng:{" "}
                     {new Date(ad.createdDate).toLocaleDateString("vi-VN")}

@@ -13,8 +13,8 @@ import EmblaCarousel from "../../components/Advertisement/embla/EmblaCarousel";
 import { Option } from "antd/es/mentions";
 import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
 import AdDetail from "../../components/Advertisement/AdDetails";
-import { BiBeenHere } from "react-icons/bi";
 import { useForm } from "antd/es/form/Form";
+import { MdFileUpload } from "react-icons/md";
 
 function AdvertisementPage({ currentUser }) {
   const form = useForm();
@@ -82,6 +82,7 @@ function AdvertisementPage({ currentUser }) {
     setSortValue("Sắp xếp theo:...");
   };
 
+  // dai qua ...
   const truncateDescription = (description, maxLength) => {
     if (description.length > maxLength) {
       return description.slice(0, maxLength) + "...";
@@ -207,41 +208,31 @@ function AdvertisementPage({ currentUser }) {
                 </Option>
               </Select>
             </div>
-          </div>
-          <div className="createAd">
-            <h2>Click ngay để đăng bài quảng cáo !</h2>
-            <BiBeenHere className="icon" />
-            <Button
-              style={{ marginBottom: "1rem" }}
-              className="custom-search-button"
-              onClick={() => setIsCreateAd(true)}
-            >
-              Đăng bài
-            </Button>
-            <Modal
-              width={"40rem"}
-              title={
-                <div
-                  style={{
-                    textAlign: "center",
-                    fontSize: "2rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Đăng bài
-                </div>
-              }
-              visible={isCreateAd}
-              onCancel={() => setIsCreateAd(false)}
-              footer={null}
-            >
-              <CreateAdForm onSubmit={handleAdSubmit} loading={loading} />
-            </Modal>
 
-            {/* <div>
+            <div className="createAd">
+              <Button
+                size="large"
+                style={{}}
+                className="custom-post-button"
+                onClick={() => setIsCreateAd(true)}
+              >
+                <MdFileUpload /> Đăng bài
+              </Button>
+              <Modal
+                width={"40rem"}
+                title={"Đăng bài"}
+                visible={isCreateAd}
+                onCancel={() => setIsCreateAd(false)}
+                footer={null}
+              >
+                <CreateAdForm onSubmit={handleAdSubmit} loading={loading} />
+              </Modal>
+
+              {/* <div>
               <ViewUserAdsButton />
               {/* Các thành phần khác của trang */}
-            {/* </div> */}
+              {/* </div> */}
+            </div>
           </div>
         </div>
 
@@ -252,7 +243,9 @@ function AdvertisementPage({ currentUser }) {
               className="advertisement"
               onClick={() => showAdDetail(ad)}
             >
-              <h2>Mệnh: {ad.element}</h2>
+              <h1 style={{ textShadow: "2px 2px 1rem gray" }}>
+                Mệnh: {ad.element}
+              </h1>
               <h3>{ad.title}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
               {ad.imagesAd.length > 1 && (
@@ -263,7 +256,8 @@ function AdvertisementPage({ currentUser }) {
               <h2 style={{ color: "green" }}>
                 Giá: {ad.price.toLocaleString()} VNĐ
               </h2>
-              <p>Thông tin: {truncateDescription(ad.description, 50)}</p>{" "}
+              <p>{truncateDescription(ad.description, 50)}</p>{" "}
+              {/* thông tin  */}
               {/* <p className="ad-user">Người đăng: {ad.user}</p> */}
               <p style={{ fontStyle: "italic", marginTop: "1rem" }}>
                 Danh mục: {ad.category.categoryName}

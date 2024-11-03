@@ -25,6 +25,7 @@
 
     &__content {
       display: flex;
+      margin-top: -4rem;
       align-items: center; // Giữ cho hình ảnh và nội dung nằm ở giữa
       justify-content: center; // Căn giữa nội dung
       height: 100%;
@@ -35,11 +36,12 @@
     &__img {
       width: 60%;
       height: auto;
-      object-fit: cover;
+      object-fit: fill;
       border-radius: 12px 0 0 12px;
     }
 
     &__info {
+      font-size: 1.2rem;
       flex: 1;
       display: flex;
       height: 100%;

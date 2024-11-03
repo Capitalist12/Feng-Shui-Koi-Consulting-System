@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Arima:wght@100..700&family=Glegoo:wght@400;700&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap");
 #sec1-ad {
   background-image: url("../assets/images/ads.jpg");
   background-size: cover;
@@ -38,11 +39,39 @@
   }
 }
 
+.custom-post-button {
+  font-size: 1.5rem;
+  font-weight: bolder;
+  padding: 2rem 1rem;
+  background-color: white;
+  border: 3px solid green;
+  color: green;
+  margin-left: 1rem;
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: translateY(-0.3rem);
+  }
+
+  &:hover {
+    background-color: green !important; /* Màu nền khi hover */
+    border-color: green !important; /* Màu viền khi hover */
+    color: white !important;
+    cursor: pointer;
+  }
+}
+
+// tat ca modal label deu in dam
+.ant-form-item-label > label {
+  font-weight: bold;
+}
+
 #sec2-ad {
   display: flex;
   justify-content: space-between;
 
   .search-filter-post {
+    border-right: solid 2px black;
     margin-top: 2rem;
     background-color: none;
     width: 20vw;
@@ -56,11 +85,8 @@
     }
 
     .filters {
-      margin-left: 1vw;
-      justify-content: center;
+      // justify-content: center;
       text-align: center;
-      width: 12rem;
-      height: 17rem;
       border: none;
       background-color: none !important;
 
@@ -82,18 +108,14 @@
       .sort {
         margin-top: 2rem;
       }
-    }
-    .createAd {
-      border-radius: 12px;
-      box-shadow: 0 0 1rem rgb(120, 116, 116);
-      margin-top: 6rem;
-      margin-left: 2rem;
-      text-align: center;
-      width: 15rem;
-      transition: transform 0.4s ease;
 
-      &:hover {
-        transform: translateY(-1rem);
+      .createAd {
+        margin-top: 3rem;
+        transition: transform 0.4s ease;
+
+        &:hover {
+          transform: translateY(-0.3rem);
+        }
       }
     }
   }
@@ -102,38 +124,65 @@
     flex: 1;
     display: flex;
     flex-wrap: wrap;
-    padding: 6rem 0;
-    // 6rem để có chỗ hiện nút view lịch sử xem
-
+    padding: 2rem 2rem;
     gap: 2rem;
 
     .advertisement {
       width: calc(100% / 4 - 2rem);
-      height: 60vh;
+      height: 65vh;
       background-color: white;
       padding: 10px;
       box-shadow: 0px 0px 1rem rgb(170, 170, 170);
       border-radius: 8px;
       text-align: center;
       transition: transform 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
 
       &:hover {
         transform: translateY(-1rem);
       }
-    }
 
-    img {
-      width: 100%;
-      height: 50%;
-      object-fit: cover;
-      border-radius: 8px;
-    }
+      h2,
+      h1,
+      // h3,
+      p {
+        margin: 0;
+        font-size: calc(
+          0.5rem + 0.5vw
+        ); /*  chỉnh kích thước chữ theo viewport */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-    .pagination {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 2rem;
+      // .glegoo-regular {
+      //   font-family: "Glegoo", serif;
+      //   font-weight: 400;
+      //   font-style: normal;
+      // }
+
+      // .glegoo-bold {
+      //   font-family: "Glegoo", serif;
+      //   font-weight: 700;
+      //   font-style: normal;
+      // }
+
+      img {
+        width: 100%;
+        height: 50%;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+      }
+
+      .ad-details {
+        overflow-y: auto;
+        padding: 0.5rem;
+        font-size: calc(0.9rem + 0.3vw);
+      }
     }
   }
 }
