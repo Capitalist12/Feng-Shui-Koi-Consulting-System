@@ -85,32 +85,33 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
   const handleFinish = async (values) => {
     const imagesAd = [];
 
-    // Xử lý hình ảnh mới
-    const uploadImagePromises = fileList
-      .filter((file) => file.originFileObj) // Chỉ lấy những file có originFileObj
-      .map((file) => uploadFile(file.originFileObj)); // Upload các file này
-
-    const urls = await Promise.all(uploadImagePromises); // Chờ tất cả hình ảnh đã upload
-
-    // Thêm các URL hình ảnh mới vào mảng
-    if (urls.length > 0) {
-      urls.forEach((url) => {
-        imagesAd.push(url); // Chỉ thêm URL vào mảng
+    // Lọc và giữ lại các hình ảnh cũ vẫn còn trong fileList
+    if (ad && ad.imagesAd) {
+      ad.imagesAd.forEach((image) => {
+        const stillExists = fileList.some(
+          (file) =>
+            file.url === image.imageURL || file.thumbUrl === image.imageURL
+        );
+        if (stillExists) {
+          imagesAd.push(image.imageURL); // Giữ lại các hình ảnh cũ
+        }
       });
     }
 
-    // Xử lý các hình ảnh đã có
-    if (ad && ad.imagesAd) {
-      ad.imagesAd.forEach((image) => {
-        imagesAd.push(image.imageURL); // Giữ lại các hình ảnh cũ
-      });
+    // Upload các hình ảnh mới
+    const newImages = fileList.filter((file) => file.originFileObj);
+    if (newImages.length > 0) {
+      const urls = await Promise.all(
+        newImages.map((file) => uploadFile(file.originFileObj))
+      );
+      imagesAd.push(...urls); // Thêm URL của các hình ảnh mới vào mảng
     }
 
     // Gán giá trị imagesAd vào values
-    values.imagesURL = imagesAd; // Cập nhật imagesURL với tất cả hình ảnh
+    values.imagesURL = imagesAd;
 
-    // Gọi hàm xử lý chỉnh sửa trong UserAds với các giá trị đã chuẩn bị
-    await onSubmit(values); // Đây là hàm gọi tới handleEditSubmit trong UserAds
+    // Gọi hàm onSubmit để cập nhật
+    await onSubmit(values);
   };
 
   const getBase64 = (file) =>
