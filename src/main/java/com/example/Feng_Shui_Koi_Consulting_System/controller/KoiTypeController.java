@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class KoiTypeController {
 
     KoiTypeService koiTypeService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ApiResponse<KTResponse> createKoiType(@RequestBody KoiTypeRequest request){
         return ApiResponse.<KTResponse>builder()
@@ -30,6 +32,7 @@ public class KoiTypeController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     ApiResponse<List<KTResponse>>getKoiType(){
         return ApiResponse.<List<KTResponse>>builder()
@@ -37,6 +40,7 @@ public class KoiTypeController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{koiTypeId}")
     ApiResponse<KTResponse> updateKoiType(@PathVariable String koiTypeId, @RequestBody KoiTypeRequest request){
         return ApiResponse.<KTResponse>builder()
@@ -44,7 +48,7 @@ public class KoiTypeController {
                 .build();
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{koiTypeId}")
     String deleteUser(@PathVariable String koiTypeId){
         koiTypeService.deleteKoiType(koiTypeId);

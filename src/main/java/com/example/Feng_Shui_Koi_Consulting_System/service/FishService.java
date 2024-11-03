@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,10 @@ public class FishService {
      KoiFishMapper koiFishMapper;
      KoiTypeService koiTypeService;
      ElementRepo elementRepo;
+
+    //Constant for generating FishID
+    private static final String FISH_ID_PREFIX = "KF";
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public KoiFishResponse createFish(FishCreationRequest request) {
         // Check if the fish with the given name already exists
@@ -128,7 +133,23 @@ public class FishService {
     }
 
     public String generateKoiID(){
-        return "KF" + String.format("%05d", System.nanoTime() % 100000);
+        String fishID;
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
+
+        do {
+            // Generate a random 9-digit number
+            int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+            fishID = FISH_ID_PREFIX + randomNum;
+
+            attempts++;
+
+            if (attempts >= maxAttempts) {
+                throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+            }
+        } while (fishRepo.existsById(fishID));
+
+        return fishID;
     }
 
     public String generateImage_Koi(){

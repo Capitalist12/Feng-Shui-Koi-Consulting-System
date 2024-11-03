@@ -7,6 +7,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.service.BlogService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 public class BlogController {
     BlogService blogService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ApiResponse<BlogResponse> createBlog(@RequestBody BlogRequest request){
         return ApiResponse.<BlogResponse>builder()
@@ -37,14 +39,14 @@ public class BlogController {
                 .result(blogService.getBlogByID(blogID))
                 .build();
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{blogID}")
     ApiResponse<BlogResponse>updateBlog(@PathVariable String blogID, @RequestBody BlogRequest request){
         return ApiResponse.<BlogResponse>builder()
                 .result(blogService.updateBlog(blogID,request))
                 .build();
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{blogID}")
     String deleteBlog(@PathVariable String blogID){
         blogService.deleteBlog(blogID);

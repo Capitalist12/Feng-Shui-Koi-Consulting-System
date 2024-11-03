@@ -58,6 +58,11 @@ public class AuthenticationServices {
     SubscriptionRepo subscriptionRepo;
     InvalidatedTokenRepository invalidatedTokenRepository;
 
+
+    //Constant for generating UserID
+    private static final String ID_PREFIX = "U";
+    private final SecureRandom secureRandom = new SecureRandom();
+
     @NonFinal
     @Value("${jwt.singerKey}")
     protected String SIGNER_KEY;
@@ -335,8 +340,22 @@ public class AuthenticationServices {
     }
 
     private String generateUserID() {
-        // Implement a method to generate a unique user ID of length 10
-        return "U" + String.format("%09d", System.nanoTime() % 1000000000);
+        String userID;
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
+
+        do {
+            // Generate a random 9-digit number
+            int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+            userID = ID_PREFIX + randomNum;
+
+            attempts++;
+            if (attempts >= maxAttempts) {
+                throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+            }
+        } while (userRepository.existsById(userID));
+
+        return userID;
     }
 
     public boolean checkSubscription(String subscriptionId) {

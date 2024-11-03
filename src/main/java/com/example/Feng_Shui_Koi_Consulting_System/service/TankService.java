@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,10 @@ public class TankService {
      TankRepo tankRepo;
      TankMapper tankMapper;
      ElementRepo elementRepo;
+
+    //Constant for generating UserID
+    private static final String ID_PREFIX = "TA";
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public TankResponse createTank(TankCreationRequest request){
 
@@ -62,6 +67,22 @@ public class TankService {
     }
 
     public String generateTankID(){
-        return "TA" + String.format("%05d", System.nanoTime() % 100000);
+        String tankID;
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
+
+        do {
+            // Generate a random 9-digit number
+            int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+            tankID = ID_PREFIX + randomNum;
+
+            attempts++;
+
+            if (attempts >= maxAttempts) {
+                throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+            }
+        } while (tankRepo.existsById(tankID));
+
+        return tankID;
     }
 }

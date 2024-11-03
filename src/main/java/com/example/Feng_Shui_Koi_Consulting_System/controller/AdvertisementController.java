@@ -5,6 +5,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.*;
 import com.example.Feng_Shui_Koi_Consulting_System.service.AdvertisementService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class AdvertisementController {
     AdvertisementService advertisementService;
 
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PostMapping
     ApiResponse<AdvertisementResponse> createAd(@RequestBody AdvertisementCreationRequest request){
         return ApiResponse.<AdvertisementResponse>builder()
@@ -56,6 +58,7 @@ public class AdvertisementController {
     }
 
     //Get pending ads
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/pending")
     ApiResponse<List<AdvertisementResponse>> getAdsPending(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -63,7 +66,7 @@ public class AdvertisementController {
                 .build();
     }
 
-    //Get all rejected ads
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/rejected-all")
     ApiResponse<List<AdvertisementResponse>> getAdsRejected(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -72,6 +75,7 @@ public class AdvertisementController {
     }
 
     //Get member's rejectedAds
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @GetMapping("/rejected")
     ApiResponse<List<AdvertisementResponse>> getAdsRejectedOfUser(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -91,6 +95,7 @@ public class AdvertisementController {
     }
 
     //Update Ad Status
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/updateAdStatus")
     ApiResponse<AdvertisementResponse> updateAdStatus(@RequestBody VerifyAdRequest request){
         return ApiResponse.<AdvertisementResponse>builder()
@@ -98,6 +103,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PutMapping("/{adID}")
     ApiResponse<AdvertisementResponse> updateAd(@PathVariable String adID, @RequestBody AdvertisementUpdateRequest request){
         return ApiResponse.<AdvertisementResponse>builder()
@@ -105,6 +111,7 @@ public class AdvertisementController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @DeleteMapping("/{adID}")
     String deleteAd(@PathVariable String adID){
         advertisementService.deleteAdvertisement(adID);

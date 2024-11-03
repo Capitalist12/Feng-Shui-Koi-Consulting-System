@@ -19,6 +19,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +36,10 @@ public class AdvertisementService {
     UserService userService;
     ElementRepo elementRepo;
     UserRepository userRepository;
+
+    //Constant for generating AdID
+    private static final String ID_PREFIX = "AD";
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public AdvertisementResponse createAdvertisement(AdvertisementCreationRequest request) {
         Advertisement ad = advertisementMapper.toAdvertisement(request, elementRepo, categoryService);
@@ -157,11 +162,29 @@ public class AdvertisementService {
         advertisementRepo.delete(advertisement);
     }
 
-    public String generateAdID() {
-        return "AD" + String.format("%05d", System.nanoTime() % 100000);
+    public String generateAdID(){
+
+            String adID;
+            int maxAttempts = 10; // Prevent infinite loop
+            int attempts = 0;
+
+            do {
+                // Generate a random 9-digit number
+                int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+                adID = ID_PREFIX + randomNum;
+
+                attempts++;
+
+                if (attempts >= maxAttempts) {
+                    throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+                }
+            } while (advertisementRepo.existsByAdID(adID));
+
+            return adID;
+
     }
 
-    public String generateImage_Ads() {
-        return "A" + String.format("%05d", System.nanoTime() % 100000);
+    public String generateImage_Ads(){
+        return "I" + String.format("%05d", System.nanoTime() % 100000);
     }
 }

@@ -7,6 +7,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.service.CommentService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CommentController {
     CommentService commentService;
 
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @PostMapping
     public ApiResponse<CommentResponse> createComment(
             @PathVariable String blogID,
@@ -35,6 +37,7 @@ public class CommentController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @PutMapping("/{commentID}")
     public ApiResponse<CommentResponse> updateComment(
             @PathVariable String blogID,
@@ -45,6 +48,7 @@ public class CommentController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @DeleteMapping("/{commentID}")
     public ApiResponse<String> deleteComment(
             @PathVariable String blogID,

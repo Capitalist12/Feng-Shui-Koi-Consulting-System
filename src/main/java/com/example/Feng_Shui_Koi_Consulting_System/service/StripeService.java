@@ -1,7 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.SessionDTO;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentSuccessfulResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentlResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Subscriptions;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Transaction;
@@ -13,9 +13,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.repository.TransactionRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Customer;
-import com.stripe.model.CustomerSearchResult;
-import com.stripe.model.Subscription;
+import com.stripe.model.*;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.CustomerSearchParams;
@@ -31,6 +29,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -87,7 +88,7 @@ public class StripeService {
             SessionCreateParams.Builder  sessionCreateParamsBuilder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
                     .setCustomer(customer.getId())
-                    .setSuccessUrl(clientURL + "/success-subscription?session_id={CHECKOUT_SESSION_ID}")
+                    .setSuccessUrl(clientURL + "/success-subscription?session_id={CHECKOUT_SESSION_ID}&user_id=" + user.getUserID())
                     .setCancelUrl(clientURL + "/failure");
 
             String aPackage = String.valueOf(request.getData().get("PACKAGE"));
@@ -149,7 +150,7 @@ public class StripeService {
         return null;
     }
 
-    public PaymentSuccessfulResponse handleSubscriptionCompletion(String userID, String sessionID) {
+    public PaymentlResponse handleSubscriptionCompletion(String userID, String sessionID) {
         try {
             if(sessionID == null) throw new AppException(ErrorCode.SESSION_ID_NULL);
             Session fetchedSession = Session.retrieve(sessionID);
@@ -171,7 +172,20 @@ public class StripeService {
             log.error("StripeException: {}", e.getMessage());
         }
         return createPaymentResponse(false, null, Roles.USER.toString());
+    }
 
+    public PaymentlResponse handleSubscriptionFalse() {
+
+            Transaction transaction =  Transaction.builder()
+            .transactionName("NULL")
+            .price(0.0)
+            .status("FALSE")
+            .createdDay(LocalDateTime.now())
+            .user(getUserLogin())
+            .build();
+            transactionRepo.save(transaction);
+
+        return createPaymentResponse(false, null, Roles.USER.toString());
     }
 
     private User getUserLogin() {
@@ -198,6 +212,7 @@ public class StripeService {
     }
 
     private void saveTransaction( String subscriptionId , User user ) throws StripeException {
+
         Transaction transaction = new Transaction();
         Subscription sub = Subscription.retrieve(subscriptionId);
         Long amountInCents = sub.getItems().getData().get(0).getPrice().getUnitAmount();
@@ -211,12 +226,28 @@ public class StripeService {
         transaction.setPrice(amountInDollars);
         transaction.setCreatedDay(createdDate);
         transaction.setUser(user);
+        transaction.setStatus(getTransactionStatus(sub).toUpperCase());
 
         transactionRepo.save(transaction);
     }
 
-    private PaymentSuccessfulResponse createPaymentResponse(boolean checkout, String token, String role) {
-        return PaymentSuccessfulResponse.builder()
+
+    private String getTransactionStatus(Subscription sub) throws StripeException {
+        String status = null;
+        String paymentIntentId = Invoice.retrieve(sub.getLatestInvoice()).getPaymentIntent();
+        Map<String, Object> chargeParams = new HashMap<>();
+        chargeParams.put("payment_intent", paymentIntentId); // Lọc theo PaymentIntent ID
+        List<Charge> charges = Charge.list(chargeParams).getData(); // Lấy các charge liên quan
+
+        if(!charges.isEmpty()) {
+            status = charges.get(0).getStatus();
+        }
+
+        return status;
+    }
+
+    private PaymentlResponse createPaymentResponse(boolean checkout, String token, String role) {
+        return PaymentlResponse.builder()
                 .checkout(checkout)
                 .token(token)
                 .role(role)
