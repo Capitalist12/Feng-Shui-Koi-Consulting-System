@@ -42,7 +42,8 @@ public enum ErrorCode {
     NULL_POINTER_EXCEPTION(1032, "An unexpected error occurred", HttpStatus.BAD_REQUEST),
     INVALID_REQUEST(1033, "Invalid request", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_MATCH(1034, "Please enter your current password correctly", HttpStatus.BAD_REQUEST),
-    CHATGPT_API_ERROR(1035, "Connection error to ChatGPT", HttpStatus.BAD_GATEWAY);
+    OTP_INVALID(1035, "OTP invalid", HttpStatus.BAD_REQUEST ),
+    CHATGPT_API_ERROR(1036, "Connection error to ChatGPT", HttpStatus.BAD_GATEWAY);
 
 
 
