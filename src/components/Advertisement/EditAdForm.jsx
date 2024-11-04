@@ -125,7 +125,7 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
               marginBottom: "2rem",
             }}
           >
-            Chỉnh sửa thông tin
+            Chỉnh sửa bài đăng
           </div>
         }
         onCancel={onClose}

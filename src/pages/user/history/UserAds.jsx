@@ -26,8 +26,11 @@ const UserAds = () => {
   const fetchAds = async () => {
     try {
       const response = await getUserAds();
-      setAds(response.data.result);
-      setDisplayAds(response.data.result);
+      const sortedAds = response.data.result.sort(
+        (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+      );
+      setAds(sortedAds);
+      setDisplayAds(sortedAds);
     } catch (error) {
       console.error("Error fetching ads: ", error);
     }
@@ -37,15 +40,20 @@ const UserAds = () => {
     fetchAds();
   }, []);
 
-  const handleSearch = (searchTerm) => {
-    if (!searchTerm) {
-      setDisplayAds(ads);
-    } else {
-      const filteredAds = ads.filter((ad) =>
-        ad.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setDisplayAds(filteredAds);
+  const handleSearch = async (keyword) => {
+    // format input
+    if (!keyword || keyword.trim() === "") {
+      await fetchAds(); // hien all ads
+      return;
     }
+    const lowerCaseKeyword = keyword.toLowerCase();
+    const filteredAds = ads.filter(
+      (ad) =>
+        ad.title.toLowerCase().includes(lowerCaseKeyword) ||
+        ad.element.toLowerCase().includes(lowerCaseKeyword) ||
+        ad.price.toString().includes(keyword)
+    );
+    setDisplayAds(filteredAds);
   };
 
   const handleFilterByStatus = (status) => {
@@ -175,7 +183,9 @@ const UserAds = () => {
               <h2 style={{ color: "green" }}>
                 Giá: {ad.price.toLocaleString()} VNĐ
               </h2>
-              <p>Thông tin: {truncateDescription(ad.description, 50)}</p>
+              <p className="ad-description">
+                {truncateDescription(ad.description, 50)}
+              </p>
               <p style={{ fontStyle: "italic", marginTop: "1rem" }}>
                 Danh mục: {ad.category.categoryName}
               </p>

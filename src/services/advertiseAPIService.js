@@ -54,4 +54,12 @@ const getUserAds = async () => {
     }
 }
 
-export { getAllAdvertises, getVerifiedAdvertise, getPendingAdvertises, getRejectedAdvertise, updateAdvertiseStatus, getUserAds };
+const getAdsByID = async (adID) => {
+    try{
+        const response = await axios.get(`ad/${adID}`);
+        return response;
+    } catch (err) {
+        toast.error(err.message);
+    }
+}
+export { getAllAdvertises, getVerifiedAdvertise, getPendingAdvertises, getRejectedAdvertise, updateAdvertiseStatus, getUserAds, getAdsByID };

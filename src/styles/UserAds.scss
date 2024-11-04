@@ -19,7 +19,7 @@
 }
 
 .title-my-ads {
-  margin-left: 2rem;
+  margin-left: 0.5rem;
   font-size: 2rem;
   font-weight: bold;
 }
@@ -29,20 +29,52 @@
     background-color: none;
     width: 20vw;
     height: 20vw;
-    display: flex;
-    flex-direction: column;
 
     .search-bar {
       text-align: left;
+      margin-left: 0.2rem;
+      .custom-search-button {
+        background-color: rgb(0, 0, 0);
+        border-color: rgb(0, 0, 0);
+        color: white;
+        margin-left: 1rem;
+        transition: transform 0.5s ease;
+
+        &:hover {
+          transform: translateY(-0.3rem);
+        }
+
+        &:hover {
+          background-color: white !important; /* Màu nền khi hover */
+          border-color: rgb(0, 0, 0) !important; /* Màu viền khi hover */
+          color: rgb(0, 0, 0) !important;
+          cursor: pointer;
+        }
+      }
+    }
+    .custom-search-button {
+      background-color: rgb(0, 0, 0);
+      border-color: rgb(0, 0, 0);
+      color: white;
       margin-left: 1rem;
+      transition: transform 0.5s ease;
+
+      &:hover {
+        transform: translateY(-0.3rem);
+      }
+
+      &:hover {
+        background-color: white !important; /* Màu nền khi hover */
+        border-color: rgb(0, 0, 0) !important; /* Màu viền khi hover */
+        color: rgb(0, 0, 0) !important;
+        cursor: pointer;
+      }
     }
 
     .filters {
       margin-left: 1vw;
       justify-content: center;
       text-align: center;
-      width: 12rem;
-      height: 17rem;
       border: none;
       background-color: none !important;
 

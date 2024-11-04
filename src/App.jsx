@@ -24,6 +24,7 @@ import Statistic from "./components/Overview/Statistic";
 import AdvertiseManagementContainer from "./components/Advertise/AdvertiseManagementContainer";
 import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
 import UserAds from "./pages/user/history/UserAds";
+import AdDetails from "./components/Advertisement/AdDetails";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -70,6 +71,11 @@ const App = () => {
       path: "ad",
       element: <AdvertisementPage />,
     },
+    {
+      path: "ad/:adID",
+      element: <AdDetails />,
+    },
+
     {
       path: "login",
       element: <LoginPage />,

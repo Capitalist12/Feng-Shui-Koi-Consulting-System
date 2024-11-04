@@ -50,7 +50,7 @@ const EmblaCarousel = ({ ads }) => {
                 <div className="embla-ad__slide__info">
                   <h2>{ad.title}</h2>
                   <p className="ad-description">
-                    {truncateDescription(ad.description, 50)}
+                    {truncateDescription(ad.description, 100)}
                   </p>
                   <h4>Giá: {ad.price.toLocaleString()} đồng</h4>
                   <p className="embla-ad__slide__created-date">

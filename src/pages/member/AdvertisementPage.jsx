@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../config/axiosConfig";
 import "../../styles/Advertisement.scss";
 import Navbar from "../../components/Utils/Navbar";
-import { Layout, Button, Pagination, Card, Select, Modal } from "antd";
+import { Layout, Button, Pagination, Select, Modal } from "antd";
 import CreateAdForm from "../../components/Advertisement/CreateAdForm";
 import SearchBar from "../../components/Advertisement/SearchBar";
 import Title from "antd/es/typography/Title";
@@ -12,18 +12,19 @@ import { RiAlignItemLeftLine } from "react-icons/ri";
 import EmblaCarousel from "../../components/Advertisement/embla/EmblaCarousel";
 import { Option } from "antd/es/mentions";
 import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
-import AdDetail from "../../components/Advertisement/AdDetails";
 import { useForm } from "antd/es/form/Form";
 import { MdFileUpload } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import AdDetails from "../../components/Advertisement/AdDetails";
 
-function AdvertisementPage({ currentUser }) {
+function AdvertisementPage() {
   const form = useForm();
+  const navigate = useNavigate();
   const [ads, setAds] = useState([]);
   const [adsE, setAdsE] = useState([]);
   const [displayAds, setDisplayAds] = useState([]);
   const [sortValue, setSortValue] = useState("Sắp xếp theo:...");
   const [selectedAd, setSelectedAd] = useState(null);
-  const [isShowDetails, setIsShowDetails] = useState(false);
   const [isCreateAd, setIsCreateAd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,9 +34,14 @@ function AdvertisementPage({ currentUser }) {
     try {
       const response = await api.get("/ad/verified");
 
-      setAds(response.data.result);
-      setAdsE(response.data.result); // set cho Embla
-      setDisplayAds(response.data.result);
+      // sort theo created truoc
+      const sortedAds = response.data.result.sort(
+        (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+      );
+
+      setAds(sortedAds);
+      setAdsE(sortedAds); // set cho Embla
+      setDisplayAds(sortedAds);
       setSortValue("Sắp xếp theo:...");
     } catch (e) {
       console.log("Error fetching ads: ", e);
@@ -94,14 +100,13 @@ function AdvertisementPage({ currentUser }) {
   const indexOfFirstAd = indexOfLastAd - adsPerPage;
   const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd);
 
-  const showAdDetail = (ad) => {
-    setSelectedAd(ad);
-    setIsShowDetails(true);
-  };
+  const handleAdClick = (adID) => {
+    // Tìm quảng cáo được chọn từ danh sách ads
+    const selectedAd = displayAds.find((ad) => ad.adID === adID);
 
-  const handleCloseModal = () => {
-    setIsShowDetails(false);
-    setSelectedAd(null);
+    // Cập nhật state để hiển thị chi tiết quảng cáo
+    setSelectedAd(selectedAd);
+    navigate(`/ad/${adID}`); // Chuyển đến trang chi tiết quảng cáo
   };
 
   const handleAdSubmit = async (values) => {
@@ -127,22 +132,19 @@ function AdvertisementPage({ currentUser }) {
     }
   };
 
-  // Sắp xếp theo ngày, bài mới nhất lên đầu
-  const sortedAds = currentAds.sort(
-    (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
-  );
-
   return (
     <Layout>
       <Navbar />
       <section id="sec1-ad">
         <Title level={1} className="custom-title">
-          SHOP VỚI NHỮNG MẶT HÀNG VỀ CÁ KOI PHONG THỦY
-          <h2>Thuận mua vừa bán - Không mua cũng được</h2>
+          SHOP Cá Koi & Phong Thủy
+          <h2>
+            Phong thủy vượng tài, bể Koi thịnh vượng - Mang tài lộc vào không
+            gian sống!
+          </h2>
         </Title>
-
-        <EmblaCarousel ads={adsE.slice(0, 5)} />
       </section>
+      <EmblaCarousel ads={adsE.slice(0, 6)} />
 
       <section id="sec2-ad">
         <div className="search-filter-post">
@@ -198,8 +200,6 @@ function AdvertisementPage({ currentUser }) {
                     sortPriceAsc();
                   } else if (value === "desc") {
                     sortPriceDes();
-                  } else {
-                    setDisplayAds(ads);
                   }
                 }}
               >
@@ -248,11 +248,11 @@ function AdvertisementPage({ currentUser }) {
         </div>
 
         <div className="ads-list">
-          {sortedAds.map((ad) => (
+          {displayAds.map((ad) => (
             <div
               key={ad.adID}
               className="advertisement"
-              onClick={() => showAdDetail(ad)}
+              onClick={() => handleAdClick(ad.adID)}
             >
               <h1 style={{ textShadow: "2px 2px 1rem gray" }}>
                 Mệnh: {ad.element}
@@ -286,14 +286,7 @@ function AdvertisementPage({ currentUser }) {
           </div>
         </div>
       </section>
-      {/* modal khi đã chọn quảng cáo */}
-      {selectedAd && (
-        <AdDetail
-          ad={selectedAd}
-          open={isShowDetails}
-          onClose={handleCloseModal}
-        />
-      )}
+      {selectedAd && <AdDetails />}
     </Layout>
   );
 }

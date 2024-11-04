@@ -1,25 +1,68 @@
 @import url("https://fonts.googleapis.com/css2?family=Arima:wght@100..700&family=Glegoo:wght@400;700&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap");
 #sec1-ad {
-  background-image: url("../assets/images/ads.jpg");
+  background-image: url("../assets/images/—Pngtree—image\ of\ mount\ fuji\ by_3629200.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  // background-position: center;
+  // background-repeat: no-repeat;
+  // background-size: cover;
+  // background-attachment: fixed;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 90vh;
+  height: 30vh;
+  &::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+    z-index: 1;
+    pointer-events: none; /* ko cho phép lớp phủ chặn click */
+  }
   .custom-title {
-    margin-top: 2rem;
+    z-index: 2;
     text-align: center;
-    text-shadow: 2px 2px 5px rgb(255, 255, 255);
-    font-family: "Courier New", Courier, monospace;
+    color: rgb(255, 255, 255);
+    text-shadow: 3px 5px 2px black;
+    font-family: "Playwrite GB S", serif;
     font-size: 3rem;
+
+    h2 {
+      margin-top: 4rem;
+      color: rgb(0, 0, 0);
+      text-shadow: 1px 1px 1rem rgb(255, 255, 255);
+    }
   }
 }
 
 // button phan search va filter
+.search-bar {
+  margin-left: 0.2rem;
+  display: flex;
+  .custom-search-button {
+    background-color: rgb(0, 0, 0);
+    border-color: rgb(0, 0, 0);
+    color: white;
+    margin-left: 1rem;
+    transition: transform 0.5s ease;
+
+    &:hover {
+      transform: translateY(-0.3rem);
+    }
+
+    &:hover {
+      background-color: white !important; /* Màu nền khi hover */
+      border-color: rgb(0, 0, 0) !important; /* Màu viền khi hover */
+      color: rgb(0, 0, 0) !important;
+      cursor: pointer;
+    }
+  }
+}
 .custom-search-button {
   background-color: rgb(0, 0, 0);
   border-color: rgb(0, 0, 0);
@@ -84,11 +127,6 @@
     height: 20vw;
     display: flex;
     flex-direction: column;
-
-    .search-bar {
-      text-align: left;
-      margin-left: 1rem;
-    }
 
     .filters {
       // justify-content: center;

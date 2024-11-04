@@ -226,9 +226,9 @@ function CompatibilityPage() {
   // };
 
   return (
-    <Layout>
+    <Layout className="layout-comp">
       <Navbar />
-      <section id="sec1-comp">
+      <div className="header-comp">
         <Title level={1} className="title">
           Tính độ tương hợp
           <h2>
@@ -261,72 +261,69 @@ function CompatibilityPage() {
           <button
             className="scroll-button"
             onClick={() => {
-              const sec2 = document.getElementById("sec2-comp");
-              if (sec2) {
-                sec2.scrollIntoView({ behavior: "smooth" }); // Cuộn xuống sec2
+              const selectedEle = document.querySelector(".selected-ele");
+              if (selectedEle) {
+                selectedEle.scrollIntoView({ behavior: "smooth" }); // Cuộn xuống selected-ele
               }
             }}
           >
             <ArrowDownOutlined />
           </button>
         </div>
-      </section>
-      <>
-        <section id="sec2-comp">
-          <Row gutter={[32, 8]}>
-            <Col span={12}>
-              <div style={{ marginLeft: "2rem", marginTop: "5rem" }}>
-                <div className="custom-title">
-                  <Title level={2}>Danh Sách Cá</Title>
-                </div>
-                <div className="custom-table">
-                  <KoiList
-                    koiData={koiData}
-                    handleSelectFish={handleSelectFish}
-                    isKoiSelected={(fish) => selectedFish.includes(fish)}
-                    searchTerm={searchTerm}
-                    handleSearchTermChange={(e) =>
-                      setSearchTerm(e.target.value)
-                    }
-                  />
-                </div>
-              </div>
-            </Col>
+      </div>
 
-            <Col span={12}>
-              <div style={{ marginRight: "3rem", marginTop: "5rem" }}>
-                <div className="custom-title">
-                  <Title level={2}>Danh Sách Hồ</Title>
-                </div>
-                <div className="custom-table">
-                  <TankList
-                    tankData={tankData}
-                    handleSelectTank={handleSelectTank}
-                    isTankSelected={(tank) => selectedTank === tank}
-                  />
-                </div>
+      <>
+        <Row gutter={[32, 8]}>
+          <Col span={12}>
+            <div style={{ marginLeft: "2rem", marginTop: "5rem" }}>
+              <div className="custom-title">
+                <Title level={2}>Danh Sách Cá</Title>
               </div>
-            </Col>
-          </Row>
-          <div className="selected-ele">
-            <div className="selected-ele">
-              {/* ????? */}
-              <SelectedItems
-                selectedFish={selectedFish}
-                selectedTank={selectedTank}
-                handleRemoveTank={handleRemoveTank}
-                handleSelectFish={handleSelectFish}
-              />
-              <Spin spinning={load}>
-                <CompatibilityForm
-                  selectedElement={selectedElement}
-                  setSelectedElement={setSelectedElement}
-                  handleCalculateCompatibility={handleCalculateCompatibility}
+              <div className="custom-table">
+                <KoiList
+                  koiData={koiData}
+                  handleSelectFish={handleSelectFish}
+                  isKoiSelected={(fish) => selectedFish.includes(fish)}
+                  searchTerm={searchTerm}
+                  handleSearchTermChange={(e) => setSearchTerm(e.target.value)}
                 />
-              </Spin>
+              </div>
             </div>
+          </Col>
+
+          <Col span={12}>
+            <div style={{ marginRight: "3rem", marginTop: "5rem" }}>
+              <div className="custom-title">
+                <Title level={2}>Danh Sách Hồ</Title>
+              </div>
+              <div className="custom-table">
+                <TankList
+                  tankData={tankData}
+                  handleSelectTank={handleSelectTank}
+                  isTankSelected={(tank) => selectedTank === tank}
+                />
+              </div>
+            </div>
+          </Col>
+        </Row>
+        <div className="selected-ele">
+          <div className="selected-ele">
+            {/* ????? */}
+            <SelectedItems
+              selectedFish={selectedFish}
+              selectedTank={selectedTank}
+              handleRemoveTank={handleRemoveTank}
+              handleSelectFish={handleSelectFish}
+            />
+            <Spin spinning={load}>
+              <CompatibilityForm
+                selectedElement={selectedElement}
+                setSelectedElement={setSelectedElement}
+                handleCalculateCompatibility={handleCalculateCompatibility}
+              />
+            </Spin>
           </div>
-        </section>
+        </div>
       </>
       <Result
         isVisible={isModalVisible}
