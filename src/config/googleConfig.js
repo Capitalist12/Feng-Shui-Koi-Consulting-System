@@ -1,6 +1,6 @@
 const OAuthConfig = {
   clientId: "311482209289-pgh12mi0hos00orqsl2773ke1gdsdhjf.apps.googleusercontent.com",
-  redirectUri: `${import.meta.env.VITE_API_URL}/login/authenticate`, // Use VITE_API_URL
+  redirectUri: `${import.meta.env.VITE_FE_API_URL}/login/authenticate`,
   authUri: "https://accounts.google.com/o/oauth2/auth",
 };
 
