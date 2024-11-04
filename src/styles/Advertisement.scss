@@ -63,6 +63,7 @@
     }
   }
 }
+
 .custom-search-button {
   background-color: rgb(0, 0, 0);
   border-color: rgb(0, 0, 0);
@@ -115,6 +116,66 @@
   font-size: 1rem !important;
 }
 
+// phan filter theo element
+.filter-element {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  .filters {
+    display: flex;
+    text-align: center;
+    border: none;
+    background-color: none !important;
+
+    .button-filter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .button-filter-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .icon {
+      font-size: 1.2rem;
+      color: #000;
+    }
+    .sort {
+      margin-top: 2rem;
+    }
+
+    .createAd {
+      margin-top: 3rem;
+      transition: transform 0.4s ease;
+
+      &:hover {
+        transform: translateY(-0.3rem);
+      }
+    }
+  }
+  .button-filter-element {
+    .custom-button {
+      font-size: 1rem; // Tăng kích thước chữ lớn hơn
+      padding: 2rem 1rem; // Tăng kích thước padding
+      border-radius: 8px; // Bo tròn góc các nút
+      transition: transform 0.5s ease; // Hiệu ứng khi hover
+
+      &:hover {
+        transform: scale(1.1); // Phóng to nhẹ khi hover
+      }
+
+      svg {
+        font-size: 2rem; // Tăng kích thước icon
+      }
+    }
+  }
+}
+
 #sec2-ad {
   display: flex;
   justify-content: space-between;
@@ -127,41 +188,6 @@
     height: 20vw;
     display: flex;
     flex-direction: column;
-
-    .filters {
-      // justify-content: center;
-      text-align: center;
-      border: none;
-      background-color: none !important;
-
-      .button-filter {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      .button-filter-container {
-        display: flex;
-        align-items: center;
-      }
-
-      .icon {
-        font-size: 1.2rem;
-        color: #000;
-      }
-      .sort {
-        margin-top: 2rem;
-      }
-
-      .createAd {
-        margin-top: 3rem;
-        transition: transform 0.4s ease;
-
-        &:hover {
-          transform: translateY(-0.3rem);
-        }
-      }
-    }
   }
 
   .ads-list {
@@ -173,7 +199,7 @@
 
     .advertisement {
       width: calc(100% / 3 - 2rem);
-      height: 70vh;
+      height: 50vh;
       background-color: white;
       padding: 10px;
       box-shadow: 0px 0px 1rem rgb(170, 170, 170);

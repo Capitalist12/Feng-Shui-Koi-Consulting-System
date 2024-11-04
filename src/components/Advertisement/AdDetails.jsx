@@ -115,11 +115,12 @@
 
 // export default AdDetail;
 import React, { useState, useEffect } from "react";
-import { Image, Button } from "antd";
+import { Image, Button, Layout } from "antd";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/Advertisement.scss";
 import { getAdsByID } from "../../services/advertiseAPIService";
+import Navbar from "../Utils/Navbar";
 
 const AdDetails = () => {
   const [loading, setLoading] = useState(false);
@@ -132,7 +133,7 @@ const AdDetails = () => {
       setLoading(true);
       try {
         const response = await getAdsByID(adID);
-        const data = response.data.result[0]; // Lấy phần tử đầu tiên của mảng 'result'
+        const data = response.data.result[0]; //  phần tử đầu tiên của result'
         setAd(data);
       } catch (error) {
         console.error("Error fetching ad details:", error);
@@ -159,55 +160,60 @@ const AdDetails = () => {
   };
 
   return (
-    <div className="ad-detail-page" style={{ padding: "2rem" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "1rem",
-        }}
-      >
-        <h1>{ad.title}</h1>
-        {ad.imagesAd.length > 0 ? (
-          <div style={{ position: "relative", maxWidth: 400 }}>
-            <Image
-              alt={ad.title}
-              src={ad.imagesAd[currentImage]?.imageURL} // Chọn ảnh hiện tại
-              style={{ width: "100%" }}
-            />
-            {ad.imagesAd.length > 1 && (
-              <>
-                <Button
-                  icon={<FaAngleLeft />}
-                  onClick={handlePrevious}
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: 10,
-                    transform: "translateY(-50%)",
-                  }}
+    <div>
+      <Layout>
+        <Navbar />
+        <div className="ad-detail-page" style={{ padding: "2rem" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <h1>{ad.title}</h1>
+            {ad.imagesAd.length > 0 ? (
+              <div style={{ position: "relative", maxWidth: 400 }}>
+                <Image
+                  alt={ad.title}
+                  src={ad.imagesAd[currentImage]?.imageURL} // Chọn ảnh hiện tại
+                  style={{ width: "100%" }}
                 />
-                <Button
-                  icon={<FaAngleRight />}
-                  onClick={handleNext}
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    right: 10,
-                    transform: "translateY(-50%)",
-                  }}
-                />
-              </>
+                {ad.imagesAd.length > 1 && (
+                  <>
+                    <Button
+                      icon={<FaAngleLeft />}
+                      onClick={handlePrevious}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: 10,
+                        transform: "translateY(-50%)",
+                      }}
+                    />
+                    <Button
+                      icon={<FaAngleRight />}
+                      onClick={handleNext}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        right: 10,
+                        transform: "translateY(-50%)",
+                      }}
+                    />
+                  </>
+                )}
+              </div>
+            ) : (
+              <div>No images available.</div>
             )}
+            <p>{ad.description}</p>
+            <h2>{ad.price} VNĐ</h2>
+            <p>Danh mục: {ad.category.categoryName}</p>
           </div>
-        ) : (
-          <div>No images available.</div>
-        )}
-        <p>{ad.description}</p>
-        <h2>{ad.price} VNĐ</h2>
-        <p>Danh mục: {ad.category.categoryName}</p>
-      </div>
+        </div>
+      </Layout>
     </div>
   );
 };
