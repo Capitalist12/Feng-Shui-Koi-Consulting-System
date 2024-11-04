@@ -31,20 +31,20 @@ const App = () => {
       element: <HomePage />,
     },
     {
-      path: "/compatibility",
+      path: "compatibility",
       element: <CompatibilityPage />,
     },
 
     {
-      path: "/pricing",
+      path: "pricing",
       element: <PricingPage />,
     },
     {
-      path: "/success-subscription",
+      path: "success-subscription",
       element: <PaymentSuccessPage />,
     },
     {
-      path: "/blog",
+      path: "blog",
       element: <BlogPage />,
       children: [
         {
@@ -58,11 +58,11 @@ const App = () => {
       ],
     },
     {
-      path: "/ad",
+      path: "ad",
       element: <AdvertisementPage />,
     },
     {
-      path: "/login",
+      path: "login",
       element: <LoginPage />,
       children: [
         {
@@ -72,11 +72,11 @@ const App = () => {
       ],
     },
     {
-      path: "/signup",
+      path: "signup",
       element: <RegisterPage />,
     },
     {
-      path: "/dashboard",
+      path: "dashboard",
       element: (
         <Admin>
           <DashboardPage />
@@ -106,7 +106,7 @@ const App = () => {
       ],
     },
     {
-      path: "/user",
+      path: "user",
       element: <UserProfilePage />,
     },
     {
@@ -114,7 +114,7 @@ const App = () => {
       element: <UserAds />,
     },
     {
-      path: "/errorMem",
+      path: "errorMem",
       element: <ErrorMember />,
     },
   ]);
