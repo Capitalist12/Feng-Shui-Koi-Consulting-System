@@ -85,13 +85,13 @@ const AdDetail = ({ ad, visible, onClose }) => {
         >
           <h2>Mệnh: {ad.element}</h2>
 
-          <h2 style={{ color: "green" }}>
-            Giá: {ad.price.toLocaleString()} VNĐ
-          </h2>
           <div>
             <h2>Thông tin chi tiết:</h2>
             <p>{ad.description}</p>
           </div>
+          <h2 style={{ color: "green" }}>
+            Giá: {ad.price.toLocaleString()} VNĐ
+          </h2>
           <div
             style={{
               display: "flex",

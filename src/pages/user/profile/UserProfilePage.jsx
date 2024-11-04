@@ -79,7 +79,7 @@ const UserProfilePage = () => {
         </Col>
         <Col className="user-info-col" xs={24} sm={24} md={12} lg={12}>
           <div className="user-info">
-            <h2>Thông tin tài khoản</h2>
+            <h1>Thông tin tài khoản</h1>
             <div>
               <span>Email:</span>
               <p>{userInfo?.email}</p>

@@ -73,7 +73,6 @@
     .user-info {
       position: absolute;
       top: 50%;
-      left: 0;
       transform: translate(0, -50%);
       background-color: rgba(255, 255, 255, 0.1);
       width: 85%;
@@ -87,11 +86,10 @@
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
 
-      h2 {
-        position: absolute;
-        top: 10px;
-        margin-left: 1em;
+      h1 {
+        align-self: center;
         font-size: 1.5em;
+        margin-bottom: 6rem;
       }
 
       div {

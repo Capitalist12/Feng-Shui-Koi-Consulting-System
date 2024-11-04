@@ -1,63 +1,20 @@
-// import React, { useEffect } from "react";
-// import { Modal, Form, Input, InputNumber, Button } from "antd";
-
-// const EditAdForm = ({ visible, ad, onClose, onSubmit, loading }) => {
-//   const [form] = Form.useForm();
-
-//   useEffect(() => {
-//     if (ad) {
-//       form.setFieldsValue({
-//         title: ad.title,
-//         description: ad.description,
-//         price: ad.price,
-//         element: ad.element,
-//         categoryName: ad.category.categoryName,
-//       });
-//     }
-//   }, [ad, form]);
-
-//   const handleFinish = (values) => {
-//     onSubmit(values);
-//   };
-
-//   return (
-//     <Modal
-//       title="Chỉnh sửa Quảng cáo"
-//       visible={visible}
-//       onCancel={onClose}
-//       footer={null}
-//     >
-//       <Form form={form} onFinish={handleFinish}>
-//         <Form.Item label="Tiêu đề" name="title">
-//           <Input />
-//         </Form.Item>
-//         <Form.Item label="Mô tả" name="description">
-//           <Input.TextArea />
-//         </Form.Item>
-//         <Form.Item label="Giá" name="price">
-//           <InputNumber style={{ width: "100%" }} />
-//         </Form.Item>
-//         <Form.Item label="Mệnh" name="element">
-//           <Input />
-//         </Form.Item>
-//         <Form.Item label="Danh mục" name="categoryName">
-//           <Input />
-//         </Form.Item>
-//         <Form.Item>
-//           <Button type="primary" htmlType="submit" loading={loading}>
-//             Lưu thay đổi
-//           </Button>
-//         </Form.Item>
-//       </Form>
-//     </Modal>
-//   );
-// };
-
-// export default EditAdForm;
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Input, InputNumber, Button, Upload, Image } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Upload,
+  Image,
+  Row,
+  Col,
+  Select,
+  notification,
+} from "antd";
 import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
+import { CATEGORY, OPTIONS } from "../../utils/constant";
 
 const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
   const [form] = Form.useForm();
@@ -85,7 +42,7 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
   const handleFinish = async (values) => {
     const imagesAd = [];
 
-    // Lọc và giữ lại các hình ảnh cũ vẫn còn trong fileList
+    // hình ảnh cũ vẫn còn trong fileList
     if (ad && ad.imagesAd) {
       ad.imagesAd.forEach((image) => {
         const stillExists = fileList.some(
@@ -93,25 +50,27 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
             file.url === image.imageURL || file.thumbUrl === image.imageURL
         );
         if (stillExists) {
-          imagesAd.push(image.imageURL); // Giữ lại các hình ảnh cũ
+          imagesAd.push(image.imageURL); // giữ lại các hình ảnh cũ
         }
       });
     }
 
-    // Upload các hình ảnh mới
     const newImages = fileList.filter((file) => file.originFileObj);
     if (newImages.length > 0) {
       const urls = await Promise.all(
         newImages.map((file) => uploadFile(file.originFileObj))
       );
-      imagesAd.push(...urls); // Thêm URL của các hình ảnh mới vào mảng
+      imagesAd.push(...urls); // url của các hình ảnh mới
     }
 
-    // Gán giá trị imagesAd vào values
     values.imagesURL = imagesAd;
 
-    // Gọi hàm onSubmit để cập nhật
     await onSubmit(values);
+    notification.success({
+      message: "Sửa bài đăng thành công",
+      description:
+        "Bài đăng của bạn đã được sửa thành công, hãy chờ phê duyệt nhé!",
+    });
   };
 
   const getBase64 = (file) =>
@@ -154,8 +113,21 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
   return (
     <div>
       <Modal
+        style={{ top: "3rem" }}
         open={open}
-        title="Chỉnh sửa quảng cáo"
+        width={"40rem"}
+        title={
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: "2rem",
+              fontWeight: "bold",
+              marginBottom: "2rem",
+            }}
+          >
+            Chỉnh sửa thông tin
+          </div>
+        }
         onCancel={onClose}
         footer={[
           <Button key="back" onClick={onClose}>
@@ -172,27 +144,79 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
         ]}
       >
         <Form form={form} onFinish={handleFinish} initialValues={ad}>
-          <Form.Item label="Tiêu đề" name="title">
-            <Input />
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="categoryName"
+                label="Danh mục"
+                labelCol={{ span: 24 }}
+                wrapperCol={{ span: 24 }}
+                rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
+              >
+                <Select options={CATEGORY} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="element"
+                label="Mệnh"
+                labelCol={{ span: 24 }}
+                wrapperCol={{ span: 24 }}
+                rules={[{ required: true, message: "Vui lòng nhập mệnh!" }]}
+              >
+                <Select options={OPTIONS} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item
+            name="title"
+            label="Tiêu đề"
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
+          >
+            <Input
+              maxLength={100}
+              placeholder="Nhập tiêu đề (tối đa 100 ký tự)"
+            />
           </Form.Item>
-          <Form.Item label="Mô tả" name="description">
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item label="Giá" name="price">
-            <InputNumber style={{ width: "100%" }} />
-          </Form.Item>
-          <Form.Item label="Mệnh" name="element">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Danh mục" name="categoryName">
-            <Input />
+          <Form.Item
+            name="description"
+            label="Mô tả"
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
+          >
+            <Input.TextArea
+              style={{ minHeight: "7rem", width: "100%" }}
+              placeholder="Mô tả chi tiết sản phẩm"
+              autoSize={{ minRows: 4, maxRows: 10 }}
+              maxLength={500}
+            />
           </Form.Item>
 
           <Form.Item
-            label="Hình ảnh:"
+            name="price"
+            label="Giá"
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
+          >
+            <InputNumber
+              step={1000}
+              style={{ width: "100%" }}
+              placeholder="Nhập giá"
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="Hình ảnh"
             name="imagesAd"
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
+            rules={[
+              { required: true, message: "Vui lòng chọn ít nhất 1 hình!" },
+            ]}
           >
             <Upload
               action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"

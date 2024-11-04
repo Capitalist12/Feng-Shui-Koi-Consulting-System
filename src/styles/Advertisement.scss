@@ -54,8 +54,8 @@
   }
 
   &:hover {
-    background-color: green !important; /* Màu nền khi hover */
-    border-color: green !important; /* Màu viền khi hover */
+    background-color: green !important;
+    border-color: green !important;
     color: white !important;
     cursor: pointer;
   }
@@ -71,7 +71,7 @@
   justify-content: space-between;
 
   .search-filter-post {
-    border-right: solid 2px black;
+    // border-right: solid 2px black;
     margin-top: 2rem;
     background-color: none;
     width: 20vw;

@@ -219,8 +219,19 @@ function AdvertisementPage({ currentUser }) {
                 <MdFileUpload /> Đăng bài
               </Button>
               <Modal
+                style={{ top: "4rem" }}
                 width={"40rem"}
-                title={"Đăng bài"}
+                title={
+                  <div
+                    style={{
+                      textAlign: "center",
+                      fontSize: "2rem",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Đăng bài quảng cáo
+                  </div>
+                }
                 visible={isCreateAd}
                 onCancel={() => setIsCreateAd(false)}
                 footer={null}
