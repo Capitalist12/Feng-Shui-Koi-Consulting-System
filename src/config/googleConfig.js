@@ -1,6 +1,6 @@
 const OAuthConfig = {
   clientId: "311482209289-pgh12mi0hos00orqsl2773ke1gdsdhjf.apps.googleusercontent.com",
-  redirectUri: "http://localhost:5173/login/authenticate",
+  redirectUri: `${import.meta.env.VITE_API_URL}/login/authenticate`, // Use VITE_API_URL
   authUri: "https://accounts.google.com/o/oauth2/auth",
 };
 
@@ -14,4 +14,4 @@ export const GoogleURL = () => {
   )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`;
   
   return targetUrl;
-}
+};
