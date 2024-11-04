@@ -162,6 +162,9 @@ const UserAds = () => {
               onClick={() => handleEditAd(ad)}
             >
               <h2>Mệnh: {ad.element}</h2>
+              <h4 style={{ textShadow: "1px 1px 2rem blue" }}>
+                Trạng thái: {ad.status}
+              </h4>
               <h3>{ad.title}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
               {ad.imagesAd.length > 1 && (

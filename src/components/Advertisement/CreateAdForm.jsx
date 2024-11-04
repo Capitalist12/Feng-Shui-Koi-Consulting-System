@@ -10,6 +10,7 @@ import {
   Col,
   Upload,
   Image,
+  notification,
 } from "antd";
 import { CATEGORY, OPTIONS } from "../../utils/constant";
 import { useNavigate } from "react-router-dom";
@@ -53,7 +54,10 @@ const CreateAdForm = ({ onSubmit }) => {
       }
 
       await onSubmit(values);
-      message.success("Quảng cáo đã được gửi thành công!");
+      notification.success({
+        message: "Đăng bài thành công !",
+        description: "Bạn đã đăng bài thành công, hãy chờ phê duyệt nhé!",
+      });
     } catch (error) {
       console.error("Lỗi khi tải ảnh hoặc gửi quảng cáo:", error);
       message.error("Có lỗi xảy ra khi gửi quảng cáo. Vui lòng thử lại.");

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Modal, Button, Image } from "antd";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import "../../styles/Advertisement.scss";
 
-const AdDetail = ({ ad, visible, onClose }) => {
+const AdDetail = ({ ad, open, onClose }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
   const handlePrevious = () => {
@@ -19,8 +20,8 @@ const AdDetail = ({ ad, visible, onClose }) => {
 
   return (
     <Modal
-      style={{ top: "15%", zIndex: 1000 }}
-      width={"60rem"}
+      style={{ top: "5%", zIndex: 1000 }}
+      width={"70rem"}
       title={
         <div
           style={{
@@ -33,7 +34,7 @@ const AdDetail = ({ ad, visible, onClose }) => {
           {ad.title}
         </div>
       }
-      visible={visible}
+      open={open}
       onCancel={onClose}
       footer={[
         <Button key="back" onClick={onClose}>
@@ -41,15 +42,15 @@ const AdDetail = ({ ad, visible, onClose }) => {
         </Button>,
       ]}
     >
-      <div style={{ display: "flex", gap: "2rem" }}>
-        <div style={{ flex: "1", textAlign: "center" }}>
+      <div style={{ display: "flex" }}>
+        <div style={{ flex: "1.5", textAlign: "center" }}>
           <Image
             src={ad.imagesAd[currentImage]?.imageURL || ""}
             alt={ad.title}
             style={{
               width: "100%",
-              maxHeight: "50vh",
-              minHeight: "50vh",
+              maxHeight: "60vh", // Tăng chiều cao tối đa của hình ảnh
+              minHeight: "60vh",
               objectFit: "contain",
             }}
           />
@@ -85,9 +86,9 @@ const AdDetail = ({ ad, visible, onClose }) => {
         >
           <h2>Mệnh: {ad.element}</h2>
 
-          <div>
+          <div style={{ fontSize: "1rem" }}>
             <h2>Thông tin chi tiết:</h2>
-            <p>{ad.description}</p>
+            <p className="ad-description">{ad.description}</p>
           </div>
           <h2 style={{ color: "green" }}>
             Giá: {ad.price.toLocaleString()} VNĐ

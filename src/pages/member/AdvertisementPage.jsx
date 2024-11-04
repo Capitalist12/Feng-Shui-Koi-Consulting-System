@@ -127,6 +127,11 @@ function AdvertisementPage({ currentUser }) {
     }
   };
 
+  // Sắp xếp theo ngày, bài mới nhất lên đầu
+  const sortedAds = currentAds.sort(
+    (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+  );
+
   return (
     <Layout>
       <Navbar />
@@ -238,17 +243,12 @@ function AdvertisementPage({ currentUser }) {
               >
                 <CreateAdForm onSubmit={handleAdSubmit} loading={loading} />
               </Modal>
-
-              {/* <div>
-              <ViewUserAdsButton />
-              {/* Các thành phần khác của trang */}
-              {/* </div> */}
             </div>
           </div>
         </div>
 
         <div className="ads-list">
-          {currentAds.map((ad) => (
+          {sortedAds.map((ad) => (
             <div
               key={ad.adID}
               className="advertisement"
@@ -264,16 +264,15 @@ function AdvertisementPage({ currentUser }) {
                   +{ad.imagesAd.length - 1} hình ảnh
                 </span>
               )}
-              <h2 style={{ color: "green" }}>
+              <h2 style={{ margin: "20px 0", color: "green" }}>
                 Giá: {ad.price.toLocaleString()} VNĐ
               </h2>
-              <p>{truncateDescription(ad.description, 50)}</p>{" "}
-              {/* thông tin  */}
-              {/* <p className="ad-user">Người đăng: {ad.user}</p> */}
+              <p className="ad-description">
+                {truncateDescription(ad.description, 50)}
+              </p>
               <p style={{ fontStyle: "italic", marginTop: "1rem" }}>
                 Danh mục: {ad.category.categoryName}
               </p>
-              {/* <Button onClick={() => setEditingAd(ad)}>Sửa</Button> */}
             </div>
           ))}
           <div className="pagination">
@@ -291,7 +290,7 @@ function AdvertisementPage({ currentUser }) {
       {selectedAd && (
         <AdDetail
           ad={selectedAd}
-          visible={isShowDetails}
+          open={isShowDetails}
           onClose={handleCloseModal}
         />
       )}

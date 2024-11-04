@@ -87,10 +87,12 @@ function CompatibilityPage() {
   const handleCalculateCompatibility = async () => {
     //  access token từ lS và kiểm tra role
     const accessToken = localStorage.getItem("accessToken");
-    const isMember =
-      accessToken && JSON.parse(accessToken).role.toUpperCase() === "MEMBER";
+    const isVIP =
+      (accessToken &&
+        JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
+      (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
 
-    if (!isMember) {
+    if (!isVIP) {
       message.error("Bạn phải là thành viên để tính toán độ tương thích.");
       navigate("/errorMem"); // Điều hướng tới trang lỗi
       return;

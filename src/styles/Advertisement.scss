@@ -66,6 +66,12 @@
   font-weight: bold;
 }
 
+// xuong dong cho AdDetail va Embla
+.ad-description {
+  white-space: pre-wrap;
+  font-size: 1rem !important;
+}
+
 #sec2-ad {
   display: flex;
   justify-content: space-between;
@@ -128,13 +134,14 @@
     gap: 2rem;
 
     .advertisement {
-      width: calc(100% / 4 - 2rem);
-      height: 65vh;
+      width: calc(100% / 3 - 2rem);
+      height: 70vh;
       background-color: white;
       padding: 10px;
       box-shadow: 0px 0px 1rem rgb(170, 170, 170);
       border-radius: 8px;
       text-align: center;
+      font-size: 1rem;
       transition: transform 0.4s ease;
       display: flex;
       flex-direction: column;
@@ -143,6 +150,10 @@
 
       &:hover {
         transform: translateY(-1rem);
+      }
+
+      .ad-description {
+        white-space: pre-wrap;
       }
 
       h2,
