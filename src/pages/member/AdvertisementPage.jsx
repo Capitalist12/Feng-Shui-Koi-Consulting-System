@@ -10,6 +10,7 @@ import {
   Modal,
   Menu,
   Dropdown,
+  Card,
 } from "antd";
 import CreateAdForm from "../../components/Advertisement/CreateAdForm";
 import SearchBar from "../../components/Advertisement/SearchBar";
@@ -31,6 +32,7 @@ import { useNavigate } from "react-router-dom";
 import AdDetails from "../../components/Advertisement/AdDetails";
 import { PiPlantFill } from "react-icons/pi";
 import { FaChevronDown } from "react-icons/fa";
+import CustomeFooter from "../../components/HomePage/Footer/CustomeFooter";
 
 function AdvertisementPage() {
   const [form] = useForm();
@@ -43,7 +45,7 @@ function AdvertisementPage() {
   const [isCreateAd, setIsCreateAd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const adsPerPage = 8;
+  const adsPerPage = 10;
 
   const fetchAds = async () => {
     try {
@@ -197,6 +199,7 @@ function AdvertisementPage() {
           </h2>
         </Title>
       </section>
+
       <EmblaCarousel ads={adsE.slice(0, 6)} />
 
       <div className="filter-element">
@@ -349,11 +352,11 @@ function AdvertisementPage() {
       </div>
 
       <section id="sec2-ad">
-        {/* filter */}
+        <Title style={{ marginLeft: "2rem" }}>Các bài đăng</Title>
 
         <div className="ads-list">
           {currentAds.map((ad) => (
-            <div
+            <Card
               key={ad.adID}
               className="advertisement"
               onClick={() => handleAdClick(ad.adID)}
@@ -361,23 +364,25 @@ function AdvertisementPage() {
               <h1 style={{ textShadow: "2px 2px 1rem gray" }}>
                 Mệnh: {ad.element}
               </h1>
-              <h3>{ad.title}</h3>
+              <h3>{truncateDescription(ad.title, 30)}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
               {ad.imagesAd.length > 1 && (
                 <span style={{ fontStyle: "italic" }}>
                   +{ad.imagesAd.length - 1} hình ảnh
                 </span>
               )}
-              <h2 style={{ margin: "20px 0", color: "green" }}>
-                Giá: {ad.price.toLocaleString()} VNĐ
-              </h2>
+
+              <div className="price-container">
+                <h2>Giá: {ad.price.toLocaleString()} VNĐ</h2>
+              </div>
+
               {/* <p className="ad-description">
-                {truncateDescription(ad.description, 50)}
-              </p>
-              <p style={{ fontStyle: "italic", marginTop: "1rem" }}>
-                Danh mục: {ad.category.categoryName}
-              </p> */}
-            </div>
+            {truncateDescription(ad.description, 50)}
+          </p>
+          <p style={{ fontStyle: "italic", marginTop: "1rem" }}>
+            Danh mục: {ad.category.categoryName}
+          </p> */}
+            </Card>
           ))}
           <div className="pagination">
             <Pagination
@@ -385,12 +390,17 @@ function AdvertisementPage() {
               total={displayAds.length}
               pageSize={adsPerPage}
               onChange={(page) => setCurrentPage(page)}
-              style={{ textAlign: "center", marginTop: "3rem" }}
+              style={{
+                textAlign: "center",
+                marginTop: "5rem",
+                marginBottom: "4rem",
+              }}
             />
           </div>
         </div>
       </section>
       {selectedAd && <AdDetails />}
+      <CustomeFooter />
     </Layout>
   );
 }

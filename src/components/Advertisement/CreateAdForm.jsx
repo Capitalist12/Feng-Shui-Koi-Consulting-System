@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
 
-const CreateAdForm = ({ form, onSubmit }) => {
+const CreateAdForm = ({ form, onSubmit, loading }) => {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -153,7 +153,7 @@ const CreateAdForm = ({ form, onSubmit }) => {
             style={{ minHeight: "8rem", width: "100%" }} // chieu rong max
             placeholder="Thông tin chi tiết, liên lạc, số điện thoại,..."
             autoSize={{ minRows: 4, maxRows: 10 }}
-            maxLength={500}
+            maxLength={700}
           />
         </Form.Item>
 
@@ -197,7 +197,7 @@ const CreateAdForm = ({ form, onSubmit }) => {
             justifyContent: "center",
           }}
         >
-          <Button size="large" htmlType="submit">
+          <Button size="large" htmlType="submit" loading={loading}>
             Đăng
           </Button>
         </div>

@@ -1,129 +1,14 @@
-// import React, { useState } from "react";
-// import { Modal, Button, Image } from "antd";
-// import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-// import "../../styles/Advertisement.scss";
-
-// const AdDetail = ({ ad, open, onClose }) => {
-//   const [currentImage, setCurrentImage] = useState(0);
-
-//   const handlePrevious = () => {
-//     setCurrentImage((prevIndex) =>
-//       prevIndex === 0 ? ad.imagesAd.length - 1 : prevIndex - 1
-//     );
-//   };
-
-//   const handleNext = () => {
-//     setCurrentImage((prevIndex) =>
-//       prevIndex === ad.imagesAd.length - 1 ? 0 : prevIndex + 1
-//     );
-//   };
-
-//   return (
-//     <Modal
-//       style={{ top: "5%", zIndex: 1000 }}
-//       width={"70rem"}
-//       title={
-//         <div
-//           style={{
-//             textAlign: "center",
-//             fontSize: "2rem",
-//             fontWeight: "bold",
-//             marginBottom: "2rem",
-//           }}
-//         >
-//           {ad.title}
-//         </div>
-//       }
-//       open={open}
-//       onCancel={onClose}
-//       footer={[
-//         <Button key="back" onClick={onClose}>
-//           Đóng
-//         </Button>,
-//       ]}
-//     >
-//       <div style={{ display: "flex" }}>
-//         <div style={{ flex: "1.5", textAlign: "center" }}>
-//           <Image
-//             src={ad.imagesAd[currentImage]?.imageURL || ""}
-//             alt={ad.title}
-//             style={{
-//               width: "100%",
-//               maxHeight: "60vh", // Tăng chiều cao tối đa của hình ảnh
-//               minHeight: "60vh",
-//               objectFit: "contain",
-//             }}
-//           />
-//           <p style={{ fontStyle: "italic" }}>
-//             Phân loại: {ad.category.categoryName}
-//           </p>
-//           {/* 2 nut */}
-//           <div
-//             style={{
-//               display: "flex",
-//               justifyContent: "center",
-//               gap: "1rem",
-//               marginTop: "1rem",
-//             }}
-//           >
-//             <Button onClick={handlePrevious} disabled={ad.imagesAd.length <= 1}>
-//               <FaAngleLeft />
-//             </Button>
-//             <Button onClick={handleNext} disabled={ad.imagesAd.length <= 1}>
-//               <FaAngleRight />
-//             </Button>
-//           </div>
-//         </div>
-
-//         <div
-//           style={{
-//             display: "flex",
-//             flexDirection: "column",
-//             gap: "2rem",
-//             flex: "1",
-//             textAlign: "center",
-//           }}
-//         >
-//           <h2>Mệnh: {ad.element}</h2>
-
-//           <div style={{ fontSize: "1rem" }}>
-//             <h2>Thông tin chi tiết:</h2>
-//             <p className="ad-description">{ad.description}</p>
-//           </div>
-//           <h2 style={{ color: "green" }}>
-//             Giá: {ad.price.toLocaleString()} VNĐ
-//           </h2>
-//           <div
-//             style={{
-//               display: "flex",
-//               justifyContent: "center",
-//               fontStyle: "italic",
-//               color: "brown",
-//               gap: "5rem",
-//             }}
-//           >
-//             <p>
-//               Ngày đăng: {new Date(ad.createdDate).toLocaleDateString("vi-VN")}
-//             </p>
-//             <p>Người đăng: {ad.user}</p>
-//           </div>
-//         </div>
-//       </div>
-//     </Modal>
-//   );
-// };
-
-// export default AdDetail;
-import React, { useState, useEffect } from "react";
-import { Image, Button, Layout, Card } from "antd";
+import React, { useState, useEffect, useMemo } from "react";
+import { Image, Button, Layout, Card, Pagination } from "antd";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import "../../styles/Advertisement.scss";
+import "../../styles/AdDetails.scss";
 import {
   getAdsByID,
   getVerifiedAdvertise,
 } from "../../services/advertiseAPIService";
 import Navbar from "../Utils/Navbar";
+import CustomeFooter from "../HomePage/Footer/CustomeFooter";
 
 const AdDetails = () => {
   const navigate = useNavigate();
@@ -132,6 +17,9 @@ const AdDetails = () => {
   const [relatedAds, setRelatedAds] = useState([]);
   const { adID } = useParams();
   const [currentImage, setCurrentImage] = useState(0);
+  const [displayAds, setDisplayAds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const adsPerPage = 10;
 
   useEffect(() => {
     const fetchAdDetails = async () => {
@@ -147,115 +35,162 @@ const AdDetails = () => {
       }
     };
 
+    fetchAdDetails();
+  }, [adID]);
+
+  useEffect(() => {
     const fetchRelatedAds = async () => {
-      try {
-        const response = await getVerifiedAdvertise();
-        setRelatedAds(response.data.result);
-      } catch (error) {
-        console.error("Error fetching related ads:", error);
+      if (ad) {
+        try {
+          const response = await getVerifiedAdvertise();
+          // Lọc các bài liên quan theo mệnh
+          const filteredRelatedAds = response.data.result.filter(
+            (relatedAd) =>
+              relatedAd.element === ad.element && relatedAd.adID !== ad.adID // Bài liên quan không chứa bài đang chọn
+          );
+          setRelatedAds(filteredRelatedAds);
+          setDisplayAds(filteredRelatedAds); // Cập nhật displayAds
+        } catch (error) {
+          console.error("Error fetching related ads:", error);
+        }
       }
     };
 
-    fetchAdDetails();
     fetchRelatedAds();
-  }, [adID]);
-
-  if (loading) return <div>Loading...</div>;
-  if (!ad) return <div>Ad not found.</div>;
+  }, [ad]);
 
   const handlePrevious = () => {
-    setCurrentImage((prevIndex) =>
-      prevIndex === 0 ? ad.imagesAd.length - 1 : prevIndex - 1
-    );
+    setCurrentImage((prevIndex) => {
+      if (ad.imagesAd && ad.imagesAd.length > 0) {
+        return prevIndex === 0 ? ad.imagesAd.length - 1 : prevIndex - 1;
+      }
+      return 0; // Giữ currentImage ở 0 nếu không có hình ảnh
+    });
   };
 
   const handleNext = () => {
-    setCurrentImage((prevIndex) =>
-      prevIndex === ad.imagesAd.length - 1 ? 0 : prevIndex + 1
-    );
+    setCurrentImage((prevIndex) => {
+      if (ad.imagesAd && ad.imagesAd.length > 0) {
+        return prevIndex === ad.imagesAd.length - 1 ? 0 : prevIndex + 1;
+      }
+      return 0; // Giữ currentImage ở 0 nếu không có hình ảnh
+    });
   };
 
+  // Hàm rút gọn mô tả
+  const truncateDescription = (description, maxLength) => {
+    if (description.length > maxLength) {
+      return description.slice(0, maxLength) + "...";
+    }
+    return description;
+  };
+
+  const indexOfLastAd = currentPage * adsPerPage;
+  const indexOfFirstAd = indexOfLastAd - adsPerPage;
+  const currentAds = useMemo(
+    () => displayAds.slice(indexOfFirstAd, indexOfLastAd),
+    [displayAds, indexOfFirstAd, indexOfLastAd]
+  );
+
+  if (loading) return <div>Loading...</div>;
+  if (!ad || !ad.imagesAd || ad.imagesAd.length === 0)
+    return <div>Ad not found or no images available.</div>;
+
   return (
-    <div>
-      <Layout>
-        <Navbar />
-        <div className="ad-detail-page" style={{ padding: "2rem" }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "1rem",
-            }}
-          >
-            <h1>{ad.title}</h1>
-            {ad.imagesAd.length > 0 ? (
-              <div style={{ position: "relative", maxWidth: 400 }}>
-                <Image
-                  alt={ad.title}
-                  src={ad.imagesAd[currentImage]?.imageURL}
-                  style={{ width: "100%" }}
+    <Layout>
+      <Navbar />
+      <div className="ad-detail-page">
+        <div className="ad-detail-container">
+          <div className="ad-detail-image">
+            <Image
+              alt={ad.title}
+              src={ad.imagesAd[currentImage]?.imageURL}
+              height={"70vh"}
+            />
+            {ad.imagesAd.length > 1 && (
+              <div className="navigation-buttons">
+                <Button
+                  icon={<FaAngleLeft />}
+                  onClick={handlePrevious}
+                  className="navigation-button"
                 />
-                {ad.imagesAd.length > 1 && (
-                  <>
-                    <Button
-                      icon={<FaAngleLeft />}
-                      onClick={handlePrevious}
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: 10,
-                        transform: "translateY(-50%)",
-                      }}
-                    />
-                    <Button
-                      icon={<FaAngleRight />}
-                      onClick={handleNext}
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        right: 10,
-                        transform: "translateY(-50%)",
-                      }}
-                    />
-                  </>
-                )}
+                <Button
+                  icon={<FaAngleRight />}
+                  onClick={handleNext}
+                  className="navigation-button"
+                />
               </div>
-            ) : (
-              <div>No images available.</div>
             )}
-            <p>{ad.description}</p>
-            <h2>{ad.price} VNĐ</h2>
-            <p>Danh mục: {ad.category.categoryName}</p>
           </div>
 
-          {/* Hiển thị các bài đăng liên quan */}
-          <div style={{ marginTop: "2rem" }}>
-            <h2>Các bài đăng khác</h2>
+          <div className="ad-detail-info">
+            <h1>Mệnh: {ad.element}</h1>
+            <h2>Danh mục: {ad.category.categoryName}</h2>
+
+            <h1 style={{ margin: "2rem " }}>{ad.title}</h1>
+
+            <h3>Thông tin chi tiết</h3>
+            <p style={{ padding: "0 8rem" }}>{ad.description}</p>
+
+            <h2 style={{ color: "green" }}>
+              Giá: {ad.price.toLocaleString()} VNĐ
+            </h2>
             <div
-              className="related-ads"
-              style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}
+              style={{
+                marginTop: "4rem",
+                display: "flex",
+                justifyContent: "center",
+                gap: "7rem",
+              }}
             >
-              {relatedAds.map((relatedAd) => (
-                <Card
-                  key={relatedAd.adID}
-                  hoverable
-                  style={{ width: 240 }}
-                  onClick={() => navigate(`/ad/${relatedAd.adID}`)} // qua bài khác khi click
-                >
-                  <Image
-                    alt={relatedAd.title}
-                    src={relatedAd.imagesAd[0]?.imageURL}
-                  />
-                  <h3>{relatedAd.title}</h3>
-                  <p>{relatedAd.price} VNĐ</p>
-                </Card>
-              ))}
+              <p>Người đăng: {ad.user}</p>
+              <p>Ngày đăng: {ad.createdDate}</p>
             </div>
           </div>
         </div>
-      </Layout>
-    </div>
+
+        <h2 style={{ marginTop: "5rem" }}>
+          Các bài đăng khác về mệnh {ad.element}
+        </h2>
+        <div className="moreAds-list">
+          {currentAds.map((relatedAd) => (
+            <Card
+              className="moreAdvertisement"
+              key={relatedAd.adID}
+              onClick={() => navigate(`/ad/${relatedAd.adID}`)}
+            >
+              <h1 style={{ textShadow: "2px 2px 1rem gray" }}>
+                Mệnh: {relatedAd.element}
+              </h1>
+              <h3>{truncateDescription(relatedAd.title, 30)}</h3>
+              <img src={relatedAd.imagesAd[0].imageURL} alt={relatedAd.title} />
+              {relatedAd.imagesAd.length > 1 && (
+                <span style={{ fontStyle: "italic" }}>
+                  +{relatedAd.imagesAd.length - 1} hình ảnh
+                </span>
+              )}
+
+              <div className="price-container">
+                <h2>Giá: {relatedAd.price.toLocaleString()} VNĐ</h2>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+      <Pagination
+        current={currentPage}
+        total={displayAds.length}
+        pageSize={adsPerPage}
+        onChange={(page) => setCurrentPage(page)}
+        style={{
+          justifyContent: "center",
+          marginTop: "5rem",
+          marginBottom: "4rem",
+        }}
+      />
+
+      <CustomeFooter />
+    </Layout>
   );
 };
 

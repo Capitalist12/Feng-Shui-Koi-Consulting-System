@@ -48,7 +48,8 @@ const EmblaCarousel = ({ ads }) => {
                   alt={ad.title}
                 />
                 <div className="embla-ad__slide__info">
-                  <h2>{ad.title}</h2>
+                  <h2>Mệnh: {ad.element}</h2>
+                  <h2>{truncateDescription(ad.title, 30)}</h2>
                   <p className="ad-description">
                     {truncateDescription(ad.description, 100)}
                   </p>
