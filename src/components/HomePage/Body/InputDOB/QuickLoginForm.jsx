@@ -9,6 +9,7 @@ import { saveToken } from "../../../../config/accessTokenConfig";
 import { login } from "../../../../redux/Slices/userSlice";
 import { loginAuth } from "../../../../services/AuthAPIService";
 import { TOKEN_EXPIRY_TIME_IN_MINUTE } from "../../../../utils/constant";
+import { toast } from "react-toastify";
 
 const QuickLoginForm = ({setIsLoading, isModalOpen, setIsModalOpen, setIsLoggedin }) => {
     const dispatch = useDispatch();
@@ -27,10 +28,11 @@ const QuickLoginForm = ({setIsLoading, isModalOpen, setIsModalOpen, setIsLoggedi
             if (response.status === 200 && response.data.code === 1000) {
                 dispatch(login(response.data.result.username));
                 saveToken(response.data.result.token, response.data.result.roleName, TOKEN_EXPIRY_TIME_IN_MINUTE);
+                toast.success("Đăng nhập thành công")
+                handleCloseModal();
             }
         } finally {
             setIsLoading(false);
-            handleCloseModal();
         }
     };
 

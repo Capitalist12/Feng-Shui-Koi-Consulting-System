@@ -58,7 +58,7 @@ const AdvertiseBlogContainer = () => {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     width: '100%',
-                                    fontSize: '1.2em'
+                                    fontSize: '1.2vw'
                                 }}
                             >
                                 <p>Xem thêm nhiều bài đăng mua bán về cá koi, vật phẩm trang trí hồ cá theo phong thủy tại mục &nbsp;</p>
@@ -80,7 +80,7 @@ const AdvertiseBlogContainer = () => {
                         topThreeBlog.map((item, index) => (
 
                             <Row key={index}>
-                                <Col span={23}>
+                                <Col span={24}>
                                     <BlogCardItem data={item}/>
                                 </Col>
                             </Row>

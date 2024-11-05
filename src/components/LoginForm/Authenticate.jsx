@@ -30,7 +30,6 @@ export default function Authenticate() {
       if (isMatch) {
         const authCode = isMatch[1];
         const response = await googleLogin(authCode);
-        // console
 
         if (response.status === 200 && response.data.code === 1000) {
           dispatch(login(response?.data?.result?.username));

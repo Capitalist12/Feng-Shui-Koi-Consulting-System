@@ -11,13 +11,17 @@
     }
 
     .advertise {
+        // background-color: red  !important;
+        width: 100%;
         height: 100vh;
+        height: 100%;
 
         h2 {
             color: white;
             font-size: 2.5em;
             margin: auto;
-            margin-top: 2em;
+            margin-top: 1em;
+            margin-bottom: 1.5em;
         }
 
         .embla {
@@ -30,7 +34,12 @@
             --slide-spacing-sm: 1.6rem;
             --slide-size-sm: 50%;
             --slide-spacing-lg: 2rem;
-            --slide-size-lg: calc(100% / 3);
+            --slide-size-lg: calc(100% / 2);
+
+            @media (min-width: 1500px) {
+                --slide-size-lg: calc(100% / 3);
+
+            }
         }
 
         .embla__viewport {
@@ -92,18 +101,26 @@
         }
 
         .advertise-card-item {
-            min-width: 100px;
+            min-width: 300px;
             height: 100%;
             height: 530px;
+            max-width: 350px;
             position: relative;
 
             img {
                 object-fit: cover;
                 transition: all 0.4s ease;
 
-                &:hover {
-                    object-fit: contain;
-                }
+            }
+
+            .description {
+                width: 100%;
+                margin: auto;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                text-overflow: ellipsis;
             }
 
             .advertise-createdDate {
@@ -154,7 +171,7 @@
     .blog {
         display: flex;
         flex-direction: column;
-        // align-items: center;
+        align-items: center;
         justify-content: end;
 
         h2 {
@@ -164,12 +181,12 @@
         }
 
         .blog-container {
-            width: 350px;
+            width: 400px;
             height: 250px;
             padding: 0 0 1.5em 0;
             background-color: white;
             border-radius: 10px;
-            margin-bottom: 3em;
+            margin-bottom: 2em;
             position: relative;
 
             img {
@@ -181,19 +198,19 @@
             }
 
             .blog-title {
-                height: '25%';
-                width: '90%';
-                margin: 'auto';
-                margin-top: '10px';
+                height: 27%;
+                width: 97%;
+                margin: auto;
+                margin-top: 5px;
 
                 a {
+                    width: 100%;
                     margin: auto;
                     overflow: hidden;
-                    max-width: 95%;
-                    display: -webkit-box;
-                    text-wrap: nowrap;
+                    white-space: nowrap;
                     text-overflow: ellipsis;
-                    font-size: 1.2em;
+                    display: block;
+                    font-size: 1.1vw;
                 }
             }
 
@@ -207,6 +224,9 @@
                 color: #969595;
             }
 
+            @media (max-width: 1400px) {
+                margin-bottom: 1em;
+            }
         }
 
         @media (max-width: 1200px) {
@@ -215,7 +235,7 @@
             .blog-container {
                 width: 280px;
                 height: 190px;
-                margin-bottom: 2em;
+                margin: 1.5em 0;
             }
 
             h2 {

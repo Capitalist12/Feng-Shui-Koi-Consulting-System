@@ -30,11 +30,11 @@
             height: 25vh;
             position: absolute;
             bottom: 25%;
-
+            
             .statistics-item {
                 height: 25vh;
                 width: 100%;
-
+                
                 div {
                     width: 80%;
                     height: 100%;
@@ -53,12 +53,16 @@
 
                     h2 {
                         margin: 0;
-                        font-size: 2em;
+                        text-align: center;
+                        width: 100%;
+                        height: 100%;
+                        font-size: 4vw;
                     }
 
                     p {
+                        font-size: 1.5vw;
                         text-align: center;
-                        width: 90%;
+                        width: 100%;
                     }
                 }
             }
@@ -180,6 +184,39 @@
                     transform: translateY(-15px);
                 }
             }
+           
+            @media (max-width: 1800px) {
+                a {
+                    bottom: 8vh;
+
+                    &:hover {
+                        width: 275px;
+                        height: 62px;
+                    }
+                }
+
+                .downArrow {
+                    bottom: 3vh;
+                }
+            }
+
+            @media (max-width: 1500px) {
+                a {
+                    height: 60px;
+                    width: 270px;
+                    bottom: 6vh;
+
+                    &:hover {
+                        width: 275px;
+                        height: 62px;
+                    }
+                }
+
+                .downArrow {
+                    bottom: 0.5vh;
+                }
+            }
+
         }
     }
 

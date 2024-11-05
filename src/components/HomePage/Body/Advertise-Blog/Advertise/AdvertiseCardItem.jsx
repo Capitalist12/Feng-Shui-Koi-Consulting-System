@@ -12,7 +12,9 @@ const AdvertiseCardItem = ({ data }) => (
         className='advertise-card-item'
         hoverable
         size='small'
-        cover={<img alt="example" style={{ height: '300px', objectFit: 'cover' }} src={data.imagesAd[0]?.imageURL || TestImage} />}
+        cover={(
+                <img alt="example" style={{ height: '300px', objectFit: 'cover' }} src={data.imagesAd[0]?.imageURL || TestImage} />
+        )}
     >
         <Meta
             title={<Link to={`/ad`}>{data.title}</Link>}
@@ -47,7 +49,7 @@ const AdvertiseCardItem = ({ data }) => (
                     ))
             }
         </p>
-        <p>
+        <p className='description'>
             Mô tả: {data.description}
         </p>
         <p>
