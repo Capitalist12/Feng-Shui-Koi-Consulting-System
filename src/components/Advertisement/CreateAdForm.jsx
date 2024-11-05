@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
 
-const CreateAdForm = ({ onSubmit }) => {
+const CreateAdForm = ({ form, onSubmit }) => {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -101,7 +101,7 @@ const CreateAdForm = ({ onSubmit }) => {
 
   return (
     <div>
-      <Form onFinish={handleFinish}>
+      <Form form={form} onFinish={handleFinish}>
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
@@ -162,7 +162,14 @@ const CreateAdForm = ({ onSubmit }) => {
           label="Giá (đơn vị VNĐ):"
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập giá!" },
+            {
+              type: "number",
+              min: 1000,
+              message: "Giá phải lớn hơn hoặc bằng 1.000 VNĐ!",
+            },
+          ]}
         >
           <InputNumber step={10000} style={{ width: "10rem" }} />
         </Form.Item>

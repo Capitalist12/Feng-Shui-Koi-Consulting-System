@@ -37,6 +37,7 @@ const UserAds = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchAds();
   }, []);
 

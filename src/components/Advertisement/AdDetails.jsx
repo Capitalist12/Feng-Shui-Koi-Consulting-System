@@ -115,16 +115,21 @@
 
 // export default AdDetail;
 import React, { useState, useEffect } from "react";
-import { Image, Button, Layout } from "antd";
+import { Image, Button, Layout, Card } from "antd";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/Advertisement.scss";
-import { getAdsByID } from "../../services/advertiseAPIService";
+import {
+  getAdsByID,
+  getVerifiedAdvertise,
+} from "../../services/advertiseAPIService";
 import Navbar from "../Utils/Navbar";
 
 const AdDetails = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [ad, setAd] = useState(null);
+  const [relatedAds, setRelatedAds] = useState([]);
   const { adID } = useParams();
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -133,7 +138,7 @@ const AdDetails = () => {
       setLoading(true);
       try {
         const response = await getAdsByID(adID);
-        const data = response.data.result[0]; //  phần tử đầu tiên của result'
+        const data = response.data.result[0];
         setAd(data);
       } catch (error) {
         console.error("Error fetching ad details:", error);
@@ -141,7 +146,18 @@ const AdDetails = () => {
         setLoading(false);
       }
     };
+
+    const fetchRelatedAds = async () => {
+      try {
+        const response = await getVerifiedAdvertise();
+        setRelatedAds(response.data.result);
+      } catch (error) {
+        console.error("Error fetching related ads:", error);
+      }
+    };
+
     fetchAdDetails();
+    fetchRelatedAds();
   }, [adID]);
 
   if (loading) return <div>Loading...</div>;
@@ -177,7 +193,7 @@ const AdDetails = () => {
               <div style={{ position: "relative", maxWidth: 400 }}>
                 <Image
                   alt={ad.title}
-                  src={ad.imagesAd[currentImage]?.imageURL} // Chọn ảnh hiện tại
+                  src={ad.imagesAd[currentImage]?.imageURL}
                   style={{ width: "100%" }}
                 />
                 {ad.imagesAd.length > 1 && (
@@ -211,6 +227,31 @@ const AdDetails = () => {
             <p>{ad.description}</p>
             <h2>{ad.price} VNĐ</h2>
             <p>Danh mục: {ad.category.categoryName}</p>
+          </div>
+
+          {/* Hiển thị các bài đăng liên quan */}
+          <div style={{ marginTop: "2rem" }}>
+            <h2>Các bài đăng khác</h2>
+            <div
+              className="related-ads"
+              style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}
+            >
+              {relatedAds.map((relatedAd) => (
+                <Card
+                  key={relatedAd.adID}
+                  hoverable
+                  style={{ width: 240 }}
+                  onClick={() => navigate(`/ad/${relatedAd.adID}`)} // qua bài khác khi click
+                >
+                  <Image
+                    alt={relatedAd.title}
+                    src={relatedAd.imagesAd[0]?.imageURL}
+                  />
+                  <h3>{relatedAd.title}</h3>
+                  <p>{relatedAd.price} VNĐ</p>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </Layout>

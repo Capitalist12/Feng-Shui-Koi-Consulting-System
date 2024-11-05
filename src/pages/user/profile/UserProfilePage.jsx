@@ -12,6 +12,7 @@ const UserProfilePage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchUserInfo = async () => {
       try {
         const response = await getInfo();

@@ -18,15 +18,8 @@ const SearchBar = ({ onSearch }) => {
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         onPressEnter={handleSearch}
-        style={{ width: "16rem" }}
+        style={{ width: "18rem" }}
       />
-      <Button
-        style={{ width: "5rem" }}
-        onClick={handleSearch}
-        className="custom-search-button"
-      >
-        Tìm kiếm
-      </Button>
     </div>
   );
 };

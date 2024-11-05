@@ -40,31 +40,7 @@
   }
 }
 
-// button phan search va filter
-.search-bar {
-  margin-left: 0.2rem;
-  display: flex;
-  .custom-search-button {
-    background-color: rgb(0, 0, 0);
-    border-color: rgb(0, 0, 0);
-    color: white;
-    margin-left: 1rem;
-    transition: transform 0.5s ease;
-
-    &:hover {
-      transform: translateY(-0.3rem);
-    }
-
-    &:hover {
-      background-color: white !important; /* Màu nền khi hover */
-      border-color: rgb(0, 0, 0) !important; /* Màu viền khi hover */
-      color: rgb(0, 0, 0) !important;
-      cursor: pointer;
-    }
-  }
-}
-
-.custom-search-button {
+.custom-button-black-white {
   background-color: rgb(0, 0, 0);
   border-color: rgb(0, 0, 0);
   color: white;
@@ -83,28 +59,6 @@
   }
 }
 
-.custom-post-button {
-  font-size: 1.5rem;
-  font-weight: bolder;
-  padding: 2rem 1rem;
-  background-color: white;
-  border: 3px solid green;
-  color: green;
-  margin-left: 1rem;
-  transition: transform 0.5s ease;
-
-  &:hover {
-    transform: translateY(-0.3rem);
-  }
-
-  &:hover {
-    background-color: green !important;
-    border-color: green !important;
-    color: white !important;
-    cursor: pointer;
-  }
-}
-
 // tat ca modal label deu in dam
 .ant-form-item-label > label {
   font-weight: bold;
@@ -119,145 +73,242 @@
 // phan filter theo element
 .filter-element {
   display: flex;
-  justify-content: end;
-  align-items: center;
-  gap: 1rem;
+  justify-content: center;
   margin-bottom: 2rem;
 
-  .filters {
+  .nam-cuc {
     display: flex;
-    text-align: center;
-    border: none;
-    background-color: none !important;
+    gap: 1rem;
 
-    .button-filter {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .button-filter-container {
-      display: flex;
-      align-items: center;
-    }
+    .button-filter-element {
+      .custom-button-kim {
+        background-color: white;
+        border-color: grey;
+        color: grey;
+        font-size: 1rem;
+        padding: 2rem 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: transform 0.5s ease;
 
-    .icon {
-      font-size: 1.2rem;
-      color: #000;
-    }
-    .sort {
-      margin-top: 2rem;
-    }
+        &:hover {
+          transform: scale(1.1);
+        }
+        &:hover {
+          background-color: grey !important; /* Màu nền khi hover */
+          border-color: white !important; /* Màu viền khi hover */
+          color: white !important;
+        }
 
-    .createAd {
-      margin-top: 3rem;
-      transition: transform 0.4s ease;
-
-      &:hover {
-        transform: translateY(-0.3rem);
+        svg {
+          font-size: 2rem;
+        }
       }
-    }
-  }
-  .button-filter-element {
-    .custom-button {
-      font-size: 1rem; // Tăng kích thước chữ lớn hơn
-      padding: 2rem 1rem; // Tăng kích thước padding
-      border-radius: 8px; // Bo tròn góc các nút
-      transition: transform 0.5s ease; // Hiệu ứng khi hover
+      .custom-button-moc {
+        background-color: white;
+        border-color: green;
+        color: green;
+        font-size: 1rem;
+        padding: 2rem 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: transform 0.5s ease;
 
-      &:hover {
-        transform: scale(1.1); // Phóng to nhẹ khi hover
+        &:hover {
+          transform: scale(1.1);
+        }
+        &:hover {
+          background-color: green !important; /* Màu nền khi hover */
+          border-color: white !important; /* Màu viền khi hover */
+          color: white !important;
+        }
+
+        svg {
+          font-size: 2rem;
+        }
       }
+      .custom-button-thuy {
+        background-color: white;
+        border-color: rgb(68, 124, 255);
+        color: rgb(68, 124, 255);
+        font-size: 1rem;
+        padding: 2rem 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: transform 0.5s ease;
 
-      svg {
-        font-size: 2rem; // Tăng kích thước icon
+        &:hover {
+          transform: scale(1.1);
+        }
+        &:hover {
+          background-color: rgb(
+            68,
+            124,
+            255
+          ) !important; /* Màu nền khi hover */
+          border-color: white !important; /* Màu viền khi hover */
+          color: white !important;
+        }
+
+        svg {
+          font-size: 2rem;
+        }
+      }
+      .custom-button-hoa {
+        background-color: white;
+        border-color: red;
+        color: red;
+        font-size: 1rem;
+        padding: 2rem 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: transform 0.5s ease;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+        &:hover {
+          background-color: red !important; /* Màu nền khi hover */
+          border-color: white !important; /* Màu viền khi hover */
+          color: white !important;
+        }
+
+        svg {
+          font-size: 2rem;
+        }
+      }
+      .custom-button-tho {
+        background-color: white;
+        border-color: rgb(74, 25, 25);
+        color: rgb(74, 25, 25);
+        font-size: 1rem;
+        padding: 2rem 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: transform 0.5s ease;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+        &:hover {
+          background-color: rgb(74, 25, 25) !important; /* Màu nền khi hover */
+          border-color: white !important; /* Màu viền khi hover */
+          color: white !important;
+        }
+
+        svg {
+          font-size: 2rem;
+        }
       }
     }
   }
 }
 
-#sec2-ad {
+// thanh search và 2 select
+.search-sort {
+  margin-bottom: 2rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 2rem;
 
-  .search-filter-post {
-    // border-right: solid 2px black;
-    margin-top: 2rem;
-    background-color: none;
-    width: 20vw;
-    height: 20vw;
+  .search-bar {
+    height: 2rem;
+  }
+}
+
+.createAd {
+  display: flex;
+  justify-content: end;
+  transition: transform 0.4s ease;
+
+  &:hover {
+    transform: translateY(-0.3rem);
+  }
+  .custom-post-button {
+    font-size: 1rem;
+    font-weight: bolder;
+    background-color: white;
+    border: 3px solid rgb(175, 175, 0);
+    color: rgb(175, 175, 0);
+    transition: transform 0.5s ease;
+
+    &:hover {
+      transform: translateY(-0.3rem);
+    }
+
+    &:hover {
+      background-color: rgb(175, 175, 0) !important;
+      border-color: rgb(175, 175, 0) !important;
+      color: white !important;
+      cursor: pointer;
+    }
+  }
+}
+
+.ads-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2rem 2rem;
+  gap: 2rem;
+
+  .advertisement {
+    width: calc(100% / 4 - 2rem);
+    height: 50vh;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0px 0px 1rem rgb(96, 96, 96);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1rem;
+    transition: transform 0.4s ease;
     display: flex;
     flex-direction: column;
-  }
+    justify-content: space-between;
+    overflow: hidden;
 
-  .ads-list {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 2rem 2rem;
-    gap: 2rem;
+    &:hover {
+      transform: translateY(-1rem);
+    }
 
-    .advertisement {
-      width: calc(100% / 3 - 2rem);
-      height: 50vh;
-      background-color: white;
-      padding: 10px;
-      box-shadow: 0px 0px 1rem rgb(170, 170, 170);
-      border-radius: 8px;
-      text-align: center;
-      font-size: 1rem;
-      transition: transform 0.4s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
+    .ad-description {
+      white-space: pre-wrap;
+    }
 
-      &:hover {
-        transform: translateY(-1rem);
-      }
-
-      .ad-description {
-        white-space: pre-wrap;
-      }
-
-      h2,
+    h2,
       h1,
       // h3,
       p {
-        margin: 0;
-        font-size: calc(
-          0.5rem + 0.5vw
-        ); /*  chỉnh kích thước chữ theo viewport */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+      margin: 0;
+      font-size: calc(0.5rem + 0.5vw); /*  chỉnh kích thước chữ theo viewport */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-      // .glegoo-regular {
-      //   font-family: "Glegoo", serif;
-      //   font-weight: 400;
-      //   font-style: normal;
-      // }
+    // .glegoo-regular {
+    //   font-family: "Glegoo", serif;
+    //   font-weight: 400;
+    //   font-style: normal;
+    // }
 
-      // .glegoo-bold {
-      //   font-family: "Glegoo", serif;
-      //   font-weight: 700;
-      //   font-style: normal;
-      // }
+    // .glegoo-bold {
+    //   font-family: "Glegoo", serif;
+    //   font-weight: 700;
+    //   font-style: normal;
+    // }
 
-      img {
-        width: 100%;
-        height: 50%;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 0.5rem;
-      }
+    img {
+      width: 100%;
+      height: 50%;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
 
-      .ad-details {
-        overflow-y: auto;
-        padding: 0.5rem;
-        font-size: calc(0.9rem + 0.3vw);
-      }
+    .ad-details {
+      overflow-y: auto;
+      padding: 0.5rem;
+      font-size: calc(0.9rem + 0.3vw);
     }
   }
 }
