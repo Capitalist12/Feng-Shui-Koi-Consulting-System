@@ -173,7 +173,20 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
             label="Tiêu đề"
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
+            rules={[
+              { required: true, message: "Vui lòng nhập tiêu đề!" },
+              {
+                // ko vượt quá 100 ký tự
+                validator: (_, value) => {
+                  if (value && value.length > 100) {
+                    return Promise.reject(
+                      "Tiêu đề không được vượt quá 100 ký tự!"
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
           >
             <Input
               maxLength={100}
@@ -185,7 +198,19 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
             label="Mô tả"
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
+            rules={[
+              { required: true, message: "Vui lòng nhập mô tả!" },
+              {
+                validator: (_, value) => {
+                  if (value && value.length > 800) {
+                    return Promise.reject(
+                      "Mô tả không được vượt quá 800 ký tự!"
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
           >
             <Input.TextArea
               style={{ minHeight: "7rem", width: "100%" }}
@@ -200,13 +225,17 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
             label="Giá"
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
+            rules={[
+              { required: true, message: "Vui lòng nhập giá!" },
+              {
+                type: "number",
+                min: 10000,
+                max: 1000000000,
+                message: "Giá phải trong khoảng 10.000 VNĐ tới 1 tỉ VNĐ!",
+              },
+            ]}
           >
-            <InputNumber
-              step={1000}
-              style={{ width: "100%" }}
-              placeholder="Nhập giá"
-            />
+            <InputNumber step={10000} style={{ width: "10rem" }} />
           </Form.Item>
 
           <Form.Item

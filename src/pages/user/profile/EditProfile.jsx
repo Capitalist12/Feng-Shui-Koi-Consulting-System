@@ -41,7 +41,6 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
       }
     }
   }, [visible, userInfo, form]);
-
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
@@ -54,20 +53,27 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
         message.error("Mật khẩu mới và xác nhận mật khẩu không khớp.");
         return;
       }
+
+      // Tạo payload với các giá trị từ form
       const payload = {
         username: values.username,
         dateOfBirth: values.dateOfBirth
           ? values.dateOfBirth.format("YYYY-MM-DD")
           : null,
         currentPassword: values.currentPassword,
-        newPassword: values.newPassword || values.currentPassword, // ko set pass mới thì gửi đi pass cũ
-        imageLink: values.imageLink,
+        newPassword: values.newPassword || values.currentPassword,
+        imageLink: values.imageLink, // Sử dụng imageLink ban đầu
       };
 
-      if (fileList.length > 0) {
+      // Kiểm tra nếu có file mới cần upload
+      if (fileList.length > 0 && fileList[0].originFileObj) {
+        // Chỉ upload nếu có file mới
         const file = fileList[0];
         const url = await uploadFile(file.originFileObj);
         payload.imageLink = url;
+      } else {
+        // Nếu không có file mới, giữ nguyên liên kết ảnh cũ
+        payload.imageLink = userInfo.imageLink;
       }
 
       setSubmitting(true);

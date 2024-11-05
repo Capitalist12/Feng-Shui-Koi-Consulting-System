@@ -133,12 +133,22 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
           label="Tiêu đề:"
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập tiêu đề!" },
+            {
+              // ko vượt quá 100 ký tự
+              validator: (_, value) => {
+                if (value && value.length > 100) {
+                  return Promise.reject(
+                    "Tiêu đề không được vượt quá 100 ký tự!"
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
         >
-          <Input
-            maxLength={100}
-            placeholder="Nhập tiêu đề (tối đa 100 ký tự)"
-          />
+          <Input placeholder="Nhập tiêu đề (tối đa 100 ký tự)" />
         </Form.Item>
 
         <Form.Item
@@ -146,14 +156,24 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
           label="Mô tả:"
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập mô tả!" },
+            {
+              // ko vượt quá 100 ký tự
+              validator: (_, value) => {
+                if (value && value.length > 800) {
+                  return Promise.reject("Mô tả không được vượt quá 800 ký tự!");
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
           style={{ width: "100%" }} // chieu rong max
         >
           <Input.TextArea
             style={{ minHeight: "8rem", width: "100%" }} // chieu rong max
             placeholder="Thông tin chi tiết, liên lạc, số điện thoại,..."
             autoSize={{ minRows: 4, maxRows: 10 }}
-            maxLength={700}
           />
         </Form.Item>
 
@@ -166,8 +186,9 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
             { required: true, message: "Vui lòng nhập giá!" },
             {
               type: "number",
-              min: 1000,
-              message: "Giá phải lớn hơn hoặc bằng 1.000 VNĐ!",
+              min: 10000,
+              max: 1000000000,
+              message: "Giá phải trong khoảng 10.000 VNĐ tới 1 tỉ VNĐ!",
             },
           ]}
         >

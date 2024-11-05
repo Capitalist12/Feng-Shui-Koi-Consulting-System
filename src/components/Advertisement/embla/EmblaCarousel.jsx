@@ -40,14 +40,14 @@ const EmblaCarousel = ({ ads }) => {
       <div className="embla-ad__viewport" ref={emblaRef}>
         <div className="embla-ad__container">
           {sortedAds.map((ad, index) => (
-            <div className="embla-ad__slide" key={index}>
-              <div className="embla-ad__slide__content">
+            <div className="embla-ad__slides" key={index}>
+              <div className="embla-ad__slides__content">
                 <img
-                  className="embla-ad__slide__img"
+                  className="embla-ad__slides__img"
                   src={ad.imagesAd[0]?.imageURL || ""}
                   alt={ad.title}
                 />
-                <div className="embla-ad__slide__info">
+                <div className="embla-ad__slides__info">
                   <h2>Mệnh: {ad.element}</h2>
                   <h2>{truncateDescription(ad.title, 30)}</h2>
                   <p className="ad-description">
