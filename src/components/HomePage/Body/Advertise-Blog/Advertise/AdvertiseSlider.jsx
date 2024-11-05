@@ -41,10 +41,10 @@ export default function AdvertiseSlider() {
               <div key={index} className="embla__slide">
                 {
                   compareWithCurrentTime(item.createdDate) ?
-                    <Badge.Ribbon text="Mới nhất" color="red">
+                    // <Badge.Ribbon text="Mới nhất" color="red">
 
                       <AdvertiseCardItem data={item} />
-                    </Badge.Ribbon>
+                    // </Badge.Ribbon>
                     :
                     <AdvertiseCardItem data={item} />
                 }

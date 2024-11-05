@@ -8,11 +8,13 @@ import { createNewComment, getBlogComments } from "../../services/CommentAPIServ
 import { useForm } from "antd/es/form/Form";
 import { FaPaperPlane } from "react-icons/fa";
 import AdvertiseCardItem from "../HomePage/Body/Advertise-Blog/Advertise/AdvertiseCardItem.jsx";
+import { getAllAdvertises } from "../../services/advertiseAPIService.js";
 
 const BlogComment = ({ id }) => {
     const [comments, setComments] = useState([]);
     const [content, setContent] = useState("");
     const [advertise, setAdvertise] = useState([]);
+    const [topThreeAds, setTopThreeAds] = useState([]);
     const [form] = useForm();
     const [isDisable, setIsDisable] = useState(true);
 
@@ -26,22 +28,30 @@ const BlogComment = ({ id }) => {
         }
     }
 
-    
     const getRandomThreeAdvertise = (array, count = 3) => {
-        const shuffled = [...array].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, count);
+            const shuffled = [...array].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
     }
-    
+
+    const getAdvertises = async () => {
+        const response = await getAllAdvertises();
+        response.status === 200 && response.data.code === 1000 ? setAdvertise(response.data.result) : setAdvertise([]);
+    }
+
     const getAllComments = async (blogId) => {
         const response = await getBlogComments(blogId);
         response.status === 200 && response.data.code === 1000 ? setComments(response.data.result) : setComments([]);
     }
 
-    
     useEffect(() => {
         id && getAllComments(id);
+        getAdvertises();
     }, [id]);
-    
+
+    useEffect(() => {
+        setTopThreeAds(getRandomThreeAdvertise(advertise));
+    }, [advertise]);
+
     const submitButton = (
         <Button htmlType="submit" type="primary" disabled={isDisable}>
             <FaPaperPlane />
@@ -74,9 +84,13 @@ const BlogComment = ({ id }) => {
                 </div>
             </Col>
             <Col xl={7} className="advertise-container">
-                {/* <AdvertiseCardItem />
-                <AdvertiseCardItem />
-                <AdvertiseCardItem /> */}
+                {topThreeAds && topThreeAds.length > 0 &&
+                    topThreeAds.map((item, index) => (
+                        <div key={index}>
+                            <AdvertiseCardItem data={item}/>
+                        </div>
+                    ))
+                }
             </Col>
         </Row>
     )

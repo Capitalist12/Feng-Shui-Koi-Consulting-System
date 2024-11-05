@@ -10,7 +10,7 @@ const BlogCardItem = ({ data }) => {
                 <img src={data.imageURL} />
             </div>
             <div className="blog-title">
-                <Link to={`blog/${data.blogID}`}>{data.title}f sf sdfs fsdffs dfsdfsd sdf</Link>
+                <Link to={`blog/${data.blogID}`}>{data.title}</Link>
             </div>
             <div className="blog-info">
                 <Space >

@@ -6,7 +6,7 @@ const calculateElement = async (dob) => {
         const response = await axios.post('calculate', dob);
         return response;
     } catch (err) {
-        toast.error(err.message);
+        return err;
     }
 }
 

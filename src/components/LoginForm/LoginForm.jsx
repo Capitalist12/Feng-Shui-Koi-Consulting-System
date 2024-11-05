@@ -54,10 +54,8 @@ const LoginForm = ({setIsForgetPassword, setIsLoading}) => {
       <Form.Item
         name="email"
         rules={[
-          {
-            required: true,
-            message: "Vui lòng nhập email!",
-          },
+          { required: true, message: "Vui lòng nhập email!" },
+          { type: "email", message: "Email không hợp lệ!" },
         ]}
       >
         <Input prefix={<MailOutlined />} type="email" placeholder="Email" />

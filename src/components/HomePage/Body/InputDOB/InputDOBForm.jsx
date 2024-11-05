@@ -6,12 +6,13 @@ import { calculateElement } from "../../../../services/consultingAPIService";
 import '../../../../styles/homepage/body/InputDOB/DOBCarousel/embla.scss';
 import '../../../../styles/homepage/body/InputDOB/InputDOBForm.scss';
 import '../../../../styles/homepage/body/InputDOB/DOBCarousel/base.css';
+import { toast } from "react-toastify";
 
 const START_YEAR = 1950
 const END_YEAR = 2025
 const YEAR_COUNT = END_YEAR - START_YEAR + 1
 
-const InputDOBForm = ({setdata}) => {
+const InputDOBForm = ({setIsModalOpen, setShowForm, setdata}) => {
     const [selectedDay, setSelectedDay] = useState(1)
     const [selectedMonth, setSelectedMonth] = useState(1)
     const [selectedYear, setSelectedYear] = useState(START_YEAR)
@@ -24,6 +25,12 @@ const InputDOBForm = ({setdata}) => {
         const response = await calculateElement({
             dob: dateOfBirth
         });
+
+        if(response?.response?.status === 401 && response?.response.data.code === 1011) {
+            setShowForm(true);
+            setIsModalOpen(true);
+            toast.error("Vui lòng đăng nhập để sử dụng chức năng này");
+        }
 
         response.status === 200 && response.data.code === 1000 && setdata({
             dob: dateOfBirth,

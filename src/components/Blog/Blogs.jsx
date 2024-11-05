@@ -46,6 +46,7 @@ const Blogs = () => {
                     <Col md={24} xl={16} className="blogs-col-row-col">
                         {randomBlogs.length > 0 &&
                             <div className="blog-item" key={randomBlogs[0].blogID}>
+                                <span className="blog-tag">Nổi bật</span>
                                 <img src={randomBlogs[0].imageURL} />
                                 <Link to={randomBlogs[0].blogID}>
                                     {randomBlogs[0].title}
@@ -98,48 +99,16 @@ const Blogs = () => {
                                             </Link>
 
                                             <p>
+                                                <FaCommentAlt />
+                                                &nbsp;
+                                                {filteredBlog.comments.length}
+                                                &emsp;
                                                 {filteredBlog.createdDate}
                                             </p>
                                         </div>
                                     </div>
                                 ))
                         }
-                        <div className="blog-item">
-                            <img src={imageTest} />
-                            <Link to="">
-                                Link test
-                            </Link>
-                            <p>
-                                20-10-2004
-                            </p>
-                        </div>
-                        <div className="blog-item">
-                            <img src={imageTest} />
-                            <Link to="">
-                                Link test
-                            </Link>
-                            <p>
-                                20-10-2004
-                            </p>
-                        </div>
-                        <div className="blog-item">
-                            <img src={imageTest} />
-                            <Link to="">
-                                Link test
-                            </Link>
-                            <p>
-                                20-10-2004
-                            </p>
-                        </div>
-                        {/* <div className="blog-item">
-                            <img src={imageTest} />
-                            <Link to="">
-                                Link test
-                            </Link>
-                            <p>
-                                20-10-2004
-                            </p>
-                        </div> */}
                     </Col>
                 </Row>
             </Col>

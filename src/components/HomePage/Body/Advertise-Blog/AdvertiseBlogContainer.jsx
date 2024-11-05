@@ -5,7 +5,6 @@ import AdvertiseSlider from "./Advertise/AdvertiseSlider";
 import BlogCardItem from "./Blog/BlogCardItem";
 import "../../../../styles/homepage/body/advertise-blog/AdvertiseBlogContainer.scss";
 import { getAllBlogs } from "../../../../services/blogAPIService";
-import { height, width } from "@mui/system";
 
 const AdvertiseBlogContainer = () => {
 
@@ -59,11 +58,11 @@ const AdvertiseBlogContainer = () => {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     width: '100%',
-                                    fontSize: '1.2em'
+                                    fontSize: '1.2vw'
                                 }}
                             >
                                 <p>Xem thêm nhiều bài đăng mua bán về cá koi, vật phẩm trang trí hồ cá theo phong thủy tại mục &nbsp;</p>
-                                <Link to="" style={{ color: 'white', textDecoration: 'underline' }}>MUA/BÁN</Link>
+                                <Link to="/ad" style={{ color: 'white', textDecoration: 'underline' }}>MUA/BÁN</Link>
                             </div>
                         </Row>
                     </Row>
@@ -81,7 +80,7 @@ const AdvertiseBlogContainer = () => {
                         topThreeBlog.map((item, index) => (
 
                             <Row key={index}>
-                                <Col span={23}>
+                                <Col span={24}>
                                     <BlogCardItem data={item}/>
                                 </Col>
                             </Row>
