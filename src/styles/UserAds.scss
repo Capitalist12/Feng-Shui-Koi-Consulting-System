@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Arima:wght@100..700&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap");
+
+#sec1-my-ads {
+  background-image: url("../assets/images/—Pngtree—image\ of\ mount\ fuji\ by_3629200.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
+    z-index: 1;
+    pointer-events: none; /* ko cho phép lớp phủ chặn click */
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 2rem rgb(255, 255, 255);
+    font-family: "Hubot Sans", sans-serif;
+  }
+
+  h2 {
+    color: white;
+    font-family: "Hubot Sans", sans-serif;
+    font-weight: bold;
+    text-shadow: 2px 2px 2rem black;
+  }
+}
+
+#sec2-ad {
+  .my-ads-filters {
+    height: 7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .ba-cuc {
+      margin-left: 2rem;
+      display: flex;
+      gap: 2rem;
+      background-color: none !important;
+
+      .custom-check-button {
+        background-color: rgb(0, 0, 0);
+        border-color: rgb(0, 0, 0);
+        color: white;
+        font-size: 1.2rem;
+        padding: 1em 1em;
+        width: 7em;
+        height: 4rem;
+        transition: transform 0.5s ease;
+
+        &:hover {
+          transform: translateY(-0.3rem);
+          background-color: white !important;
+          border-color: rgb(0, 0, 0) !important;
+          color: rgb(0, 0, 0) !important;
+          cursor: pointer;
+        }
+      }
+
+      .icon {
+        font-size: 1.2rem;
+        color: #000;
+      }
+    }
+  }
+
+  .ads-list {
+    margin-top: 2rem;
+    .ad-item {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      width: 80%;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+      .ad-title {
+        font-size: 18px;
+        color: #333;
+      }
+
+      .ad-description {
+        font-size: 14px;
+        color: #666;
+      }
+    }
+  }
+
+  .pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+}

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
 body {
   overflow-x: hidden; // fix width full
@@ -6,40 +6,39 @@ body {
   scroll-behavior: smooth;
 }
 
-#sec1-comp {
+.layout-comp {
   position: relative;
-  height: 100vh;
-  width: 100vw;
-  background-image: url("../assets/images/leo-bayard-eLBa_U2lRD8-unsplash.jpg");
+  background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: scroll;
+  background-attachment: fixed;
 
   &::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(100deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
     z-index: 1;
-    pointer-events: none;
+    pointer-events: none; /* ko cho phép lớp phủ chặn click */
   }
+}
+
+.header-comp {
+  position: relative;
+  z-index: 2;
+
   .title {
-    position: relative;
-    z-index: 2; /* Nội dung trên lớp phủ */
     margin-top: 2rem;
     margin-left: 4vw;
     font-size: 7em;
     font-weight: 800;
     color: white;
     text-shadow: 3px 3px 5px rgb(0, 255, 21);
-    font-family: "Playball";
-    font-optical-sizing: auto;
+    // font-family: "Playwrite GB S", serif;
     font-style: oblique;
-    z-index: 2;
+    z-index: 2; /* Nội dung trên lớp phủ */
 
     h2 {
       color: rgb(255, 255, 255);
@@ -49,28 +48,29 @@ body {
 
   .infor-data {
     width: 100%;
-    height: 30vh;
-    position: absolute;
-    bottom: 25%;
-    z-index: 2;
+    margin-top: 20px;
+    z-index: 1;
+    position: relative; /* Để hiệu ứng mờ hoạt động đúng */
 
     h1 {
       color: white;
+      font-family: "Playwrite GB S", serif;
       font-size: 2em;
       text-shadow: 5px 5px 1px rgba(0, 0, 0, 0.7);
+      text-align: center; /* Căn giữa tiêu đề */
     }
 
     .data {
-      height: 25vh;
+      display: flex;
+      justify-content: space-around;
       width: 100%;
-      font-family: serif;
+      font-family: "Playwrite GB S", serif;
 
       div {
-        width: 50%;
-        height: 100%;
-        margin: auto;
+        width: 30%; /* Điều chỉnh chiều rộng của từng div */
         font-size: 2em;
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.1); /* Màu nền trong suốt */
+        backdrop-filter: blur(10px); /* Mờ nền */
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -83,23 +83,22 @@ body {
         &:hover {
           transform: translateY(-1rem);
         }
+
         p {
           color: white;
           text-align: center;
+
           width: 90%;
-          font-size: 4rem;
+          font-size: 2rem;
           font-weight: 600;
         }
       }
     }
 
     .scroll-button {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgb(133, 122, 122);
-      border: solid 3px;
+      background-color: rgba(255, 255, 255, 0.1); /*  nền trong suốt */
+      backdrop-filter: blur(10px);
+      border: solid 3px rgb(255, 255, 255); /*  viền trong suốt */
       border-radius: 50%;
       width: 9rem;
       height: 5rem;
@@ -110,14 +109,14 @@ body {
       transition: background-color 0.3s, transform 0.3s;
 
       &:hover {
-        background-color: rgb(255, 255, 255);
-        transform: translateX(-50%) scale(1.1);
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
       }
 
       svg {
         width: 2rem;
         height: 3rem;
-        fill: rgb(0, 0, 0);
+        fill: rgb(255, 255, 255);
       }
     }
   }
@@ -165,9 +164,9 @@ body {
           background-color: rgb(155, 155, 155) !important;
           transition: background-color 1.5s ease;
 
-          // &:hover {
-          //   background-color: rgb(155, 155, 155) !important;
-          // }
+          &:hover {
+            background-color: rgb(155, 155, 155) !important;
+          }
         }
       }
     }

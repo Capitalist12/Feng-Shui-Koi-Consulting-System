@@ -1,43 +1,64 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import api from "../../config/axiosConfig";
 import "../../styles/Advertisement.scss";
 import Navbar from "../../components/Utils/Navbar";
-import { Layout, Button, Pagination, Card, Select, Modal } from "antd";
+import {
+  Layout,
+  Button,
+  Pagination,
+  Select,
+  Modal,
+  Menu,
+  Dropdown,
+  Card,
+} from "antd";
 import CreateAdForm from "../../components/Advertisement/CreateAdForm";
-import EditAdForm from "../../components/Advertisement/EditAdForm";
 import SearchBar from "../../components/Advertisement/SearchBar";
 import Title from "antd/es/typography/Title";
-import { IoFishOutline } from "react-icons/io5";
-import { GiAquarium } from "react-icons/gi";
+import { IoFishOutline, IoWater, IoWaterOutline } from "react-icons/io5";
+import { GiAquarium, GiMetalBar } from "react-icons/gi";
 import { RiAlignItemLeftLine } from "react-icons/ri";
 import EmblaCarousel from "../../components/Advertisement/embla/EmblaCarousel";
 import { Option } from "antd/es/mentions";
-import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
-import AdDetail from "../../components/Advertisement/AdDetails";
-import { BiBeenHere } from "react-icons/bi";
+import {
+  FaArrowTrendDown,
+  FaArrowTrendUp,
+  FaFire,
+  FaMountainSun,
+} from "react-icons/fa6";
 import { useForm } from "antd/es/form/Form";
-import ViewUserAdsButton from "../../components/Advertisement/ViewUserAdsButton";
+import { MdFileUpload, MdOutlineWaterDrop } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import AdDetails from "../../components/Advertisement/AdDetails";
+import { PiPlantFill } from "react-icons/pi";
+import { FaChevronDown } from "react-icons/fa";
+import CustomeFooter from "../../components/HomePage/Footer/CustomeFooter";
 
-function AdvertisementPage({ currentUser }) {
-  const form = useForm();
+function AdvertisementPage() {
+  const [form] = useForm();
+  const navigate = useNavigate();
   const [ads, setAds] = useState([]);
   const [adsE, setAdsE] = useState([]);
   const [displayAds, setDisplayAds] = useState([]);
   const [sortValue, setSortValue] = useState("Sắp xếp theo:...");
   const [selectedAd, setSelectedAd] = useState(null);
-  const [isShowDetails, setIsShowDetails] = useState(false);
   const [isCreateAd, setIsCreateAd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const adsPerPage = 8;
+  const adsPerPage = 10;
 
   const fetchAds = async () => {
     try {
       const response = await api.get("/ad/verified");
 
-      setAds(response.data.result);
-      setAdsE(response.data.result); // set cho Embla
-      setDisplayAds(response.data.result);
+      // sort theo created truoc
+      const sortedAds = response.data.result.sort(
+        (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+      );
+
+      setAds(sortedAds);
+      setAdsE(sortedAds); // set cho Embla
+      setDisplayAds(sortedAds);
       setSortValue("Sắp xếp theo:...");
     } catch (e) {
       console.log("Error fetching ads: ", e);
@@ -45,6 +66,7 @@ function AdvertisementPage({ currentUser }) {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchAds();
   }, []);
 
@@ -76,15 +98,28 @@ function AdvertisementPage({ currentUser }) {
   };
 
   const handleCategoryFilter = async (categoryName) => {
-    const filteredAds = ads.filter(
-      (ad) => ad.category.categoryName === categoryName
-    );
+    if (categoryName === "") {
+      setDisplayAds(ads);
+      // tat ca
+    } else {
+      const filteredAds = ads.filter(
+        (ad) => ad.category.categoryName === categoryName
+      );
+      setDisplayAds(filteredAds);
+    }
+    setCurrentPage(1);
+    setSortValue("Sắp xếp theo:...");
+  };
+
+  const handleElementFilter = async (elementName) => {
+    const filteredAds = ads.filter((ad) => ad.element === elementName);
     setDisplayAds(filteredAds);
     setCurrentPage(1);
     setSortValue("Sắp xếp theo:...");
   };
 
-  const truncateDescription = (description, maxLength) => {
+  // dai qua ...
+  const truncateTitle = (description, maxLength) => {
     if (description.length > maxLength) {
       return description.slice(0, maxLength) + "...";
     }
@@ -93,16 +128,16 @@ function AdvertisementPage({ currentUser }) {
 
   const indexOfLastAd = currentPage * adsPerPage;
   const indexOfFirstAd = indexOfLastAd - adsPerPage;
-  const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd);
+  const currentAds = useMemo(
+    () => displayAds.slice(indexOfFirstAd, indexOfLastAd),
+    [displayAds, indexOfFirstAd, indexOfLastAd]
+  );
 
-  const showAdDetail = (ad) => {
-    setSelectedAd(ad);
-    setIsShowDetails(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsShowDetails(false);
-    setSelectedAd(null);
+  const handleAdClick = (adID) => {
+    // tìm quảng cáo được chọn từ danh sách ads
+    const selectedAd = displayAds.find((ad) => ad.adID === adID);
+    setSelectedAd(selectedAd);
+    navigate(`/ad/${adID}`); // Chuyển đến trang chi tiết quảng cáo
   };
 
   const handleAdSubmit = async (values) => {
@@ -128,150 +163,219 @@ function AdvertisementPage({ currentUser }) {
     }
   };
 
+  // //dropdown
+  // const menu = (
+  //   <Menu>
+  //     <Menu.Item key="1" onClick={() => handleCategoryFilter("Koi Fish")}>
+  //       <IoFishOutline style={{ marginRight: "0.5rem" }} />
+  //       Koi Fish
+  //     </Menu.Item>
+  //     <Menu.Item
+  //       key="2"
+  //       onClick={() => handleCategoryFilter("Aquarium Supplies")}
+  //     >
+  //       <GiAquarium style={{ marginRight: "0.5rem" }} />
+  //       Aquarium Supplies
+  //     </Menu.Item>
+  //     <Menu.Item
+  //       key="3"
+  //       onClick={() => handleCategoryFilter("Feng Shui Items")}
+  //     >
+  //       <RiAlignItemLeftLine style={{ marginRight: "0.5rem" }} />
+  //       Feng Shui Items
+  //     </Menu.Item>
+  //   </Menu>
+  // );
+
   return (
     <Layout>
       <Navbar />
       <section id="sec1-ad">
-        <Title level={1} className="custom-title">
-          SHOP VỚI NHỮNG MẶT HÀNG VỀ CÁ KOI PHONG THỦY
-          <h2>Thuận mua vừa bán - Không mua cũng được</h2>
-        </Title>
-
-        <EmblaCarousel ads={adsE.slice(0, 5)} />
+        <h1>SHOP Cá Koi & Phong Thủy</h1>
+        <h2>
+          {" "}
+          Phong thủy vượng tài, bể Koi thịnh vượng - Mang tài lộc vào không gian
+          sống!
+        </h2>
       </section>
 
-      <section id="sec2-ad">
-        <div className="search-filter-post">
-          <div className="search-bar">
-            <SearchBar onSearch={handleSearch} />
-          </div>
-          {/* filter */}
-          <div className="filters">
-            <Title style={{ marginTop: "2rem" }} level={4}>
-              Bộ lọc tìm kiếm
-            </Title>
-            <div className="button-filter">
-              <div className="button-filter-container">
-                <IoFishOutline className="icon" />
-                <Button
-                  className="custom-search-button"
-                  style={{ width: "8rem" }}
-                  onClick={() => handleCategoryFilter("Koi Fish")}
-                >
-                  Koi Fish
-                </Button>
-              </div>
+      <EmblaCarousel ads={adsE.slice(0, 6)} />
 
-              <div className="button-container">
-                <GiAquarium className="icon" />
-                <Button
-                  className="custom-search-button"
-                  style={{ width: "8rem" }}
-                  onClick={() => handleCategoryFilter("Aquarium Supplies")}
-                >
-                  Aquarium Supplies
-                </Button>
-              </div>
-
-              <div className="button-container">
-                <RiAlignItemLeftLine className="icon" />
-                <Button
-                  className="custom-search-button"
-                  style={{ width: "8rem" }}
-                  onClick={() => handleCategoryFilter("Feng Shui Items")}
-                >
-                  Feng Shui Items
-                </Button>
-              </div>
-
-              <Select
-                className="sort"
-                value={sortValue}
-                style={{ width: 200 }}
-                onChange={(value) => {
-                  setSortValue(value);
-                  if (value === "asc") {
-                    sortPriceAsc();
-                  } else if (value === "desc") {
-                    sortPriceDes();
-                  } else {
-                    setDisplayAds(ads);
-                  }
-                }}
-              >
-                <Option value="asc">
-                  Giá thấp đến cao{" "}
-                  <FaArrowTrendUp style={{ marginLeft: "0.5rem" }} />
-                </Option>
-                <Option value="desc">
-                  Giá cao đến thấp{" "}
-                  <FaArrowTrendDown style={{ marginLeft: "0.5rem" }} />
-                </Option>
-              </Select>
-            </div>
-          </div>
-          <div className="createAd">
-            <h2>Click ngay để đăng bài quảng cáo !</h2>
-            <BiBeenHere className="icon" />
+      <div className="filter-element">
+        {/* 5 cuc */}
+        <div className="nam-cuc">
+          <div className="button-filter-element">
             <Button
-              style={{ marginBottom: "1rem" }}
-              className="custom-search-button"
-              onClick={() => setIsCreateAd(true)}
+              className="custom-button-kim"
+              style={{ width: "8rem" }}
+              onClick={() => handleElementFilter("Kim")}
             >
-              Đăng bài
+              <GiMetalBar />
+              KIM
             </Button>
-            <Modal
-              width={"40rem"}
-              title={
-                <div
-                  style={{
-                    textAlign: "center",
-                    fontSize: "2rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Đăng bài
-                </div>
-              }
-              visible={isCreateAd}
-              onCancel={() => setIsCreateAd(false)}
-              footer={null}
-            >
-              <CreateAdForm onSubmit={handleAdSubmit} loading={loading} />
-            </Modal>
+          </div>
 
-            <div>
-              <ViewUserAdsButton />
-              {/* Các thành phần khác của trang */}
-            </div>
+          <div className="button-filter-element">
+            <Button
+              className="custom-button-moc"
+              style={{ width: "8rem" }}
+              onClick={() => handleElementFilter("Mộc")}
+            >
+              <PiPlantFill />
+              MỘC
+            </Button>
+          </div>
+          <div className="button-filter-element">
+            <Button
+              className="custom-button-thuy"
+              style={{ width: "8rem" }}
+              onClick={() => handleElementFilter("Thủy")}
+            >
+              <IoWaterOutline />
+              THỦY
+            </Button>
+          </div>
+          <div className="button-filter-element">
+            <Button
+              className="custom-button-hoa"
+              style={{ width: "8rem" }}
+              onClick={() => handleElementFilter("Hỏa")}
+            >
+              <FaFire />
+              HỎA
+            </Button>
+          </div>
+
+          <div className="button-filter-element">
+            <Button
+              className="custom-button-tho"
+              style={{ width: "8rem" }}
+              onClick={() => handleElementFilter("Thổ")}
+            >
+              <FaMountainSun />
+              THỔ
+            </Button>
           </div>
         </div>
+      </div>
+
+      <div className="search-sort">
+        {/* nut dang bai */}
+        <div className="createAd">
+          <Button
+            size="large"
+            style={{}}
+            className="custom-post-button"
+            onClick={() => setIsCreateAd(true)}
+          >
+            <MdFileUpload /> Đăng bài
+          </Button>
+          <Modal
+            style={{ top: "4rem" }}
+            width={"40rem"}
+            title={
+              <div
+                style={{
+                  textAlign: "center",
+                  fontSize: "2rem",
+                  fontWeight: "bold",
+                }}
+              >
+                Đăng bài quảng cáo
+              </div>
+            }
+            visible={isCreateAd}
+            onCancel={() => {
+              setIsCreateAd(false);
+              form.resetFields();
+            }}
+            footer={null}
+          >
+            <CreateAdForm
+              form={form}
+              onSubmit={handleAdSubmit}
+              loading={loading}
+            />
+          </Modal>
+        </div>
+
+        {/* thanh search */}
+        <div className="search-bar">
+          <SearchBar onSearch={handleSearch} />
+        </div>
+
+        {/* danh muc */}
+        <Select
+          style={{ width: 200 }}
+          placeholder="Danh mục"
+          onChange={handleCategoryFilter}
+          defaultValue=""
+        >
+          <Option value="">Tất cả</Option>
+          <Option value="Koi Fish">
+            <IoFishOutline style={{ marginRight: "0.5rem" }} />
+            Koi Fish
+          </Option>
+          <Option value="Aquarium Supplies">
+            <GiAquarium style={{ marginRight: "0.5rem" }} />
+            Aquarium Supplies
+          </Option>
+          <Option value="Feng Shui Items">
+            <RiAlignItemLeftLine style={{ marginRight: "0.5rem" }} />
+            Feng Shui Items
+          </Option>
+        </Select>
+
+        {/* theo gia tien*/}
+        <Select
+          className="sort"
+          value={sortValue}
+          style={{ width: 200 }}
+          onChange={(value) => {
+            setSortValue(value);
+            if (value === "asc") {
+              sortPriceAsc();
+            } else if (value === "desc") {
+              sortPriceDes();
+            }
+          }}
+        >
+          <Option value="asc">
+            Giá thấp đến cao <FaArrowTrendUp style={{ marginLeft: "0.5rem" }} />
+          </Option>
+          <Option value="desc">
+            Giá cao đến thấp{" "}
+            <FaArrowTrendDown style={{ marginLeft: "0.5rem" }} />
+          </Option>
+        </Select>
+      </div>
+
+      <section id="sec2-ad">
+        <Title style={{ marginLeft: "2rem" }}>Các bài đăng</Title>
 
         <div className="ads-list">
           {currentAds.map((ad) => (
-            <div
+            <Card
               key={ad.adID}
               className="advertisement"
-              onClick={() => showAdDetail(ad)}
+              onClick={() => handleAdClick(ad.adID)}
             >
-              <h2>Mệnh: {ad.element}</h2>
-              <h3>{ad.title}</h3>
+              <h1 style={{ textShadow: "2px 2px 1rem gray" }}>
+                Mệnh: {ad.element}
+              </h1>
+              <h3>{truncateTitle(ad.title, 30)}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
               {ad.imagesAd.length > 1 && (
                 <span style={{ fontStyle: "italic" }}>
                   +{ad.imagesAd.length - 1} hình ảnh
                 </span>
               )}
-              <h2 style={{ color: "green" }}>
-                Giá: {ad.price.toLocaleString()} VNĐ
-              </h2>
-              <p>Thông tin: {truncateDescription(ad.description, 50)}</p>{" "}
-              {/* <p className="ad-user">Người đăng: {ad.user}</p> */}
-              <p style={{ fontStyle: "italic", marginTop: "1rem" }}>
-                Danh mục: {ad.category.categoryName}
-              </p>
-              {/* <Button onClick={() => setEditingAd(ad)}>Sửa</Button> */}
-            </div>
+
+              <div className="price-cate">
+                <h2>Giá: {ad.price.toLocaleString()} VNĐ</h2>
+                <p>Danh mục: {ad.category.categoryName}</p>
+              </div>
+            </Card>
           ))}
           <div className="pagination">
             <Pagination
@@ -279,19 +383,17 @@ function AdvertisementPage({ currentUser }) {
               total={displayAds.length}
               pageSize={adsPerPage}
               onChange={(page) => setCurrentPage(page)}
-              style={{ textAlign: "center", marginTop: "3rem" }}
+              style={{
+                textAlign: "center",
+                marginTop: "5rem",
+                marginBottom: "4rem",
+              }}
             />
           </div>
         </div>
       </section>
-      {/* modal khi đã chọn quảng cáo */}
-      {selectedAd && (
-        <AdDetail
-          ad={selectedAd}
-          visible={isShowDetails}
-          onClose={handleCloseModal}
-        />
-      )}
+      {selectedAd && <AdDetails />}
+      <CustomeFooter />
     </Layout>
   );
 }

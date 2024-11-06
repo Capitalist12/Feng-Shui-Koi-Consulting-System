@@ -63,7 +63,7 @@ const Result = ({ isVisible, resultData, onClose }) => {
       title="Kết Quả Tính Toán"
       visible={isVisible}
       style={{ top: "10%" }}
-      bodyStyle={{ textAlign: "center" }}
+      // bodyStyle={{ textAlign: "center" }}
       width={"50rem"}
       onCancel={onClose}
       footer={[
@@ -74,19 +74,27 @@ const Result = ({ isVisible, resultData, onClose }) => {
     >
       {resultData ? (
         <div>
-          <Title level={2}>Điểm tương thích:</Title>
-          <Paragraph>
-            <strong style={{ fontWeight: "bold" }}>Điểm tương thích cá:</strong>{" "}
-            {resultData.fishCompatibilityScore}%
-          </Paragraph>
-          <Paragraph>
-            <strong style={{ fontWeight: "bold" }}>Điểm tương thích hồ:</strong>{" "}
-            {resultData.tankCompatibilityScore}%
-          </Paragraph>
-          <Paragraph>
-            <strong style={{ fontWeight: "bold" }}> Điểm tổng hợp:</strong>{" "}
-            {resultData.calculateCompatibilityScore}%
-          </Paragraph>
+          <Title style={{ textAlign: "center" }} level={2}>
+            Điểm tương thích:
+          </Title>
+          <div style={{ margin: "2rem" }}>
+            <Paragraph style={{ textAlign: "center" }}>
+              <strong style={{ fontWeight: "bold" }}>
+                Điểm tương thích cá:
+              </strong>{" "}
+              {resultData.fishCompatibilityScore}%
+            </Paragraph>
+            <Paragraph style={{ textAlign: "center" }}>
+              <strong style={{ fontWeight: "bold" }}>
+                Điểm tương thích hồ:
+              </strong>{" "}
+              {resultData.tankCompatibilityScore}%
+            </Paragraph>
+            <Paragraph style={{ textAlign: "center" }}>
+              <strong style={{ fontWeight: "bold" }}> Điểm tổng hợp:</strong>{" "}
+              {resultData.calculateCompatibilityScore}%
+            </Paragraph>
+          </div>
           <Paragraph>
             <strong style={{ fontWeight: "bold" }}>Lời khuyên:</strong>{" "}
             {resultData.advise}

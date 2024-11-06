@@ -1,6 +1,10 @@
 import React from "react";
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  ScrollRestoration,
+} from "react-router-dom";
 import DashboardPage from "./pages/admin/dashboard/DashboardPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import LoginPage from "./pages/login/LoginPage";
@@ -24,7 +28,7 @@ import Statistic from "./components/Overview/Statistic";
 import AdvertiseManagementContainer from "./components/Advertise/AdvertiseManagementContainer";
 import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
 import UserAds from "./pages/user/history/UserAds";
-
+import AdDetails from "./components/Advertisement/AdDetails";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -70,6 +74,11 @@ const App = () => {
       path: "ad",
       element: <AdvertisementPage />,
     },
+    {
+      path: "ad/:adID",
+      element: <AdDetails />,
+    },
+
     {
       path: "login",
       element: <LoginPage />,
@@ -127,7 +136,6 @@ const App = () => {
       element: <ErrorMember />,
     },
   ]);
-
   return <RouterProvider router={router} />;
 };
 

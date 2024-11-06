@@ -16,6 +16,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const path = location.pathname.split("/");
     setCurrent(path[1] || "");
   }, [location.pathname]);

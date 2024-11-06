@@ -6,26 +6,30 @@ import { loginAuth } from "../../services/AuthAPIService";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/Slices/userSlice.js";
-import { GoogleURL } from '../../config/googleConfig.js';
-import { saveToken } from '../../config/accessTokenConfig.js';
+import { GoogleURL } from "../../config/googleConfig.js";
+import { saveToken } from "../../config/accessTokenConfig.js";
 import { TOKEN_EXPIRY_TIME_IN_MINUTE } from "../../utils/constant.jsx";
 
-const LoginForm = ({setIsForgetPassword, setIsLoading}) => {
+const LoginForm = ({ setIsForgetPassword, setIsLoading }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onFinish = async (values) => {
     setIsLoading(true);
-    try{
+    try {
       const { email, password } = values;
       const response = await loginAuth({ email, password });
-  
+
       if (response.status === 200 && response.data.code === 1000) {
         dispatch(login(response.data.result.username));
-        saveToken(response.data.result.token, response.data.result.roleName, TOKEN_EXPIRY_TIME_IN_MINUTE);
-  
+        saveToken(
+          response.data.result.token,
+          response.data.result.roleName,
+          TOKEN_EXPIRY_TIME_IN_MINUTE
+        );
+
         const role = response.data.result.roleName.toUpperCase();
-  
+
         role !== "ADMIN" ? navigate("/") : navigate("/dashboard");
       }
     } finally {
@@ -68,13 +72,20 @@ const LoginForm = ({setIsForgetPassword, setIsLoading}) => {
             required: true,
             message: "Vui lòng nhập mật khẩu!",
           },
+          {
+            min: 6,
+            message: "Mật khẩu phải có ít nhất 6 ký tự!",
+          },
         ]}
       >
         <Input.Password prefix={<LockOutlined />} placeholder="Mật khẩu" />
       </Form.Item>
+
       <Form.Item>
         <Flex justify="space-between" align="center">
-          <Link to="" onClick={() => setIsForgetPassword(true)}>Quên mật khẩu ?</Link>
+          <Link to="" onClick={() => setIsForgetPassword(true)}>
+            Quên mật khẩu ?
+          </Link>
         </Flex>
       </Form.Item>
       <Form.Item>
