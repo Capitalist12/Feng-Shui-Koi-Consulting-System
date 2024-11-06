@@ -104,6 +104,7 @@ public class AdvertisementService {
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
+    //Get list of rejected ads
     public List<AdvertisementResponse> getListAdvertisementsRejected() {
         return advertisementRepo.findAdsRejected().stream()
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
@@ -113,6 +114,12 @@ public class AdvertisementService {
     public List<AdvertisementResponse> getAdvertisementByFilter(String categoryName, String username, String elementName) {
         return advertisementRepo.filterAdvertisements(categoryName, username, elementName).stream()
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
+    }
+
+    //Get list of ads suitable with user's element
+    public List<AdvertisementResponse> getAdvertisementByUserElement(){
+        return advertisementRepo.findAdsByUserElement(userService.getMyInfo().getElement())
+                .stream().map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
     //Let admin verify if the pending ads

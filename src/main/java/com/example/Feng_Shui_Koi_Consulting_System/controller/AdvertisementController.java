@@ -83,6 +83,15 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get ads by user element
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
+    @GetMapping("/user-element")
+    ApiResponse<List<AdvertisementResponse>> getAdsByUserElement(){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getAdvertisementByUserElement())
+                .build();
+    }
+
     //Find ads by filter
     @PostMapping("/filter")
     ApiResponse<List<AdvertisementResponse>> getAdByFilter(@RequestBody FindAdByFilterRequest request){

@@ -32,6 +32,7 @@ public class ConsultingAPI {
     ConsultingService consultingService;
     CompatibilityService compatibilityService;
 
+    //Calculate user's element
     @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @PostMapping("/calculate")
     public ApiResponse<String> calculateElementName(@RequestBody CalculateElementRequest request) {
@@ -40,6 +41,8 @@ public class ConsultingAPI {
                 .result(elementName)
                 .build();
     }
+
+    //Calculate the compatibility between you and your koi fishes and tank
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PostMapping("/compatibility")
     ApiResponse<CompatibilityResponse> calculateCompatibilityScore
@@ -57,6 +60,7 @@ public class ConsultingAPI {
                 .build();
     }
 
+    //Consulting koi fishes and tank
     @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @PostMapping("/consulting")
     public ApiResponse<ConsultingResponse> getConsulting(@RequestBody ConsultingRequest request){
