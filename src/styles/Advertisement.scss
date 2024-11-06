@@ -4,11 +4,6 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
-  // background-position: center;
-  // background-repeat: no-repeat;
-  // background-size: cover;
-  // background-attachment: fixed;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -20,23 +15,23 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+    background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
     z-index: 1;
     pointer-events: none; /* ko cho phép lớp phủ chặn click */
   }
-  .custom-title {
-    z-index: 2;
-    text-align: center;
-    color: rgb(255, 255, 255);
-    text-shadow: 3px 5px 2px black;
-    font-family: "Playwrite GB S", serif;
+  h1 {
     font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 2rem rgb(255, 255, 255);
+    font-family: "Hubot Sans", sans-serif;
+  }
 
-    h2 {
-      margin-top: 4rem;
-      color: rgb(0, 0, 0);
-      text-shadow: 1px 1px 1rem rgb(255, 255, 255);
-    }
+  h2 {
+    margin-top: 2rem;
+    color: white;
+    font-family: "Hubot Sans", sans-serif;
+    font-weight: bold;
+    text-shadow: 2px 2px 2rem black;
   }
 }
 
@@ -254,7 +249,7 @@
   .advertisement {
     position: relative;
     width: calc(100% / 5 - 1.5rem);
-    height: 50vh;
+    height: 55vh;
     background-color: white;
     padding: 10px;
     box-shadow: 0px 0px 1rem rgb(96, 96, 96);
@@ -285,7 +280,7 @@
       object-fit: cover;
     }
 
-    .price-container {
+    .price-cate {
       position: absolute;
       bottom: 10px;
       left: 10px;

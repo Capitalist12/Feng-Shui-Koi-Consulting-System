@@ -78,11 +78,12 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
 
       setSubmitting(true);
       await onSave(payload);
-      message.success("Thông tin đã được lưu thành công");
       onClose();
       form.resetFields();
     } catch (err) {
-      message.error("Vui lòng kiểm tra lại các trường thông tin.");
+      {
+        ("");
+      }
     } finally {
       setSubmitting(false);
     }

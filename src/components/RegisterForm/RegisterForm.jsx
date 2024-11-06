@@ -10,8 +10,13 @@ import { toast } from "react-toastify";
 import "../../styles/RegisterPage.scss";
 import { verifyEmail } from "../../services/AuthAPIService";
 
-const RegisterForm = ({ setVerifiedMail, setIsVerifiedMail, setIsLoading, setCurrentStep, setRegisterData }) => {
-
+const RegisterForm = ({
+  setVerifiedMail,
+  setIsVerifiedMail,
+  setIsLoading,
+  setCurrentStep,
+  setRegisterData,
+}) => {
   const handleRegister = async (values) => {
     setIsLoading(true);
 
@@ -28,7 +33,6 @@ const RegisterForm = ({ setVerifiedMail, setIsVerifiedMail, setIsLoading, setCur
         setVerifiedMail(values.email);
         setIsVerifiedMail(true);
       }
-
     } finally {
       setIsLoading(false);
     }
@@ -86,14 +90,17 @@ const RegisterForm = ({ setVerifiedMail, setIsVerifiedMail, setIsLoading, setCur
           placeholder="Ngày tháng năm sinh"
         />
       </Form.Item>
-
       <Form.Item
         name="password"
         label="Mật khẩu"
         rules={[
           {
             required: true,
-            message: 'Vui lòng nhập mật khẩu!',
+            message: "Vui lòng nhập mật khẩu!",
+          },
+          {
+            min: 6,
+            message: "Mật khẩu phải có ít nhất 6 ký tự!",
           },
         ]}
         hasFeedback
@@ -104,19 +111,19 @@ const RegisterForm = ({ setVerifiedMail, setIsVerifiedMail, setIsLoading, setCur
       <Form.Item
         name="confirmPassword"
         label="Xác nhận mật khẩu"
-        dependencies={['password']}
+        dependencies={["password"]}
         hasFeedback
         rules={[
           {
             required: true,
-            message: 'Vui lòng xác nhận mật khẩu!',
+            message: "Vui lòng xác nhận mật khẩu!",
           },
           ({ getFieldValue }) => ({
             validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
+              if (!value || getFieldValue("password") === value) {
                 return Promise.resolve();
               }
-              return Promise.reject(new Error('Mật khẩu không trùng khớp!'));
+              return Promise.reject(new Error("Mật khẩu không trùng khớp!"));
             },
           }),
         ]}
@@ -135,7 +142,6 @@ const RegisterForm = ({ setVerifiedMail, setIsVerifiedMail, setIsLoading, setCur
         </Button>
       </Form.Item>
     </Form>
-
   );
 };
 

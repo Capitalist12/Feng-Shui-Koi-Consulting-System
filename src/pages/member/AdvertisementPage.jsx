@@ -119,7 +119,7 @@ function AdvertisementPage() {
   };
 
   // dai qua ...
-  const truncateDescription = (description, maxLength) => {
+  const truncateTitle = (description, maxLength) => {
     if (description.length > maxLength) {
       return description.slice(0, maxLength) + "...";
     }
@@ -191,13 +191,12 @@ function AdvertisementPage() {
     <Layout>
       <Navbar />
       <section id="sec1-ad">
-        <Title level={1} className="custom-title">
-          SHOP Cá Koi & Phong Thủy
-          <h2>
-            Phong thủy vượng tài, bể Koi thịnh vượng - Mang tài lộc vào không
-            gian sống!
-          </h2>
-        </Title>
+        <h1>SHOP Cá Koi & Phong Thủy</h1>
+        <h2>
+          {" "}
+          Phong thủy vượng tài, bể Koi thịnh vượng - Mang tài lộc vào không gian
+          sống!
+        </h2>
       </section>
 
       <EmblaCarousel ads={adsE.slice(0, 6)} />
@@ -364,7 +363,7 @@ function AdvertisementPage() {
               <h1 style={{ textShadow: "2px 2px 1rem gray" }}>
                 Mệnh: {ad.element}
               </h1>
-              <h3>{truncateDescription(ad.title, 30)}</h3>
+              <h3>{truncateTitle(ad.title, 30)}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
               {ad.imagesAd.length > 1 && (
                 <span style={{ fontStyle: "italic" }}>
@@ -372,16 +371,10 @@ function AdvertisementPage() {
                 </span>
               )}
 
-              <div className="price-container">
+              <div className="price-cate">
                 <h2>Giá: {ad.price.toLocaleString()} VNĐ</h2>
+                <p>Danh mục: {ad.category.categoryName}</p>
               </div>
-
-              {/* <p className="ad-description">
-            {truncateDescription(ad.description, 50)}
-          </p>
-          <p style={{ fontStyle: "italic", marginTop: "1rem" }}>
-            Danh mục: {ad.category.categoryName}
-          </p> */}
             </Card>
           ))}
           <div className="pagination">

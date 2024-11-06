@@ -12,6 +12,7 @@ import {
   MdOutlinePending,
   MdOutlineVerified,
 } from "react-icons/md";
+import CustomeFooter from "../../../components/HomePage/Footer/CustomeFooter";
 
 const UserAds = () => {
   const [ads, setAds] = useState([]);
@@ -21,7 +22,7 @@ const UserAds = () => {
   const [loading, setLoading] = useState(false);
   const userName = ads && ads.length > 0 ? ads[0].user : "bạn";
   const [currentPage, setCurrentPage] = useState(1);
-  const adsPerPage = 8;
+  const adsPerPage = 10;
 
   const fetchAds = async () => {
     try {
@@ -75,7 +76,6 @@ const UserAds = () => {
   const handleEditSubmit = async (values) => {
     setLoading(true);
     try {
-      // Gửi yêu cầu PUT với các giá trị đã cập nhật
       const response = await api.put(`/ad/${selectedAd.adID}`, {
         title: values.title || selectedAd.title,
         description: values.description || selectedAd.description,
@@ -83,7 +83,7 @@ const UserAds = () => {
         element: values.element || selectedAd.element,
         categoryName: values.categoryName || selectedAd.category.categoryName,
         imagesURL:
-          values.imagesURL || selectedAd.imagesAd.map((img) => img.imageURL), // Chỉ truyền URL hình ảnh
+          values.imagesURL || selectedAd.imagesAd.map((img) => img.imageURL), // truyền URL hình ảnh
       });
 
       console.log("Response from API:", response);
@@ -96,70 +96,53 @@ const UserAds = () => {
     }
   };
 
+  // dai qua ...
+  const truncateTitle = (description, maxLength) => {
+    if (description.length > maxLength) {
+      return description.slice(0, maxLength) + "...";
+    }
+    return description;
+  };
   const indexOfLastAd = currentPage * adsPerPage;
   const indexOfFirstAd = indexOfLastAd - adsPerPage;
   const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd);
-
-  const truncateDescription = (description, maxLength) => {
-    if (description.length <= maxLength) return description;
-    return `${description.substring(0, maxLength)}...`;
-  };
 
   return (
     <Layout>
       <Navbar />
       <section id="sec1-my-ads">
-        <Title level={1} className="custom-title">
-          LỊCH SỬ ĐĂNG BÀI MUA-BÁN
-        </Title>
+        <h1>LỊCH SỬ ĐĂNG BÀI MUA-BÁN</h1>
+
+        <h2>Xin chào, {userName}!</h2>
       </section>
 
-      <div className="title-my-ads">
-        <Title level={2}>Xin chào, {userName}!</Title>
-      </div>
       <section id="sec2-ad">
         <div className="my-ads-filters">
           <div className="search-bar">
             <SearchBar onSearch={handleSearch} />
           </div>
-          <div className="filters">
-            <Title style={{ marginTop: "2rem" }} level={4}>
-              Bộ lọc tìm kiếm
-            </Title>
-            <div className="button-filter">
-              <div className="button-filter-container">
-                <MdOutlineVerified className="icon" />
-                <Button
-                  className="custom-search-button"
-                  style={{ width: "8rem" }}
-                  onClick={() => handleFilterByStatus("Verified")}
-                >
-                  Verified
-                </Button>
-              </div>
 
-              <div className="button-container">
-                <MdOutlinePending className="icon" />
-                <Button
-                  className="custom-search-button"
-                  style={{ width: "8rem" }}
-                  onClick={() => handleFilterByStatus("Pending")}
-                >
-                  Pending
-                </Button>
-              </div>
+          <div className="ba-cuc">
+            <Button
+              className="custom-check-button"
+              onClick={() => handleFilterByStatus("Verified")}
+            >
+              <MdOutlineVerified /> Verified
+            </Button>
 
-              <div className="button-container">
-                <MdOutlineAutoDelete className="icon" />
-                <Button
-                  className="custom-search-button"
-                  style={{ width: "8rem" }}
-                  onClick={() => handleFilterByStatus("Rejected")}
-                >
-                  Rejected
-                </Button>
-              </div>
-            </div>
+            <Button
+              className="custom-check-button"
+              onClick={() => handleFilterByStatus("Pending")}
+            >
+              <MdOutlinePending /> Pending
+            </Button>
+
+            <Button
+              className="custom-check-button"
+              onClick={() => handleFilterByStatus("Rejected")}
+            >
+              <MdOutlineAutoDelete /> Rejected
+            </Button>
           </div>
         </div>
 
@@ -168,28 +151,24 @@ const UserAds = () => {
             <div
               key={ad.adID}
               className="advertisement"
+              // an scss cua ben advertisement
               onClick={() => handleEditAd(ad)}
             >
               <h2>Mệnh: {ad.element}</h2>
               <h4 style={{ textShadow: "1px 1px 2rem blue" }}>
                 Trạng thái: {ad.status}
               </h4>
-              <h3>{ad.title}</h3>
+              <h3>{truncateTitle(ad.title, 30)}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
               {ad.imagesAd.length > 1 && (
                 <span style={{ fontStyle: "italic" }}>
                   +{ad.imagesAd.length - 1} hình ảnh
                 </span>
               )}
-              <h2 style={{ color: "green" }}>
-                Giá: {ad.price.toLocaleString()} VNĐ
-              </h2>
-              <p className="ad-description">
-                {truncateDescription(ad.description, 50)}
-              </p>
-              <p style={{ fontStyle: "italic", marginTop: "1rem" }}>
-                Danh mục: {ad.category.categoryName}
-              </p>
+              <div className="price-cate">
+                <h2>Giá: {ad.price.toLocaleString()} VNĐ</h2>
+                <p>Danh mục: {ad.category.categoryName}</p>
+              </div>
             </div>
           ))}
           <div className="pagination">
@@ -213,6 +192,7 @@ const UserAds = () => {
           loading={loading}
         />
       )}
+      <CustomeFooter />
     </Layout>
   );
 };

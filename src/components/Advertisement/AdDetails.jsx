@@ -107,6 +107,7 @@ const AdDetails = () => {
               src={ad.imagesAd[currentImage]?.imageURL}
               height={"70vh"}
             />
+            {/* nhiều hơn 1 ảnh thì hiện 2 nút chuyển */}
             {ad.imagesAd.length > 1 && (
               <div className="navigation-buttons">
                 <Button
