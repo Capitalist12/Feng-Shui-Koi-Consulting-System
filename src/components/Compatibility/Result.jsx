@@ -1,11 +1,65 @@
 import React from "react";
-import { Button, Modal, Typography } from "antd";
-import "../../styles/Result.scss";
+import { Button, Col, Modal, Progress, Row, Typography } from "antd";
+import "../../styles/compability/Result.scss";
 const { Title, Paragraph } = Typography;
 
 const Result = ({ isVisible, resultData, onClose }) => {
+  const fishScore = resultData.fishCompatibilityScore;
+  const tankScore = resultData.tankCompatibilityScore;
+  const totalScore = resultData.calculateCompatibilityScore;
+
+  const percentOfTankScoreInTotal = totalScore - (totalScore * (tankScore / fishScore));
+
   return (
-    <Modal
+    <>
+      <section id="compability-result-section">
+        <Row>
+          <Col span={8}>
+            <Progress
+              type="circle"
+              strokeColor="#006b71"
+              percent={resultData.fishCompatibilityScore}
+              format={(percent) => `${percent} Điểm`}
+              strokeWidth={10}
+              size={300}
+            />
+            <p>fish: {fishScore}</p>
+          </Col>
+          <Col span={8}>
+            <Progress
+              type="circle"
+              strokeColor="#00b16b"
+              percent={resultData.tankCompatibilityScore}
+              format={(percent) => `${percent} Điểm`}
+              strokeWidth={10}
+              size={300}
+            />
+            <p>tank: {tankScore}</p>
+          </Col>
+          <Col span={8}>
+            <Progress
+              type="circle"
+              strokeColor={fishScore < tankScore ? "#00b16b" : "#006b71"}
+              percent={resultData.calculateCompatibilityScore}
+              strokeLinecap="butt"
+              success={{
+                percent: (Number.isFinite(percentOfTankScoreInTotal) && percentOfTankScoreInTotal < 0) ? Math.abs(percentOfTankScoreInTotal) : (fishScore && tankScore) && percentOfTankScoreInTotal,
+                strokeColor: fishScore < tankScore ? "#006b71" : "#00b16b"
+              }}
+              format={(percent) => `${percent} Điểm`}
+              strokeWidth={10}
+              size={300}
+            />
+          </Col>
+        </Row>
+        <Row>
+        <Paragraph>
+            <strong style={{ fontWeight: "bold" }}>Lời khuyên:</strong>{" "}
+            {resultData.advise}
+          </Paragraph>
+        </Row>
+      </section>
+      {/* <Modal
       title="Kết Quả Tính Toán"
       visible={isVisible}
       style={{ top: "10%" }}
@@ -41,7 +95,8 @@ const Result = ({ isVisible, resultData, onClose }) => {
       ) : (
         <Paragraph>Không có dữ liệu để hiển thị.</Paragraph>
       )}
-    </Modal>
+    </Modal> */}
+    </>
   );
 };
 

@@ -326,11 +326,11 @@ function CompatibilityPage() {
           </div>
         </section>
       </>
-      <Result
+      {resultData && <Result
         isVisible={isModalVisible}
         resultData={resultData}
         onClose={() => setIsModalVisible(false)}
-      />
+      />}
     </Layout>
   );
 }

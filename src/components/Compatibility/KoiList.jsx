@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Button, Input, Checkbox } from "antd";
-import "../../styles/KoiList.scss";
-import { IconButton, ImageList, ImageListItem, ImageListItemBar, ListSubheader } from "@mui/material";
+import "../../styles/compability/KoiList.scss";
+import { IconButton, ImageList, ImageListItem, ImageListItemBar, ListSubheader, Skeleton } from "@mui/material";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { element } from "prop-types";
 
@@ -13,29 +13,14 @@ const KoiList = ({
   handleSearchTermChange,
 }) => {
   const [selectedFishId, setSelectedFishId] = useState([]);
+  const [loadedImages, setLoadedImages] = useState({});
 
-  const koiColumns = [
-    {
-      title: "Tên Cá",
-      dataIndex: "name",
-      key: "name",
-      width: 100,
-    },
-    {
-      title: "Màu sắc",
-      dataIndex: "color",
-      key: "color",
-      width: 50,
-    },
-    {
-      title: "Chọn",
-      key: "action",
-      render: (fish) => (
-        <Button onClick={() => handleSelectFish(fish)}>+</Button>
-      ),
-      width: 50,
-    },
-  ];
+  useEffect(() => {
+  }, []);
+
+  const handleImageLoad = (id) => {
+    setLoadedImages((prev) => ({ ...prev, [id]: true }));
+  };
 
   const filteredFishData = (koiData || []).filter((fish) => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
@@ -61,32 +46,20 @@ const KoiList = ({
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      {/* <Input
-        placeholder="Tìm kiếm theo màu sắc hoặc loại cá"
-        value={searchTerm}
-        onChange={handleSearchTermChange}
-        style={{ marginBottom: "1rem", width: "20rem" }}
-      />
-      <div>
-        <Table
-          columns={koiColumns}
-          dataSource={filteredFishData}
-          rowKey="id"
-          pagination={false}
-          rowClassName={(fish) => (isKoiSelected(fish) ? "selected-row" : "")}
-          sticky
-          scroll={{ y: 360 }}
-        />
-      </div> */}
       <ImageList sx={{ width: 800, height: 500 }} cols={3}>
         {filteredFishData.map((item) => (
           <ImageListItem key={item.id} onClick={() => handleSelectKoiFish(item, item.id)}>
-            <img
-              srcSet={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              src={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format`}
-              alt={item.name}
-              loading="lazy"
-            />
+            {/* {!loadedImages[item.id] && <Skeleton animation="wave" variant="rectangular" width="100%" height={390} />} */}
+            {!loadedImages[item.id] && (<Skeleton animation="wave" variant="rectangular" width="100%" height={390} />)}
+            
+              <img
+                srcSet={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                src={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format`}
+                style={{ display: loadedImages[item.id] ? 'block' : 'none' }}
+                alt={item.name}
+                loading="lazy"
+                onLoad={() => handleImageLoad(item.id)}
+              />
             <ImageListItemBar
               key="koi-info"
               title={item.name}
