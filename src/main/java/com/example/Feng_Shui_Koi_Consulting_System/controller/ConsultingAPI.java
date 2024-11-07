@@ -71,9 +71,11 @@ public class ConsultingAPI {
     public ApiResponse<ConsultingResponse> getConsulting(@RequestBody ConsultingRequest request){
         var koiFishList = consultingService.koiFishList(request);
         var tankList = consultingService.tankList(request);
+        var adList = consultingService.adList(request);
         ConsultingResponse consultingResponse = ConsultingResponse.builder()
                 .koiFishList(koiFishList)
                 .tankList(tankList)
+                .adList(adList)
                 .build();
         return ApiResponse.<ConsultingResponse>builder()
                 .result(consultingResponse).build();

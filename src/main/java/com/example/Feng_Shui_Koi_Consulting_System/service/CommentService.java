@@ -13,6 +13,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class CommentService {
     CommentRepo commentRepo;
     BlogRepo blogRepo;
@@ -83,8 +85,10 @@ public class CommentService {
                     .content(savedComment.getContent())
                     .blogID(savedComment.getBlog().getBlogID())
                     .build();
-
+        } catch (AppException e){
+            throw e;
         } catch (Exception e) {
+            log.error("exception: ", e);
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }

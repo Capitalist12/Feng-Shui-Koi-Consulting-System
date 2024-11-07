@@ -52,14 +52,14 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, String> 
     List<Advertisement> findAdsRejectedOfUser(@Param("userID") String userID);
 
     //Get ads by user's element
-    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Verified' AND ad.element.elementName = :elementName")
-    List<Advertisement> findAdsByUserElement(@Param("elementName") String elementName);
+    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Verified' AND ad.element.elementId = :elementId")
+    List<Advertisement> findAdsByUserElement(@Param("elementId") Integer elementId);
 
     //Find ads older than 5 minutes
-    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate < :fiveMinutesAgo")
+    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate <= :fiveMinutesAgo")
     List<Advertisement> findRejectedAdvertisementsOlderThan5Mins(@Param("fiveMinutesAgo") LocalDateTime fiveMinutesAgo);
 
     //Find ads older than 7 days
-    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate < :sevenDaysAgo")
+    @Query("SELECT ad FROM Advertisement ad WHERE ad.status = 'Rejected' AND ad.createdDate <= :sevenDaysAgo")
     List<Advertisement> findRejectedAdvertisementsOlderThan7Days(@Param("sevenDaysAgo") LocalDateTime sevenDaysAgo);
 }

@@ -55,6 +55,7 @@ public class AdvertisementService {
         ad.setAdID(adID);
         ad.setStatus("Pending");
         ad.setCreatedDate(LocalDateTime.now());
+
     // Get advertisement's images
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
             Set<Ads_Image> imagesAd = request.getImagesURL().stream()
@@ -118,12 +119,6 @@ public class AdvertisementService {
     public List<AdvertisementResponse> getAdvertisementByFilter(String categoryName, String username, String elementName) {
         return advertisementRepo.filterAdvertisements(categoryName, username, elementName).stream()
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
-    }
-
-    //Get list of ads suitable with user's element
-    public List<AdvertisementResponse> getAdvertisementByUserElement(){
-        return advertisementRepo.findAdsByUserElement(userService.getMyInfo().getElement())
-                .stream().map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
     //Let admin verify if the pending ads
