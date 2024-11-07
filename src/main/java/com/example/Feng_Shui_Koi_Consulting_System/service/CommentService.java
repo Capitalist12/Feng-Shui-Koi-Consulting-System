@@ -155,7 +155,7 @@ public class CommentService {
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
 
             // Verify the user is the owner of the comment or the blog
-            if (!comment.getUser().equals(user) && !comment.getBlog().getUser().equals(user)) {
+            if (!comment.getUser().equals(user) || !comment.getBlog().getUser().equals(user)) {
                 throw new AppException(ErrorCode.UNAUTHORIZED);
             }
 

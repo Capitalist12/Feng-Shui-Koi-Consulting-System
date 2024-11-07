@@ -51,7 +51,7 @@ public class AdvertisementService {
         String adID;
         do{
             adID = generateAdID();
-        }while(advertisementRepo.findById(adID) != null);
+        }while(advertisementRepo.existsByAdID(adID));
         ad.setAdID(adID);
         ad.setStatus("Pending");
         ad.setCreatedDate(LocalDateTime.now());
@@ -141,7 +141,7 @@ public class AdvertisementService {
     }
 
     //delete ads has been rejected for 5 minutes
-    @Scheduled(fixedRate = 60000)  // Run every 5 minutes
+    @Scheduled(fixedRate = 300000)  // Run every 5 minutes
     public void deleteOldRejectedAdvertisements() {
         // Get the timestamp of 5 minutes ago
         LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);
