@@ -32,18 +32,18 @@ public enum ErrorCode {
     SEND_MAIL_FAILED(1022, "Gửi mail thất bại", HttpStatus.BAD_REQUEST ),
     OTP_NOT_FOUND(1023, "OTP không thấy", HttpStatus.BAD_REQUEST ),
     AD_NOT_EXIST(1024, "Bài đăng không tìm thấy", HttpStatus.NOT_FOUND),
-    SESSION_ID_NULL(1025, "SessionID không null", HttpStatus.BAD_REQUEST ),
-    CATEGORY_NOT_EXIST(1026, "Thể không tìm thấy", HttpStatus.NOT_FOUND),
+    SESSION_ID_NULL(1025, "SessionID bị null", HttpStatus.BAD_REQUEST ),
+    CATEGORY_NOT_EXIST(1026, "Danh mục không tìm thấy", HttpStatus.NOT_FOUND),
     OTP_REQUIRED(1027, "Yêu cầu OTP", HttpStatus.BAD_REQUEST ),
-    BLOG_NOT_FOUND(1028, "BlogID không tìm thấy", HttpStatus.BAD_REQUEST ),
+    BLOG_NOT_FOUND(1028, "Không tìm thấy BlogID", HttpStatus.BAD_REQUEST ),
     COMMENT_NOT_FOUND(1029, "Bình luận không tìm thấy", HttpStatus.BAD_REQUEST ),
     STATUS_INVALID(1030, "Trạng thái không hợp lệ", HttpStatus.BAD_REQUEST),
     CHATGPT_NOT_RESPONSE(1031, "OpenAI API Gateway Timeout", HttpStatus.GATEWAY_TIMEOUT ),
-    NULL_POINTER_EXCEPTION(1032, "Đã xảy ra lỗi không mong muốn", HttpStatus.BAD_REQUEST),
+    NULL_POINTER_EXCEPTION(1032, "Đã xảy ra lỗi không mong muốn với Open AI", HttpStatus.BAD_REQUEST),
     INVALID_REQUEST(1033, "Yêu cầu không hợp lệ", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_MATCH(1034, "Vui lòng nhập đúng mật khẩu hiện tại của bạn", HttpStatus.BAD_REQUEST),
     CHATGPT_API_ERROR(1035, "Lỗi kết nối đến ChatGPT", HttpStatus.BAD_GATEWAY),
-    UNABLE_TO_GENERATE_UNIQUE_ID(1036,"UserID không tồn tại", HttpStatus.BAD_REQUEST),
+    UNABLE_TO_GENERATE_UNIQUE_ID(1036,"Không thể tạo ID tự động", HttpStatus.BAD_REQUEST),
     UNKNOWN_COLORS(1037, "Màu không tồn tại trong hệ thống", HttpStatus.NOT_FOUND),
     TANK_INVALID(1038, "Bể cá không hợp lệ", HttpStatus.BAD_REQUEST),
     ELEMENT_INVALID(1039, "Mệnh không hợp lệ", HttpStatus.BAD_REQUEST),
@@ -54,15 +54,6 @@ public enum ErrorCode {
     TITLE_NOT_EMPTY(1043, "Tiêu đề không thể để trống", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED_GPT(1044, "Thiếu api key của chatgpt", HttpStatus.UNAUTHORIZED),
     API_KEY_EXPIRED(1045, "Khóa API đã hết hạn hoặc không được gia hạn", HttpStatus.NOT_FOUND);
-
-
-
-
-
-
-
-
-
 
 
 

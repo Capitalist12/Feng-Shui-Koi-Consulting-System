@@ -26,7 +26,7 @@ public class SecurityConfig {
     , "/auth/outbound/authentication", "/auth/verify-email", "/auth/logout", "/auth/reset-password"
     , "/ad/verified",  "/ad/filter", "/ad/{adID}"
     , "/fish", "/tank"
-    , "/blog", "/blog/{blogID}"
+    , "/blog", "/blog/{blogID}", "/blog/{blogID}/comments"
     };
     private final String[] SWAGGER = {
             "/koifish-docs/v3/api-docs/**",
