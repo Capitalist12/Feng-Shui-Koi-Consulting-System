@@ -141,15 +141,6 @@ const KoiList = ({
               loading="lazy"
               onLoad={() => handleImageLoad(item.id)}
             />
-
-            <img
-              srcSet={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              src={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format`}
-              // style={{ display: loadedImages[item.id] ? 'block' : 'none' }}
-              alt={item.name}
-              loading="lazy"
-              onLoad={() => handleImageLoad(item.id)}
-            />
             <ImageListItemBar
               key="koi-info"
               title={item.name}
