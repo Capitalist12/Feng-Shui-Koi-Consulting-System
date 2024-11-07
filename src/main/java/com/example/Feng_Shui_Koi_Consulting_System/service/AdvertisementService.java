@@ -48,7 +48,11 @@ public class AdvertisementService {
         User user = userRepository.findByUsername(userService.getMyInfo().getUsername())
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXIST)));
         ad.setUser(user);
-        ad.setAdID(generateAdID());
+        String adID;
+        do{
+            adID = generateAdID();
+        }while(advertisementRepo.findById(adID) != null);
+        ad.setAdID(adID);
         ad.setStatus("Pending");
         ad.setCreatedDate(LocalDateTime.now());
     // Get advertisement's images
