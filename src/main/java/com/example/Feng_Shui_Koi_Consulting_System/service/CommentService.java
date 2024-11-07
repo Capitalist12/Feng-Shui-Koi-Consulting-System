@@ -51,9 +51,8 @@ public class CommentService {
 
             // Generate a unique comment ID
             Integer commentId = generateCommentID();
-            do {
-                commentId = generateCommentID();
-            } while (commentRepo.existsById(commentId));
+            commentId = generateCommentID();
+
 
             // Create new comment
             Comment newComment = Comment.builder()
@@ -125,6 +124,7 @@ public class CommentService {
 
             // Update comment
             comment.setContent(request.getContent());
+
             Comment savedComment = commentRepo.save(comment);
 
             return CommentResponse.builder()
@@ -134,6 +134,7 @@ public class CommentService {
                     .content(savedComment.getContent())
                     .blogID(savedComment.getBlog().getBlogID())
                     .build();
+
         } catch (AppException ae) {
             throw ae;
         } catch (Exception e) {

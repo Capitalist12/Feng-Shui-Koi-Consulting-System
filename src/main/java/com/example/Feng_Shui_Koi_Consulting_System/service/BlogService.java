@@ -36,6 +36,7 @@ public class BlogService {
         String email = context.getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+
         Blog newblog = Blog.builder()
                 .blogID(generateBlogID())
                 .title(request.getTitle())
