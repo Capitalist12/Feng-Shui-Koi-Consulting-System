@@ -51,10 +51,11 @@ public class AdvertisementService {
         String adID;
         do{
             adID = generateAdID();
-        }while(advertisementRepo.findById(adID) != null);
+        }while(advertisementRepo.existsByAdID(adID));
         ad.setAdID(adID);
         ad.setStatus("Pending");
         ad.setCreatedDate(LocalDateTime.now());
+
     // Get advertisement's images
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
             Set<Ads_Image> imagesAd = request.getImagesURL().stream()
@@ -120,12 +121,6 @@ public class AdvertisementService {
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
-    //Get list of ads suitable with user's element
-    public List<AdvertisementResponse> getAdvertisementByUserElement(){
-        return advertisementRepo.findAdsByUserElement(userService.getMyInfo().getElement())
-                .stream().map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
-    }
-
     //Let admin verify if the pending ads
     public AdvertisementResponse verifyAd(VerifyAdRequest request) {
         Advertisement advertisement = advertisementRepo.findById(request.getAdID())
@@ -141,7 +136,7 @@ public class AdvertisementService {
     }
 
     //delete ads has been rejected for 5 minutes
-    @Scheduled(fixedRate = 60000)  // Run every 5 minutes
+    @Scheduled(fixedRate = 300000)  // Run every 5 minutes
     public void deleteOldRejectedAdvertisements() {
         // Get the timestamp of 5 minutes ago
         LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);

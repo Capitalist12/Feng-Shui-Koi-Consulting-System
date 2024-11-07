@@ -1,15 +1,22 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.CategoryResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingAdResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingFishResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingTankResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.fish.KoiTypesResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.user.ElementResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Category;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.KoiFish;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.User;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
+import com.example.Feng_Shui_Koi_Consulting_System.mapper.AdvertisementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.mapper.ElementMapper;
+import com.example.Feng_Shui_Koi_Consulting_System.repository.AdvertisementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.FishRepo;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.TankRepo;
@@ -28,9 +35,12 @@ public class ConsultingService {
 
     FishRepo fishRepo;
     TankRepo tankRepo;
+    AdvertisementRepo advertisementRepo;
     ElementRepo elementRepo;
     ElementMapper elementMapper;
+    AdvertisementMapper advertisementMapper;
     ElementCalculationService elementCalculationService;
+    UserService userService;
 
     public List<ConsultingFishResponse> koiFishList(ConsultingRequest request) {
         // Calculate the user's elementID based on the date of birth
@@ -75,13 +85,32 @@ public class ConsultingService {
     {
         Integer elementID = elementCalculationService.calculateElementId(request.getDob());
         return tankRepo.findByElementTank_ElementId(elementID).stream().map(tank -> {
-            ElementResponse elementResponse = elementMapper
-                    .toElementResponse(tank.getElementTank());
             return ConsultingTankResponse.builder()
                     .tankId(tank.getTankId())
                     .shape(tank.getShape())
                     .imageURL(tank.getImageURL())
-//                    .elementTank(elementResponse)
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
+    //Get list of ads suitable with user's element
+    public List<ConsultingAdResponse> adList(ConsultingRequest request){
+        Integer elementID = elementCalculationService.calculateElementId(request.getDob());
+        return advertisementRepo.findAdsByUserElement(elementID).stream().map(advertisement -> {
+            Category category = advertisement.getCategory();
+            CategoryResponse categoryResponse = CategoryResponse.builder()
+                    .categoryID(category.getCategoryID())
+                    .categoryName(category.getCategoryName())
+                    .build();
+
+            return ConsultingAdResponse.builder()
+                    .adID(advertisement.getAdID())
+                    .price(advertisement.getPrice())
+                    .createdDate(advertisement.getCreatedDate())
+                    .title(advertisement.getTitle())
+                    .status(advertisement.getStatus())
+                    .imagesAd(advertisement.getImagesAd())
+                    .category(categoryResponse)
                     .build();
         }).collect(Collectors.toList());
     }
