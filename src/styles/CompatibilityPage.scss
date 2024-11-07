@@ -8,7 +8,7 @@ body {
 
 .layout-comp {
   position: relative;
-  background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
+  // background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -141,35 +141,7 @@ body {
   }
 
   .custom-title {
-    text-shadow: 5px 5px 1em rgb(0, 0, 0);
-  }
-
-  .custom-table {
-    .ant-table {
-      border: 3px solid #ffffff;
-      width: 50rem;
-
-      th {
-        background-color: rgb(0, 0, 0);
-        color: white;
-        text-align: center;
-        font-size: 1.3em;
-      }
-
-      tr {
-        text-align: center;
-
-        // áp dụng cho hàng đã chọn
-        &.selected-row {
-          background-color: rgb(155, 155, 155) !important;
-          transition: background-color 1.5s ease;
-
-          &:hover {
-            background-color: rgb(155, 155, 155) !important;
-          }
-        }
-      }
-    }
+    color: white;
   }
 
   .selected-ele {

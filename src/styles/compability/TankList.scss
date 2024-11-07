@@ -1,12 +1,15 @@
-.shape-transform {
-    width: 250px;
-    height: 250px;
-    background: red;
-    transition: all 0.3s ease;
-    animation: changeShape 3s infinite;
-}
-
 .compability-tank-list{
+    height: 100%;
+    width: 800px;
+    background-color: white;
+
+    .shape-transform {
+        width: 250px;
+        height: 250px;
+        background: red;
+        transition: all 0.3s ease;
+    }
+
     button {
         transition: all 0.2s ease;
 
@@ -27,6 +30,11 @@
             font-size: 1vw;
         }
         
+    }
+
+    .tank-selection{
+        width: 100%;
+        justify-content: center;
     }
 }
 

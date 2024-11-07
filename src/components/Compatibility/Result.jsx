@@ -19,7 +19,7 @@ const Result = ({ isVisible, resultData, onClose }) => {
             <Progress
               type="circle"
               strokeColor="#006b71"
-              percent={resultData.fishCompatibilityScore}
+              percent={fishScore}
               format={(percent) => `${percent} Điểm`}
               strokeWidth={10}
               size={300}
@@ -30,7 +30,7 @@ const Result = ({ isVisible, resultData, onClose }) => {
             <Progress
               type="circle"
               strokeColor="#00b16b"
-              percent={resultData.tankCompatibilityScore}
+              percent={tankScore}
               format={(percent) => `${percent} Điểm`}
               strokeWidth={10}
               size={300}
@@ -41,10 +41,10 @@ const Result = ({ isVisible, resultData, onClose }) => {
             <Progress
               type="circle"
               strokeColor={fishScore < tankScore ? "#00b16b" : "#006b71"}
-              percent={resultData.calculateCompatibilityScore}
+              percent={totalScore}
               strokeLinecap="butt"
               success={{
-                percent: (Number.isFinite(percentOfTankScoreInTotal) && percentOfTankScoreInTotal < 0) ? Math.abs(percentOfTankScoreInTotal) : (fishScore && tankScore) && percentOfTankScoreInTotal,
+                percent: (!Number.isFinite(percentOfTankScoreInTotal) && percentOfTankScoreInTotal < 0) ? Math.abs(percentOfTankScoreInTotal) : (fishScore && tankScore) && percentOfTankScoreInTotal,
                 strokeColor: fishScore < tankScore ? "#006b71" : "#00b16b"
               }}
               format={(percent) => `${percent} Điểm`}

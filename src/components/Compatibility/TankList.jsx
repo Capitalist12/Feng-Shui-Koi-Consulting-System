@@ -23,27 +23,6 @@ const TankList = ({ tankData, handleSelectTank, isTankSelected }) => {
     }
   });
 
-  const tankColumns = [
-    {
-      title: "Loại Hồ",
-      dataIndex: "shape",
-      key: "shape",
-      width: 200,
-    },
-    {
-      title: "Số lượng",
-      render: (record) => record.elementTank?.quantity || "N/A",
-      width: 80,
-    },
-    {
-      title: "Chọn",
-      render: (tank) => (
-        <Button onClick={() => handleSelectTank(tank)}>+</Button>
-      ),
-      width: 70,
-    },
-  ];
-
   const handleChangeShape = (tank, id) => {
     handleSelectTank(tank);
     let newShapeStyle = { ...shapeStyle }; // Tạo một bản sao của shapeStyle
@@ -80,29 +59,14 @@ const TankList = ({ tankData, handleSelectTank, isTankSelected }) => {
       align="center"
       gap="middle"
       justify="space-around"
-      style={{
-        marginTop: "2Fem",
-        backgroundColor: 'white',
-        height: "500px"
-      }}
       className="compability-tank-list"
     >
-      {/* <Table
-        className="tank-list-table"
-        columns={tankColumns}
-        dataSource={tankData}
-        rowKey="tankId"
-        pagination={false}
-        rowClassName={(tank) => (isTankSelected(tank) ? "selected-row" : "")}
-        sticky
-        scroll={{ y: 360 }}
-      /> */}
-      <Flex width="100%" vertical justify="center" align="start" className="tank-info">
+      <Flex vertical justify="center" align="start" className="tank-info">
         <Title level={2}>Hướng đặt phù hợp: {selectedTank.elementTank.direction}</Title>
         <p>Số lượng cá nuôi đề xuất: {selectedTank.elementTank.quantity}</p>
       </Flex>
       <div className="shape-transform" style={shapeStyle}></div>
-      <Flex gap="middle" align="center">
+      <Flex wrap gap="middle" align="center" className="tank-selection">
         {tankData.map((item, index) => (
           <Button
             type={item.tankId === selectedTank.tankId ? "primary" : "text"}
