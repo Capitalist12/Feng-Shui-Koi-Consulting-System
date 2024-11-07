@@ -114,7 +114,7 @@ public class AdvertisementController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER')")
     @PutMapping("/{adID}")
     ApiResponse<AdvertisementResponse> updateAd(@PathVariable String adID, @RequestBody AdvertisementUpdateRequest request){
         return ApiResponse.<AdvertisementResponse>builder()
@@ -122,7 +122,7 @@ public class AdvertisementController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @DeleteMapping("/{adID}")
     String deleteAd(@PathVariable String adID){
         advertisementService.deleteAdvertisement(adID);
