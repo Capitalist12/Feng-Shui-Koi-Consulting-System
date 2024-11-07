@@ -37,10 +37,7 @@ public class ConsultingService {
     TankRepo tankRepo;
     AdvertisementRepo advertisementRepo;
     ElementRepo elementRepo;
-    ElementMapper elementMapper;
-    AdvertisementMapper advertisementMapper;
     ElementCalculationService elementCalculationService;
-    UserService userService;
 
     public List<ConsultingFishResponse> koiFishList(ConsultingRequest request) {
         // Calculate the user's elementID based on the date of birth
