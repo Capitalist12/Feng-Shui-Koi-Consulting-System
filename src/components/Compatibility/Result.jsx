@@ -1,20 +1,21 @@
 import React from "react";
-import { Button, Col, Modal, Progress, Row, Typography } from "antd";
+import { Button, Col, Flex, Modal, Progress, Row, Typography } from "antd";
 import "../../styles/compability/Result.scss";
 const { Title, Paragraph } = Typography;
 
 const Result = ({ isVisible, resultData, onClose }) => {
-  const fishScore = resultData.fishCompatibilityScore;
-  const tankScore = resultData.tankCompatibilityScore;
-  const totalScore = resultData.calculateCompatibilityScore;
+  const fishScore = parseFloat(resultData.fishCompatibilityScore).toFixed(1);
+  const tankScore = parseFloat(resultData.tankCompatibilityScore).toFixed(1);
+  const totalScore = parseFloat(resultData.calculateCompatibilityScore).toFixed(1);
 
   const percentOfTankScoreInTotal = totalScore - (totalScore * (tankScore / fishScore));
 
   return (
     <>
       <section id="compability-result-section">
-        <Row>
-          <Col span={8}>
+        <Row className="score-container">
+          <Flex vertical align="center">
+            <Title level={3}>Điểm tương thích cá:</Title>
             <Progress
               type="circle"
               strokeColor="#006b71"
@@ -23,9 +24,9 @@ const Result = ({ isVisible, resultData, onClose }) => {
               strokeWidth={10}
               size={300}
             />
-            <p>fish: {fishScore}</p>
-          </Col>
-          <Col span={8}>
+          </Flex>
+          <Flex vertical align="center">
+          <Title level={3}>Điểm tương thích hồ:</Title>
             <Progress
               type="circle"
               strokeColor="#00b16b"
@@ -34,9 +35,9 @@ const Result = ({ isVisible, resultData, onClose }) => {
               strokeWidth={10}
               size={300}
             />
-            <p>tank: {tankScore}</p>
-          </Col>
-          <Col span={8}>
+          </Flex>
+          <Flex vertical align="center">
+          <Title level={3}>Tổng điểm tương thích:</Title>
             <Progress
               type="circle"
               strokeColor={fishScore < tankScore ? "#00b16b" : "#006b71"}
@@ -50,7 +51,7 @@ const Result = ({ isVisible, resultData, onClose }) => {
               strokeWidth={10}
               size={300}
             />
-          </Col>
+          </Flex>
         </Row>
         <Row>
         <Paragraph>

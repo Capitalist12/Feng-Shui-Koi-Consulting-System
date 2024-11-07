@@ -5,8 +5,10 @@ import Title from "antd/es/typography/Title";
 import { MONTHS } from "../../utils/constant";
 import { countAllKoiFish } from "../../services/koiAPIService";
 import { countAllTank } from "../../services/tankAPIService";
-import Chart from "./Chart";
 import { useSelector } from "react-redux";
+import PieChartUser from "./PieChartUser";
+import { LineChart } from "recharts";
+import LineChartRevenue from "./BarChartRevenue";
 
 const Statistics = () => {
   const [revenue, setRevenue] = useState(null);
@@ -96,6 +98,9 @@ const Statistics = () => {
         </div>
       </StyledWrapper>
       <StyledWrapper>
+        <LineChartRevenue />
+      </StyledWrapper>
+      <StyledWrapper>
         <div style={{ flex: "0 1 30rem" }} className="card-das">
           <div className="title-das">
             <span>
@@ -150,8 +155,9 @@ const Statistics = () => {
           </div>
         </div>
       </StyledWrapper>
+
       <StyledWrapper>
-        <Chart />
+        <PieChartUser />
       </StyledWrapper>
       <StyledWrapper>
         <div style={{ flex: "0 1 40rem" }} className="card-das">

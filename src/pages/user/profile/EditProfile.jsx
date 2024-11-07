@@ -54,8 +54,6 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
         message.error("Mật khẩu mới và xác nhận mật khẩu không khớp.");
         return;
       }
-
-      // Tạo payload với các giá trị từ form
       const payload = {
         username: values.username,
         dateOfBirth: values.dateOfBirth
@@ -63,7 +61,7 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
           : null,
         currentPassword: values.currentPassword,
         newPassword: values.newPassword || values.currentPassword,
-        imageLink: values.imageLink, // Sử dụng imageLink ban đầu
+        imageLink: values.imageLink,
       };
 
       // Kiểm tra nếu có file mới cần upload

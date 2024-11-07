@@ -74,11 +74,7 @@ function CompatibilityPage() {
   };
 
   const handleSelectTank = (tank) => {
-    if (selectedTank) {
-      message.warning("Vui lòng chỉ chọn 1 hồ!");
-    } else {
-      setSelectedTank(tank);
-    }
+    setSelectedTank(tank);
   };
 
   const handleRemoveTank = () => {

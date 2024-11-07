@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Layout, Pagination } from "antd";
+import { Button, Layout, notification, Pagination } from "antd";
 import "../../../styles/UserAds.scss";
 import api from "../../../config/axiosConfig";
 import SearchBar from "../../../components/Advertisement/SearchBar";
@@ -12,6 +12,7 @@ import {
   MdOutlineVerified,
 } from "react-icons/md";
 import CustomeFooter from "../../../components/HomePage/Footer/CustomeFooter";
+import { toast } from "react-toastify";
 
 const UserAds = () => {
   const [ads, setAds] = useState([]);
@@ -90,6 +91,30 @@ const UserAds = () => {
       await fetchAds();
     } catch (error) {
       console.error("Lỗi khi chỉnh sửa quảng cáo:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteAd = async (adID) => {
+    setLoading(true);
+    try {
+      const response = await api.delete(`/ad/${adID}`);
+      const mess =
+        response?.data?.message || "Bài đăng đã được xóa thành công.";
+
+      await fetchAds();
+      handleCloseEditModal();
+
+      notification.success({
+        message: "Thành công!",
+        description: mess,
+      });
+    } catch (error) {
+      notification.error({
+        message: "Lỗi!",
+        description: mess,
+      });
     } finally {
       setLoading(false);
     }
@@ -202,6 +227,7 @@ const UserAds = () => {
           ad={selectedAd}
           onClose={handleCloseEditModal}
           onSubmit={handleEditSubmit}
+          onDelete={handleDeleteAd}
           loading={loading}
         />
       )}
