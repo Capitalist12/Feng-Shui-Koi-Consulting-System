@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Checkbox, Divider, Flex, Popover, Tooltip } from "antd";
-import { IconButton, ImageList, ImageListItem, ImageListItemBar, Skeleton } from "@mui/material";
+import {
+  IconButton,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  Skeleton,
+} from "@mui/material";
 import { AiFillFire, AiFillInfoCircle } from "react-icons/ai";
 import { element } from "prop-types";
 import Title from "antd/es/typography/Title";
@@ -20,25 +26,45 @@ const KoiList = ({
   const [selectedFishId, setSelectedFishId] = useState([]);
   const [loadedImages, setLoadedImages] = useState({});
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const renderKoiElement = (element) => {
-    console.log(element)
+    console.log(element);
     switch (element.elementName) {
       case "Kim":
-        return <GiMetalBar className="koi-element-icon" style={{ color: 'lightgray' }} />;
+        return (
+          <GiMetalBar
+            className="koi-element-icon"
+            style={{ color: "lightgray" }}
+          />
+        );
       case "Hỏa":
-        return <AiFillFire className="koi-element-icon" style={{ color: '#ef1d1c' }} />;
+        return (
+          <AiFillFire
+            className="koi-element-icon"
+            style={{ color: "#ef1d1c" }}
+          />
+        );
       case "Thủy":
-        return <IoIosWater className="koi-element-icon" style={{ color: '#0abfff' }} />;
+        return (
+          <IoIosWater
+            className="koi-element-icon"
+            style={{ color: "#0abfff" }}
+          />
+        );
       case "Thổ":
-        return <FaMountainSun className="koi-element-icon" style={{ color: '#ffda60' }} />;
+        return (
+          <FaMountainSun
+            className="koi-element-icon"
+            style={{ color: "#ffda60" }}
+          />
+        );
       case "Mộc":
-        return <FaLeaf className="koi-element-icon" style={{ color: '#96e817' }} />;
+        return (
+          <FaLeaf className="koi-element-icon" style={{ color: "#96e817" }} />
+        );
     }
-
-  }
+  };
 
   const renderKoiTypeIcon = (type) => {
     let letter = "";
@@ -67,8 +93,12 @@ const KoiList = ({
         break;
     }
 
-    return <Title className="koi-type-icon" level={4}>{letter}</Title>
-  }
+    return (
+      <Title className="koi-type-icon" level={4}>
+        {letter}
+      </Title>
+    );
+  };
 
   const handleImageLoad = (id) => {
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
@@ -93,54 +123,65 @@ const KoiList = ({
   };
 
   return (
-    <Flex vertical style={{ backgroundColor: '#4096ff' }}>
-      <Flex justify="space-between" align="center" style={{ backgroundColor: '#eaecef' }}>
+    <Flex vertical style={{ backgroundColor: "#4096ff" }}>
+      <Flex
+        justify="space-between"
+        align="center"
+        style={{ backgroundColor: "#eaecef" }}
+      >
         <Flex align="center">
-          <Title style={{ margin: '0 10px' }} level={3}>Danh sách Koi</Title>
-          <p style={{ fontSize: '1.1em' }}>Tổng cộng: {koiData.length} loài</p>
+          <Title style={{ margin: "0 10px" }} level={3}>
+            Danh sách Koi
+          </Title>
+          <p style={{ fontSize: "1.1em" }}>Tổng cộng: {koiData.length} loài</p>
         </Flex>
         <Flex align="center">
-          <p style={{ color: selectedFishId.length === 6 ? "red" : "black" }}>Đã chọn: {selectedFishId.length}/6</p>
-          <Popover placement="topRight" title={"Hướng dẫn"} content={(
-            <Flex vertical>
-              <p>Bạn chỉ được chọn tối đa 6 loại cá khác nhau trong dữ liệu của chúng tôi</p>
-              <Divider orientation="left" plain>Chú giải</Divider>
+          <p style={{ color: selectedFishId.length === 6 ? "red" : "black" }}>
+            Đã chọn: {selectedFishId.length}/6
+          </p>
+          <Popover
+            placement="topRight"
+            title={"Hướng dẫn"}
+            content={
               <Flex vertical>
-                <Flex align="center">
-                  <GiMetalBar style={{ color: 'lightgray' }} /> - Mệnh Kim
-                </Flex>
-                <Flex align="center">
-                  <AiFillFire style={{ color: '#ef1d1c' }} /> - Mệnh Hỏa
-                </Flex>
-                <Flex align="center">
-                  <IoIosWater style={{ color: '#0abfff' }} /> - Mệnh Thủy
-                </Flex>
-                <Flex align="center">
-                  <FaLeaf style={{ color: '#96e817' }} /> - Mệnh Mộc
-                </Flex>
-                <Flex align="center">
-                  <FaMountainSun style={{ color: '#ffda60' }} /> - Mệnh Thổ
+                <p>
+                  Bạn chỉ được chọn tối đa 6 loại cá khác nhau trong dữ liệu của
+                  chúng tôi
+                </p>
+                <Divider orientation="left" plain>
+                  Chú giải
+                </Divider>
+                <Flex vertical>
+                  <Flex align="center">
+                    <GiMetalBar style={{ color: "lightgray" }} /> - Mệnh Kim
+                  </Flex>
+                  <Flex align="center">
+                    <AiFillFire style={{ color: "#ef1d1c" }} /> - Mệnh Hỏa
+                  </Flex>
+                  <Flex align="center">
+                    <IoIosWater style={{ color: "#0abfff" }} /> - Mệnh Thủy
+                  </Flex>
+                  <Flex align="center">
+                    <FaLeaf style={{ color: "#96e817" }} /> - Mệnh Mộc
+                  </Flex>
+                  <Flex align="center">
+                    <FaMountainSun style={{ color: "#ffda60" }} /> - Mệnh Thổ
+                  </Flex>
                 </Flex>
               </Flex>
-            </Flex>
-          )}>
-            <FaQuestionCircle style={{ margin: '0 10px' }} />
+            }
+          >
+            <FaQuestionCircle style={{ margin: "0 10px" }} />
           </Popover>
         </Flex>
       </Flex>
       <ImageList sx={{ width: 800, height: 500 }} cols={3}>
         {filteredFishData.map((item) => (
-          <ImageListItem key={item.id} onClick={() => handleSelectKoiFish(item, item.id)}>
+          <ImageListItem
+            key={item.id}
+            onClick={() => handleSelectKoiFish(item, item.id)}
+          >
             {/* {!loadedImages[item.id] && (<Skeleton animation="wave" variant="rectangular" width="100%" height={390} />)} */}
-
-            <img
-              srcSet={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              src={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format`}
-              // style={{ display: loadedImages[item.id] ? 'block' : 'none' }}
-              alt={item.name}
-              loading="lazy"
-              onLoad={() => handleImageLoad(item.id)}
-            />
 
             <img
               srcSet={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format&dpr=2 2x`}
@@ -180,14 +221,10 @@ const KoiList = ({
             />
             <Flex className="koi-tag-container" vertical align="end">
               <Flex>
-                {
-                  item.elements.length > 0 &&
+                {item.elements.length > 0 &&
                   item.elements.map((element, index) => (
-                    <div key={index}>
-                      {renderKoiElement(element)}
-                    </div>
-                  ))
-                }
+                    <div key={index}>{renderKoiElement(element)}</div>
+                  ))}
               </Flex>
               <Tooltip placement="right" title={item.koiTypes.typeName}>
                 {renderKoiTypeIcon(item.koiTypes.typeName)}

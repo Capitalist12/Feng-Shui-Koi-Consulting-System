@@ -83,17 +83,17 @@ function CompatibilityPage() {
 
   const handleCalculateCompatibility = async () => {
     //  access token từ lS và kiểm tra role
-    const accessToken = localStorage.getItem("accessToken");
-    const isVIP =
-      (accessToken &&
-        JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
-      (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
+    // const accessToken = localStorage.getItem("accessToken");
+    // const isVIP =
+    //   (accessToken &&
+    //     JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
+    //   (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
 
-    if (!isVIP) {
-      message.error("Bạn phải là thành viên để tính toán độ tương thích.");
-      navigate("/errorMem"); // Điều hướng tới trang lỗi
-      return;
-    }
+    // if (!isVIP) {
+    //   message.error("Bạn phải là thành viên để tính toán độ tương thích.");
+    //   navigate("/errorMem"); // Điều hướng tới trang lỗi
+    //   return;
+    // }
 
     if (selectedFish.length === 0 || !selectedTank || !selectedElement) {
       message.warning("Vui lòng chọn cá, hồ và yếu tố trước khi tính toán!");
@@ -201,8 +201,8 @@ function CompatibilityPage() {
       </div>
 
       <>
-        <Row style={{ backgroundColor: 'red' }}>
-          <Flex gap={30} wrap justify="space-evenly" style={{ width: '100%' }}>
+        <Row style={{ backgroundColor: "red" }}>
+          <Flex gap={30} wrap justify="space-evenly" style={{ width: "100%" }}>
             <Flex vertical>
               <KoiList
                 koiData={koiData}

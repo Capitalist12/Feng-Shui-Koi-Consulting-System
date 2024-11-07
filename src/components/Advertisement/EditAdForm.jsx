@@ -136,7 +136,9 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, onDelete, loading }) => {
         }
         onCancel={onClose}
         footer={[
-          <Button onClick={handleDelete}>Xóa</Button>,
+          <Button danger onClick={handleDelete}>
+            Xóa
+          </Button>,
           <Button
             key="submit"
             type="primary"
@@ -206,9 +208,9 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, onDelete, loading }) => {
               { required: true, message: "Vui lòng nhập mô tả!" },
               {
                 validator: (_, value) => {
-                  if (value && value.length > 800) {
+                  if (value && value.length > 1000) {
                     return Promise.reject(
-                      "Mô tả không được vượt quá 800 ký tự!"
+                      "Mô tả không được vượt quá 1000 ký tự!"
                     );
                   }
                   return Promise.resolve();

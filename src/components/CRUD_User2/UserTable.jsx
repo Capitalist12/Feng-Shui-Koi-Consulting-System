@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Popconfirm, Table, Avatar, Switch } from "antd";
 
-function UserTable({ users, handleEdit, handleDelete }) {
+function UserTable({ users, handleView }) {
   const columns = [
     { title: "ID", dataIndex: "userID", key: "userID" },
     { title: "Tên", dataIndex: "username", key: "username" },
@@ -19,17 +19,20 @@ function UserTable({ users, handleEdit, handleDelete }) {
       key: "userID",
       render: (userID, user) => (
         <>
-          <Button type="primary" onClick={() => handleEdit(user)}>
-            Edit
+          <Button
+            className="custom-button-black-white"
+            onClick={() => handleView(user)}
+          >
+            Xem thông tin
           </Button>
-          <Popconfirm
+          {/* <Popconfirm
             title="Bạn có chắc chắn muốn xóa người dùng này?"
             onConfirm={() => handleDelete(userID)}
           >
             <Button type="primary" danger>
               Xóa
             </Button>
-          </Popconfirm>
+          </Popconfirm> */}
         </>
       ),
     },

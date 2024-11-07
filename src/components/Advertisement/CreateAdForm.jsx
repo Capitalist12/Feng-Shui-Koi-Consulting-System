@@ -24,25 +24,27 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      try {
-        const { role } = JSON.parse(accessToken);
-        setRole(role.toUpperCase());
-      } catch (error) {
-        console.error("Invalid token format", error);
-        localStorage.removeItem("accessToken");
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const accessToken = localStorage.getItem("accessToken");
+  //   if (accessToken) {
+  //     try {
+  //       const role = JSON.parse(accessToken);
+  //       setRole(role.toUpperCase());
+  //     } catch (error) {
+  //       console.error("Invalid token format", error);
+  //       localStorage.removeItem("accessToken");
+  //     }
+  //   }
+  // }, []);
 
   const handleFinish = async (values) => {
-    if (role !== "MEMBER" || role !== "ADMIN") {
-      message.error("Bạn phải là thành viên để đăng quảng cáo.");
-      navigate("/errorMem");
-      return;
-    }
+    // if (role === "USER") {
+    //   message.error(
+    //     "Bạn phải là thành viên aaaaaaaaaaaaaaaaaaađể đăng quảng cáo."
+    //   );
+    //   navigate("/errorMem");
+    //   return;
+    // }
 
     try {
       if (fileList.length > 0) {
@@ -59,8 +61,7 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
         description: "Bạn đã đăng bài thành công, hãy chờ phê duyệt nhé!",
       });
     } catch (error) {
-      console.error("Lỗi khi tải ảnh hoặc gửi quảng cáo:", error);
-      message.error("Có lỗi xảy ra khi gửi quảng cáo. Vui lòng thử lại.");
+      message.error(error + " Vui lòng thử lại.");
     }
   };
 
@@ -161,8 +162,10 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
             {
               // ko vượt quá 100 ký tự
               validator: (_, value) => {
-                if (value && value.length > 800) {
-                  return Promise.reject("Mô tả không được vượt quá 800 ký tự!");
+                if (value && value.length > 1000) {
+                  return Promise.reject(
+                    "Mô tả không được vượt quá 1000 ký tự!"
+                  );
                 }
                 return Promise.resolve();
               },
