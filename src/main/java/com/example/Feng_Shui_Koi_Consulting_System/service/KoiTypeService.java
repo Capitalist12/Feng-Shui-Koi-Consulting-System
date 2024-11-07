@@ -38,7 +38,7 @@ public class KoiTypeService {
     }
 
 
-    //@PreAuthorize("hasRole('ADMIN')")
+
     public List<KTResponse> getKoiTypes(){
         return koiTypeRepo.findAll().stream()
                 .map(koiTypeMapper :: toKTResponse).collect(Collectors.toList());
