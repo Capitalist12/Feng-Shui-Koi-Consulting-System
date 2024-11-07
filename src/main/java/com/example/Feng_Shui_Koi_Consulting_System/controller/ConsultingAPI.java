@@ -6,9 +6,12 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.Compatibili
 import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.CompatibilityResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
+import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.service.CompatibilityService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ConsultingService;
 import com.example.Feng_Shui_Koi_Consulting_System.service.ElementCalculationService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +38,7 @@ public class ConsultingAPI {
     //Calculate user's element
     @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @PostMapping("/calculate")
-    public ApiResponse<String> calculateElementName(@RequestBody CalculateElementRequest request) {
+    public ApiResponse<String> calculateElementName(@RequestBody  CalculateElementRequest request) {
         String elementName = elementCalculationService.calculateElementName(request.getDob());
         return ApiResponse.<String>builder()
                 .result(elementName)
@@ -47,15 +50,16 @@ public class ConsultingAPI {
     @PostMapping("/compatibility")
     ApiResponse<CompatibilityResponse> calculateCompatibilityScore
             (@RequestBody CompatibilityRequest request) {
-        String userElement = request.getUserElement();
+        if(request.getUserElement().isEmpty()) throw new AppException(ErrorCode.INVALID_REQUEST);
         String tankElement = compatibilityService.elementFromShape(request.getTankShape());
+        if(request.getKoiFishColors().isEmpty() || request.getKoiFishColors().stream().anyMatch(Set :: isEmpty)) throw new AppException(ErrorCode.INVALID_REQUEST);
         Set<Set<String>> fishElements = request.getKoiFishColors().stream()
                 .map(colors -> colors.stream()
                         .map(compatibilityService::elementFromColor)
                         .collect(Collectors.toSet()))
                 .collect(Collectors.toSet());
         return ApiResponse.<CompatibilityResponse>builder()
-                .result(compatibilityService.compatibilityScore(userElement,
+                .result(compatibilityService.compatibilityScore(request.getUserElement(),
                         tankElement, fishElements, request))
                 .build();
     }

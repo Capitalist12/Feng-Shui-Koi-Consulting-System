@@ -29,7 +29,7 @@ public class DashBoardService {
             Integer month = (Integer) result[1];
             Double totalRevenue = (Double) result[2];
 
-            String monthYear = String.format("%d-%d02", year, month);
+            String monthYear = String.format("%d-%d", year, month);
             revenueByMonth.put(monthYear, totalRevenue);
         }
 

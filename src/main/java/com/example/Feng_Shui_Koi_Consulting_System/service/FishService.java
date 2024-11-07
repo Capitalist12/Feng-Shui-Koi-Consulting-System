@@ -51,8 +51,6 @@ public class FishService {
                         koiImage.setKoiImageId(generateImage_Koi());
                         koiImage.setImageURL(imageUrl);  // Set the image link from the request
                         koiImage.setKoiFish(fish);        // Set the association to the koiFish
-                        // Handle Tank relationship here if needed, assuming the Tank is already available or from another part of the request
-                        // image.setTank(tank); // You can add tank reference if the Tank entity is required.
                         return koiImage;
                     })
                     .collect(Collectors.toSet());

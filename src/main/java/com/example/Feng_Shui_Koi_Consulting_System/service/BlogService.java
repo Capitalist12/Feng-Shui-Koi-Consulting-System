@@ -36,6 +36,7 @@ public class BlogService {
         String email = context.getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+
         Blog newblog = Blog.builder()
                 .blogID(generateBlogID())
                 .title(request.getTitle())
@@ -122,7 +123,11 @@ public class BlogService {
     }
 
     public void deleteBlog(String blogID){
-        blogRepo.deleteById(blogID);
+        Blog blog = blogRepo.findById(blogID).orElseThrow(()
+                -> new AppException(ErrorCode.BLOG_NOT_FOUND));
+        if(blog != null) {
+            blogRepo.deleteById(blogID);
+        }
     }
 
     public String generateBlogID(){

@@ -6,6 +6,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.Compatibili
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.proxy.ChatGptProxy;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,19 +28,20 @@ public class ChatGptService {
 
         try {
 
-            if(request == null || request.getUserElement() == null || request.getChatGptAIDto() == null) {
+            if (request == null || request.getUserElement() == null || request.getChatGptAIDto() == null) {
                 throw new AppException(ErrorCode.INVALID_REQUEST);
             }
 
             request.getChatGptAIDto().setModel("gpt-4");
             String systemMessage = """
-                    Bạn là 1 trợ lý ảo hỗ trợ tư vấn phong thủy nuôi cá Koi
-                    dựa trên mệnh (ví dụ: Kim, Mộc,...) của người dùng.
-                    Điểm mạnh của bạn là tư vấn cá Koi và hồ cá theo mệnh người 
-                    dùng. Nếu người dùng thông báo mệnh của mình thì bạn sẽ phản hồi cho 
-                    người dùng theo : tên giống cá Koi, màu sắc cá phù hợp, số lượng cá,
-                    hình dáng hồ, hướng đặt hồ, vị trí trí đặt hồ. Những thứ 
-                    này có độ phù hợp cao nhất với mệnh của người dùng.
+                    Bạn là một trợ lý ảo chuyên tư vấn phong thủy
+                    về việc nuôi cá Koi dựa trên mệnh của người dùng
+                    (ví dụ: Kim, Mộc, Thủy, Hỏa, Thổ). Điểm mạnh của 
+                    bạn là đưa ra lời khuyên về giống cá Koi, màu sắc, 
+                    số lượng cá, hình dáng hồ, hướng và vị trí đặt hồ 
+                    phù hợp nhất với mệnh của người dùng. Khi người dùng 
+                    thông báo mệnh của mình, bạn sẽ cung cấp các gợi ý 
+                    cụ thể và có độ phù hợp cao nhất theo mệnh đó.
                     """;
 
             ChatGptMessage chatGptMessage = new ChatGptMessage();
@@ -62,11 +64,20 @@ public class ChatGptService {
             ChatGptMessage message = chatGptResponse.getChoices().get(0).getMessage();
 
             return message.getContent();
+        }catch (FeignException.NotFound e) {
+            throw new AppException(ErrorCode.API_KEY_EXPIRED);
+        }catch (FeignException.Unauthorized e) {
+            throw new AppException(ErrorCode.UNAUTHORIZED_GPT);
+        }catch (FeignException.BadRequest e) {
+            throw new AppException(ErrorCode.INVALID_REQUEST_CHATGPT);
         }catch (HttpClientErrorException e) {
             throw new AppException(ErrorCode.CHATGPT_API_ERROR);
         }catch (NullPointerException e) {
             throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
+        }catch (AppException e) {
+            throw e;
         }catch (Exception e) {
+            log.error("Exception:", e);
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }

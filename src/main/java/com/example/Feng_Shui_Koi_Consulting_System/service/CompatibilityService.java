@@ -33,10 +33,11 @@ public class CompatibilityService {
     public String elementFromColor(String color) {
         return elementRepo.findByColor(color)
                 .map(Element::getElementName)
-                .orElse("Unknow Element");
+                .orElseThrow(() -> new AppException(ErrorCode.UNKNOWN_COLORS));
     }
 
     public String elementFromShape(String shape) {
+        if(shape.isEmpty()) throw new AppException(ErrorCode.INVALID_REQUEST);
         Tank tank = tankRepo.findByShape(shape).orElseThrow(() -> new
                 AppException(ErrorCode.TANK_NOT_FOUND));
         return tank.getElementTank().getElementName();
@@ -45,7 +46,6 @@ public class CompatibilityService {
     public CompatibilityResponse compatibilityScore(String elementName, String tankElement,
                                                     Set<Set<String>> fishElements,
                                                     CompatibilityRequest request) {
-
 
         // Tìm yếu tố của người dùng dựa trên tên của yếu tố
         Element userElement = elementRepo.findByElementName(elementName)
