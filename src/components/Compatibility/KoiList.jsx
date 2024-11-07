@@ -50,12 +50,12 @@ const KoiList = ({
         {filteredFishData.map((item) => (
           <ImageListItem key={item.id} onClick={() => handleSelectKoiFish(item, item.id)}>
             {/* {!loadedImages[item.id] && <Skeleton animation="wave" variant="rectangular" width="100%" height={390} />} */}
-            {!loadedImages[item.id] && (<Skeleton animation="wave" variant="rectangular" width="100%" height={390} />)}
+            {/* {!loadedImages[item.id] && (<Skeleton animation="wave" variant="rectangular" width="100%" height={390} />)} */}
             
               <img
                 srcSet={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format&dpr=2 2x`}
                 src={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format`}
-                style={{ display: loadedImages[item.id] ? 'block' : 'none' }}
+                // style={{ display: loadedImages[item.id] ? 'block' : 'none' }}
                 alt={item.name}
                 loading="lazy"
                 onLoad={() => handleImageLoad(item.id)}

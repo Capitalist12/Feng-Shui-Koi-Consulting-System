@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import {
   createBrowserRouter,
+  Outlet,
   RouterProvider,
   ScrollRestoration,
 } from "react-router-dom";
@@ -42,7 +43,14 @@ const App = () => {
 
     {
       path: "pricing",
-      element: <PricingPage />,
+      element: <Outlet />,
+      children: [
+        {
+          path: "",
+          element: <PricingPage />,
+        },
+        
+      ]
     },
     {
       path: "success-subscription",

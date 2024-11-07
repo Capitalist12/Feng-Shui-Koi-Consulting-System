@@ -1,0 +1,14 @@
+#compability-result-section{
+    background-color: white;
+
+    .score-container{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding-bottom: 25px;
+
+        span.ant-progress-text{
+            color: black;
+        }
+    }
+}

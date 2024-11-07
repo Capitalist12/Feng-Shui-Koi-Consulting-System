@@ -60,7 +60,7 @@ const BlogComment = ({ id }) => {
 
     return (
         <Row id="comment-section">
-            <Col xl={17} className="comment-container">
+            <Col xl={16} className="comment-container">
                 <Title level={3}>Bình luận / Trao đổi</Title>
                 <Form
                     form={form}
@@ -83,10 +83,10 @@ const BlogComment = ({ id }) => {
                     {comments && <Comments data={comments} />}
                 </div>
             </Col>
-            <Col xl={7} className="advertise-container">
+            <Col xl={8} className="advertise-container">
                 {topThreeAds && topThreeAds.length > 0 &&
                     topThreeAds.map((item, index) => (
-                        <div key={index}>
+                        <div key={index} style={{ width: '95%'}}>
                             <AdvertiseCardItem data={item}/>
                         </div>
                     ))

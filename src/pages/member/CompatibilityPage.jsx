@@ -74,11 +74,7 @@ function CompatibilityPage() {
   };
 
   const handleSelectTank = (tank) => {
-    if (selectedTank) {
-      message.warning("Vui lòng chỉ chọn 1 hồ!");
-    } else {
       setSelectedTank(tank);
-    }
   };
 
   const handleRemoveTank = () => {
@@ -281,13 +277,15 @@ function CompatibilityPage() {
                 <Title level={2}>Danh Sách Cá</Title>
               </div>
               <div className="custom-table">
-                <KoiList
-                  koiData={koiData}
-                  handleSelectFish={handleSelectFish}
-                  isKoiSelected={(fish) => selectedFish.includes(fish)}
-                  searchTerm={searchTerm}
-                  handleSearchTermChange={(e) => setSearchTerm(e.target.value)}
-                />
+                {koiData &&
+                  <KoiList
+                    koiData={koiData}
+                    handleSelectFish={handleSelectFish}
+                    isKoiSelected={(fish) => selectedFish.includes(fish)}
+                    searchTerm={searchTerm}
+                    handleSearchTermChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                }
               </div>
             </div>
           </Col>
