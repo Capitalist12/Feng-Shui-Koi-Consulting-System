@@ -30,7 +30,7 @@ const LoginForm = ({ setIsForgetPassword, setIsLoading }) => {
 
         const role = response.data.result.roleName.toUpperCase();
 
-        role !== "ADMIN" ? navigate("/") : navigate("/dashboard");
+        role !== "ADMIN" ? navigate("/") : navigate("/dashboard/statistic");
       }
     } finally {
       setIsLoading(false);

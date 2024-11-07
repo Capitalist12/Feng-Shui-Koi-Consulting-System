@@ -40,6 +40,7 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
         ]);
       }
     }
+    setIsChangePassword(false);
   }, [visible, userInfo, form]);
   const handleSave = async () => {
     try {
@@ -53,8 +54,6 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
         message.error("Mật khẩu mới và xác nhận mật khẩu không khớp.");
         return;
       }
-
-      // Tạo payload với các giá trị từ form
       const payload = {
         username: values.username,
         dateOfBirth: values.dateOfBirth
@@ -62,7 +61,7 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
           : null,
         currentPassword: values.currentPassword,
         newPassword: values.newPassword || values.currentPassword,
-        imageLink: values.imageLink, // Sử dụng imageLink ban đầu
+        imageLink: values.imageLink,
       };
 
       // Kiểm tra nếu có file mới cần upload
@@ -90,7 +89,11 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
   };
 
   const handleChangePassword = (value) => {
+    // ẩn trường xác nhận mật khẩu
     setIsChangePassword(value ? true : false);
+    if (!value) {
+      form.setFieldsValue({ confirmPassword: "" }); // xóa xác nhận
+    }
   };
 
   const getBase64 = (file) =>
@@ -178,7 +181,10 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
                 name="dateOfBirth"
                 label="Sinh nhật"
                 rules={[
-                  { required: true, message: "Vui lòng nhập tên người dùng" },
+                  {
+                    required: true,
+                    message: "Vui lòng nhập ngày sinh người dùng",
+                  },
                 ]}
               >
                 <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />

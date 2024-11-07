@@ -2,16 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import api from "../../config/axiosConfig";
 import "../../styles/Advertisement.scss";
 import Navbar from "../../components/Utils/Navbar";
-import {
-  Layout,
-  Button,
-  Pagination,
-  Select,
-  Modal,
-  Menu,
-  Dropdown,
-  Card,
-} from "antd";
+import { Layout, Button, Pagination, Select, Modal, Card, message } from "antd";
 import CreateAdForm from "../../components/Advertisement/CreateAdForm";
 import SearchBar from "../../components/Advertisement/SearchBar";
 import Title from "antd/es/typography/Title";
@@ -27,11 +18,10 @@ import {
   FaMountainSun,
 } from "react-icons/fa6";
 import { useForm } from "antd/es/form/Form";
-import { MdFileUpload, MdOutlineWaterDrop } from "react-icons/md";
+import { MdFileUpload } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import AdDetails from "../../components/Advertisement/AdDetails";
 import { PiPlantFill } from "react-icons/pi";
-import { FaChevronDown } from "react-icons/fa";
 import CustomeFooter from "../../components/HomePage/Footer/CustomeFooter";
 
 function AdvertisementPage() {
@@ -87,6 +77,7 @@ function AdvertisementPage() {
     setSortValue("Sắp xếp theo:...");
   };
 
+  //sort theo giá
   const sortPriceAsc = () => {
     const sortedAds = [...displayAds].sort((a, b) => a.price - b.price);
     setDisplayAds(sortedAds);
@@ -141,6 +132,18 @@ function AdvertisementPage() {
   };
 
   const handleAdSubmit = async (values) => {
+    const accessToken = localStorage.getItem("accessToken");
+    const isVIP =
+      (accessToken &&
+        JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
+      (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
+
+    if (!isVIP) {
+      message.error("Bạn phải là thành viên để tính toán độ tương thích.");
+      navigate("/errorMem"); // Điều hướng tới trang lỗi
+      return;
+    }
+
     setLoading(true);
     try {
       await api.post("/ad", {
@@ -162,30 +165,6 @@ function AdvertisementPage() {
       setLoading(false);
     }
   };
-
-  // //dropdown
-  // const menu = (
-  //   <Menu>
-  //     <Menu.Item key="1" onClick={() => handleCategoryFilter("Koi Fish")}>
-  //       <IoFishOutline style={{ marginRight: "0.5rem" }} />
-  //       Koi Fish
-  //     </Menu.Item>
-  //     <Menu.Item
-  //       key="2"
-  //       onClick={() => handleCategoryFilter("Aquarium Supplies")}
-  //     >
-  //       <GiAquarium style={{ marginRight: "0.5rem" }} />
-  //       Aquarium Supplies
-  //     </Menu.Item>
-  //     <Menu.Item
-  //       key="3"
-  //       onClick={() => handleCategoryFilter("Feng Shui Items")}
-  //     >
-  //       <RiAlignItemLeftLine style={{ marginRight: "0.5rem" }} />
-  //       Feng Shui Items
-  //     </Menu.Item>
-  //   </Menu>
-  // );
 
   return (
     <Layout>

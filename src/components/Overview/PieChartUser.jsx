@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Cell, Legend, Pie, PieChart } from "recharts";
 import api from "../../config/axiosConfig";
 
-const Chart = () => {
+const PieChartUser = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
 
@@ -60,4 +60,4 @@ const Chart = () => {
     </div>
   );
 };
-export default Chart;
+export default PieChartUser;

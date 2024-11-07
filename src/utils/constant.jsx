@@ -151,7 +151,7 @@ const DASHBOARD_ITEMS = [
     icon: <MdOutlineSell />,
     label: (
       <NavLink to="advertise" className="nav-link">
-        Quản lý bài đăng bán
+        Quản lý bài đăng
       </NavLink>
     ),
   },

@@ -240,11 +240,13 @@ function CompatibilityPage() {
           </div>
         </div>
       </>
-      {resultData && <Result
-        isVisible={isModalVisible}
-        resultData={resultData}
-        onClose={() => setIsModalVisible(false)}
-      />}
+      {resultData && (
+        <Result
+          isVisible={isModalVisible}
+          resultData={resultData}
+          onClose={() => setIsModalVisible(false)}
+        />
+      )}
     </Layout>
   );
 }

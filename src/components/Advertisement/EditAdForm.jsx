@@ -16,7 +16,7 @@ import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
 import { CATEGORY, OPTIONS } from "../../utils/constant";
 
-const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
+const EditAdForm = ({ open, ad, onClose, onSubmit, onDelete, loading }) => {
   const [form] = Form.useForm();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -71,6 +71,12 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
       description:
         "Bài đăng của bạn đã được sửa thành công, hãy chờ phê duyệt nhé!",
     });
+  };
+
+  const handleDelete = () => {
+    if (ad && ad.adID) {
+      onDelete(ad.adID); // Gọi hàm xóa từ UserAds và truyền adID
+    }
   };
 
   const getBase64 = (file) =>
@@ -130,9 +136,7 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
         }
         onCancel={onClose}
         footer={[
-          <Button key="back" onClick={onClose}>
-            Hủy
-          </Button>,
+          <Button onClick={handleDelete}>Xóa</Button>,
           <Button
             key="submit"
             type="primary"
@@ -222,7 +226,7 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
 
           <Form.Item
             name="price"
-            label="Giá"
+            label="Giá (đơn vị VNĐ)"
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             rules={[
@@ -239,7 +243,7 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
           </Form.Item>
 
           <Form.Item
-            label="Hình ảnh"
+            label="Hình ảnh "
             name="imagesAd"
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}

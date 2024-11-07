@@ -88,9 +88,9 @@ const KoiList = ({
       setSelectedFishId([...selectedFishId, id]);
     } else if (selectedFishId.includes(id)) {
       handleSelectFish(koi);
-      setSelectedFishId(selectedFishId.filter((koiID) => koiID !== id))
+      setSelectedFishId(selectedFishId.filter((koiID) => koiID !== id));
     }
-  }
+  };
 
   return (
     <Flex vertical style={{ backgroundColor: '#4096ff' }}>
@@ -141,13 +141,22 @@ const KoiList = ({
               loading="lazy"
               onLoad={() => handleImageLoad(item.id)}
             />
+
+            <img
+              srcSet={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format&dpr=2 2x`}
+              src={`${item.imagesFish[0].imageURL}?w=248&fit=crop&auto=format`}
+              // style={{ display: loadedImages[item.id] ? 'block' : 'none' }}
+              alt={item.name}
+              loading="lazy"
+              onLoad={() => handleImageLoad(item.id)}
+            />
             <ImageListItemBar
               key="koi-info"
               title={item.name}
               subtitle={item.color}
               actionIcon={
                 <IconButton
-                  sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                  sx={{ color: "rgba(255, 255, 255, 0.54)" }}
                   aria-label={`info about ${item.name}`}
                 >
                   <AiFillInfoCircle />
@@ -157,16 +166,14 @@ const KoiList = ({
             <ImageListItemBar
               sx={{
                 background:
-                  'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-                  'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                  "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
+                  "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
               }}
               key="action"
               position="top"
               actionPosition="left"
               actionIcon={
-                <IconButton
-                  sx={{ color: 'white' }}
-                >
+                <IconButton sx={{ color: "white" }}>
                   <Checkbox checked={selectedFishId.includes(item.id)} />
                 </IconButton>
               }
