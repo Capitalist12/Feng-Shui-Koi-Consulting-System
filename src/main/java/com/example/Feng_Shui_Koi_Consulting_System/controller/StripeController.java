@@ -35,7 +35,7 @@ public class StripeController {
     @ResponseBody
     public ApiResponse<PaymentlResponse> paymentSuccessfull(@RequestBody PaymentSuccessfulRequest request) {
         return ApiResponse.<PaymentlResponse>builder()
-                .result(stripeService.handleSubscriptionCompletion(request.getUserID(),request.getSessionID())    )
+                .result(stripeService.handleSubscriptionCompletion(request)    )
                 .build();
     }
 

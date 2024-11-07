@@ -5,6 +5,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.tank.TankResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.TankService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,7 +23,7 @@ public class TankController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    ApiResponse<TankResponse> createTank(@RequestBody TankCreationRequest request){
+    ApiResponse<TankResponse> createTank(@Valid @RequestBody TankCreationRequest request){
         return ApiResponse.<TankResponse>builder()
                 .result(tankService.createTank(request))
                 .build();
@@ -46,7 +47,7 @@ public class TankController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{tankId}")
-    ApiResponse<TankResponse> updateFish(@PathVariable String tankId ,@RequestBody TankUpdateRequest request){
+    ApiResponse<TankResponse> updateTank(@PathVariable String tankId , @Valid @RequestBody TankUpdateRequest request){
         return ApiResponse.<TankResponse>builder()
                 .result(tankService.updateTank(tankId, request))
                 .build();

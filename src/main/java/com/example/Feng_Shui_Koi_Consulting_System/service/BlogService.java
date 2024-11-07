@@ -122,7 +122,11 @@ public class BlogService {
     }
 
     public void deleteBlog(String blogID){
-        blogRepo.deleteById(blogID);
+        Blog blog = blogRepo.findById(blogID).orElseThrow(()
+                -> new AppException(ErrorCode.BLOG_NOT_FOUND));
+        if(blog != null) {
+            blogRepo.deleteById(blogID);
+        }
     }
 
     public String generateBlogID(){
