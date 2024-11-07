@@ -48,7 +48,11 @@ public class AdvertisementService {
         User user = userRepository.findByUsername(userService.getMyInfo().getUsername())
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXIST)));
         ad.setUser(user);
-        ad.setAdID(generateAdID());
+        String adID;
+        do{
+            adID = generateAdID();
+        }while(advertisementRepo.findById(adID) != null);
+        ad.setAdID(adID);
         ad.setStatus("Pending");
         ad.setCreatedDate(LocalDateTime.now());
     // Get advertisement's images
@@ -104,6 +108,7 @@ public class AdvertisementService {
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
+    //Get list of rejected ads
     public List<AdvertisementResponse> getListAdvertisementsRejected() {
         return advertisementRepo.findAdsRejected().stream()
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
@@ -115,10 +120,19 @@ public class AdvertisementService {
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
+    //Get list of ads suitable with user's element
+    public List<AdvertisementResponse> getAdvertisementByUserElement(){
+        return advertisementRepo.findAdsByUserElement(userService.getMyInfo().getElement())
+                .stream().map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
+    }
+
     //Let admin verify if the pending ads
     public AdvertisementResponse verifyAd(VerifyAdRequest request) {
         Advertisement advertisement = advertisementRepo.findById(request.getAdID())
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
+        if(!userService.getMyInfo().getRoleName().equals("ADMIN")){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
         if (!request.getNewStatus().equals("Verified") && !request.getNewStatus().equals("Rejected")) {
             throw new AppException(ErrorCode.STATUS_INVALID);
         }
@@ -152,6 +166,9 @@ public class AdvertisementService {
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request) {
         Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
+        if(!userService.getMyInfo().getUserID().equals(advertisement.getUser().getUserID())){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
         advertisementMapper.updateAdvertisement(advertisement, request, elementRepo, categoryService);
         advertisement.setStatus("Pending");
         Set<Ads_Image> currentImages = advertisement.getImagesAd();
@@ -180,6 +197,10 @@ public class AdvertisementService {
     public void deleteAdvertisement(String adID) {
         Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
+        if(!userService.getMyInfo().getUserID().equals(advertisement.getUser().getUserID())
+                || !userService.getMyInfo().getRoleName().equals("ADMIN")){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
         advertisementRepo.delete(advertisement);
     }
 

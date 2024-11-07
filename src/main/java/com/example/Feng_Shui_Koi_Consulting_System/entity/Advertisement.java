@@ -24,13 +24,13 @@ public class Advertisement {
     @Column(name = "AdID")
     String adID;
 
-    @Column(name = "Title")
+    @Column(name = "Title", nullable = false)
     String title;
 
-    @Column(name = "Description")
+    @Column(name = "Description", nullable = false, length = 1000)
     String description;
 
-    @Column(name = "Price")
+    @Column(name = "Price", nullable = false)
     Float price;
 
     @Column(name = "Status")

@@ -26,6 +26,7 @@ public class AdvertisementController {
     }
 
     //Get all ads doesn't care about status
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     ApiResponse<List<AdvertisementResponse>> getAllAds(){
         return ApiResponse.<List<AdvertisementResponse>>builder()
@@ -41,7 +42,8 @@ public class AdvertisementController {
                 .build();
     }
 
-    //Get member's ads
+    //Get my ads
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @GetMapping("/get-my-ads")
     ApiResponse<List<AdvertisementResponse>> getAdsOfUser(){
         return  ApiResponse.<List<AdvertisementResponse>>builder()
@@ -83,6 +85,15 @@ public class AdvertisementController {
                 .build();
     }
 
+    //Get ads by user element
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
+    @GetMapping("/user-element")
+    ApiResponse<List<AdvertisementResponse>> getAdsByUserElement(){
+        return ApiResponse.<List<AdvertisementResponse>>builder()
+                .result(advertisementService.getAdvertisementByUserElement())
+                .build();
+    }
+
     //Find ads by filter
     @PostMapping("/filter")
     ApiResponse<List<AdvertisementResponse>> getAdByFilter(@RequestBody FindAdByFilterRequest request){
@@ -103,7 +114,7 @@ public class AdvertisementController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER')")
     @PutMapping("/{adID}")
     ApiResponse<AdvertisementResponse> updateAd(@PathVariable String adID, @RequestBody AdvertisementUpdateRequest request){
         return ApiResponse.<AdvertisementResponse>builder()
@@ -111,7 +122,7 @@ public class AdvertisementController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @DeleteMapping("/{adID}")
     String deleteAd(@PathVariable String adID){
         advertisementService.deleteAdvertisement(adID);

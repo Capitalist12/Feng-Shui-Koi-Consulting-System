@@ -27,7 +27,7 @@ public class Comment {
 
     @Column(name = "CommentDate")
     LocalDate commentDate;
-    @Column(name = "Content")
+    @Column(name = "Content", nullable = false, length = 1000)
     String content;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
