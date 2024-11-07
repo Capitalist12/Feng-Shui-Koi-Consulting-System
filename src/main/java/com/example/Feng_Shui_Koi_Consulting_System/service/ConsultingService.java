@@ -39,6 +39,7 @@ public class ConsultingService {
     ElementRepo elementRepo;
     ElementCalculationService elementCalculationService;
 
+    //consulting fishes
     public List<ConsultingFishResponse> koiFishList(ConsultingRequest request) {
         // Calculate the user's elementID based on the date of birth
         int elementID = elementCalculationService.calculateElementId(request.getDob());
@@ -78,6 +79,7 @@ public class ConsultingService {
                 .collect(Collectors.toList());
     }
 
+    //consulting tank
     public List<ConsultingTankResponse> tankList(ConsultingRequest request)
     {
         Integer elementID = elementCalculationService.calculateElementId(request.getDob());
@@ -90,7 +92,7 @@ public class ConsultingService {
         }).collect(Collectors.toList());
     }
 
-    //Get list of ads suitable with user's element
+    //consulting ads
     public List<ConsultingAdResponse> adList(ConsultingRequest request){
         Integer elementID = elementCalculationService.calculateElementId(request.getDob());
         return advertisementRepo.findAdsByUserElement(elementID).stream().map(advertisement -> {
