@@ -3,7 +3,6 @@ import { Button, Layout, Pagination } from "antd";
 import "../../../styles/UserAds.scss";
 import api from "../../../config/axiosConfig";
 import SearchBar from "../../../components/Advertisement/SearchBar";
-import Title from "antd/es/typography/Title";
 import Navbar from "../../../components/Utils/Navbar";
 import EditAdForm from "../../../components/Advertisement/EditAdForm";
 import { getUserAds } from "../../../services/advertiseAPIService";
@@ -103,6 +102,18 @@ const UserAds = () => {
     }
     return description;
   };
+
+  const translateStatus = (status) => {
+    switch (status) {
+      case "Verified":
+        return "Đã chấp nhận";
+      case "Pending":
+        return "Đang chờ";
+      case "Rejected":
+        return "Từ chối";
+    }
+  };
+
   const indexOfLastAd = currentPage * adsPerPage;
   const indexOfFirstAd = indexOfLastAd - adsPerPage;
   const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd);
@@ -127,21 +138,21 @@ const UserAds = () => {
               className="custom-check-button"
               onClick={() => handleFilterByStatus("Verified")}
             >
-              <MdOutlineVerified /> Verified
+              <MdOutlineVerified /> Đã Chấp Nhận
             </Button>
 
             <Button
               className="custom-check-button"
               onClick={() => handleFilterByStatus("Pending")}
             >
-              <MdOutlinePending /> Pending
+              <MdOutlinePending /> Đang Chờ
             </Button>
 
             <Button
               className="custom-check-button"
               onClick={() => handleFilterByStatus("Rejected")}
             >
-              <MdOutlineAutoDelete /> Rejected
+              <MdOutlineAutoDelete /> Từ chối
             </Button>
           </div>
         </div>
@@ -155,8 +166,10 @@ const UserAds = () => {
               onClick={() => handleEditAd(ad)}
             >
               <h2>Mệnh: {ad.element}</h2>
-              <h4 style={{ textShadow: "1px 1px 2rem blue" }}>
-                Trạng thái: {ad.status}
+              <h4
+                style={{ textShadow: "1px 1px 2rem blue", fontStyle: "italic" }}
+              >
+                {translateStatus(ad.status)}
               </h4>
               <h3>{truncateTitle(ad.title, 30)}</h3>
               <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />

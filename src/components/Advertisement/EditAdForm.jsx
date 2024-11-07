@@ -222,7 +222,7 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
 
           <Form.Item
             name="price"
-            label="Giá"
+            label="Giá (đơn vị VNĐ)"
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             rules={[
@@ -239,7 +239,7 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, loading }) => {
           </Form.Item>
 
           <Form.Item
-            label="Hình ảnh"
+            label="Hình ảnh "
             name="imagesAd"
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}

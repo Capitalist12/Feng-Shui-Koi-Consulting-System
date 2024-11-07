@@ -2,16 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import api from "../../config/axiosConfig";
 import "../../styles/Advertisement.scss";
 import Navbar from "../../components/Utils/Navbar";
-import {
-  Layout,
-  Button,
-  Pagination,
-  Select,
-  Modal,
-  Menu,
-  Dropdown,
-  Card,
-} from "antd";
+import { Layout, Button, Pagination, Select, Modal, Card } from "antd";
 import CreateAdForm from "../../components/Advertisement/CreateAdForm";
 import SearchBar from "../../components/Advertisement/SearchBar";
 import Title from "antd/es/typography/Title";

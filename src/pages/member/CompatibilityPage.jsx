@@ -281,13 +281,17 @@ function CompatibilityPage() {
                 <Title level={2}>Danh Sách Cá</Title>
               </div>
               <div className="custom-table">
-                <KoiList
-                  koiData={koiData}
-                  handleSelectFish={handleSelectFish}
-                  isKoiSelected={(fish) => selectedFish.includes(fish)}
-                  searchTerm={searchTerm}
-                  handleSearchTermChange={(e) => setSearchTerm(e.target.value)}
-                />
+                {koiData && (
+                  <KoiList
+                    koiData={koiData}
+                    handleSelectFish={handleSelectFish}
+                    isKoiSelected={(fish) => selectedFish.includes(fish)}
+                    searchTerm={searchTerm}
+                    handleSearchTermChange={(e) =>
+                      setSearchTerm(e.target.value)
+                    }
+                  />
+                )}
               </div>
             </div>
           </Col>
@@ -326,11 +330,13 @@ function CompatibilityPage() {
           </div>
         </div>
       </>
-      {resultData && <Result
-        isVisible={isModalVisible}
-        resultData={resultData}
-        onClose={() => setIsModalVisible(false)}
-      />}
+      {resultData && (
+        <Result
+          isVisible={isModalVisible}
+          resultData={resultData}
+          onClose={() => setIsModalVisible(false)}
+        />
+      )}
     </Layout>
   );
 }

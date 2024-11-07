@@ -40,6 +40,7 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
         ]);
       }
     }
+    setIsChangePassword(false);
   }, [visible, userInfo, form]);
   const handleSave = async () => {
     try {
@@ -90,7 +91,11 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
   };
 
   const handleChangePassword = (value) => {
+    // ẩn trường xác nhận mật khẩu
     setIsChangePassword(value ? true : false);
+    if (!value) {
+      form.setFieldsValue({ confirmPassword: "" }); // xóa xác nhận
+    }
   };
 
   const getBase64 = (file) =>
@@ -178,7 +183,10 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
                 name="dateOfBirth"
                 label="Sinh nhật"
                 rules={[
-                  { required: true, message: "Vui lòng nhập tên người dùng" },
+                  {
+                    required: true,
+                    message: "Vui lòng nhập ngày sinh người dùng",
+                  },
                 ]}
               >
                 <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
