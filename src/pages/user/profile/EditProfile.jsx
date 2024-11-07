@@ -40,8 +40,8 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
         ]);
       }
     }
+    setIsChangePassword(false);
   }, [visible, userInfo, form]);
-
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
@@ -60,30 +60,40 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
           ? values.dateOfBirth.format("YYYY-MM-DD")
           : null,
         currentPassword: values.currentPassword,
-        newPassword: values.newPassword || values.currentPassword, // ko set pass mới thì gửi đi pass cũ
+        newPassword: values.newPassword || values.currentPassword,
         imageLink: values.imageLink,
       };
 
-      if (fileList.length > 0) {
+      // Kiểm tra nếu có file mới cần upload
+      if (fileList.length > 0 && fileList[0].originFileObj) {
+        // Chỉ upload nếu có file mới
         const file = fileList[0];
         const url = await uploadFile(file.originFileObj);
         payload.imageLink = url;
+      } else {
+        // Nếu không có file mới, giữ nguyên liên kết ảnh cũ
+        payload.imageLink = userInfo.imageLink;
       }
 
       setSubmitting(true);
       await onSave(payload);
-      message.success("Thông tin đã được lưu thành công");
       onClose();
       form.resetFields();
     } catch (err) {
-      message.error("Vui lòng kiểm tra lại các trường thông tin.");
+      {
+        ("");
+      }
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleChangePassword = (value) => {
+    // ẩn trường xác nhận mật khẩu
     setIsChangePassword(value ? true : false);
+    if (!value) {
+      form.setFieldsValue({ confirmPassword: "" }); // xóa xác nhận
+    }
   };
 
   const getBase64 = (file) =>
@@ -167,12 +177,35 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
             </Col>
 
             <Col span={12}>
-              <Form.Item name="dateOfBirth" label="Sinh nhật">
+              <Form.Item
+                name="dateOfBirth"
+                label="Sinh nhật"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập ngày sinh người dùng",
+                  },
+                ]}
+              >
                 <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
               </Form.Item>
             </Col>
           </Row>
-
+          <Row justify="center">
+            <Col>
+              <Form.Item name="imageLink" label="Ảnh Đại Diện">
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onPreview={handlePreview}
+                  onChange={handleChange}
+                  style={{ width: "10rem", height: "10rem" }}
+                >
+                  {fileList.length >= 1 ? null : uploadButton}
+                </Upload>
+              </Form.Item>
+            </Col>
+          </Row>
           <Form.Item
             name="currentPassword"
             label="Mật khẩu hiện tại"
@@ -182,21 +215,6 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
           >
             <Input.Password placeholder="Nhập mật khẩu hiện tại" />
           </Form.Item>
-
-          <Row>
-            <Col span={24}>
-              <Form.Item name="imageLink" label="Ảnh Đại Diện">
-                <Upload
-                  listType="picture-card"
-                  fileList={fileList}
-                  onPreview={handlePreview}
-                  onChange={handleChange}
-                >
-                  {fileList.length >= 1 ? null : uploadButton}
-                </Upload>
-              </Form.Item>
-            </Col>
-          </Row>
 
           <div style={{ marginTop: "2rem" }}>
             <Form.Item name="newPassword" label="Mật khẩu mới (TÙY CHỌN)">
@@ -209,7 +227,7 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
             {isChangePassword && (
               <Form.Item
                 name="confirmPassword"
-                label="Xác nhận mật khẩu"
+                label="Xác nhận mật khẩu mới"
                 dependencies={["newPassword"]}
                 hasFeedback
                 rules={[
@@ -229,7 +247,7 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
                   }),
                 ]}
               >
-                <Input.Password placeholder="Xác nhận mật khẩu" />
+                <Input.Password placeholder="Xác nhận mật khẩu mới" />
               </Form.Item>
             )}
           </div>

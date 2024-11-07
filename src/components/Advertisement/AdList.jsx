@@ -14,7 +14,6 @@ const AdList = ({ ads, loading }) => {
 
   return (
     <div className="ad-list">
-      {/* Hiển thị danh sách quảng cáo */}
       {currentAds.map((ad) => (
         <Card key={ad.adID} title={ad.title} style={{ marginBottom: "16px" }}>
           <p>{ad.description}</p>

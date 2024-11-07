@@ -8,7 +8,11 @@ const ErrorMember = () => {
   return (
     <Result
       status="403"
-      title={<span style={{ fontSize: "3rem", color: "red" }}>403</span>}
+      title={
+        <span style={{ fontSize: "2rem", color: "red" }}>
+          Không được phép truy cập tính năng này
+        </span>
+      }
       subTitle={
         <span style={{ fontSize: "2rem" }}>
           Xin vui lòng nạp VIP để sử dụng dịch vụ!
@@ -16,6 +20,7 @@ const ErrorMember = () => {
       }
       extra={[
         <Button
+          className="custom-button-black-white"
           type="primary"
           size="large"
           style={{ marginRight: "2rem" }}
@@ -24,6 +29,7 @@ const ErrorMember = () => {
           Trang chủ
         </Button>,
         <Button
+          className="custom-button-black-white"
           type="primary"
           size="large"
           onClick={() => navigate("/pricing")}

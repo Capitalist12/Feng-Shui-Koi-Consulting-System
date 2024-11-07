@@ -1,67 +1,238 @@
 import React, { useEffect, useState } from "react";
-import { message } from "antd";
-import { getUserAds } from "../../../services/advertiseAPIService"; // Đường dẫn đến file chứa hàm getUserAds
+import { Button, Layout, notification, Pagination } from "antd";
+import "../../../styles/UserAds.scss";
+import api from "../../../config/axiosConfig";
+import SearchBar from "../../../components/Advertisement/SearchBar";
+import Navbar from "../../../components/Utils/Navbar";
+import EditAdForm from "../../../components/Advertisement/EditAdForm";
+import { getUserAds } from "../../../services/advertiseAPIService";
+import {
+  MdOutlineAutoDelete,
+  MdOutlinePending,
+  MdOutlineVerified,
+} from "react-icons/md";
+import CustomeFooter from "../../../components/HomePage/Footer/CustomeFooter";
+import { toast } from "react-toastify";
 
 const UserAds = () => {
   const [ads, setAds] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [displayAds, setDisplayAds] = useState([]);
+  const [selectedAd, setSelectedAd] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const userName = ads && ads.length > 0 ? ads[0].user : "bạn";
+  const [currentPage, setCurrentPage] = useState(1);
+  const adsPerPage = 10;
+
+  const fetchAds = async () => {
+    try {
+      const response = await getUserAds();
+      const sortedAds = response.data.result.sort(
+        (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+      );
+      setAds(sortedAds);
+      setDisplayAds(sortedAds);
+    } catch (error) {
+      console.error("Error fetching ads: ", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchAds = async () => {
-      try {
-        const response = await getUserAds(); // Gọi hàm getUserAds
-        if (Array.isArray(response.result) && response.result.length > 0) {
-          setAds(response.result); // Lưu dữ liệu bài đăng vào state
-        } else {
-          message.error("Không tìm thấy bài đăng nào.");
-        }
-      } catch (error) {
-        message.error("Có lỗi xảy ra khi kết nối với máy chủ.");
-      } finally {
-        setLoading(false); // Kết thúc trạng thái loading
-      }
-    };
-
+    window.scrollTo(0, 0);
     fetchAds();
   }, []);
 
+  const handleSearch = async (keyword) => {
+    // format input
+    if (!keyword || keyword.trim() === "") {
+      await fetchAds(); // hien all ads
+      return;
+    }
+    const lowerCaseKeyword = keyword.toLowerCase();
+    const filteredAds = ads.filter(
+      (ad) =>
+        ad.title.toLowerCase().includes(lowerCaseKeyword) ||
+        ad.element.toLowerCase().includes(lowerCaseKeyword) ||
+        ad.price.toString().includes(keyword)
+    );
+    setDisplayAds(filteredAds);
+  };
+
+  const handleFilterByStatus = (status) => {
+    const filteredAds = ads.filter((ad) => ad.status === status);
+    setDisplayAds(filteredAds);
+  };
+
+  const handleEditAd = (ad) => {
+    setSelectedAd(ad);
+    setIsEditing(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setSelectedAd(null);
+    setIsEditing(false);
+  };
+
+  const handleEditSubmit = async (values) => {
+    setLoading(true);
+    try {
+      const response = await api.put(`/ad/${selectedAd.adID}`, {
+        title: values.title || selectedAd.title,
+        description: values.description || selectedAd.description,
+        price: values.price || selectedAd.price,
+        element: values.element || selectedAd.element,
+        categoryName: values.categoryName || selectedAd.category.categoryName,
+        imagesURL:
+          values.imagesURL || selectedAd.imagesAd.map((img) => img.imageURL), // truyền URL hình ảnh
+      });
+
+      console.log("Response from API:", response);
+      handleCloseEditModal();
+      await fetchAds();
+    } catch (error) {
+      console.error("Lỗi khi chỉnh sửa quảng cáo:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteAd = async (adID) => {
+    setLoading(true);
+    try {
+      const response = await api.delete(`/ad/${adID}`);
+      const mess =
+        response?.data?.message || "Bài đăng đã được xóa thành công.";
+
+      await fetchAds();
+      handleCloseEditModal();
+
+      notification.success({
+        message: "Thành công!",
+        description: mess,
+      });
+    } catch (error) {
+      notification.error({
+        message: "Lỗi!",
+        description: mess,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // dai qua ...
+  const truncateTitle = (description, maxLength) => {
+    if (description.length > maxLength) {
+      return description.slice(0, maxLength) + "...";
+    }
+    return description;
+  };
+
+  const translateStatus = (status) => {
+    switch (status) {
+      case "Verified":
+        return "Đã chấp nhận";
+      case "Pending":
+        return "Đang chờ";
+      case "Rejected":
+        return "Từ chối";
+    }
+  };
+
+  const indexOfLastAd = currentPage * adsPerPage;
+  const indexOfFirstAd = indexOfLastAd - adsPerPage;
+  const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd);
+
   return (
-    <div>
-      {loading ? (
-        <p>Đang tải...</p>
-      ) : (
-        <div>
-          {ads.length > 0 ? (
-            ads.map((ad) => (
-              <div key={ad.adID} className="ad-card">
-                <h3>{ad.title}</h3>
-                <p>{ad.description.replace(/\n/g, "<br/>")}</p>{" "}
-                {/* Thay thế \n bằng <br/> để hiển thị đúng định dạng */}
-                <p>Giá: {ad.price.toLocaleString()} VND</p>{" "}
-                {/* Hiển thị giá với định dạng tiền tệ */}
-                <p>Loại: {ad.element}</p>
-                <p>Danh mục: {ad.category.categoryName}</p>
-                <p>Trạng thái: {ad.status}</p>
-                <p>
-                  Ngày tạo: {new Date(ad.createdDate).toLocaleString()}
-                </p>{" "}
-                {/* Chuyển đổi định dạng ngày */}
-                {ad.imagesAd.map((image) => (
-                  <img
-                    key={image.adImageId}
-                    src={image.imageURL}
-                    alt={ad.title}
-                    style={{ width: "100px", margin: "5px" }}
-                  />
-                ))}
-              </div>
-            ))
-          ) : (
-            <p>Không có bài đăng nào.</p>
-          )}
+    <Layout>
+      <Navbar />
+      <section id="sec1-my-ads">
+        <h1>LỊCH SỬ ĐĂNG BÀI MUA-BÁN</h1>
+
+        <h2>Xin chào, {userName}!</h2>
+      </section>
+
+      <section id="sec2-ad">
+        <div className="my-ads-filters">
+          <div className="search-bar">
+            <SearchBar onSearch={handleSearch} />
+          </div>
+
+          <div className="ba-cuc">
+            <Button
+              className="custom-check-button"
+              onClick={() => handleFilterByStatus("Verified")}
+            >
+              <MdOutlineVerified /> Đã Chấp Nhận
+            </Button>
+
+            <Button
+              className="custom-check-button"
+              onClick={() => handleFilterByStatus("Pending")}
+            >
+              <MdOutlinePending /> Đang Chờ
+            </Button>
+
+            <Button
+              className="custom-check-button"
+              onClick={() => handleFilterByStatus("Rejected")}
+            >
+              <MdOutlineAutoDelete /> Từ chối
+            </Button>
+          </div>
         </div>
+
+        <div className="ads-list">
+          {currentAds.map((ad) => (
+            <div
+              key={ad.adID}
+              className="advertisement"
+              // an scss cua ben advertisement
+              onClick={() => handleEditAd(ad)}
+            >
+              <h2>Mệnh: {ad.element}</h2>
+              <h4
+                style={{ textShadow: "1px 1px 2rem blue", fontStyle: "italic" }}
+              >
+                {translateStatus(ad.status)}
+              </h4>
+              <h3>{truncateTitle(ad.title, 30)}</h3>
+              <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
+              {ad.imagesAd.length > 1 && (
+                <span style={{ fontStyle: "italic" }}>
+                  +{ad.imagesAd.length - 1} hình ảnh
+                </span>
+              )}
+              <div className="price-cate">
+                <h2>Giá: {ad.price.toLocaleString()} VNĐ</h2>
+                <p>Danh mục: {ad.category.categoryName}</p>
+              </div>
+            </div>
+          ))}
+          <div className="pagination">
+            <Pagination
+              current={currentPage}
+              total={displayAds.length}
+              pageSize={adsPerPage}
+              onChange={(page) => setCurrentPage(page)}
+              style={{ textAlign: "center", marginTop: "3rem" }}
+            />
+          </div>
+        </div>
+      </section>
+
+      {isEditing && (
+        <EditAdForm
+          open={isEditing}
+          ad={selectedAd}
+          onClose={handleCloseEditModal}
+          onSubmit={handleEditSubmit}
+          onDelete={handleDeleteAd}
+          loading={loading}
+        />
       )}
-    </div>
+      <CustomeFooter />
+    </Layout>
   );
 };
 

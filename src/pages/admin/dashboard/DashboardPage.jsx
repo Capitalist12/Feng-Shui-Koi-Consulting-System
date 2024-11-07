@@ -3,7 +3,11 @@ import { Button, Layout, Menu, theme, Row, Col } from "antd";
 import "../../../styles/DashboardPage.scss";
 import { Outlet, useLocation } from "react-router-dom";
 import { DASHBOARD_ITEMS } from "../../../utils/constant.jsx";
-import { HomeOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+} from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import DropdownAvatar from "../../../components/Utils/DropdownAvatar.jsx";
 import { Typography } from "antd";
@@ -53,10 +57,10 @@ const DashboardPage = () => {
                   height: 64,
                 }}
               />
-              <Button 
-              icon={<HomeOutlined />} 
-              title="Trang chủ"
-              onClick={() => window.location.href = "/"}
+              <Button
+                icon={<HomeOutlined />}
+                title="Trang chủ"
+                onClick={() => (window.location.href = "/")}
               />
             </Col>
             <Col md={6}>
