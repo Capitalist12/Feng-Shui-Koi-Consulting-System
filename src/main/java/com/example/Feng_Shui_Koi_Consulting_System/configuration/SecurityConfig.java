@@ -21,7 +21,6 @@ import org.springframework.web.filter.CorsFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-
     private final String[] PUBLIC_ENDPOINT = {"/auth/login","/auth/signup","/auth/introspect"
     , "/auth/outbound/authentication", "/auth/verify-email", "/auth/logout", "/auth/reset-password"
     , "/ad/verified",  "/ad/filter", "/ad/{adID}"

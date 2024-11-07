@@ -6,6 +6,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.Compatibili
 import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.CompatibilityResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.consulting.ConsultingResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.ElementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.service.CompatibilityService;
@@ -38,10 +39,10 @@ public class ConsultingAPI {
     //Calculate user's element
     @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @PostMapping("/calculate")
-    public ApiResponse<String> calculateElementName(@RequestBody  CalculateElementRequest request) {
-        String elementName = elementCalculationService.calculateElementName(request.getDob());
-        return ApiResponse.<String>builder()
-                .result(elementName)
+    public ApiResponse<ElementResponse> calculateElementName(@RequestBody  CalculateElementRequest request) {
+        ElementResponse element = elementCalculationService.calculateElementName(request.getDob());
+        return ApiResponse.<ElementResponse>builder()
+                .result(element)
                 .build();
     }
 

@@ -1,6 +1,8 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
+import com.example.Feng_Shui_Koi_Consulting_System.dto.user.ElementResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Element;
+import com.example.Feng_Shui_Koi_Consulting_System.mapper.ElementMapper;
 import com.example.Feng_Shui_Koi_Consulting_System.repository.ElementRepo;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +18,17 @@ import java.util.Optional;
 public class ElementCalculationService {
 
     ElementRepo elementRepo;
+    ElementMapper elementMapper;
 
-    public String calculateElementName(LocalDate dateOfBirth) {
+    public ElementResponse calculateElementName(LocalDate dateOfBirth) {
         if (dateOfBirth == null) {
             throw new IllegalArgumentException("Date of birth cannot be null");
         }
         int birthYear = dateOfBirth.getYear();
         int elementId = calculateElementId(dateOfBirth);
-            // Get the element name using the calculated element ID
-        Optional<Element> element = elementRepo.findById(elementId);
-        return element.map(Element::getElementName).orElse("Element not found");
+            // Get the element using the calculated element ID
+        Element element = elementRepo.findById(elementId).get();
+        return elementMapper.toElementResponse(element);
     }
 
     public int calculateElementId(LocalDate dateOfBirth) {
