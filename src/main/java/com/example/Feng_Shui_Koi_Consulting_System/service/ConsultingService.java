@@ -108,7 +108,6 @@ public class ConsultingService {
                     .price(advertisement.getPrice())
                     .createdDate(advertisement.getCreatedDate())
                     .title(advertisement.getTitle())
-                    .status(advertisement.getStatus())
                     .imagesAd(advertisement.getImagesAd())
                     .category(categoryResponse)
                     .build();
