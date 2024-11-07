@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SignUpRequest {
     @NotBlank
-    @Size(min = 3, max = 20, message = "USERNAME_INVALID")
+    @Size(min = 3, max = 30, message = "USERNAME_INVALID")
     String username;
     @NotBlank
     @Size(min = 6, max = 40, message = "PASSWORD_INVALID")

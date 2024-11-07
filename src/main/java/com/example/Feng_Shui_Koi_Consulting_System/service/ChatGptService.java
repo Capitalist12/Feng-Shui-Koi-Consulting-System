@@ -6,6 +6,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.compatibility.Compatibili
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
 import com.example.Feng_Shui_Koi_Consulting_System.proxy.ChatGptProxy;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class ChatGptService {
 
         try {
 
-            if(request == null || request.getUserElement() == null || request.getChatGptAIDto() == null) {
+            if (request == null || request.getUserElement() == null || request.getChatGptAIDto() == null) {
                 throw new AppException(ErrorCode.INVALID_REQUEST);
             }
 
@@ -63,11 +64,20 @@ public class ChatGptService {
             ChatGptMessage message = chatGptResponse.getChoices().get(0).getMessage();
 
             return message.getContent();
+        }catch (FeignException.NotFound e) {
+            throw new AppException(ErrorCode.API_KEY_EXPIRED);
+        }catch (FeignException.Unauthorized e) {
+            throw new AppException(ErrorCode.UNAUTHORIZED_GPT);
+        }catch (FeignException.BadRequest e) {
+            throw new AppException(ErrorCode.INVALID_REQUEST_CHATGPT);
         }catch (HttpClientErrorException e) {
             throw new AppException(ErrorCode.CHATGPT_API_ERROR);
         }catch (NullPointerException e) {
             throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
+        }catch (AppException e) {
+            throw e;
         }catch (Exception e) {
+            log.error("Exception:", e);
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }

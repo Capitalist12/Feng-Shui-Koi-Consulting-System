@@ -56,5 +56,11 @@ api:
 chat-gpt:
   key:
 
+feign:
+  client:
+    config:
+      chat-gpt-proxy-service:
+        connectTimeout: 5000
+        readTimeout: 5000
 
 

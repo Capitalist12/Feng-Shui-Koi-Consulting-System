@@ -101,7 +101,7 @@ public class StripeService {
             User user = getUserLogin();
             if(!checkUserSubcription()) throw new AppException(ErrorCode.SUBSCRIPTION_EXIST);
             Customer customer = findOrCreateCustomer(user.getEmail(),user.getUsername());
-            String clientURL = "http://localhost:8080";
+            String clientURL = "http://localhost:5173";
 
             SessionCreateParams.Builder  sessionCreateParamsBuilder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.SUBSCRIPTION)

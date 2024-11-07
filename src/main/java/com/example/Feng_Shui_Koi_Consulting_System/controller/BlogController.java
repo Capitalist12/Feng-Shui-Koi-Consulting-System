@@ -4,6 +4,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.blog.BlogRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.blog.BlogResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.BlogService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +21,7 @@ public class BlogController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    ApiResponse<BlogResponse> createBlog(@RequestBody BlogRequest request){
+    ApiResponse<BlogResponse> createBlog(@RequestBody @Valid BlogRequest request){
         return ApiResponse.<BlogResponse>builder()
                 .result(blogService.createBlog(request))
                 .build();

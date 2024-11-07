@@ -44,12 +44,19 @@ public enum ErrorCode {
     PASSWORD_NOT_MATCH(1034, "Please enter your current password correctly", HttpStatus.BAD_REQUEST),
     CHATGPT_API_ERROR(1035, "Connection error to ChatGPT", HttpStatus.BAD_GATEWAY),
     UNABLE_TO_GENERATE_UNIQUE_ID(1036,"User ID existed", HttpStatus.BAD_REQUEST),
-    UNKNOWN_COLORS(1037, "Unknow Element", HttpStatus.NOT_FOUND),
+    UNKNOWN_COLORS(1037, "Unknow color", HttpStatus.NOT_FOUND),
     TANK_INVALID(1038, "Tank invalid", HttpStatus.BAD_REQUEST),
     ELEMENT_INVALID(1039, "Element invalid", HttpStatus.BAD_REQUEST),
     NAME_INVALID(1040, "The name must not contain special characters or numbers and cannot be empty", HttpStatus.BAD_REQUEST),
     KOI_INVALID(1041, "Koi invalid", HttpStatus.BAD_REQUEST),
-    SUBSCRIPTION_EXIST(1041, "Your subscription is still valid, please renew after it has expired", HttpStatus.BAD_REQUEST);
+    SUBSCRIPTION_EXIST(1041, "Your subscription is still valid, please renew after it has expired", HttpStatus.BAD_REQUEST),
+    INVALID_REQUEST_CHATGPT(1042, "Invalid request format or content for ChatGPT API.", HttpStatus.BAD_REQUEST),
+    TITLE_NOT_EMPTY(1043, "Title cannot be empty", HttpStatus.BAD_REQUEST),
+    UNAUTHORIZED_GPT(1044, "Missing api key of chatgpt", HttpStatus.UNAUTHORIZED),
+    API_KEY_EXPIRED(1045, "Api key expired or not renewed", HttpStatus.NOT_FOUND);
+
+
+
 
 
 
