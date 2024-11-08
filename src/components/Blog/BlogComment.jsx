@@ -8,7 +8,7 @@ import { createNewComment, getBlogComments } from "../../services/CommentAPIServ
 import { useForm } from "antd/es/form/Form";
 import { FaPaperPlane } from "react-icons/fa";
 import AdvertiseCardItem from "../HomePage/Body/Advertise-Blog/Advertise/AdvertiseCardItem.jsx";
-import { getAllAdvertises } from "../../services/advertiseAPIService.js";
+import { getVerifiedAdvertise } from "../../services/advertiseAPIService.js";
 
 const BlogComment = ({ id }) => {
     const [comments, setComments] = useState([]);
@@ -34,7 +34,7 @@ const BlogComment = ({ id }) => {
     }
 
     const getAdvertises = async () => {
-        const response = await getAllAdvertises();
+        const response = await getVerifiedAdvertise();
         response.status === 200 && response.data.code === 1000 ? setAdvertise(response.data.result) : setAdvertise([]);
     }
 

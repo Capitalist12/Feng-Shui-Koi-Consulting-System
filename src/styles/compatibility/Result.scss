@@ -1,0 +1,80 @@
+#compability-result-section{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .result-container{
+        background-color: rgba(19, 21, 24, 0.8);
+        color: white;
+        max-width: 85%;
+        padding: 0 20px;
+
+        .score-container{
+            h3 {
+                color: white;
+            }
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 100px;
+            padding-bottom: 25px;
+    
+            span.ant-progress-text{
+                color: white;
+            }
+
+            .ant-progress-circle-trail{
+                stroke: rgb(147 147 147 / 15%);
+            }
+        }
+    }
+}
+
+.animation-container {
+    position: absolute;
+    top: 25vh;
+    left: 0;
+    right: 0;
+    bottom: 25vh;
+    z-index: 1;
+    background: #111111;
+  }
+  
+  .animation-container span {
+    z-index: 5;
+    position: absolute;
+    color: whitesmoke;
+    display: block;
+    font-size: 18px;
+    font-family: 'Helvetica';
+    text-shadow: 0 0 1px white;
+    user-select: none;
+    pointer-events: none;
+    cursor: default;
+    z-index: 1;
+    opacity: 0;
+    top: 0;
+    will-change: transform, opacity;
+    animation-timing-function: ease-out;
+    animation-name: move;
+  }
+  
+  @keyframes move {
+    0% {
+      opacity: 0;
+      top: 100%;
+    }
+    25% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 1;
+    }
+    75% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+      transform: none;
+    }
+  }

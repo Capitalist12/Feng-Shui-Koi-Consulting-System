@@ -1,7 +1,13 @@
 .compability-tank-list{
     height: 100%;
     width: 800px;
-    background-color: white;
+    color: white;
+    background-color: #131518;
+
+    h3 {
+        margin: 0;
+        color: white;
+    }
 
     .shape-transform {
         width: 250px;
@@ -19,7 +25,12 @@
 
         &.disable{
             color: gray;
-            background-color: #f0f0f0;
+            background-color: #353535;
+
+            &:hover {
+                color: gray;
+                background-color: #3b3b3b !important;
+            }
         }
     }
 
@@ -33,6 +44,7 @@
     }
 
     .tank-selection{
+        margin-top: 50px;
         width: 100%;
         justify-content: center;
     }
