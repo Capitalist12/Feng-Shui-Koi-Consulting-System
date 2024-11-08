@@ -88,8 +88,7 @@ public class UserService {
     public UserResponse updateUser(String userID, UserUpdateRequest request){
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-        userMapper.updateUser(user, request,
-                elementRepo);
+        userMapper.updateUser(user, request );
         user.setRoleName(request.getRoleName());
         user.setDeleteStatus(request.isDeleteStatus());
         return userMapper.toUserResponse(userRepository.save(user));

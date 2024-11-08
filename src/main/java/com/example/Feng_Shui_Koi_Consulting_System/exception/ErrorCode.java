@@ -4,8 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum ErrorCode {
@@ -44,14 +42,21 @@ public enum ErrorCode {
     NULL_POINTER_EXCEPTION(1032, "An unexpected error occurred", HttpStatus.BAD_REQUEST),
     INVALID_REQUEST(1033, "Invalid request", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_MATCH(1034, "Please enter your current password correctly", HttpStatus.BAD_REQUEST),
-    CHATGPT_API_ERROR(1035, "Connection error to ChatGPT", HttpStatus.BAD_GATEWAY),
-    UNABLE_TO_GENERATE_UNIQUE_ID(1006,"User ID existed", HttpStatus.BAD_REQUEST),
-    API_KEY_EXPIRED(1036, "", BAD_REQUEST),
-    UNAUTHORIZED_GPT(1037, "", BAD_REQUEST),
-    INVALID_REQUEST_CHATGPT(1038, "", BAD_REQUEST),
-    ACCOUNT_DELETED(1039, "Account has been deleted", BAD_REQUEST),
-    UNKNOWN_COLORS(1040, "", BAD_REQUEST),
-    SUBSCRIPTION_EXIST(1041, "", BAD_REQUEST);
+    OTP_INVALID(1035, "OTP invalid", HttpStatus.BAD_REQUEST ),
+    CHATGPT_API_ERROR(1036, "Connection error to ChatGPT", HttpStatus.BAD_GATEWAY),
+    UNABLE_TO_GENERATE_UNIQUE_ID(1037,"User ID existed", HttpStatus.BAD_REQUEST),
+    UNKNOWN_COLORS(1038, "Unknow color", HttpStatus.NOT_FOUND),
+    TANK_INVALID(1039, "Tank invalid", HttpStatus.BAD_REQUEST),
+    ELEMENT_INVALID(1040, "Element invalid", HttpStatus.BAD_REQUEST),
+    NAME_INVALID(1041, "The name must not contain special characters or numbers and cannot be empty", HttpStatus.BAD_REQUEST),
+    KOI_INVALID(1042, "Koi invalid", HttpStatus.BAD_REQUEST),
+    SUBSCRIPTION_EXIST(1043, "Your subscription is still valid, please renew after it has expired", HttpStatus.BAD_REQUEST),
+    INVALID_REQUEST_CHATGPT(1044, "Invalid request format or content for ChatGPT API.", HttpStatus.BAD_REQUEST),
+    TITLE_NOT_EMPTY(1045, "Title cannot be empty", HttpStatus.BAD_REQUEST),
+    UNAUTHORIZED_GPT(1046, "Missing api key of chatgpt", HttpStatus.UNAUTHORIZED),
+    API_KEY_EXPIRED(1047, "Api key expired or not renewed", HttpStatus.NOT_FOUND),
+    ACCOUNT_DELETED(1048, "Account has been deleted", HttpStatus.BAD_REQUEST);
+
 
 
     private int code;
