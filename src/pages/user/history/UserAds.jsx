@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Layout, notification, Pagination } from "antd";
+import { Button, Layout, message, notification, Pagination } from "antd";
 import "../../../styles/UserAds.scss";
 import api from "../../../config/axiosConfig";
 import SearchBar from "../../../components/Advertisement/SearchBar";
@@ -12,9 +12,10 @@ import {
   MdOutlineVerified,
 } from "react-icons/md";
 import CustomeFooter from "../../../components/HomePage/Footer/CustomeFooter";
-import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const UserAds = () => {
+  const navigate = useNavigate();
   const [ads, setAds] = useState([]);
   const [displayAds, setDisplayAds] = useState([]);
   const [selectedAd, setSelectedAd] = useState(null);
@@ -74,7 +75,17 @@ const UserAds = () => {
   };
 
   const handleEditSubmit = async (values) => {
-    setLoading(true);
+    // const accessToken = localStorage.getItem("accessToken");
+    // const isVIP =
+    //   (accessToken &&
+    //     JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
+    //   (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
+
+    // if (!isVIP) {
+    //   message.error("Mua VIP");
+    //   navigate("/errorMem"); // Điều hướng tới trang lỗi
+    //   return;
+    // }
     try {
       const response = await api.put(`/ad/${selectedAd.adID}`, {
         title: values.title || selectedAd.title,

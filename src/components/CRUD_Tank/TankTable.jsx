@@ -27,13 +27,18 @@ function TankTable({ datas, handleEdit, handleDelete }) {
       render: (record) => record.elementTank?.elementName || "N/A",
     },
     {
-      title: "Action",
+      title: "Tác vụ",
       dataIndex: "tankId",
       key: "tankId",
+      align: "center",
       render: (tankId, tank) => (
         <>
-          <Button type="primary" onClick={() => handleEdit(tank)}>
-            Edit
+          <Button
+            style={{ marginRight: "1rem" }}
+            className="custom-button-black-white"
+            onClick={() => handleEdit(tank)}
+          >
+            Xem thông tin
           </Button>
           <Popconfirm
             title="Xóa hồ này ?"

@@ -18,32 +18,11 @@ import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
 
 const CreateAdForm = ({ form, onSubmit, loading }) => {
-  const [role, setRole] = useState("");
-  const navigate = useNavigate();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      try {
-        const { role } = JSON.parse(accessToken);
-        setRole(role.toUpperCase());
-      } catch (error) {
-        console.error("Invalid token format", error);
-        localStorage.removeItem("accessToken");
-      }
-    }
-  }, []);
-
   const handleFinish = async (values) => {
-    if (role !== "MEMBER" || role !== "ADMIN") {
-      message.error("Bạn phải là thành viên để đăng quảng cáo.");
-      navigate("/errorMem");
-      return;
-    }
-
     try {
       if (fileList.length > 0) {
         const uploadImage = fileList.map((file) =>
@@ -52,15 +31,14 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
         const urls = await Promise.all(uploadImage);
         values.imagesURL = urls;
       }
-
       await onSubmit(values);
       notification.success({
-        message: "Đăng bài thành công !",
-        description: "Bạn đã đăng bài thành công, hãy chờ phê duyệt nhé!",
+        message: "Đăng bài thành công",
+        description:
+          "Bài đăng của bạn đã được đăng thành công, hãy chờ phê duyệt nhé!",
       });
     } catch (error) {
-      console.error("Lỗi khi tải ảnh hoặc gửi quảng cáo:", error);
-      message.error("Có lỗi xảy ra khi gửi quảng cáo. Vui lòng thử lại.");
+      message.error(error.message);
     }
   };
 
@@ -79,7 +57,9 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
+
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+
   const uploadButton = (
     <button
       style={{
@@ -136,7 +116,6 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
           rules={[
             { required: true, message: "Vui lòng nhập tiêu đề!" },
             {
-              // ko vượt quá 100 ký tự
               validator: (_, value) => {
                 if (value && value.length > 100) {
                   return Promise.reject(
@@ -159,19 +138,20 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
           rules={[
             { required: true, message: "Vui lòng nhập mô tả!" },
             {
-              // ko vượt quá 100 ký tự
               validator: (_, value) => {
-                if (value && value.length > 800) {
-                  return Promise.reject("Mô tả không được vượt quá 800 ký tự!");
+                if (value && value.length > 1000) {
+                  return Promise.reject(
+                    "Mô tả không được vượt quá 1000 ký tự!"
+                  );
                 }
                 return Promise.resolve();
               },
             },
           ]}
-          style={{ width: "100%" }} // chieu rong max
+          style={{ width: "100%" }}
         >
           <Input.TextArea
-            style={{ minHeight: "8rem", width: "100%" }} // chieu rong max
+            style={{ minHeight: "8rem", width: "100%" }}
             placeholder="Thông tin chi tiết, liên lạc, số điện thoại,..."
             autoSize={{ minRows: 4, maxRows: 10 }}
           />
