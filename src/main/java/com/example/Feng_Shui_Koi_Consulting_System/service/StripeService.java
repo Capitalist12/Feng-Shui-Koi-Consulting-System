@@ -40,7 +40,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Service
 @Slf4j
 public class StripeService {
-
+    @Value("${frontend.url}")
+    private String frontendUrl;
     @Value("${api.stripe.key}")
     private String stripeApiKey;
     @Autowired
@@ -101,7 +102,7 @@ public class StripeService {
             User user = getUserLogin();
             if(!checkUserSubcription()) throw new AppException(ErrorCode.SUBSCRIPTION_EXIST);
             Customer customer = findOrCreateCustomer(user.getEmail(),user.getUsername());
-            String clientURL = "http://localhost:5173";
+            String clientURL = frontendUrl;
 
             SessionCreateParams.Builder  sessionCreateParamsBuilder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
