@@ -43,7 +43,7 @@ const Navbar = () => {
       ? [
           {
             label: (
-              <Link to="/dashboard" className="admin-btn">
+              <Link to="/dashboard/statistic" className="admin-btn">
                 <GrUserAdmin />
                 &nbsp; Quản lý
               </Link>

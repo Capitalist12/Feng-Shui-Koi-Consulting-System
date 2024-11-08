@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Checkbox, Divider, Flex, Popover, Tooltip } from "antd";
-import { IconButton, ImageList, ImageListItem, ImageListItemBar, Skeleton } from "@mui/material";
+import {
+  IconButton,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  Skeleton,
+} from "@mui/material";
 import { AiFillFire, AiFillInfoCircle } from "react-icons/ai";
 import { element } from "prop-types";
 import Title from "antd/es/typography/Title";
 import { FaLeaf, FaQuestionCircle } from "react-icons/fa";
-import "../../styles/compability/KoiList.scss";
 import { GiMetalBar } from "react-icons/gi";
 import { IoIosWater } from "react-icons/io";
 import { FaMountainSun } from "react-icons/fa6";
+import "../../styles/compatibility/KoiList.scss";
 
 const KoiList = ({
   koiData,
@@ -20,25 +26,43 @@ const KoiList = ({
   const [selectedFishId, setSelectedFishId] = useState([]);
   const [loadedImages, setLoadedImages] = useState({});
 
-  useEffect(() => {
-  }, []);
 
   const renderKoiElement = (element) => {
-    console.log(element)
     switch (element.elementName) {
       case "Kim":
-        return <GiMetalBar className="koi-element-icon" style={{ color: 'lightgray' }} />;
+        return (
+          <GiMetalBar
+            className="koi-element-icon"
+            style={{ color: "lightgray" }}
+          />
+        );
       case "Hỏa":
-        return <AiFillFire className="koi-element-icon" style={{ color: '#ef1d1c' }} />;
+        return (
+          <AiFillFire
+            className="koi-element-icon"
+            style={{ color: "#ef1d1c" }}
+          />
+        );
       case "Thủy":
-        return <IoIosWater className="koi-element-icon" style={{ color: '#0abfff' }} />;
+        return (
+          <IoIosWater
+            className="koi-element-icon"
+            style={{ color: "#0abfff" }}
+          />
+        );
       case "Thổ":
-        return <FaMountainSun className="koi-element-icon" style={{ color: '#ffda60' }} />;
+        return (
+          <FaMountainSun
+            className="koi-element-icon"
+            style={{ color: "#ffda60" }}
+          />
+        );
       case "Mộc":
-        return <FaLeaf className="koi-element-icon" style={{ color: '#96e817' }} />;
+        return (
+          <FaLeaf className="koi-element-icon" style={{ color: "#96e817" }} />
+        );
     }
-
-  }
+  };
 
   const renderKoiTypeIcon = (type) => {
     let letter = "";
@@ -67,8 +91,12 @@ const KoiList = ({
         break;
     }
 
-    return <Title className="koi-type-icon" level={4}>{letter}</Title>
-  }
+    return (
+      <Title className="koi-type-icon" level={4}>
+        {letter}
+      </Title>
+    );
+  };
 
   const handleImageLoad = (id) => {
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
@@ -93,14 +121,14 @@ const KoiList = ({
   };
 
   return (
-    <Flex vertical style={{ backgroundColor: '#4096ff' }}>
-      <Flex justify="space-between" align="center" style={{ backgroundColor: '#eaecef' }}>
-        <Flex align="center">
-          <Title style={{ margin: '0 10px' }} level={3}>Danh sách Koi</Title>
+    <Flex vertical style={{ backgroundColor: '#131518' }}>
+      <Flex justify="space-between" align="center" style={{ backgroundColor: '#353535', color: 'white' }}>
+        <Flex align="center" style={{ color: 'white' }}>
+          <Title style={{ margin: '0 10px', color: 'white' }} level={3}>Danh sách Koi</Title>
           <p style={{ fontSize: '1.1em' }}>Tổng cộng: {koiData.length} loài</p>
         </Flex>
         <Flex align="center">
-          <p style={{ color: selectedFishId.length === 6 ? "red" : "black" }}>Đã chọn: {selectedFishId.length}/6</p>
+          <p style={{ color: selectedFishId.length === 6 ? "red" : "white" }}>Đã chọn: {selectedFishId.length}/6</p>
           <Popover placement="topRight" title={"Hướng dẫn"} content={(
             <Flex vertical>
               <p>Bạn chỉ được chọn tối đa 6 loại cá khác nhau trong dữ liệu của chúng tôi</p>
@@ -122,15 +150,20 @@ const KoiList = ({
                   <FaMountainSun style={{ color: '#ffda60' }} /> - Mệnh Thổ
                 </Flex>
               </Flex>
-            </Flex>
-          )}>
-            <FaQuestionCircle style={{ margin: '0 10px' }} />
+              </Flex>
+            )}
+          >
+            <FaQuestionCircle style={{ margin: "0 10px" }} />
           </Popover>
         </Flex>
       </Flex>
+
       <ImageList sx={{ width: 800, height: 500 }} cols={3}>
         {filteredFishData.map((item) => (
-          <ImageListItem key={item.id} onClick={() => handleSelectKoiFish(item, item.id)}>
+          <ImageListItem
+            key={item.id}
+            onClick={() => handleSelectKoiFish(item, item.id)}
+          >
             {/* {!loadedImages[item.id] && (<Skeleton animation="wave" variant="rectangular" width="100%" height={390} />)} */}
 
             <img
@@ -141,6 +174,7 @@ const KoiList = ({
               loading="lazy"
               onLoad={() => handleImageLoad(item.id)}
             />
+
             <ImageListItemBar
               key="koi-info"
               title={item.name}
@@ -171,14 +205,10 @@ const KoiList = ({
             />
             <Flex className="koi-tag-container" vertical align="end">
               <Flex>
-                {
-                  item.elements.length > 0 &&
+                {item.elements.length > 0 &&
                   item.elements.map((element, index) => (
-                    <div key={index}>
-                      {renderKoiElement(element)}
-                    </div>
-                  ))
-                }
+                    <div key={index}>{renderKoiElement(element)}</div>
+                  ))}
               </Flex>
               <Tooltip placement="right" title={item.koiTypes.typeName}>
                 {renderKoiTypeIcon(item.koiTypes.typeName)}

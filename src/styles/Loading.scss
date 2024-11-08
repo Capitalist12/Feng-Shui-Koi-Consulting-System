@@ -1,6 +1,6 @@
 /* From Uiverse.io by kennyotsu */
 #loading-container {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(49, 49, 49, 0.507);
     width: 100%;
     height: 100vh;
     position: fixed;
@@ -37,13 +37,13 @@
         overflow: hidden;
         border-right: 3px solid;
         width: 100%;
-        animation: typewriter 2s steps(12) infinite alternate, blink 0.8s steps(10) infinite;
+        animation: typewriter 2s steps(12) infinite alternate, blinktext 0.8s steps(10) infinite;
 
         .type-writer-text {
             width: 100%;
             text-wrap: nowrap;
             font-weight: 200;
-            background-color: rgb(124, 124, 124);
+            background-color: rgb(255, 255, 255);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -62,7 +62,7 @@
             }
         }
 
-        @keyframes blink {
+        @keyframes blinktext {
             0% {
                 border-right-color: rgba(0, 0, 0, 0.75);
                 ;

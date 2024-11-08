@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { Table, Button, Row, Flex } from "antd";
-import "../../styles/compability/TankList.scss";
+import { Button, Flex, Popover } from "antd";
+import "../../styles/compatibility/TankList.scss";
 import Title from "antd/es/typography/Title";
+import { FaQuestionCircle } from "react-icons/fa";
+
 const TankList = ({ tankData, handleSelectTank, isTankSelected }) => {
   const [shapeStyle, setShapeStyle] = useState({
     clipPath: 'polygon(0 15%, 100% 15%, 100% 30%, 100% 70%, 100% 85%, 0 85%, 0% 70%, 0% 30%)'
   });
+  
   const [selectedTank, setSelectedTank] = useState({
     tankId: "TA001",
     shape: "Hình Chữ Nhật",
@@ -58,14 +61,22 @@ const TankList = ({ tankData, handleSelectTank, isTankSelected }) => {
       vertical
       align="center"
       gap="middle"
-      justify="space-around"
+      // justify="space-between"
       className="compability-tank-list"
     >
+      <Flex align="center" justify="space-between" style={{ backgroundColor: '#353535', width: '100%', height: '50px' }}>
+        <Title level={3} style={{ margin: '0 20px' }}>Danh sách hồ</Title>
+        <Popover placement="topRight" title={"Hướng dẫn"} content="Lựa chọn 1 hồ có hình dạng phù hợp (hình dạng chỉ mang tính tương đối và không giống với kích thước hoặc hình dạng thực tế)" >
+          <FaQuestionCircle style={{ margin: '0 10px' }} />
+        </Popover>
+      </Flex>
       <Flex vertical justify="center" align="start" className="tank-info">
-        <Title level={2}>Hướng đặt phù hợp: {selectedTank.elementTank.direction}</Title>
+        <Title level={3}>Hướng đặt phù hợp: {selectedTank.elementTank.direction}</Title>
         <p>Số lượng cá nuôi đề xuất: {selectedTank.elementTank.quantity}</p>
       </Flex>
-      <div className="shape-transform" style={shapeStyle}></div>
+      <Flex>
+        <div className="shape-transform" style={shapeStyle}></div>
+      </Flex>
       <Flex wrap gap="middle" align="center" className="tank-selection">
         {tankData.map((item, index) => (
           <Button

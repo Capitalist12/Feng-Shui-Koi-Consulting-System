@@ -86,12 +86,26 @@ function TankManagement() {
 
   return (
     <div>
-      <Title level={2}>
-        Chào {userName}, chào mừng tới với Tank Management{" "}
-      </Title>
-      <Button type="primary" onClick={handleAddNew}>
-        + Add
-      </Button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginRight: "2rem",
+        }}
+      >
+        <Title level={2}>
+          Chào {userName}, chào mừng tới với Tank Management
+        </Title>
+        <Button
+          style={{ fontSize: "1.2rem", padding: "1.2rem" }}
+          className="custom-button-black-white"
+          type="primary"
+          onClick={handleAddNew}
+        >
+          + Add
+        </Button>
+      </div>
       <TankTable
         datas={datas}
         handleEdit={handleEdit}

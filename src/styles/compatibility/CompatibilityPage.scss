@@ -8,11 +8,12 @@ body {
 
 .layout-comp {
   position: relative;
-  // background-image: url("../assets/images/beautiful-exotic-colorful-fish.jpg");
+  background-image: url("../../assets/images/compBG.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
+  z-index: 2;
 
   &::before {
     content: "";
@@ -21,7 +22,43 @@ body {
     height: 100%;
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
     z-index: -1;
-    pointer-events: none; /* ko cho phép lớp phủ chặn click */
+    pointer-events: none;
+    /* ko cho phép lớp phủ chặn click */
+  }
+
+  .comp-info-container {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+
+    .comp-info {
+      max-width: 950px;
+      color: white;
+      background: rgba(19, 21, 24, 0.7);
+      padding: 0 20px;
+
+      h3 {
+        color: white;
+        margin: 0;
+      }
+
+      p {
+        font-size: 0.9vw;
+      }
+    }
+
+    a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
+      color: white;
+      width: 110px;
+      padding: 5px 0;
+      border-radius: 5px;
+      background-color: rgb(255, 187, 0);
+    }
+
   }
 }
 
@@ -38,7 +75,8 @@ body {
     text-shadow: 3px 3px 5px rgb(0, 255, 21);
     // font-family: "Playwrite GB S", serif;
     font-style: oblique;
-    z-index: 2; /* Nội dung trên lớp phủ */
+    z-index: 2;
+    /* Nội dung trên lớp phủ */
 
     h2 {
       color: rgb(255, 255, 255);
@@ -50,14 +88,16 @@ body {
     width: 100%;
     margin-top: 20px;
     z-index: 1;
-    position: relative; /* Để hiệu ứng mờ hoạt động đúng */
+    position: relative;
+    /* Để hiệu ứng mờ hoạt động đúng */
 
     h1 {
       color: white;
       font-family: "Playwrite GB S", serif;
       font-size: 2em;
       text-shadow: 5px 5px 1px rgba(0, 0, 0, 0.7);
-      text-align: center; /* Căn giữa tiêu đề */
+      text-align: center;
+      /* Căn giữa tiêu đề */
     }
 
     .data {
@@ -67,10 +107,13 @@ body {
       font-family: "Playwrite GB S", serif;
 
       div {
-        width: 30%; /* Điều chỉnh chiều rộng của từng div */
+        width: 30%;
+        /* Điều chỉnh chiều rộng của từng div */
         font-size: 2em;
-        background-color: rgba(255, 255, 255, 0.1); /* Màu nền trong suốt */
-        backdrop-filter: blur(10px); /* Mờ nền */
+        background-color: rgba(255, 255, 255, 0.1);
+        /* Màu nền trong suốt */
+        backdrop-filter: blur(10px);
+        /* Mờ nền */
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -95,30 +138,7 @@ body {
       }
     }
 
-    .scroll-button {
-      background-color: rgba(255, 255, 255, 0.1); /*  nền trong suốt */
-      backdrop-filter: blur(10px);
-      border: solid 3px rgb(255, 255, 255); /*  viền trong suốt */
-      border-radius: 50%;
-      width: 9rem;
-      height: 5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
 
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.3);
-        transform: scale(1.1);
-      }
-
-      svg {
-        width: 2rem;
-        height: 3rem;
-        fill: rgb(255, 255, 255);
-      }
-    }
   }
 }
 

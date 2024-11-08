@@ -49,7 +49,7 @@ const PieChartUser = () => {
             {data.map((item, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={index % 2 === 0 ? "grey" : "blue"}
+                fill={index % 2 === 0 ? "#82ca9d" : "#8884d8"}
               />
             ))}
           </Pie>

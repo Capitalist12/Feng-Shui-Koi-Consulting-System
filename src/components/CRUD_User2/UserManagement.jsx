@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Typography } from "antd";
 import React from "react";
+
 const { Title } = Typography;
 
 function UserManagement() {
@@ -13,6 +14,8 @@ function UserManagement() {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+
+  // Hàm lấy danh sách người dùng
   const fetchUsers = async () => {
     try {
       const response = await api.get("users");
@@ -23,36 +26,23 @@ function UserManagement() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchUsers();
   }, []);
 
-  const handleDelete = async (userID) => {
-    try {
-      await api.delete(`user/${userID}`);
-      toast.success("Xóa người dùng thành công");
-      fetchUsers();
-    } catch (err) {
-      toast.error(err.response?.data || "Xóa người dùng thất bại");
-    }
-  };
-
+  // Một hàm duy nhất để xử lý submit
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
 
       const payload = {
-        userID: selectedUser.userID,
-        username: selectedUser.username,
-        email: selectedUser.email,
-        dateOfBirth: selectedUser.dateOfBirth,
-        element: selectedUser.element,
-        imageLink: selectedUser.imageLink,
-        planID: selectedUser.planID,
-        deleteStatus: values.deleteStatus,
+        roleName: selectedUser.roleName, // Luôn giữ nguyên roleName
+        deleteStatus: values.deleteStatus, // Chỉ thay đổi deleteStatus
       };
 
-      await api.put(`users/${selectedUser.userID}`, payload);
+      console.log("Payload gửi đi:", payload); // Ghi thông tin về payload
 
+      await api.put(`users/${selectedUser.userID}`, payload);
       toast.success("Chỉnh sửa thông tin thành công");
       fetchUsers();
       setShowModal(false);
@@ -63,29 +53,8 @@ function UserManagement() {
     }
   };
 
-  const handleStatusChange = async (userID, deleteStatus) => {
-    try {
-      const userToUpdate = users.find((user) => user.userID === userID);
-      const payload = {
-        password: userToUpdate.password,
-        email: userToUpdate.email,
-        dateOfBirth: userToUpdate.dateOfBirth,
-        element: userToUpdate.element,
-        imageLink: userToUpdate.imageLink,
-        roleName: userToUpdate.roleName,
-        planID: userToUpdate.planID,
-        deleteStatus: deleteStatus,
-      };
-
-      await api.put(`users/${userID}`, payload);
-      toast.success("Cập nhật trạng thái thành công");
-      fetchUsers();
-    } catch (err) {
-      toast.error(err.response?.data || "Cập nhật trạng thái thất bại");
-    }
-  };
-
-  const handleEdit = (user) => {
+  // Xử lý khi nhấp vào một người dùng
+  const handleView = (user) => {
     if (user && user.userID) {
       setSelectedUser(user);
       setShowModal(true);
@@ -101,12 +70,7 @@ function UserManagement() {
       <Title level={2}>
         Chào {userName}, chào mừng tới với User Management
       </Title>
-      <UserTable
-        users={users}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-        handleStatusChange={handleStatusChange}
-      />
+      <UserTable users={users} handleView={handleView} />
       <UserForm
         visible={showModal}
         onClose={() => {

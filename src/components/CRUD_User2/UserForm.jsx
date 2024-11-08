@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Input, Modal, Row, message, Switch } from "antd";
-import ImageUploader from "./ImageUploader.jsx";
+import { Col, Form, Input, Modal, Row, message, Switch, Image } from "antd";
 import { useForm } from "antd/lib/form/Form.js";
 
 function UserForm({ visible, onClose, onSubmit, selectedUser, loading }) {
   const [form] = Form.useForm();
-  const [fileList, setFileList] = useState([]);
+  const [imageURL, setImageURL] = useState("");
 
   useEffect(() => {
     if (visible && selectedUser) {
@@ -16,25 +15,23 @@ function UserForm({ visible, onClose, onSubmit, selectedUser, loading }) {
         dateOfBirth: selectedUser.dateOfBirth || "",
         roleName: selectedUser.roleName || "",
         element: selectedUser.element || "",
-        imageLink: selectedUser.imageLink || "",
         planID: selectedUser.planID || "",
-        deleteStatus: selectedUser.deleteStatus || true,
+        deleteStatus: !!selectedUser.deleteStatus, // Sử dụng !! để đảm bảo giá trị boolean (ko hiện true auto)
       });
-      setFileList(
-        selectedUser.imageLink ? [{ url: selectedUser.imageLink }] : []
-      );
+      setImageURL(selectedUser.imageLink || "");
     } else if (!visible) {
       form.resetFields();
-      setFileList([]);
+      setImageURL("");
     }
-  }, [visible, selectedUser]);
+  }, [visible, selectedUser, form]);
 
   const handleFormSubmit = async (values) => {
     try {
-      await onSubmit({ deleteStatus: values.deleteStatus });
-      message.success("Chỉnh sửa người dùng thành công");
+      // Gọi onSubmit và chờ nó hoàn thành
+      if (selectedUser) {
+        await onSubmit({ deleteStatus: values.deleteStatus });
+      }
       onClose();
-      setFileList([]);
     } catch (error) {
       console.error("Có lỗi xảy ra khi chỉnh sửa người dùng:", error);
       message.error(
@@ -47,7 +44,19 @@ function UserForm({ visible, onClose, onSubmit, selectedUser, loading }) {
     <Modal
       open={visible}
       onCancel={onClose}
-      title="Thông tin người dùng"
+      width={"40rem"}
+      title={
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: "2rem",
+            fontWeight: "bold",
+            marginBottom: "2rem",
+          }}
+        >
+          Thông tin người dùng
+        </div>
+      }
       onOk={() => form.submit()}
       confirmLoading={loading}
     >
@@ -86,32 +95,34 @@ function UserForm({ visible, onClose, onSubmit, selectedUser, loading }) {
               label="Trạng thái xóa"
               valuePropName="checked"
             >
-              <Switch />
+              <Switch
+                checkedChildren="Kích hoạt"
+                unCheckedChildren="Vô hiệu hóa"
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="roleName" label="Vai trò">
-              <Input disabled />
+            <Form.Item name="roleName" label="Cấp độ">
+              <Input readOnly />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item
-              name="noPassword"
-              label="No Password"
-              valuePropName="checked"
-            >
-              <Switch disabled />
+            <Form.Item name="planID" label="Mã mua VIP">
+              <Input disabled />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="noDob" label="No Dob" valuePropName="checked">
-              <Switch disabled />
+            <Form.Item label="Ảnh đại diện">
+              {imageURL && (
+                <div style={{ textAlign: "center", marginTop: "16px" }}>
+                  <Image src={imageURL} alt="User avatar" width={100} />
+                </div>
+              )}
             </Form.Item>
           </Col>
         </Row>
-        <ImageUploader fileList={fileList} setFileList={setFileList} />
       </Form>
     </Modal>
   );
