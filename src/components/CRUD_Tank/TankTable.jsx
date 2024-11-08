@@ -27,9 +27,10 @@ function TankTable({ datas, handleEdit, handleDelete }) {
       render: (record) => record.elementTank?.elementName || "N/A",
     },
     {
-      title: "Action",
+      title: "Tác vụ",
       dataIndex: "tankId",
       key: "tankId",
+      align: "center",
       render: (tankId, tank) => (
         <>
           <Button

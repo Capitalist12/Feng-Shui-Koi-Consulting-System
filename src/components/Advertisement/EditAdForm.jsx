@@ -75,7 +75,7 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, onDelete, loading }) => {
 
   const handleDelete = () => {
     if (ad && ad.adID) {
-      onDelete(ad.adID); // Gọi hàm xóa từ UserAds và truyền adID
+      onDelete(ad.adID); // Gọi hàm xóa và truyền adID
     }
   };
 

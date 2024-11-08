@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import AdDetails from "../../components/Advertisement/AdDetails";
 import { PiPlantFill } from "react-icons/pi";
 import CustomeFooter from "../../components/HomePage/Footer/CustomeFooter";
+import { postAd } from "../../services/advertiseAPIService";
 
 function AdvertisementPage() {
   const [form] = useForm();
@@ -132,37 +133,15 @@ function AdvertisementPage() {
   };
 
   const handleAdSubmit = async (values) => {
-    // const accessToken = localStorage.getItem("accessToken");
-    // const isVIP =
-    //   (accessToken &&
-    //     JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
-    //   (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
-
-    // if (!isVIP) {
-    //   message.error("Bạn phải là thành viên để đăng bài!");
-    //   navigate("/errorMem"); // Điều hướng tới trang lỗi
-    //   return;
-    // }
-
-    setLoading(true);
     try {
-      await api.post("/ad", {
-        title: values.title,
-        description: values.description,
-        price: values.price,
-        element: values.element,
-        categoryName: values.categoryName,
-        imagesURL: values.imagesURL || [],
-      });
-
-      console.log("Submitted values:", values);
+      await postAd(values);
       setIsCreateAd(false);
       await fetchAds();
       form.resetFields();
     } catch (error) {
-      console.log("Lỗi khi gửi quảng cáo:", error);
-    } finally {
-      setLoading(false);
+      // Xử lý lỗi và điều hướng nếu có lỗi
+      message.error(error.message);
+      navigate("/errorMem");
     }
   };
 
@@ -263,12 +242,13 @@ function AdvertisementPage() {
                 Đăng bài quảng cáo
               </div>
             }
-            visible={isCreateAd}
+            open={isCreateAd}
             onCancel={() => {
               setIsCreateAd(false);
               form.resetFields();
             }}
             footer={null}
+            loading={loading}
           >
             <CreateAdForm
               form={form}
