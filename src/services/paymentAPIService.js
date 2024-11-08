@@ -5,14 +5,19 @@ const buyPackage = async (time) => {
     try {
         const response = await axios.post('session/subscription', {
             data: {
-                PACKAGE: time.toUpperCase()
+                PACKAGE: time.toUpperCase(),
             }
-        })
+        });
         return response;
     } catch (err) {
-        toast.error(err.message);
+        if (err.response && err.response.data && err.response.data.message) {
+            toast.error(err.response.data.message);
+        } else {
+            toast.error("Lỗi kế nối !");
+        }
     }
-}
+};
+
 
 const buyPackageSuccess = async (uid, sessId) => {
     try {
@@ -22,7 +27,7 @@ const buyPackageSuccess = async (uid, sessId) => {
         });
         return response;
     } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data.message);
     }
 }
 

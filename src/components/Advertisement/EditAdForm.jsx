@@ -11,6 +11,7 @@ import {
   Col,
   Select,
   notification,
+  Popconfirm, // Thêm Popconfirm từ Ant Design
 } from "antd";
 import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
@@ -136,9 +137,14 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, onDelete, loading }) => {
         }
         onCancel={onClose}
         footer={[
-          <Button danger onClick={handleDelete}>
-            Xóa
-          </Button>,
+          <Popconfirm
+            title="Bạn có chắc chắn muốn xóa bài đăng này?"
+            onConfirm={handleDelete}
+            okText="Có"
+            cancelText="Không"
+          >
+            <Button danger>Xóa</Button>
+          </Popconfirm>,
           <Button
             key="submit"
             type="primary"
@@ -182,7 +188,6 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, onDelete, loading }) => {
             rules={[
               { required: true, message: "Vui lòng nhập tiêu đề!" },
               {
-                // ko vượt quá 100 ký tự
                 validator: (_, value) => {
                   if (value && value.length > 100) {
                     return Promise.reject(

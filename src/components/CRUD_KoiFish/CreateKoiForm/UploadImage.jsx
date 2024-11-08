@@ -19,7 +19,6 @@ const UploadImage = ({ data, setKoiImage, onChange, MAX_COUNT, uploadType }) => 
   const [previewImage, setPreviewImage] = useState("");
   const [image, setImage] = useState(data);
 
-
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);

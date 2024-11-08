@@ -82,7 +82,6 @@ function TankManagement() {
     }
   };
 
-  const userName = useSelector((state) => state.user);
 
   return (
     <div>
@@ -94,16 +93,13 @@ function TankManagement() {
           marginRight: "2rem",
         }}
       >
-        <Title level={2}>
-          Chào {userName}, chào mừng tới với Tank Management
-        </Title>
         <Button
           style={{ fontSize: "1.2rem", padding: "1.2rem" }}
           className="custom-button-black-white"
           type="primary"
           onClick={handleAddNew}
         >
-          + Add
+          + Thêm
         </Button>
       </div>
       <TankTable

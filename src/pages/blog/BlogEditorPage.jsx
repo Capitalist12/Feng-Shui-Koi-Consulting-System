@@ -11,26 +11,15 @@ import { toast } from "react-toastify";
 import { useForm } from "antd/es/form/Form.js";
 import { IoSunny } from "react-icons/io5";
 import { FaMoon } from "react-icons/fa";
-import { useQuill } from "react-quilljs";
-import "quill/dist/quill.snow.css";
 import Navbar from "../../components/Utils/Navbar.jsx";
-import MyRichTextEditor from "../../components/RichTextEditor/EditorToolbar.jsx";
-import Tiptap from "../../components/RichTextEditor/EditorToolbar.jsx";
+import RichTextEditor from "../../components/Blog/RichTextEditor.jsx";
 
 const BlogEditorPage = () => {
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("Tiêu đề");
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [form] = useForm();
-    const { quill, quillRef } = useQuill({ placeholder: "Nhập nội dung bài viết..." });
-
-    useEffect(() => {
-        if (quill) {
-            quill.on("text-change", () => {
-                setValue(quill.root.innerHTML);
-            });
-        }
-    }, [quill]);
+    const [clearEditor, setClearEditor] = useState(false);
 
     const handleSubmit = async (values) => {
         try {
@@ -55,8 +44,8 @@ const BlogEditorPage = () => {
                     toast.success("Tạo bài viết thành công!");
                     setValue("");
                     setTitle("");
-                    quill.root.innerHTML = "";
                     form.resetFields();
+                    setClearEditor(true);
                 }
             }
         } catch (error) {
@@ -64,6 +53,12 @@ const BlogEditorPage = () => {
             toast.error("Lỗi khi tạo bài viết.");
         }
     };
+
+    useEffect(() => {
+        if (clearEditor) {
+            setClearEditor(false); 
+        }
+      }, [clearEditor]);
 
     const handleInputTitle = (event) => {
         setTitle(event.target.value);
@@ -105,9 +100,7 @@ const BlogEditorPage = () => {
                         >
                             <UploadImage data={[]} MAX_COUNT={1} uploadType={"picture"} />
                         </Form.Item>
-                        <div style={{ width: '100%', height: 500 }}>
-                            <div ref={quillRef} />
-                        </div>
+                        <RichTextEditor setValue={setValue} clearEditor={clearEditor}/>
                         <Button className="submit-btn" type="primary" htmlType="submit">Tạo mới</Button>
                     </Form>
                 </Col>
@@ -133,7 +126,6 @@ const BlogEditorPage = () => {
                     </div>
                 </Col>
             </Row>
-            <Tiptap />
         </section>
     );
 };

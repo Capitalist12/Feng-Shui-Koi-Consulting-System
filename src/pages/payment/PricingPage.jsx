@@ -5,12 +5,14 @@ import { FaCheckCircle } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { buyPackage } from "../../services/paymentAPIService";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const List = ({ children }) => {
   return <p>{children}</p>;
 };
 
 const PricingPage = () => {
+  const navigate = useNavigate();
   return (
     <section id="pricing-section">
       <div className="border"></div>
@@ -42,7 +44,18 @@ const PricingPage = () => {
             giống cá và hồ cá đang có, khung viền độc đáo).
           </p>
         </div>
-
+        {/* <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "20px",
+          }}
+        >
+          <Button size="large" onClick={() => navigate(-1)} type="dashed">
+            Trở về
+          </Button>
+        </div> */}
         <Row gutter={16} justify="center">
           <PricingCard
             type="Gói tháng"

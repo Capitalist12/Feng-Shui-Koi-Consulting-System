@@ -10,8 +10,8 @@ import {
 } from "./EmblaCarouselSelectedSnapDisplay";
 import useEmblaCarousel from "embla-carousel-react";
 
-const EmblaCarousel = (props) => {
-  const { options, koiList, setKoiInfo } = props;
+const EmblaCarouselAds = (props) => {
+  const { options, adList, setAdInfo } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   const {
@@ -23,9 +23,10 @@ const EmblaCarousel = (props) => {
 
   const { selectedSnap, snapCount } = useSelectedSnapDisplay(emblaApi);
 
+  // Cập nhật thông tin quảng cáo khi thay đổi slide
   useEffect(() => {
-    if (koiList && koiList.length > 0) {
-      setKoiInfo(koiList[selectedSnap]);
+    if (adList && adList.length > 0) {
+      setAdInfo(adList[selectedSnap]);
     }
   }, [selectedSnap]);
 
@@ -33,25 +34,26 @@ const EmblaCarousel = (props) => {
     <section className="embla">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
-          {koiList.map((item, index) => (
+          {adList.map((item, index) => (
             <div
               className={`embla__slide ${
                 selectedSnap === index ? "active" : ""
               }`}
-              key={item.imagesFish[0]?.koiImageId || index}
+              key={item.imagesAd[0]?.adImageId || index}
             >
               <img
                 className="embla__slide__img"
                 src={
-                  item.imagesFish[0]?.imageURL ||
+                  item.imagesAd[0]?.imageURL ||
                   `https://picsum.photos/600/350?v=${index}`
                 }
-                alt="Koi image"
+                alt="image"
               />
             </div>
           ))}
         </div>
       </div>
+
       <div className="embla__controls">
         <div className="embla__buttons">
           <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
@@ -67,4 +69,4 @@ const EmblaCarousel = (props) => {
   );
 };
 
-export default EmblaCarousel;
+export default EmblaCarouselAds;

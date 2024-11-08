@@ -6,7 +6,7 @@ const getAllKoiType = async () => {
         const response = await axios.get('koiType');
         return response;
     } catch (err) {
-        toast.error(err);
+        toast.error(err.response.data.message);
     }
 }
 
@@ -15,7 +15,7 @@ const createNewKoiType = async (payload) => {
         const response = await axios.post('koiType', payload);
         return response;
     } catch (err) {
-        toast.error(err);
+        toast.error(err.response.data.message);
     }
 }
 

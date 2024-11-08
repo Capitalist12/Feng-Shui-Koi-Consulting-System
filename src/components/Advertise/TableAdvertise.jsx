@@ -3,9 +3,6 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   CloseCircleOutlined,
-  LikeOutlined,
-  MessageOutlined,
-  StarOutlined,
 } from "@ant-design/icons";
 import { Avatar, Badge, Button, List, Space, Tag, Tooltip } from "antd";
 import { timeDifference } from "../../utils/helper";
@@ -36,30 +33,8 @@ const renderStatus = (status) => {
   }
 };
 
-const IconText = ({ icon, text }) => (
-  <Space>
-    {React.createElement(icon)}
-    {text}
-  </Space>
-);
-
-const items = [
-  {
-    title: "Từ chối",
-    description: "This is a Step 1.",
-  },
-  {
-    title: "Đang đợi",
-    description: "This is a Step 2.",
-  },
-  {
-    title: "Chấp nhận",
-    description: "This is a Step 3.",
-  },
-];
-
 const TableAdvertise = (props) => {
-  const { data, fetchAPI } = props;
+  const { data, handleChange, filter } = props;
 
   const rejectAd = async (status, id) => {
     try {
@@ -68,7 +43,7 @@ const TableAdvertise = (props) => {
         newStatus: status,
       });
     } finally {
-      fetchAPI();
+      handleChange(filter);
     }
   };
 

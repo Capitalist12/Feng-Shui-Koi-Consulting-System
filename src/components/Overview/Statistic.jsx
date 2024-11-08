@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import api from "../../config/axiosConfig";
-import Title from "antd/es/typography/Title";
 import { MONTHS } from "../../utils/constant";
 import { countAllKoiFish } from "../../services/koiAPIService";
 import { countAllTank } from "../../services/tankAPIService";
-import { useSelector } from "react-redux";
 import PieChartUser from "./PieChartUser";
 import LineChartRevenue from "./BarChartRevenue";
 
@@ -64,13 +62,10 @@ const Statistics = () => {
     fetchFishAndTankCount();
   }, []);
 
-  const userName = useSelector((state) => state.user);
-
   return (
     <div>
-      <Title level={2}>Chào {userName}, chào mừng tới với Dashboard </Title>
       <StyledWrapper style={{ fontSize: "3rem", fontWeight: "bold" }}>
-        Phần doanh thu
+        Doanh thu
       </StyledWrapper>
       <StyledWrapper
         style={{

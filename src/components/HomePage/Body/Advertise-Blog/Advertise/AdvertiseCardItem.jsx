@@ -17,7 +17,7 @@ const AdvertiseCardItem = ({ data }) => (
         )}
     >
         <Meta
-            title={<Link to={`/ad`}>{data.title}</Link>}
+            title={<Link to={`/ad/${data.adID}`}>{data.title}</Link>}
             description={<h3 style={{ margin: 0, color: 'red' }}>{data.price} VNĐ</h3>}
         />
         <p>

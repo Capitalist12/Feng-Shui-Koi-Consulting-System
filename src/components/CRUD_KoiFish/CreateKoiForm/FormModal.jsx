@@ -26,9 +26,6 @@ const FormModal = (props) => {
 
   return (
     <>
-      <Title level={2}>
-        Chào {userName}, chào mừng tới với Tank Management
-      </Title>
       <Button
         style={{ fontSize: "1.2rem", padding: "1.2rem" }}
         className="custom-button-black-white"

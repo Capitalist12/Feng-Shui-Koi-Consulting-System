@@ -1,11 +1,13 @@
-import { Carousel, Col, Row, Space } from "antd";
+import { Carousel, Col, Popover, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import imageTest from "../../assets/images/compatibility.jpg"
-import { getAllBlogs } from "../../services/blogAPIService";
+import { deleteBlog, getAllBlogs } from "../../services/blogAPIService";
 import { FaCommentAlt } from "react-icons/fa";
 import { getUserRole } from "../../config/accessTokenConfig";
 import { IoIosCreate } from "react-icons/io";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
@@ -25,6 +27,14 @@ const Blogs = () => {
     useEffect(() => {
         getBlogs();
     }, [])
+
+    const handleDeleteBlog = async (id) => {
+        const response = await deleteBlog(id);
+        if(response.status === 200){
+            getBlogs();
+            toast.success("Xóa thành công!");
+        };
+    }
 
     useEffect(() => {
         if (blogs.length > 0) {
@@ -46,6 +56,14 @@ const Blogs = () => {
                     <Col md={24} xl={16} className="blogs-col-row-col">
                         {randomBlogs.length > 0 &&
                             <div className="blog-item" key={randomBlogs[0].blogID}>
+                                <Popover
+                                    content={(
+                                        <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
+                                    )}
+                                    title="Tùy chỉnh"
+                                >
+                                    <span className="blog-action"><BsThreeDotsVertical /></span>
+                                </Popover>
                                 <span className="blog-tag">Nổi bật</span>
                                 <img src={randomBlogs[0].imageURL} />
                                 <Link to={randomBlogs[0].blogID}>
@@ -62,6 +80,14 @@ const Blogs = () => {
                             randomBlogs.slice(1).map((blog) => (
                                 <Row className="blogs-col-row-col-row" key={blog.blogID}>
                                     <div className="blog-item">
+                                        <Popover
+                                            content={(
+                                                <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
+                                            )}
+                                            title="Tùy chỉnh"
+                                        >
+                                            <span className="blog-action"><BsThreeDotsVertical /></span>
+                                        </Popover>
                                         <img src={blog.imageURL || imageTest} alt={blog.title} />
                                         <div>
                                             <Link to={blog.blogID}>
@@ -92,6 +118,14 @@ const Blogs = () => {
                                 .filter((item) => !randomBlogs.some((randomBlog) => randomBlog.blogID === item.blogID))
                                 .map((filteredBlog) => (
                                     <div className="blog-item" key={filteredBlog.blogID}>
+                                        <Popover
+                                            content={(
+                                                <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
+                                            )}
+                                            title="Tùy chỉnh"
+                                        >
+                                            <span className="blog-action"><BsThreeDotsVertical /></span>
+                                        </Popover>
                                         <img src={filteredBlog.imageURL} />
                                         <div className="blog-info">
                                             <Link to={filteredBlog.blogID}>
