@@ -6,7 +6,7 @@ const getAllBlogs = async () => {
         const response = await axios.get("blog");
         return response;
     } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data);
     }
 }
 
@@ -15,7 +15,7 @@ const createNewBlog = async (payload) => {
         const response = await axios.post("blog", payload);
         return response;
     } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data);
     }
 }
 
@@ -24,8 +24,18 @@ const getBlogById = async (id) => {
         const response = await axios.get(`blog/${id}`);
         return response;
     } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data);
     }
 }
 
-export { getAllBlogs, createNewBlog, getBlogById };
+const deleteBlog = async (id) => {
+    try {
+        const response = await axios.delete(`/blog/${id}`);
+        return response;
+
+    } catch (err) {
+       toast.error(err.response.data);
+    }
+}
+
+export { getAllBlogs, createNewBlog, getBlogById, deleteBlog };

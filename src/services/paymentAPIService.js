@@ -10,7 +10,7 @@ const buyPackage = async (time) => {
         })
         return response;
     } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data);
     }
 }
 
@@ -22,7 +22,7 @@ const buyPackageSuccess = async (uid, sessId) => {
         });
         return response;
     } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data);
     }
 }
 

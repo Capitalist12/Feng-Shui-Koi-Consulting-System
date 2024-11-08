@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import UserTable from "./UserTable";
 import UserForm from "./UserForm";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Typography } from "antd";
 import React from "react";
 
@@ -63,13 +62,8 @@ function UserManagement() {
     }
   };
 
-  const userName = useSelector((state) => state.user);
-
   return (
     <div>
-      <Title level={2}>
-        Chào {userName}, chào mừng tới với User Management
-      </Title>
       <UserTable users={users} handleView={handleView} />
       <UserForm
         visible={showModal}

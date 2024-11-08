@@ -22,6 +22,7 @@
     display: block;
     box-sizing: border-box;
 
+
     .banner {
         height: 250px;
         background-image: url("../assets/images/banner1.png");
@@ -72,6 +73,21 @@
                                 background-color: #353535;
                                 position: relative;
                                 max-height: 600px;
+
+                                .blog-action {
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    background-color: #353535;
+                                    border: solid 1px #1f1f1f;
+                                    padding: 10px;
+                                    border-radius: 50%;
+                                    position: absolute;
+                                    top: 10px;
+                                    left: 10px;
+                                    color: white;
+                                    z-index: 2;
+                                }
 
                                 .blog-tag {
                                     position: absolute;
@@ -146,6 +162,21 @@
                                         a {
                                             margin-left: 0;
                                         }
+                                    }
+
+                                    .blog-action {
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        background-color: #353535;
+                                        border: solid 1px #1f1f1f;
+                                        padding: 8px;
+                                        border-radius: 50%;
+                                        position: absolute;
+                                        top: 5px;
+                                        left: 5px;
+                                        color: white;
+                                        z-index: 2;
                                     }
 
                                     img {
@@ -268,15 +299,40 @@
                         gap: 20px;
                         flex-wrap: wrap;
                         height: 100%;
-                        width: 100%;
+                        width: 100%;                       
 
                         .blog-item {
+                            position: relative;
                             display: flex;
                             max-height: 160px;
-                            // max-height: 500px;
-                            // background-color: red;
                             flex: 1 1 30%;
-                            // box-sizing: border-box;
+
+                            .blog-action {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                background-color: #353535;
+                                border: solid 1px #1f1f1f;
+                                padding: 8px;
+                                border-radius: 50%;
+                                position: absolute;
+                                top: 5px;
+                                left: 5px;
+                                color: white;
+                                z-index: 2;
+                            }
+
+                            a {
+                                display: -webkit-box;
+                                -webkit-box-orient: vertical;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                -webkit-line-clamp: 3;
+                                max-height: 4em;
+                                line-height: 1.3em;
+                                word-break: break-word; 
+                            }
+
 
                             img {
                                 width: 55%;
@@ -619,6 +675,8 @@
             }
         }
     }
+
+    
 }
 
 .share-modal {
@@ -633,4 +691,31 @@
             background-color: lightgray;
         }
     }
+}
+
+.ant-popover .ant-popover-inner {
+    width: 100px;
+    background-color: #505050;
+
+    .ant-popover-title, .ant-popover-inner-content{
+        color: white;
+
+        p{
+            color: rgb(250, 84, 55);
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+            width: 100%;
+            transition: all 0.2s ease;
+
+            &:hover{
+                background-color: #616161;
+            }
+        }
+    }
+}
+
+.ant-popover-arrow {
+    --antd-arrow-background-color: #505050;
 }

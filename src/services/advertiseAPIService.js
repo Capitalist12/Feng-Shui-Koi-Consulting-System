@@ -6,7 +6,7 @@ const getAllAdvertises = async () => {
     const response = await axios.get("ad");
     return response;
   } catch (err) {
-    toast.error(err.message);
+    toast.error(err.response.data);
   }
 };
 const getVerifiedAdvertise = async () => {
@@ -14,7 +14,7 @@ const getVerifiedAdvertise = async () => {
     const response = await axios.get("ad/verified");
     return response;
   } catch (err) {
-    toast.error(err.message);
+    toast.error(err.response.data);
   }
 };
 
@@ -23,7 +23,7 @@ const getRejectedAdvertise = async () => {
     const response = await axios.get("ad/rejected");
     return response;
   } catch (err) {
-    toast.error(err.message);
+    toast.error(err.response.data);
   }
 };
 
@@ -32,7 +32,7 @@ const getPendingAdvertises = async () => {
     const response = await axios.get("ad/pending");
     return response;
   } catch (err) {
-    toast.error(err.message);
+    toast.error(err.response.data);
   }
 };
 
@@ -41,7 +41,7 @@ const updateAdvertiseStatus = async (payload) => {
     const response = await axios.post("ad/updateAdStatus", payload);
     return response;
   } catch (err) {
-    toast.error(err.message);
+    toast.error(err.response.data);
   }
 };
 
@@ -50,7 +50,7 @@ const getUserAds = async () => {
     const response = await axios.get("ad/get-my-ads");
     return response;
   } catch (err) {
-    toast.error(err.message);
+    toast.error(err.response.data);
   }
 };
 
@@ -59,7 +59,7 @@ const getAdsByID = async (adID) => {
     const response = await axios.get(`ad/${adID}`);
     return response;
   } catch (err) {
-    toast.error(err.message);
+    toast.error(err.response.data);
   }
 };
 

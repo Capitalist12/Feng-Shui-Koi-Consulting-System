@@ -67,7 +67,6 @@ const KoiDrawer = (props) => {
       })
     );
 
-      console.log(url)
     const payload = {
       name: koiName,
       size: koiSize,
@@ -93,6 +92,9 @@ const KoiDrawer = (props) => {
   const toggleEditable = async () => {
     const response = await getAllKoiType();
     response.data.code === 1000 && response.data.result.length > 0 ? setKoiTypeList(response.data.result) : setKoiTypeList([]);
+    setKoiImage(data.imagesFish?.map((item, index) => ({
+      url: item.imageURL
+    })));
     setIsEdit(!isEdit);
   };
 
