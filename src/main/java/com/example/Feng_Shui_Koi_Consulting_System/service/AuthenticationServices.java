@@ -138,6 +138,9 @@ public class AuthenticationServices {
     public AuthenResponse loginUser(AuthenRequest request)  {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+        if(user.isDeleteStatus()){
+            throw new AppException(ErrorCode.ACCOUNT_DELETED);
+        }
         // Check for the transaction and subscription status
         subscriptionRepo.findByUser_UserID(user.getUserID())
                 .ifPresent(subscriptions -> {
