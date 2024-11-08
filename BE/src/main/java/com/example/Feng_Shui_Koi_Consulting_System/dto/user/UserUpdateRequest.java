@@ -12,14 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
-    @Size(min = 5, max = 20, message = "PASSWORD_INVALID")
-    String password;
-    @Email(message = "EMAIL_INVALID")
-    String email;
-    LocalDate dateOfBirth;
-    String element;
-    String imageLink;
     String roleName;
-    String planID;
     boolean deleteStatus;
 }

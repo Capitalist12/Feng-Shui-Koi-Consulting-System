@@ -90,7 +90,7 @@ public class UserController {
     }
 
     @PutMapping("/update-info")
-    ApiResponse<UpdateProfileResponse> updateMyInfo(@RequestBody UpdateProfileRequest request) {
+    ApiResponse<UpdateProfileResponse> updateMyInfo(@RequestBody @Valid UpdateProfileRequest request) {
         return ApiResponse.<UpdateProfileResponse>builder()
                 .result(userService.updateMyInfo(request))
                 .build();

@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,9 @@ import java.util.stream.Collectors;
 public class KoiTypeService {
     KoiTypeRepo koiTypeRepo;
     KoiTypeMapper koiTypeMapper;
+
+    private static final String FISHTYPE_ID_PREFIX = "KT";
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public KTResponse createKoiType(KoiTypeRequest request) {
 
@@ -34,7 +38,7 @@ public class KoiTypeService {
     }
 
 
-    //@PreAuthorize("hasRole('ADMIN')")
+
     public List<KTResponse> getKoiTypes(){
         return koiTypeRepo.findAll().stream()
                 .map(koiTypeMapper :: toKTResponse).collect(Collectors.toList());
@@ -59,7 +63,24 @@ public class KoiTypeService {
     }
 
     public String generateKoiTypeID(){
-        return "KT" + String.format("%05d", System.nanoTime() % 100000);
+        String fishTypeID;
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
+
+        do {
+            // Generate a random 9-digit number
+            int randomNum = secureRandom.nextInt(900000000) + 100000000; // Ensures 9 digits
+            fishTypeID = FISHTYPE_ID_PREFIX + randomNum;
+
+            attempts++;
+
+            if (attempts >= maxAttempts) {
+                throw new AppException(ErrorCode.UNABLE_TO_GENERATE_UNIQUE_ID);
+            }
+        } while (koiTypeRepo.existsById(fishTypeID));
+
+        return fishTypeID;
     }
+
 
 }

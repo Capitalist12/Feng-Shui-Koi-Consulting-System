@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.dto.consulting;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

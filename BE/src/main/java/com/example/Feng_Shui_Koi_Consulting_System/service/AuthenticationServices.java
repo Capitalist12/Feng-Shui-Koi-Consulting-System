@@ -85,6 +85,13 @@ public class AuthenticationServices {
 
     //Method to register user
     public SignUpResponse registerUser(SignUpRequest request) {
+
+        userRepository.findByEmail(request.getEmail()).ifPresent(
+                user -> {
+                    if(user != null) throw new AppException(ErrorCode.EMAIL_EXITST);
+                }
+        );
+
         if (request.getOtp().isEmpty())
             throw new AppException(ErrorCode.OTP_REQUIRED);
         if (!validateOTP(request.getEmail().trim(), request.getOtp()))
@@ -103,7 +110,6 @@ public class AuthenticationServices {
 
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
         user.setRoleName(String.valueOf(Roles.USER));
-//        user.setPlanID("PP005");
         user.setElement(element);
         user.setDeleteStatus(false);
         clearOTP(request.getEmail().trim());
@@ -114,10 +120,10 @@ public class AuthenticationServices {
         return userMapper.toSignUpResponse(userRepository.save(user));
     }
 
+    //Sending the otp to user's email
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
-        if (userRepository.existsByEmail(request.getEmail()))
-            throw new AppException(ErrorCode.EMAIL_EXITST);
         try {
+
             String otp = generateOTP();
             storeOTP(request.getEmail().trim(), otp);
             emailService.sendEmail(request.getEmail().trim(),
@@ -132,6 +138,9 @@ public class AuthenticationServices {
     public AuthenResponse loginUser(AuthenRequest request)  {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+        if(user.isDeleteStatus()){
+            throw new AppException(ErrorCode.ACCOUNT_DELETED);
+        }
         // Check for the transaction and subscription status
         subscriptionRepo.findByUser_UserID(user.getUserID())
                 .ifPresent(subscriptions -> {
@@ -204,6 +213,7 @@ public class AuthenticationServices {
 
     }
 
+    //Get the OTP if it's correct will change the user account's password
     public String resetPassword(ResetPasswordRequest request) {
         boolean isOtpValid = validateOTP(request.getEmail().trim(), request.getOtp());
 
@@ -245,14 +255,17 @@ public class AuthenticationServices {
     public boolean validateOTP(String email, String inputOtp) {
         String storedOTP = otpData.get(email);
         LocalDateTime expiryOTP = otpExpiry.get(email);
+        //Check the otp if it's exist
         if (storedOTP == null || expiryOTP == null) {
             return false;
         }
+        //Check the otp if it's expired
         if (expiryOTP.isBefore(LocalDateTime.now())) {
             otpData.remove(email);
             otpExpiry.remove(email);
             return false;
         }
+        //Check the otp if the input otp is the otp that send to your mail
         if (storedOTP.equals(inputOtp)) {
             otpData.remove(email);
             otpExpiry.remove(email);
@@ -261,6 +274,7 @@ public class AuthenticationServices {
         return false;
     }
 
+    //clean up the otp of the email
     public void clearOTP(String email) {
         otpData.remove(email);
         otpExpiry.remove(email);

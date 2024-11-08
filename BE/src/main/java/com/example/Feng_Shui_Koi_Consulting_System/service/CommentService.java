@@ -13,6 +13,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class CommentService {
     CommentRepo commentRepo;
     BlogRepo blogRepo;
@@ -38,24 +40,21 @@ public class CommentService {
 
     @Transactional
     public CommentResponse createComment(String blogId, CommentRequest request) {
-        try {
-            // Get current logged-in user
+            // Lấy user đang comment ra
             var context = SecurityContextHolder.getContext();
             String email = context.getAuthentication().getName();
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
 
-            // Find the blog
+            // Tìm blog đang comment
             Blog blog = blogRepo.findById(blogId)
                     .orElseThrow(() -> new AppException(ErrorCode.BLOG_NOT_FOUND));
 
             // Generate a unique comment ID
             Integer commentId = generateCommentID();
-            do {
-                commentId = generateCommentID();
-            } while (commentRepo.existsById(commentId));
+            commentId = generateCommentID();
 
-            // Create new comment
+            // Tạo comment mới
             Comment newComment = Comment.builder()
                     .commentID(commentId)
                     .content(request.getContent())
@@ -64,19 +63,19 @@ public class CommentService {
                     .blog(blog)
                     .build();
 
-            // Initialize comments set if null
+            // Tạo comment set mới nếu null
             if (blog.getComments() == null) {
                 blog.setComments(new HashSet<>());
             }
 
-            // Save the comment first
+            // Lưu comment vừa tạo
             Comment savedComment = commentRepo.save(newComment);
 
-            // Add to blog's comments and save blog
+            // Add comment vừa tạo vào blog
             blog.getComments().add(savedComment);
             blogRepo.save(blog);
 
-            // Build and return response
+            // Tạo và trả về response
             return CommentResponse.builder()
                     .commentID(savedComment.getCommentID())
                     .username(savedComment.getUser().getUsername())
@@ -85,9 +84,6 @@ public class CommentService {
                     .blogID(savedComment.getBlog().getBlogID())
                     .build();
 
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
-        }
     }
 
     public List<CommentResponse> getCommentsByBlogID(String blogId) {
@@ -107,18 +103,18 @@ public class CommentService {
 
     @Transactional
     public CommentResponse updateComment(Integer commentId, CommentRequest request) {
-        try {
-            // Get current logged-in user
+
+            // Lấy user đang update
             var context = SecurityContextHolder.getContext();
             String email = context.getAuthentication().getName();
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
 
-            // Find the comment
+            // Tìm comment cần update
             Comment comment = commentRepo.findById(commentId)
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
 
-            // Verify the user is the owner of the comment
+            // Xác thực user là người comment
             if (!comment.getUser().equals(user)) {
                 throw new AppException(ErrorCode.UNAUTHORIZED);
             }
@@ -127,6 +123,7 @@ public class CommentService {
             comment.setContent(request.getContent());
             Comment savedComment = commentRepo.save(comment);
 
+            // Trả response
             return CommentResponse.builder()
                     .commentID(savedComment.getCommentID())
                     .username(savedComment.getUser().getUsername())
@@ -134,43 +131,33 @@ public class CommentService {
                     .content(savedComment.getContent())
                     .blogID(savedComment.getBlog().getBlogID())
                     .build();
-        } catch (AppException ae) {
-            throw ae;
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
-        }
+
     }
 
     @Transactional
     public void deleteComment(Integer commentId) {
-        try {
-            // Get current logged-in user
+            // Lấy user đang xóa cmt
             var context = SecurityContextHolder.getContext();
             String email = context.getAuthentication().getName();
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
 
-            // Find the comment
+            // Tìm comment cần xóa
             Comment comment = commentRepo.findById(commentId)
                     .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
 
-            // Verify the user is the owner of the comment or the blog
-            if (!comment.getUser().equals(user) && !comment.getBlog().getUser().equals(user)) {
+            // Xác thực user là người comment
+            if (!comment.getUser().equals(user) || !comment.getBlog().getUser().equals(user)) {
                 throw new AppException(ErrorCode.UNAUTHORIZED);
             }
 
-            // Remove from blog's comments
+            // Xóa comment khỏi blog
             Blog blog = comment.getBlog();
             blog.getComments().remove(comment);
             blogRepo.save(blog);
 
-            // Delete the comment
+            // Xóa comment
             commentRepo.delete(comment);
-        } catch (AppException ae) {
-            throw ae;
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
-        }
     }
 
     private Integer generateCommentID() {
