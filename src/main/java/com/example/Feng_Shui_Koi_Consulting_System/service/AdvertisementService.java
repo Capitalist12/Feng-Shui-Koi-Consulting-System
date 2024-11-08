@@ -48,9 +48,14 @@ public class AdvertisementService {
         User user = userRepository.findByUsername(userService.getMyInfo().getUsername())
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXIST)));
         ad.setUser(user);
-        ad.setAdID(generateAdID());
+        String adID;
+        do{
+            adID = generateAdID();
+        }while(advertisementRepo.existsByAdID(adID));
+        ad.setAdID(adID);
         ad.setStatus("Pending");
         ad.setCreatedDate(LocalDateTime.now());
+
     // Get advertisement's images
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
             Set<Ads_Image> imagesAd = request.getImagesURL().stream()
@@ -104,6 +109,7 @@ public class AdvertisementService {
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
+    //Get list of rejected ads
     public List<AdvertisementResponse> getListAdvertisementsRejected() {
         return advertisementRepo.findAdsRejected().stream()
                 .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
@@ -119,6 +125,9 @@ public class AdvertisementService {
     public AdvertisementResponse verifyAd(VerifyAdRequest request) {
         Advertisement advertisement = advertisementRepo.findById(request.getAdID())
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
+        if(!userService.getMyInfo().getRoleName().equals("ADMIN")){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
         if (!request.getNewStatus().equals("Verified") && !request.getNewStatus().equals("Rejected")) {
             throw new AppException(ErrorCode.STATUS_INVALID);
         }
@@ -127,7 +136,7 @@ public class AdvertisementService {
     }
 
     //delete ads has been rejected for 5 minutes
-    @Scheduled(fixedRate = 60000)  // Run every 5 minutes
+    @Scheduled(fixedRate = 300000)  // Run every 5 minutes
     public void deleteOldRejectedAdvertisements() {
         // Get the timestamp of 5 minutes ago
         LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);
@@ -152,6 +161,9 @@ public class AdvertisementService {
     public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request) {
         Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
+        if(!userService.getMyInfo().getUserID().equals(advertisement.getUser().getUserID())){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
         advertisementMapper.updateAdvertisement(advertisement, request, elementRepo, categoryService);
         advertisement.setStatus("Pending");
         Set<Ads_Image> currentImages = advertisement.getImagesAd();
@@ -180,6 +192,10 @@ public class AdvertisementService {
     public void deleteAdvertisement(String adID) {
         Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
+        if(!userService.getMyInfo().getUserID().equals(advertisement.getUser().getUserID())
+                || !userService.getMyInfo().getRoleName().equals("ADMIN")){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
         advertisementRepo.delete(advertisement);
     }
 

@@ -34,9 +34,8 @@ public interface UserMapper {
     @Mapping(source = "element", target = "element", qualifiedByName = "mapToElementName")
     UserResponse toUserResponse(User user);
 
-    @Mapping(source = "element", target = "element", qualifiedByName = "mapToElement")
-    void updateUser(@MappingTarget User user, UserUpdateRequest request,
-                    @Context ElementRepo elementRepo);
+
+    void updateUser(@MappingTarget User user, UserUpdateRequest request);
 
     @Mapping(target = "userID", source = "userID")
     @Mapping(target = "element", source = "element", qualifiedByName = "mapToElementName")

@@ -85,6 +85,13 @@ public class AuthenticationServices {
 
     //Method to register user
     public SignUpResponse registerUser(SignUpRequest request) {
+
+        userRepository.findByEmail(request.getEmail()).ifPresent(
+                user -> {
+                    if(user != null) throw new AppException(ErrorCode.EMAIL_EXITST);
+                }
+        );
+
         if (request.getOtp().isEmpty())
             throw new AppException(ErrorCode.OTP_REQUIRED);
         if (!validateOTP(request.getEmail().trim(), request.getOtp()))
@@ -103,7 +110,6 @@ public class AuthenticationServices {
 
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
         user.setRoleName(String.valueOf(Roles.USER));
-//        user.setPlanID("PP005");
         user.setElement(element);
         user.setDeleteStatus(false);
         clearOTP(request.getEmail().trim());
@@ -117,6 +123,7 @@ public class AuthenticationServices {
     //Sending the otp to user's email
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
         try {
+
             String otp = generateOTP();
             storeOTP(request.getEmail().trim(), otp);
             emailService.sendEmail(request.getEmail().trim(),
@@ -131,6 +138,9 @@ public class AuthenticationServices {
     public AuthenResponse loginUser(AuthenRequest request)  {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+        if(user.isDeleteStatus()){
+            throw new AppException(ErrorCode.ACCOUNT_DELETED);
+        }
         // Check for the transaction and subscription status
         subscriptionRepo.findByUser_UserID(user.getUserID())
                 .ifPresent(subscriptions -> {

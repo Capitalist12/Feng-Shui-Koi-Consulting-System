@@ -27,15 +27,18 @@ public class BlogService {
     UserRepository userRepository;
     BlogRepo blogRepo;
 
-    //Constant for generating BlogID
+    //Constant để generate BlogID
     private static final String ID_PREFIX = "BL";
     private final SecureRandom secureRandom = new SecureRandom();
 
     public BlogResponse createBlog(BlogRequest request) {
+        // Tìm user đang tạo blog
         var context = SecurityContextHolder.getContext();
         String email = context.getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+
+        // Tạo blog mới
         Blog newblog = Blog.builder()
                 .blogID(generateBlogID())
                 .title(request.getTitle())
@@ -45,8 +48,10 @@ public class BlogService {
                 .user(user)
                 .build();
 
+        // Save blog mới
         Blog savedblog = blogRepo.save(newblog);
 
+        // Tạo response với thông tin blog mới
         BlogResponse response = BlogResponse.builder()
                 .blogID(savedblog.getBlogID())
                 .title(savedblog.getTitle())
@@ -60,8 +65,8 @@ public class BlogService {
     }
 
     public List<BlogResponse> getListBlogs() {
-        return blogRepo.findAll().stream()
-                .map(blog -> BlogResponse.builder()
+        return blogRepo.findAll().stream() // Fetch toàn bộ blog và chuyển thành stream để xử lí
+                .map(blog -> BlogResponse.builder()  // Map blog entity thành blog response
                         .blogID(blog.getBlogID())
                         .title(blog.getTitle())
                         .description(blog.getDescription())
@@ -75,9 +80,9 @@ public class BlogService {
                                         .content(comment.getContent())
                                         .username(comment.getUser().getUsername())
                                         .build())
-                                .collect(Collectors.toList()))
+                                .collect(Collectors.toList())) // collect comment response lại thành list
                         .build())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // collect blog response lại thành list
     }
     public BlogResponse getBlogByID(String blogID) {
         return blogRepo.findById(blogID)
@@ -101,14 +106,19 @@ public class BlogService {
     }
 
     public BlogResponse updateBlog(String blogID, BlogRequest request){
+        // Tìm blogid đang update
         Blog blog = blogRepo.findById(blogID)
                 .orElseThrow(()-> new AppException(ErrorCode.BLOG_NOT_FOUND));
+
+        // Set các thông tin mới
         blog.setTitle(request.getTitle());
         blog.setDescription(request.getDescription());
         blog.setImageURL(request.getImageURL());
 
+        //Save blog mới
         Blog savedBlog = blogRepo.save(blog);
 
+        // Tạo response với thông tin blog mới
         BlogResponse response = BlogResponse.builder()
                 .blogID(savedBlog.getBlogID())
                 .title(savedBlog.getTitle())
@@ -122,7 +132,11 @@ public class BlogService {
     }
 
     public void deleteBlog(String blogID){
-        blogRepo.deleteById(blogID);
+        Blog blog = blogRepo.findById(blogID).orElseThrow(()
+                -> new AppException(ErrorCode.BLOG_NOT_FOUND));
+        if(blog != null) {
+            blogRepo.deleteById(blogID);
+        }
     }
 
     public String generateBlogID(){
