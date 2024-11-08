@@ -56,8 +56,6 @@ public enum ErrorCode {
     UNAUTHORIZED_GPT(1046, "Missing api key of chatgpt", HttpStatus.UNAUTHORIZED),
     API_KEY_EXPIRED(1047, "Api key expired or not renewed", HttpStatus.NOT_FOUND);
 
-
-
     private int code;
     private String message;
     private HttpStatus httpStatus;

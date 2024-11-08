@@ -43,11 +43,15 @@ public class UserService {
             throw new AppException(ErrorCode.USER_EXIST);
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXITST);
+
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
         User user = userMapper.toUser(request, elementRepo);
+
         user.setUserID(generateUserID());
         user.setRoleName(String.valueOf(Roles.USER));
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
@@ -99,12 +103,16 @@ public class UserService {
     }
 
     public UserResponse getMyInfo() {
+        // Lấy user ra
         var context = SecurityContextHolder.getContext();
         String email = context.getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
 
+        // Tạo response
         var userResponse = userMapper.toUserResponse(user);
+
+        // Set nodob và nopassword = true nếu người dùng chưa có password và dob để tạo mới
         userResponse.setNoPassword(!StringUtils.hasText(user.getPassword()));
         userResponse.setNoDob(user.getDateOfBirth() == null);
 
@@ -150,7 +158,6 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
     }
-
 
     public void createDOB( DOBCreationRequest request) {
         var context = SecurityContextHolder.getContext();
