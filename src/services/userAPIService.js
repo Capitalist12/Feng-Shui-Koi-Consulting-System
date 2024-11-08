@@ -7,7 +7,7 @@ const fetchUsers = async () => {
     const response = await axios.get("users");
     return response;
   } catch (err) {
-    toast.error(err.response.data);
+    toast.error(err.response.data.message);
   }
 };
 
@@ -17,7 +17,7 @@ const createUser = async (payload) => {
     const response = await axios.post("users", payload);
     return response;
   } catch (err) {
-    toast.error(err.response.data);
+    toast.error(err.response.data.message);
   }
 };
 
@@ -27,7 +27,7 @@ const updateUser = async (id, payload) => {
     const response = await axios.put(`users/${id}`, payload);
     return response;
   } catch (err) {
-    toast.error(err.response.data);
+    toast.error(err.response.data.message);
   }
 };
 
@@ -37,7 +37,7 @@ const deleteUser = async (id) => {
     const response = await axios.delete(`users/${id}`);
     return response;
   } catch (err) {
-    toast.error(err.response.data);
+    toast.error(err.response.data.message);
   }
 };
 
@@ -46,7 +46,7 @@ const fetchUserDetails = async (userID) => {
     const response = await axios.get(`users/${userID}`);
     return response;
   } catch (err) {
-    toast.error(err.response.data);
+    toast.error(err.response.data.message);
     throw err; // Ném lại lỗi để xử lý trong phần gọi hàm
   }
 };

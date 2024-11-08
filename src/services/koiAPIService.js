@@ -6,7 +6,7 @@ const getAllKoiFish = async () => {
         const response = await axios.get('fish');
         return response;
     } catch (err) {
-        toast.error(err.response.data);
+        toast.error(err.response.data.message);
     }
 }
 
@@ -20,7 +20,7 @@ const updateKoiFish = async (id, payload) => {
         const response = await axios.put(`fish/${id}`, payload);  
         return response;  
     } catch (err) {  
-        toast.error(err.response.data);  
+        toast.error(err.response.data.message);  
     }  
 }  
 
@@ -29,7 +29,7 @@ const deleteKoiFish = async (id) => {
         const response = await axios.delete(`fish/${id}`);
         return response;
     } catch (err) {
-        toast.error(err.response.data);
+        toast.error(err.response.data.message);
     }
 }
 
@@ -38,7 +38,7 @@ const getKoiFish = async (id) => {
         const response = await axios.get(`fish/${id}`);
         return response;
     }catch (err) {
-        toast.error(err.response.data);
+        toast.error(err.response.data.message);
     }
 }
 

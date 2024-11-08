@@ -6,7 +6,7 @@ const getBlogComments = async (blogId) => {
         const response = await axios.get(`blog/${blogId}/comments`);
         return response;
     } catch (err) {
-        toast.error(err.response.data);
+        toast.error(err.response.data.message);
     }
 }
 
@@ -15,7 +15,7 @@ const createNewComment = async (blogId, payload) => {
         const response = await axios.post(`blog/${blogId}/comments`, payload);
         return response;
     } catch (err) {
-        toast.error(err.response.data);
+        toast.error(err.response.data.message);
     }
 }
 

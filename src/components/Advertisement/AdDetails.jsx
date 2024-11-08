@@ -13,10 +13,10 @@ import CustomeFooter from "../HomePage/Footer/CustomeFooter";
 const AdDetails = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [ad, setAd] = useState(null);
-  const [relatedAds, setRelatedAds] = useState([]);
+  const [ad, setAd] = useState(null); // Dữ liệu chi tiết của quảng cáo đang xem
+  const [relatedAds, setRelatedAds] = useState([]); // Danh sách các quảng cáo liên quan
   const { adID } = useParams();
-  const [currentImage, setCurrentImage] = useState(0);
+  const [currentImage, setCurrentImage] = useState(0); // vi tri hinh anh
   const [displayAds, setDisplayAds] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const adsPerPage = 10;
@@ -43,13 +43,13 @@ const AdDetails = () => {
       if (ad) {
         try {
           const response = await getVerifiedAdvertise();
-          // Lọc các bài liên quan theo mệnh
+          // loc ra lay ad relate element tru bai dang chon
           const filteredRelatedAds = response.data.result.filter(
-            (relatedAd) =>
-              relatedAd.element === ad.element && relatedAd.adID !== ad.adID // Bài liên quan không chứa bài đang chọn
+            (relatedAds) =>
+              relatedAds.element === ad.element && relatedAds.adID !== ad.adID
           );
           setRelatedAds(filteredRelatedAds);
-          setDisplayAds(filteredRelatedAds); // Cập nhật displayAds
+          setDisplayAds(filteredRelatedAds);
         } catch (error) {
           console.error("Error fetching related ads:", error);
         }
@@ -64,7 +64,7 @@ const AdDetails = () => {
       if (ad.imagesAd && ad.imagesAd.length > 0) {
         return prevIndex === 0 ? ad.imagesAd.length - 1 : prevIndex - 1;
       }
-      return 0; // Giữ currentImage ở 0 nếu không có hình ảnh
+      return 0; // currentImage = 0 nếu không có hình ảnh
     });
   };
 
@@ -73,11 +73,11 @@ const AdDetails = () => {
       if (ad.imagesAd && ad.imagesAd.length > 0) {
         return prevIndex === ad.imagesAd.length - 1 ? 0 : prevIndex + 1;
       }
-      return 0; // Giữ currentImage ở 0 nếu không có hình ảnh
+      return 0;
     });
   };
 
-  // Hàm rút gọn mô tả
+  // dai qua ...
   const truncateDescription = (description, maxLength) => {
     if (description.length > maxLength) {
       return description.slice(0, maxLength) + "...";
@@ -85,16 +85,18 @@ const AdDetails = () => {
     return description;
   };
 
+  // Xác định vị trí bắt đầu và kết thúc của các quảng cáo hiện tại dựa trên trang
   const indexOfLastAd = currentPage * adsPerPage;
   const indexOfFirstAd = indexOfLastAd - adsPerPage;
-  const currentAds = useMemo(
-    () => displayAds.slice(indexOfFirstAd, indexOfLastAd),
-    [displayAds, indexOfFirstAd, indexOfLastAd]
-  );
+  const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd, [
+    displayAds,
+    indexOfFirstAd,
+    indexOfLastAd,
+  ]);
 
   if (loading) return <div>Loading...</div>;
   if (!ad || !ad.imagesAd || ad.imagesAd.length === 0)
-    return <div>Ad not found or no images available.</div>;
+    return <div>Ad not found or no images available.</div>; // Hiển thị thông báo nếu không có quảng cáo hoặc không có ảnh
 
   return (
     <Layout>
@@ -107,7 +109,7 @@ const AdDetails = () => {
               src={ad.imagesAd[currentImage]?.imageURL}
               height={"70vh"}
             />
-            {/* nhiều hơn 1 ảnh thì hiện 2 nút chuyển */}
+            {/* Hiện các nút chuyển ảnh nếu có nhiều hơn 1 ảnh */}
             {ad.imagesAd.length > 1 && (
               <div className="navigation-buttons">
                 <Button
@@ -154,11 +156,12 @@ const AdDetails = () => {
           Các bài đăng khác về mệnh {ad.element}
         </h2>
         <div className="moreAds-list">
+          {/* Hiển thị danh sách các quảng cáo liên quan theo trang */}
           {currentAds.map((relatedAd) => (
             <Card
               className="moreAdvertisement"
               key={relatedAd.adID}
-              onClick={() => navigate(`/ad/${relatedAd.adID}`)}
+              onClick={() => navigate(`/ad/${relatedAd.adID}`)} // Điều hướng đến chi tiết quảng cáo khi nhấn vào
             >
               <h1 style={{ textShadow: "2px 2px 1rem gray" }}>
                 Mệnh: {relatedAd.element}
@@ -178,6 +181,7 @@ const AdDetails = () => {
           ))}
         </div>
       </div>
+      {/* Phân trang cho các quảng cáo liên quan */}
       <Pagination
         current={currentPage}
         total={displayAds.length}
@@ -189,8 +193,9 @@ const AdDetails = () => {
           marginBottom: "4rem",
         }}
       />
-
-      <CustomeFooter />
+      <div style={{ marginTop: "-10rem" }}>
+        <CustomeFooter />
+      </div>
     </Layout>
   );
 };

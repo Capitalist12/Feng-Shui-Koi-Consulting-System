@@ -15,7 +15,7 @@ const consultingKoi = async (payload) => {
         const response = await axios.post('consulting', payload);
         return response;
     } catch (err) {
-        toast.error(err.response.data);
+        toast.error(err.response.data.message);
     }
 }
 

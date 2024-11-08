@@ -6,91 +6,106 @@ import { consultingKoi } from "../../../../services/consultingAPIService";
 import { store } from "../../../../redux/store";
 import ConsultantTank from "./Koi-Tank/ConsultantTank";
 
-//Images
+// Images
 import FireElementImage from "../../../../assets/images/elements-image/fire.png";
 import MetalElementImage from "../../../../assets/images/elements-image/metal.png";
 import WaterElementImage from "../../../../assets/images/elements-image/water.png";
 import EarthElementImage from "../../../../assets/images/elements-image/earth.png";
 import WoodElementImage from "../../../../assets/images/elements-image/wood.png";
-
+import ConsultantAdsSlider from "./Koi-Tank/ConsultantAdsSlider";
 
 const Consultant = (props) => {
-    const [consultantKoiData, setConsultantKoiData] = useState([]);
-    const { userElement } = props;
-    const { dob, element } = userElement;
+  const [consultantKoiData, setConsultantKoiData] = useState([]);
+  const { userElement } = props;
+  const { dob, element } = userElement;
 
-    const [displayElementTitle, setDisplayElementTitle] = useState(null);
-    const [displayElementImage, setDisplayElementImage] = useState(null);
-    const [displayElementStyle, setDisplayElementStyle] = useState({});
+  const [displayElementTitle, setDisplayElementTitle] = useState(null);
+  const [displayElementImage, setDisplayElementImage] = useState(null);
+  const [displayElementStyle, setDisplayElementStyle] = useState({});
 
-    const getConsultantKoi = async () => {
-        const response = await consultingKoi({
-            username: store.getState()?.user?.username,
-            dob: dob
-        })
+  const getConsultantKoi = async () => {
+    const response = await consultingKoi({
+      username: store.getState()?.user?.username,
+      dob: dob,
+    });
 
-        response.status === 200 && response.data.code === 1000 ? setConsultantKoiData(response.data.result) : setConsultantKoiData([])
+    if (response.status === 200 && response.data.code === 1000) {
+      setConsultantKoiData(response.data.result);
+    } else {
+      setConsultantKoiData([]);
     }
+  };
 
-    useEffect(() => {
-        getConsultantKoi();
-        window.location.href = '#consultant-section';
-    }, [dob]);
+  useEffect(() => {
+    getConsultantKoi();
+    window.location.href = "#consultant-section";
+  }, [dob]);
 
-    useEffect(() => {
-        switch (element) {
-            case 'Hỏa':
-                setDisplayElementTitle('Hỏa');
-                setDisplayElementImage(FireElementImage);
-                setDisplayElementStyle({ boxShadow: '0 0 25px tomato' })
-                break;
-            case 'Mộc':
-                setDisplayElementTitle('Mộc');
-                setDisplayElementImage(WoodElementImage);
-                setDisplayElementStyle({ boxShadow: '0 0 25px #69db58' })
-                break;
-            case 'Thủy':
-                setDisplayElementTitle('Thủy');
-                setDisplayElementImage(WaterElementImage);
-                setDisplayElementStyle({ boxShadow: '0 0 25px #699dd5' })
-                break;
-            case 'Kim':
-                setDisplayElementTitle('Kim');
-                setDisplayElementImage(MetalElementImage);
-                setDisplayElementStyle({ boxShadow: '0 0 25px gray' })
-                break;
-            case 'Thổ':
-                setDisplayElementTitle('Thổ');
-                setDisplayElementImage(EarthElementImage);
-                setDisplayElementStyle({ boxShadow: '0 0 25px #e8ca49' })
-                break;
+  useEffect(() => {
+    switch (element) {
+      case "Hỏa":
+        setDisplayElementTitle("Hỏa");
+        setDisplayElementImage(FireElementImage);
+        setDisplayElementStyle({ boxShadow: "0 0 25px tomato" });
+        break;
+      case "Mộc":
+        setDisplayElementTitle("Mộc");
+        setDisplayElementImage(WoodElementImage);
+        setDisplayElementStyle({ boxShadow: "0 0 25px #69db58" });
+        break;
+      case "Thủy":
+        setDisplayElementTitle("Thủy");
+        setDisplayElementImage(WaterElementImage);
+        setDisplayElementStyle({ boxShadow: "0 0 25px #699dd5" });
+        break;
+      case "Kim":
+        setDisplayElementTitle("Kim");
+        setDisplayElementImage(MetalElementImage);
+        setDisplayElementStyle({ boxShadow: "0 0 25px gray" });
+        break;
+      case "Thổ":
+        setDisplayElementTitle("Thổ");
+        setDisplayElementImage(EarthElementImage);
+        setDisplayElementStyle({ boxShadow: "0 0 25px #e8ca49" });
+        break;
+      default:
+        break;
+    }
+    window.location.href = "#consultant-section";
+  }, [element]);
 
-        }
-        window.location.href = '#consultant-section';
-    }, [element])
+  return (
+    <section id="consultant-section">
+      <Row>
+        <Row className="consultant-item-row1">
+          <Col className="col" span={24}>
+            {displayElementImage && displayElementTitle && (
+              <>
+                <div
+                  className="element-image-container"
+                  style={displayElementStyle}
+                >
+                  <img src={displayElementImage} alt={displayElementTitle} />
+                </div>
+                <Title level={2} style={{ color: "white" }}>
+                  MỆNH {displayElementTitle?.toUpperCase()}
+                </Title>
+              </>
+            )}
+          </Col>
+        </Row>
 
-    return (
-        <section id='consultant-section'>
-            <Row>
-                <Row className='consultant-item-row1'>
-                    <Col className='col' span={24}>
-                        {(displayElementImage && displayElementTitle) &&
-                            (<>
-                                <div className="element-image-container" style={displayElementStyle}>
-                                    <img src={displayElementImage} alt={displayElementTitle} />
-                                </div>
-                                <Title level={2} style={{ color: 'white' }}>MỆNH {displayElementTitle?.toUpperCase()}</Title>
-                            </>
-                            )}
-                    </Col>
-                </Row>
-                <ConsultantKoiSlider data={consultantKoiData} />
-                {consultantKoiData.tankList?.length > 0 && <ConsultantTank data={consultantKoiData} />}
-                {/* <div className="background-effect"></div> */}
+        <ConsultantKoiSlider data={consultantKoiData} />
 
-            </Row>
-        </section>
-    )
-}
+        {consultantKoiData.tankList?.length > 0 && (
+          <ConsultantTank data={consultantKoiData} />
+        )}
+        {consultantKoiData.adList?.length > 0 && (
+          <ConsultantAdsSlider data={consultantKoiData} />
+        )}
+      </Row>
+    </section>
+  );
+};
 
 export default Consultant;
