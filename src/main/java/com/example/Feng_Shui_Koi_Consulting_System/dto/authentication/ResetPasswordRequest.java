@@ -16,6 +16,6 @@ public class ResetPasswordRequest {
     String email;
     @NotBlank
     String otp;
-    @Size(min = 5, max = 20, message = "PASSWORD_INVALID")
+    @Size(min = 5, max = 40, message = "PASSWORD_INVALID")
     String newPassword;
 }

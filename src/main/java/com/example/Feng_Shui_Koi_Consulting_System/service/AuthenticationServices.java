@@ -85,6 +85,13 @@ public class AuthenticationServices {
 
     //Method to register user
     public SignUpResponse registerUser(SignUpRequest request) {
+
+        userRepository.findByEmail(request.getEmail()).ifPresent(
+                user -> {
+                    if(user != null) throw new AppException(ErrorCode.EMAIL_EXITST);
+                }
+        );
+
         if (request.getOtp().isEmpty())
             throw new AppException(ErrorCode.OTP_REQUIRED);
         if (!validateOTP(request.getEmail().trim(), request.getOtp()))
@@ -103,7 +110,6 @@ public class AuthenticationServices {
 
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
         user.setRoleName(String.valueOf(Roles.USER));
-//        user.setPlanID("PP005");
         user.setElement(element);
         user.setDeleteStatus(false);
         clearOTP(request.getEmail().trim());
@@ -117,6 +123,7 @@ public class AuthenticationServices {
     //Sending the otp to user's email
     public void sendOTPToEmail(@Valid SendOTPRequest request) {
         try {
+
             String otp = generateOTP();
             storeOTP(request.getEmail().trim(), otp);
             emailService.sendEmail(request.getEmail().trim(),
