@@ -109,6 +109,7 @@ public class ConsultingService {
                     .title(advertisement.getTitle())
                     .imagesAd(advertisement.getImagesAd())
                     .category(categoryResponse)
+                    .description(advertisement.getDescription())
                     .build();
         }).collect(Collectors.toList());
     }
