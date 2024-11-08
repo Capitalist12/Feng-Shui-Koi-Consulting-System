@@ -46,7 +46,8 @@ public enum ErrorCode {
     PASSWORD_NOT_MATCH(1034, "Please enter your current password correctly", BAD_REQUEST),
     OTP_INVALID(1035, "OTP invalid", BAD_REQUEST ),
     CHATGPT_API_ERROR(1036, "Connection error to ChatGPT", HttpStatus.BAD_GATEWAY),
-    UNABLE_TO_GENERATE_UNIQUE_ID(1006,"User ID existed", BAD_REQUEST);
+    UNABLE_TO_GENERATE_UNIQUE_ID(1006,"User ID existed", BAD_REQUEST),
+    ACCOUNT_DELETED(1037, "Your account has been deleted", BAD_REQUEST);
 
     private int code;
     private String message;
