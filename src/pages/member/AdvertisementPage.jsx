@@ -139,7 +139,6 @@ function AdvertisementPage() {
       await fetchAds();
       form.resetFields();
     } catch (error) {
-      // Xử lý lỗi và điều hướng nếu có lỗi
       message.error(error.message);
       navigate("/errorMem");
     }

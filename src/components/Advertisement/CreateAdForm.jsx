@@ -37,6 +37,10 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
         description:
           "Bài đăng của bạn đã được đăng thành công, hãy chờ phê duyệt nhé!",
       });
+
+      // Reset form và fileList sau khi đăng thành công
+      form.resetFields();
+      setFileList([]); // Reset lại danh sách file đã upload
     } catch (error) {
       message.error(error.message);
     }
@@ -56,6 +60,11 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
     }
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
+  };
+
+  const handleReset = () => {
+    form.resetFields();
+    setFileList([]); // Reset lại danh sách file khi hủy
   };
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
@@ -198,8 +207,16 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
             justifyContent: "center",
           }}
         >
-          <Button size="large" htmlType="submit" loading={loading}>
+          <Button
+            style={{ marginRight: "2rem" }}
+            size="large"
+            htmlType="submit"
+            loading={loading}
+          >
             Đăng
+          </Button>
+          <Button size="large" danger onClick={handleReset}>
+            Reset
           </Button>
         </div>
       </Form>
