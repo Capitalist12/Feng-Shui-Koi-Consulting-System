@@ -29,6 +29,7 @@ import AdvertiseManagementContainer from "./components/Advertise/AdvertiseManage
 import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
 import UserAds from "./pages/user/history/UserAds";
 import AdDetails from "./components/Advertisement/AdDetails";
+import BlogEditorPage from "./pages/blog/BlogEditorPage";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -68,6 +69,14 @@ const App = () => {
           element: <BlogContent />,
         },
       ],
+    },
+    {
+      path: "editor",
+      element: (
+        <Admin>
+          <BlogEditorPage />
+        </Admin>
+      ),
     },
     {
       path: "ad",
