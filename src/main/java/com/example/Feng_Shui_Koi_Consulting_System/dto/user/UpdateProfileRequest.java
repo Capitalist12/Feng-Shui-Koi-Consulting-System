@@ -13,7 +13,9 @@ import java.time.LocalDate;
 public class UpdateProfileRequest {
     @Size(min = 4, max = 50, message = "USERNAME_INVALID")
     String username;
+    @Size(min = 5, max = 50, message = "PASSWORD_INVALID")
     String currentPassword;
+    @Size(min = 5, max = 50, message = "PASSWORD_INVALID")
     String newPassword;
     LocalDate dateOfBirth;
     String imageLink;

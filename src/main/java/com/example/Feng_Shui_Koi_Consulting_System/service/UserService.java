@@ -125,10 +125,9 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        if(!request.getCurrentPassword().isEmpty() || !request.getNewPassword().isEmpty()) {
             if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
                 throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
-            }
+
         }
 
         if (!request.getDateOfBirth().equals(user.getDateOfBirth())) {
