@@ -44,6 +44,9 @@ outbound:
   client-secret: ${OUTBOUND_CLIENT_SECRET}
   redirect-uri: ${OUTBOUND_REDIRECT_URI}
 
+frontend:
+  url: ${FRONTEND_URL}
+
 jwt:
   singerKey: ${JWT_SIGNER_KEY}
 

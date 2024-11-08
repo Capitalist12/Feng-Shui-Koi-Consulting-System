@@ -43,6 +43,8 @@ public class StripeService {
 
     @Value("${api.stripe.key}")
     private String stripeApiKey;
+    @Value("${frontend.url}")
+    private String frontendUrl;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -101,7 +103,7 @@ public class StripeService {
             User user = getUserLogin();
             if(!checkUserSubcription()) throw new AppException(ErrorCode.SUBSCRIPTION_EXIST);
             Customer customer = findOrCreateCustomer(user.getEmail(),user.getUsername());
-            String clientURL = "http://localhost:5173";
+            String clientURL = frontendUrl;
 
             SessionCreateParams.Builder  sessionCreateParamsBuilder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
