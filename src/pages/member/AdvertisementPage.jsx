@@ -314,6 +314,7 @@ function AdvertisementPage() {
         <div className="ads-list">
           {currentAds.map((ad) => (
             <Card
+              style={{ height: "50vh" }}
               key={ad.adID}
               className="advertisement"
               onClick={() => handleAdClick(ad.adID)}
