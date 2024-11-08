@@ -10,22 +10,22 @@ springdoc:
     enabled: true
     path: /koifish-docs/v3/api-docs
   swagger-ui:
-    path: /swagger-ui.html  # ???ng d?n cho Swagger UI
+    path: /swagger-ui.html
     enabled: true
 
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/FengShuiKoiDB13"
-    username: root
-    password: 12345
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USER}
+    password: ${DATASOURCE_PASSWORD}
 
   application:
     name: sendemail
   mail:
     host: smtp.gmail.com
     port: 587
-    username: dinht1706@gmail.com
-    password: kjkv fiph rrze aiqc
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
@@ -34,27 +34,25 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-
     show-sql: true
     properties:
       hibernate:
         globally_quoted_identifiers: true
 
-
 outbound:
-  client-id: "311482209289-pgh12mi0hos00orqsl2773ke1gdsdhjf.apps.googleusercontent.com"
-  client-secret: "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"
-  redirect-uri: "http://localhost:5173/login/authenticate"
+  client-id: ${OUTBOUND_CLIENT_ID}
+  client-secret: ${OUTBOUND_CLIENT_SECRET}
+  redirect-uri: ${OUTBOUND_REDIRECT_URI}
 
 jwt:
-  singerKey: "cq9cu5H3J3h1qWLxonaN4CFQy2J47Mnf/0vRPGek0SBZm//1k0V0CKAYlcC/G68A"
+  singerKey: ${JWT_SIGNER_KEY}
 
 api:
   stripe:
-    key: sk_test_51Q7E6DF0U8Qubnpu6K2IVhs7Gj5GpEDEWTyDBuv4JeFGK0dphOZDXtGGcTCkR2LZOF8bOauwpVDfLaeqS5sdLXwt00J5sOw6wn
+    key: ${API_STRIPE_KEY}
 
 chat-gpt:
-  key:
+  key: ${CHAT_GPT_KEY}
 
 
 

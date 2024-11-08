@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -32,6 +33,9 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-resources/**"
     };
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
@@ -78,7 +82,7 @@ public class SecurityConfig {
 
         // Allow your frontend origin specifically for security purposes
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
-        corsConfiguration.addAllowedOrigin("http://localhost:5173");
+        corsConfiguration.addAllowedOrigin(frontendUrl);
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowCredentials(true);  // Enable credentials if needed (e.g., with JWTs)
