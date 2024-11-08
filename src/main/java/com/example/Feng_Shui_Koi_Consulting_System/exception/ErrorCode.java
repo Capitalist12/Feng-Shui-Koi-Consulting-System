@@ -55,7 +55,7 @@ public enum ErrorCode {
     TITLE_NOT_EMPTY(1045, "Title cannot be empty", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED_GPT(1046, "Missing api key of chatgpt", HttpStatus.UNAUTHORIZED),
     API_KEY_EXPIRED(1047, "Api key expired or not renewed", HttpStatus.NOT_FOUND),
-    ACCOUNT_DELETED(1048, "Account has been deleted", HttpStatus.BAD_REQUEST);
+    ACCOUNT_DELETED(1048, "Account has been banned", HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;
