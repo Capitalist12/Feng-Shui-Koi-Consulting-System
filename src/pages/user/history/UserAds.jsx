@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Layout, message, notification, Pagination } from "antd";
+import { Button, Card, Layout, message, notification, Pagination } from "antd";
 import "../../../styles/UserAds.scss";
 import api from "../../../config/axiosConfig";
 import SearchBar from "../../../components/Advertisement/SearchBar";
@@ -64,11 +64,6 @@ const UserAds = () => {
     setDisplayAds(filteredAds);
   };
 
-  const handleEditAd = (ad) => {
-    setSelectedAd(ad);
-    setIsEditing(true);
-  };
-
   const handleCloseEditModal = () => {
     setSelectedAd(null);
     setIsEditing(false);
@@ -104,6 +99,11 @@ const UserAds = () => {
     }
   };
 
+  const handleEditAd = (ad) => {
+    setSelectedAd(ad);
+    setIsEditing(true);
+  };
+
   const handleDeleteAd = async (adID) => {
     setLoading(true);
     try {
@@ -121,7 +121,7 @@ const UserAds = () => {
     } catch (error) {
       notification.error({
         message: "Lỗi!",
-        description: mess,
+        description: error.message,
       });
     } finally {
       setLoading(false);
@@ -192,31 +192,72 @@ const UserAds = () => {
 
         <div className="ads-list">
           {currentAds.map((ad) => (
-            <div
+            <Card
+              className="card-history"
               key={ad.adID}
-              className="advertisement"
-              // an scss cua ben advertisement
               onClick={() => handleEditAd(ad)}
             >
-              <h2>Mệnh: {ad.element}</h2>
+              <h1
+                style={{ textShadow: "2px 2px 1rem gray", fontSize: "1.2rem" }}
+              >
+                Mệnh: {ad.element}
+              </h1>
               <h4
                 style={{ textShadow: "1px 1px 2rem blue", fontStyle: "italic" }}
               >
                 {translateStatus(ad.status)}
               </h4>
-              <h3>{truncateTitle(ad.title, 30)}</h3>
-              <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
-              {ad.imagesAd.length > 1 && (
-                <span style={{ fontStyle: "italic" }}>
-                  +{ad.imagesAd.length - 1} hình ảnh
-                </span>
-              )}
-              <div className="price-cate">
-                <h2>Giá: {ad.price.toLocaleString()} VNĐ</h2>
-                <p>Danh mục: {ad.category.categoryName}</p>
+              <h3
+                style={{
+                  fontWeight: "bold",
+                  height: "45px",
+                }}
+              >
+                {truncateTitle(ad.title, 30)}
+              </h3>
+              <div style={{ position: "relative" }}>
+                <img
+                  src={ad.imagesAd[0]?.imageURL || ""}
+                  alt={ad.title}
+                  style={{
+                    width: "100%",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "1rem",
+                  }}
+                />
+                {ad.imagesAd.length > 1 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: "10px",
+                      right: "10px",
+                      backgroundColor: "rgba(0, 0, 0, 0.5)",
+                      color: "white",
+                      padding: "0.2rem 0.5rem",
+                      borderRadius: "0.5rem",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    +{ad.imagesAd.length - 1} hình ảnh
+                  </span>
+                )}
               </div>
-            </div>
+              <h2
+                style={{
+                  color: "green",
+                  fontSize: "1.2rem",
+                  margin: "0.5rem 0",
+                }}
+              >
+                Giá: {ad.price.toLocaleString()} VNĐ
+              </h2>
+              <p style={{ margin: "0", fontSize: "1rem", color: "#555" }}>
+                Danh mục: {ad.category.categoryName}
+              </p>
+            </Card>
           ))}
+
           <div className="pagination">
             <Pagination
               current={currentPage}

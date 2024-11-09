@@ -243,60 +243,6 @@
   }
 }
 
-.ads-list {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 2rem 2rem;
-  gap: 4rem 1.5rem;
-
-  .advertisement {
-    position: relative;
-    width: calc(100% / 5 - 1.5rem);
-    height: 55vh;
-    background-color: white;
-    padding: 10px;
-    box-shadow: 0px 0px 1rem rgb(96, 96, 96);
-    border-radius: 8px;
-    text-align: center;
-    transition: transform 0.4s ease;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-
-    &:hover {
-      transform: translateY(-1rem);
-    }
-
-    h1,
-    h3 {
-      margin: 0;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    img {
-      margin-top: 1rem;
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 1rem;
-    }
-
-    .price-cate {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      right: 10px;
-      margin-top: auto;
-      text-align: center;
-
-      h2 {
-        font-size: 1.2rem;
-        color: green;
-        margin: 0;
-      }
-    }
-  }
+.ant-popover-inner {
+  background-color: white !important;
 }
