@@ -85,7 +85,6 @@ const AdDetails = () => {
     return description;
   };
 
-  // Xác định vị trí bắt đầu và kết thúc của các quảng cáo hiện tại dựa trên trang
   const indexOfLastAd = currentPage * adsPerPage;
   const indexOfFirstAd = indexOfLastAd - adsPerPage;
   const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd, [
@@ -96,7 +95,7 @@ const AdDetails = () => {
 
   if (loading) return <div>Loading...</div>;
   if (!ad || !ad.imagesAd || ad.imagesAd.length === 0)
-    return <div>Ad not found or no images available.</div>; // Hiển thị thông báo nếu không có quảng cáo hoặc không có ảnh
+    return <div>Ad not found or no images available.</div>;
 
   return (
     <Layout>
@@ -109,7 +108,7 @@ const AdDetails = () => {
               src={ad.imagesAd[currentImage]?.imageURL}
               height={"70vh"}
             />
-            {/* Hiện các nút chuyển ảnh nếu có nhiều hơn 1 ảnh */}
+            {/* các nút chuyển ảnh nếu có nhiều hơn 1 ảnh */}
             {ad.imagesAd.length > 1 && (
               <div className="navigation-buttons">
                 <Button
@@ -156,18 +155,17 @@ const AdDetails = () => {
           Các bài đăng khác về mệnh {ad.element}
         </h2>
         <div className="ads-list">
-          {/* Hiển thị danh sách các quảng cáo liên quan theo trang */}
           {currentAds.map((relatedAd) => (
             <Card
               className="card-history"
               // an scss userads
-              key={ad.adID}
+              key={relatedAd.adID}
               onClick={() => navigate(`/ad/${relatedAd.adID}`)}
             >
               <h1
                 style={{ textShadow: "2px 2px 1rem gray", fontSize: "1.2rem" }}
               >
-                Mệnh: {ad.element}
+                Mệnh: {relatedAd.element}
               </h1>
               <h3
                 style={{
@@ -176,12 +174,12 @@ const AdDetails = () => {
                   height: "45px",
                 }}
               >
-                {truncateDescription(ad.title, 30)}
+                {truncateDescription(relatedAd.title, 30)}
               </h3>
               <div style={{ position: "relative", marginBottom: "1rem" }}>
                 <img
-                  src={ad.imagesAd[0]?.imageURL || ""}
-                  alt={ad.title}
+                  src={relatedAd.imagesAd[0]?.imageURL || ""}
+                  alt={relatedAd.title}
                   style={{
                     width: "100%",
                     height: "300px",
@@ -202,7 +200,7 @@ const AdDetails = () => {
                       fontSize: "0.9rem",
                     }}
                   >
-                    +{ad.imagesAd.length - 1} hình ảnh
+                    +{relatedAd.imagesAd.length - 1} hình ảnh
                   </span>
                 )}
               </div>
@@ -213,10 +211,10 @@ const AdDetails = () => {
                   margin: "0.5rem 0",
                 }}
               >
-                Giá: {ad.price.toLocaleString()} VNĐ
+                Giá: {relatedAd.price.toLocaleString()} VNĐ
               </h2>
               <p style={{ margin: "0", fontSize: "1rem", color: "#555" }}>
-                Danh mục: {ad.category.categoryName}
+                Danh mục: {relatedAd.category.categoryName}
               </p>
             </Card>
           ))}
@@ -231,12 +229,11 @@ const AdDetails = () => {
         style={{
           justifyContent: "center",
           marginTop: "5rem",
-          marginBottom: "4rem",
+          marginBottom: "10rem",
         }}
       />
-      <div style={{ marginTop: "-10rem" }}>
-        <CustomeFooter />
-      </div>
+
+      <CustomeFooter />
     </Layout>
   );
 };
