@@ -29,7 +29,7 @@ const KoiTypeInputForm = ({createKoiType, isCreated, setIsCreated}) => {
                 form.resetFields();
             }}
         >
-            {!isCreated &&
+            {!isCreated  &&
                 <Form.Item noStyle>
                     <Button
                         type="dashed"
