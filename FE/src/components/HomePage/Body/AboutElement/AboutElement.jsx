@@ -10,6 +10,7 @@ const AboutElement = () => {
                     <div className='inner-image'></div>
                 </Col>
                 <Col sm={24} xl={12} className='element-info'>
+                <div className="element-info-container">
                     <div>
                         <h2>MỆNH NGŨ HÀNH LÀ GÌ?</h2>
                     </div>
@@ -40,6 +41,7 @@ const AboutElement = () => {
                             Trong ngũ hành có hai quy luật lớn được ứng dụng nhiều là quy luật tương sinh và quy luật tương khắc. Hai yếu tố này không tách rời mà luôn có sự gắn kết với nhau, trong tương sinh luôn có mầm mống của tương khắc, ngược lại trong tương khắc luôn tồn tại tương sinh. Đây cũng chính là nguyên lý cơ bản nhất để duy trì sự sống của vạn vật.
                         </p>
                     </div>
+                </div>
                 </Col>
             </Row>
             <div id='cloud-background'></div>

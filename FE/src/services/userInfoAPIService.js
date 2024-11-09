@@ -6,7 +6,7 @@ const getInfo = async () => {
         const response = await axios.get('users/my-info');
         return response;
     } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data.message);
     }
 } 
 
@@ -17,7 +17,7 @@ const updateDob = async (newDob) => {
          })
          return response;
     } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data.message);
     }
 }
 
@@ -28,8 +28,16 @@ const updatePassword = async (newPassword) => {
          })
          return response;
     } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data.message);
+    }
+}
+const updateUserInfo = async (userInfo) => {
+    try {
+        const response = await axios.put('users/update-info', userInfo);
+        return response;
+    } catch (err) {
+        toast.error(err.response.data.message);
     }
 }
 
-export {getInfo, updateDob, updatePassword};
+export { getInfo, updateDob, updatePassword, updateUserInfo };

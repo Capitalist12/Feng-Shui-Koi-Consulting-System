@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   Input,
@@ -10,38 +10,41 @@ import {
   Col,
   Upload,
   Image,
+  notification,
 } from "antd";
 import { CATEGORY, OPTIONS } from "../../utils/constant";
 import { useNavigate } from "react-router-dom";
 import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
 
-const CreateAdForm = ({ onSubmit }) => {
+const CreateAdForm = ({ form, onSubmit, loading }) => {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      try {
-        const { role } = JSON.parse(accessToken);
-        setRole(role.toUpperCase());
-      } catch (error) {
-        console.error("Invalid token format", error);
-        localStorage.removeItem("accessToken");
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const accessToken = localStorage.getItem("accessToken");
+  //   if (accessToken) {
+  //     try {
+  //       const role = JSON.parse(accessToken);
+  //       setRole(role.toUpperCase());
+  //     } catch (error) {
+  //       console.error("Invalid token format", error);
+  //       localStorage.removeItem("accessToken");
+  //     }
+  //   }
+  // }, []);
 
   const handleFinish = async (values) => {
-    if (role !== "MEMBER") {
-      message.error("Bạn phải là thành viên để đăng quảng cáo.");
-      navigate("/errorMem");
-      return;
-    }
+    // if (role === "USER") {
+    //   message.error(
+    //     "Bạn phải là thành viên aaaaaaaaaaaaaaaaaaađể đăng quảng cáo."
+    //   );
+    //   navigate("/errorMem");
+    //   return;
+    // }
 
     try {
       if (fileList.length > 0) {
@@ -53,10 +56,8 @@ const CreateAdForm = ({ onSubmit }) => {
       }
 
       await onSubmit(values);
-      message.success("Quảng cáo đã được gửi thành công!");
     } catch (error) {
-      console.error("Lỗi khi tải ảnh hoặc gửi quảng cáo:", error);
-      message.error("Có lỗi xảy ra khi gửi quảng cáo. Vui lòng thử lại.");
+      message.error(error + " Vui lòng thử lại.");
     }
   };
 
@@ -75,6 +76,12 @@ const CreateAdForm = ({ onSubmit }) => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
+
+  const handleReset = () => {
+    form.resetFields();
+    setFileList([]); // Reset lại danh sách file khi hủy
+  };
+
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
   const uploadButton = (
     <button
@@ -97,7 +104,7 @@ const CreateAdForm = ({ onSubmit }) => {
 
   return (
     <div>
-      <Form onFinish={handleFinish}>
+      <Form form={form} onFinish={handleFinish}>
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
@@ -129,12 +136,22 @@ const CreateAdForm = ({ onSubmit }) => {
           label="Tiêu đề:"
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập tiêu đề!" },
+            {
+              // ko vượt quá 100 ký tự
+              validator: (_, value) => {
+                if (value && value.length > 100) {
+                  return Promise.reject(
+                    "Tiêu đề không được vượt quá 100 ký tự!"
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
         >
-          <Input
-            maxLength={100}
-            placeholder="Nhập tiêu đề (tối đa 100 ký tự)"
-          />
+          <Input placeholder="Nhập tiêu đề (tối đa 100 ký tự)" />
         </Form.Item>
 
         <Form.Item
@@ -142,14 +159,26 @@ const CreateAdForm = ({ onSubmit }) => {
           label="Mô tả:"
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập mô tả!" },
+            {
+              // ko vượt quá 100 ký tự
+              validator: (_, value) => {
+                if (value && value.length > 1000) {
+                  return Promise.reject(
+                    "Mô tả không được vượt quá 1000 ký tự!"
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
           style={{ width: "100%" }} // chieu rong max
         >
           <Input.TextArea
             style={{ minHeight: "8rem", width: "100%" }} // chieu rong max
             placeholder="Thông tin chi tiết, liên lạc, số điện thoại,..."
             autoSize={{ minRows: 4, maxRows: 10 }}
-            maxLength={500}
           />
         </Form.Item>
 
@@ -158,7 +187,15 @@ const CreateAdForm = ({ onSubmit }) => {
           label="Giá (đơn vị VNĐ):"
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập giá!" },
+            {
+              type: "number",
+              min: 10000,
+              max: 1000000000,
+              message: "Giá phải trong khoảng 10.000 VNĐ tới 1 tỉ VNĐ!",
+            },
+          ]}
         >
           <InputNumber step={10000} style={{ width: "10rem" }} />
         </Form.Item>
@@ -171,7 +208,6 @@ const CreateAdForm = ({ onSubmit }) => {
           rules={[{ required: true, message: "Vui lòng chọn ít nhất 1 hình!" }]}
         >
           <Upload
-            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
             listType="picture-card"
             fileList={fileList}
             onPreview={handlePreview}
@@ -187,7 +223,15 @@ const CreateAdForm = ({ onSubmit }) => {
             justifyContent: "center",
           }}
         >
-          <Button size="large" htmlType="submit">
+          <Button
+            style={{ marginRight: "3rem" }}
+            size="large"
+            danger
+            onClick={handleReset}
+          >
+            Reset
+          </Button>
+          <Button size="large" htmlType="submit" loading={loading}>
             Đăng
           </Button>
         </div>

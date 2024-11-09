@@ -1,0 +1,80 @@
+.ad-detail-page {
+  padding: 2rem;
+  background-color: #f9f9f9;
+
+  .ad-detail-container {
+    display: flex; // cùng 1 hàng chia nên làm đôi
+    text-align: center;
+    justify-content: center;
+    border-radius: 8px;
+    box-shadow: 0 0 2rem black;
+    padding: 1rem 0.5rem;
+
+    .ad-detail-image {
+      position: relative;
+      width: 45%;
+
+      .ad-image {
+        width: 100%;
+        height: 100%; // Đảm bảo chiều cao của hình ảnh bằng chiều cao của container
+        border-radius: 8px;
+        object-fit: cover; // Giữ tỷ lệ hình ảnh
+      }
+
+      .navigation-buttons {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        gap: 3rem;
+        bottom: -0.5rem;
+      }
+
+      .navigation-button {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: none;
+        font-size: 2rem;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+    }
+
+    .ad-detail-info {
+      padding: 2rem;
+      width: 55%;
+      margin-top: 2rem;
+      color: black;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+
+  // Bài đăng liên quan
+  .ads-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 2rem 2rem;
+    gap: 4rem 1.5rem;
+
+    .card-history {
+      width: calc(100% / 5 - 1.5rem);
+      border-radius: 0.5rem;
+      text-align: center;
+      box-shadow: 0px 0px 5rem rgba(0, 0, 0, 0.1);
+      transition: transform 0.4s ease;
+
+      &:hover {
+        transform: translateY(-1rem);
+      }
+
+      @media (max-width: 1200px) {
+        width: calc(100% / 4 - 1.5rem);
+      }
+
+      @media (max-width: 992px) {
+        width: calc(100% / 3 - 1.5rem);
+      }
+    }
+  }
+}

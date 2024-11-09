@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Layout, Row, Col, Typography, message, Spin } from "antd";
+import React, { useEffect, useState } from "react";
+import { Layout, Row, Col, Typography, message, Spin, Flex } from "antd";
 import Navbar from "../../components/Utils/Navbar";
 import { getAllKoiFish } from "../../services/koiAPIService";
 import { fetchTank } from "../../services/tankAPIService";
@@ -7,11 +7,12 @@ import KoiList from "../../components/Compatibility/KoiList";
 import TankList from "../../components/Compatibility/TankList";
 import CompatibilityForm from "../../components/Compatibility/CompatibilityForm";
 import SelectedItems from "../../components/Compatibility/SelectedItems";
-import Result from "../../components/Compatibility/Result";
-import "../../styles/CompatibilityPage.scss";
+import Result from "../../components/Compatibility/Result.jsx";
 import api from "../../config/axiosConfig";
-import { ArrowDownOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "../../styles/compatibility/CompatibilityPage.scss";
+import { Loading } from "../../components/Utils/Loading";
+import { FaCrown, FaQuestionCircle } from "react-icons/fa";
 
 const { Title } = Typography;
 
@@ -21,21 +22,35 @@ function CompatibilityPage() {
   const [koiData, setKoiData] = useState([]);
   const [tankData, setTankData] = useState([]);
   const [selectedFish, setSelectedFish] = useState([]);
-  const [selectedTank, setSelectedTank] = useState(null);
+  const [selectedTank, setSelectedTank] = useState(
+    {
+      tankId: "TA001",
+      shape: "Hình Chữ Nhật",
+      imageURL: "/images/tanks/rectangle.jpg",
+      elementTank: {
+        elementId: 4,
+        elementName: "Thổ",
+        description: "Nguyên tố của sự ổn định và nuôi dưỡng",
+        quantity: "5-10 con",
+        direction: "Tây Nam và Đông Bắc",
+        value: 3,
+        color: "Vàng,Nâu",
+        generation: "Hỏa",
+        inhibition: "Mộc"
+      }
+    }
+  );
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedElement, setSelectedElement] = useState("");
-  const [fishCount, setFishCount] = useState(0);
-  const [tankCount, setTankCount] = useState(0);
   const [resultData, setResultData] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const fetchData = async () => {
-    setLoading(true);
     await Promise.all([fetchFishData(), fetchTankData()]);
-    setLoading(false);
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchData();
   }, []);
 
@@ -43,7 +58,6 @@ function CompatibilityPage() {
     try {
       const response = await getAllKoiFish();
       const data = response?.data?.result || [];
-      setFishCount(response.data.result.length);
       setKoiData(Array.isArray(data) ? data : []);
     } catch (error) {
       message.error("Error fetching fish data: " + error.message);
@@ -52,19 +66,10 @@ function CompatibilityPage() {
 
   const fetchTankData = async () => {
     try {
-      const response = await fetchTank(); // Gọi API lấy dữ liệu hồ
-      console.log("Tank API Response:", response); // Kiểm tra phản hồi từ API
+      const response = await fetchTank();
 
-      // Kiểm tra xem có thuộc tính result hay không
-      if (Array.isArray(response.data.result)) {
-        const data = response.data.result; // Lấy danh sách các hồ
-        setTankCount(data.length); // Đếm số lượng hồ
-        setTankData(data); // Lưu dữ liệu vào state
-      } else {
-        throw new Error(
-          "Result is not an array: " + JSON.stringify(response.data)
-        );
-      }
+      const data = response.data.result;
+      setTankData(data);
     } catch (error) {
       message.error("Error fetching tank data: " + error.message);
     }
@@ -81,11 +86,7 @@ function CompatibilityPage() {
   };
 
   const handleSelectTank = (tank) => {
-    if (selectedTank) {
-      message.warning("Vui lòng chỉ chọn 1 hồ!");
-    } else {
-      setSelectedTank(tank);
-    }
+    setSelectedTank(tank);
   };
 
   const handleRemoveTank = () => {
@@ -94,15 +95,17 @@ function CompatibilityPage() {
 
   const handleCalculateCompatibility = async () => {
     //  access token từ lS và kiểm tra role
-    const accessToken = localStorage.getItem("accessToken");
-    const isMember =
-      accessToken && JSON.parse(accessToken).role.toUpperCase() === "MEMBER";
+    // const accessToken = localStorage.getItem("accessToken");
+    // const isVIP =
+    //   (accessToken &&
+    //     JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
+    //   (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
 
-    if (!isMember) {
-      message.error("Bạn phải là thành viên để tính toán độ tương thích.");
-      navigate("/errorMem"); // Điều hướng tới trang lỗi
-      return;
-    }
+    // if (!isVIP) {
+    //   message.error("Bạn phải là thành viên để tính toán độ tương thích.");
+    //   navigate("/errorMem"); // Điều hướng tới trang lỗi
+    //   return;
+    // }
 
     if (selectedFish.length === 0 || !selectedTank || !selectedElement) {
       message.warning("Vui lòng chọn cá, hồ và yếu tố trước khi tính toán!");
@@ -162,184 +165,80 @@ function CompatibilityPage() {
     }
   };
 
-  // const handleCalculateCompatibility = async () => {
-  //   const accessToken = localStorage.getItem("accessToken");
-  //   const isMember =
-  //     accessToken && JSON.parse(accessToken).role.toUpperCase() === "MEMBER";
-  //   if (isMember) {
-  //     message.error("Bạn phải là thành viên để tính toán độ tương thích.");
-  //     Navigate("/errorMem");
-  //     return;
-  //   }
-  //   // check
-  //   if (selectedFish.length === 0 || !selectedTank || !selectedElement) {
-  //     message.warning("Vui lòng chọn cá, hồ và yếu tố trước khi tính toán!");
-  //     return;
-  //   }
-  //   setLoading(true);
-
-  //   // lay mau
-  //   const selectedKoiColors = selectedFish.map((fish) =>
-  //     fish.color.split(",").map((color) => color.trim())
-  //   );
-  //   const selectedTankShape = selectedTank.shape;
-  //   const userElement = selectedElement;
-
-  //   const payload = {
-  //     userElement: userElement,
-  //     koiFishColors: selectedKoiColors,
-  //     tankShape: selectedTankShape,
-  //     chatGptAIDto: {
-  //       model: "null", // Đặt mặc định là null
-  //       messages: [
-  //         {
-  //           role: "user", // Đặt mặc định là "user"
-  //           content: "string", // Đặt mặc định là "string"
-  //         },
-  //       ],
-  //     },
-  //   };
-
-  //   try {
-  //     const response = await api.post("compatibility", payload);
-
-  //     // phản hồi có chứa dữ liệu kết quả không
-  //     if (response.data && response.data.result) {
-  //       const result = response.data.result;
-  //       const formattedAdvise = result.advise.split("\n").map((line, index) => (
-  //         <span key={index}>
-  //           {line}
-  //           <br />
-  //         </span>
-  //       ));
-
-  //       const formattedResult = {
-  //         ...result,
-  //         advise: formattedAdvise,
-  //       };
-
-  //       setResultData(formattedResult);
-  //       setIsModalVisible(true);
-  //       message.success("Tính điểm tương thích thành công!");
-  //     } else {
-  //       throw new Error("Không có dữ liệu tương thích từ phản hồi.");
-  //     }
-  //   } catch (error) {
-  //     message.error("Lỗi khi tính điểm tương thích: " + error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   return (
-    <Layout>
-      <Navbar />
-      <section id="sec1-comp">
-        <Title level={1} className="title">
-          Tính độ tương hợp
-          <h2>
-            Bạn đang phân vân loại cá và hồ nào, tính thử độ tương hợp ngay nhé
-            !
-          </h2>
-        </Title>
-        <div className="infor-data">
-          <h1
-            style={{
-              textAlign: "center",
-              marginBottom: "30px",
-            }}
-          >
-            Hệ thống hiện đang có :
-          </h1>
+    <>
+      {load && <Loading />}
+      <Layout className="layout-comp">
+        <Navbar />
+        <Row className="comp-info-container">
+          <Flex className="comp-info" vertical align="center">
+            <Flex style={{ width: '100%' }} justify="space-between" align="center">
+              <Title level={3}>Thông tin</Title>
+              <Flex align="center">
+                <p>Hướng dẫn</p>
+                <FaQuestionCircle style={{ margin: '0 10px' }} />
+              </Flex>
+            </Flex>
+            <p>
+              Chức năng tính toán độ tương hợp yêu cầu người dùng chọn 1-6 loài cá koi khác nhau, hình dạng hồ cá và mệnh ngũ hành tương ứng. Hệ thống sẽ tính toán và cho ra số điểm tương hợp dựa trên các yếu tố sau:
+              <ul>
+                <li>Độ tương sinh/ tương khắc dựa trên mệnh của loài cá koi so với mệnh được chọn</li>
+                <li>Độ tương sinh/ tương khắc dựa trên mệnh của loài cá koi so với hình dáng của hồ</li>
+                <li>Độ tương sinh/ tương khắc dựa trên hình dáng của hồ so với mệnh được chọn</li>
+              </ul>
+              Điểm số sẽ cho bạn biết loài koi nào và hồ cá phù hợp với mệnh, giúp đưa ra được nhiều sự lựa chọn cho người dùng, tuy nhiên điểm số chỉ mang tính chất tham khảo. Với tính năng này, chúng tôi mong muốn mang tại một trải nghiệm mới mẻ cho người dùng, đưa ra những lời khuyên phù hợp với mệnh của người dùng, để sử dụng tính năng này hãy nâng cấp gói
+            </p>
+            <Link to="/pricing"><FaCrown /> Nâng cấp</Link>
+          </Flex>
+        </Row>
+
+        <>
           <Row>
-            <Col span={12} className="data">
-              <div>
-                <p>{fishCount} con cá Koi </p>
-              </div>
-            </Col>
-            <Col span={12} className="data">
-              <div>
-                <p>{tankCount} hồ cá</p>
-              </div>
-            </Col>
-          </Row>
+            <Flex gap={30} wrap justify="space-evenly" style={{ width: '100%' }}>
+              <Flex vertical>
+                <KoiList
+                  koiData={koiData}
+                  handleSelectFish={handleSelectFish}
+                  isKoiSelected={(fish) => selectedFish.includes(fish)}
+                  searchTerm={searchTerm}
+                  handleSearchTermChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </Flex>
 
-          <button
-            className="scroll-button"
-            onClick={() => {
-              const sec2 = document.getElementById("sec2-comp");
-              if (sec2) {
-                sec2.scrollIntoView({ behavior: "smooth" }); // Cuộn xuống sec2
-              }
-            }}
-          >
-            <ArrowDownOutlined />
-          </button>
-        </div>
-      </section>
-      <>
-        <section id="sec2-comp">
-          <Row gutter={[32, 8]}>
-            <Col span={12}>
-              <div style={{ marginLeft: "2rem", marginTop: "5rem" }}>
-                <div className="custom-title">
-                  <Title level={2}>Danh Sách Cá</Title>
-                </div>
-                <div className="custom-table">
-                  <KoiList
-                    koiData={koiData}
-                    handleSelectFish={handleSelectFish}
-                    isKoiSelected={(fish) => selectedFish.includes(fish)}
-                    searchTerm={searchTerm}
-                    handleSearchTermChange={(e) =>
-                      setSearchTerm(e.target.value)
-                    }
-                  />
-                </div>
-              </div>
-            </Col>
-
-            <Col span={12}>
-              <div style={{ marginRight: "3rem", marginTop: "5rem" }}>
-                <div className="custom-title">
-                  <Title level={2}>Danh Sách Hồ</Title>
-                </div>
-                <div className="custom-table">
-                  <TankList
-                    tankData={tankData}
-                    handleSelectTank={handleSelectTank}
-                    isTankSelected={(tank) => selectedTank === tank}
-                  />
-                </div>
-              </div>
-            </Col>
+              <Flex vertical>
+                <TankList
+                  tankData={tankData}
+                  handleSelectTank={handleSelectTank}
+                  isTankSelected={(tank) => selectedTank === tank}
+                />
+              </Flex>
+            </Flex>
           </Row>
           <div className="selected-ele">
             <div className="selected-ele">
-              {/* ????? */}
               <SelectedItems
                 selectedFish={selectedFish}
                 selectedTank={selectedTank}
                 handleRemoveTank={handleRemoveTank}
                 handleSelectFish={handleSelectFish}
               />
-              <Spin spinning={load}>
-                <CompatibilityForm
-                  selectedElement={selectedElement}
-                  setSelectedElement={setSelectedElement}
-                  handleCalculateCompatibility={handleCalculateCompatibility}
-                />
-              </Spin>
+              <CompatibilityForm
+                selectedElement={selectedElement}
+                setSelectedElement={setSelectedElement}
+                handleCalculateCompatibility={handleCalculateCompatibility}
+              />
             </div>
           </div>
-        </section>
-      </>
-      <Result
-        isVisible={isModalVisible}
-        resultData={resultData}
-        onClose={() => setIsModalVisible(false)}
-      />
-    </Layout>
+        </>
+        {resultData && (
+          <Result
+            isVisible={isModalVisible}
+            resultData={resultData}
+            onClose={() => setIsModalVisible(false)}
+          />
+        )}
+      </Layout>
+    </>
   );
 }
 

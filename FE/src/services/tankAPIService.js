@@ -6,7 +6,7 @@ const fetchTank = async () => {
         const response = await api.get('tank');
         return response;
     } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data.message);
     }
 }
 
@@ -20,7 +20,7 @@ const updateTank = async (id, payload) => {
         const response = await api.put(`tank/${id}`, payload);  
         return response;
     } catch (err) {  
-        toast.error(err.message);
+        toast.error(err.response.data.message);
     }  
 
 }  
@@ -29,7 +29,7 @@ const deleteTank = async (id) => {
         const response = await api.delete(`tank/${id}`);  
         return response;  
     } catch (err) {  
-        toast.error(err.message); // Ném lỗi ra component
+        toast.error(err.response.data.message); 
     }  
 }  
 

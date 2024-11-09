@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input, Select, Space } from "antd";
+import { Button, Flex, Form, Input, message, Select, Space } from "antd";
 import MultiSelectElement from "./MultiSelectElement";
 import UploadImage from "./UploadImage";
 import uploadFile from "../../../utils/file";
 import { useForm } from "antd/es/form/Form.js";
 import { createKoiFish } from "../../../services/koiAPIService";
 import { toast } from "react-toastify";
+import KoiTypePopover from "../../CRUD_KoiType/KoiTypePopover.jsx";
 import { PlusOutlined, CloseOutlined, CheckOutlined } from "@ant-design/icons";
+import { FiTrash } from "react-icons/fi";
 import {
   getAllKoiType,
-  createNewKoiType,
 } from "../../../services/koiTypeService";
 import {
   SIZE_OPTIONS,
@@ -20,12 +21,11 @@ import TextArea from "antd/es/input/TextArea";
 
 const InputForm = (props) => {
   const { close, save, fetchAPI, setIsLoading } = props;
-  const [addType, setAddType] = useState(false);
   const [koiType, setKoiType] = useState([]);
   const [selectedElement, setSelectedElement] = useState([]);
-  const [typeInput, setTypeInput] = useState("");
-  
   const [form] = useForm();
+
+
 
   const getAllTypes = async () => {
     const response = await getAllKoiType();
@@ -62,14 +62,12 @@ const InputForm = (props) => {
             : [selectedElement],
         });
 
-        console.log(">>> check response", response);
-        toast.success("Successfully!");
+        toast.success("Tạo thành công!");
       } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data.message);
       } finally {
         setIsLoading(false);
         // clear old data
-        setTypeInput("");
         setSelectedElement([]);
         form.resetFields();
         await fetchAPI();
@@ -79,228 +77,174 @@ const InputForm = (props) => {
   };
 
   const cancelForm = () => {
-    setAddType(false);
     setSelectedElement([]);
-    setTypeInput("");
     form.resetFields();
     save();
   };
 
-  const cancelCreateKoiType = () => {
-    setAddType(false);
-    setTypeInput("");
-    setSelectedElement([]);
-  };
-
-  const createKoiType = async (newType) => {
-    if (!newType) {
-      toast.error("Không được để trống!");
-      return;
-    }
-    const response = await createNewKoiType({
-      typeName: newType,
-      description: "",
-    });
-    response && getAllTypes();
-    setAddType(false);
-  };
-
-  const handleInputNewType = (event) => {
-    setTypeInput(event.target.value);
-  };    
-
   return (
-    <Form
-      form={form}
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 14 }}
-      layout="horizontal"
-      style={{ maxWidth: 1000, margin: "0 auto" }}
-      onFinish={onFinish}
-    >
-      <Form.Item
-        label="Tên"
-        name="name"
-        rules={[
-          {
-            required: true,
-            message: "Tên không được để trống!",
-          },
-        ]}
+    <>
+      <Form
+        form={form}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 14 }}
+        layout="horizontal"
+        style={{ maxWidth: 1000, margin: "0 auto" }}
+        onFinish={onFinish}
       >
-        <Input />
-      </Form.Item>
 
-      <Form.Item
-        label="Màu sắc"
-        name="color"
-        rules={[
-          {
-            required: true,
-            message: "Vui lòng nhập màu sắc!",
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
+        <Form.Item
+          label="Tên"
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: "Tên không được để trống!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item
-        label="Kích thước"
-        name="size"
-        rules={[
-          {
-            required: true,
-            message: "Vui lòng chọn kích thước!",
-          },
-        ]}
-      >
-        <Select
-          showSearch
-          placeholder="Chọn kích thước"
-          options={SIZE_OPTIONS}
-        />
-      </Form.Item>
+        <Form.Item
+          label="Màu sắc"
+          name="color"
+          rules={[
+            {
+              required: true,
+              message: "Vui lòng nhập màu sắc!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item
-        label="Cân nặng"
-        name="weight"
-        rules={[
-          {
-            required: true,
-            message: "Vui lòng chọn cân nặng!",
-          },
-        ]}
-      >
-        <Select
-          showSearch
-          placeholder="Chọn cân nặng"
-          options={WEIGHT_OPTIONS}
-        />
-      </Form.Item>
-
-      <Form.Item
-        label="Giống"
-        name="type"
-        rules={[
-          {
-            required: true,
-            message: "Vui lòng chọn giống cá!",
-          },
-        ]}
-      >
-        {addType ? (
-          <Input
-            autoComplete="off"
-            autoFocus
-            value={typeInput}
-            placeholder="Nhập giống cá mới"
-            onChange={(event) => handleInputNewType(event)}
-            suffix={
-              <Space>
-                <CheckOutlined
-                  style={{ color: "#49ca3e" }}
-                  onClick={() => createKoiType(typeInput)}
-                />
-                <CloseOutlined
-                  style={{ color: "#d33726" }}
-                  onClick={() => cancelCreateKoiType()}
-                />
-              </Space>
-            }
+        <Form.Item
+          label="Kích thước"
+          name="size"
+          rules={[
+            {
+              required: true,
+              message: "Vui lòng chọn kích thước!",
+            },
+          ]}
+        >
+          <Select
+            showSearch
+            placeholder="Chọn kích thước"
+            options={SIZE_OPTIONS}
           />
-        ) : (
-          <Select showSearch placeholder="Chọn giống cá">
-            <Select.Option disabled value="them">
-              <Button
-                type="dashed"
-                onClick={(event) => {
-                  setAddType(!addType);
-                  console.log(event);
-                }}
-                style={{
-                  width: "100%",
-                }}
-                icon={<PlusOutlined />}
-              >
-                Thêm giống cá mới
-              </Button>
-            </Select.Option>
+        </Form.Item>
 
-            {koiType &&
-              koiType.length > 0 &&
-              koiType.map((item, index) => (
-                <Select.Option key={index + 1} value={item.typeName}>
-                  {item.typeName}
-                </Select.Option>
-              ))}
-          </Select>
-        )}
-      </Form.Item>
+        <Form.Item
+          label="Cân nặng"
+          name="weight"
+          rules={[
+            {
+              required: true,
+              message: "Vui lòng chọn cân nặng!",
+            },
+          ]}
+        >
+          <Select
+            showSearch
+            placeholder="Chọn cân nặng"
+            options={WEIGHT_OPTIONS}
+          />
+        </Form.Item>
 
-      <Form.Item
-        label="Mệnh"
-        name="element"
-        rules={[
-          {
-            required: true,
-            message: "Vui lòng chọn ít nhất một mệnh!",
-            validator: (_, value) =>
-              value && value.length > 0
-                ? Promise.resolve()
-                : Promise.reject(new Error("Vui lòng chọn ít nhất một mệnh!")),
-          },
-        ]}
-      >
-        <MultiSelectElement
-          data={selectedElement}
-          onChange={setSelectedElement}
-          customeStyle={{ width: "100%" }}
-          maxCount={KOI_ELEMENT_MAX_COUNT}
-        />
-      </Form.Item>
+        <Form.Item label="Giống">
+          <Flex>
+            <Form.Item
+              style={{ width: '100%' }}
+              name="type"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng chọn giống cá!",
+                },
+              ]}
+            >
+              <Select showSearch placeholder="Chọn giống cá">
+                {
+                  (koiType && koiType.length) > 0 &&
+                  koiType.map((item, index) => (
+                    <Select.Option key={index + 1} value={item.typeName}>
+                      {item.typeName}
+                    </Select.Option>
+                  ))
+                }
+              </Select>
+            </Form.Item>
+            <KoiTypePopover data={koiType} fetchData={getAllTypes} />
+          </Flex>
+        </Form.Item>
 
-      <Form.Item label="Thông tin" name="description">
-        <TextArea
-          showCount
-          maxLength={300}
-          placeholder="Thông tin thêm"
-          style={{
-            height: 120,
-            resize: "none",
-          }}
-        />
-      </Form.Item>
+        <Form.Item
+          label="Mệnh"
+          name="element"
+          rules={[
+            {
+              required: true,
+              message: "Vui lòng chọn ít nhất một mệnh!",
+              validator: (_, value) =>
+                value && value.length > 0
+                  ? Promise.resolve()
+                  : Promise.reject(new Error("Vui lòng chọn ít nhất một mệnh!")),
+            },
+          ]}
+        >
+          <MultiSelectElement
+            data={selectedElement}
+            onChange={setSelectedElement}
+            customeStyle={{ width: "100%" }}
+            maxCount={KOI_ELEMENT_MAX_COUNT}
+          />
+        </Form.Item>
 
-      <Form.Item
-        className="upload-image-section"
-        label="Hình ảnh"
-        name="images"
-        style={{ width: "100%" }}
-        rules={[
-          {
-            required: true,
-            message: "Vui lòng chọn ít nhất một ảnh!",
-            validator: (_, value) =>
-              value && value.length > 0
-                ? Promise.resolve()
-                : Promise.reject(new Error("Vui lòng chọn ít nhất một ảnh!")),
-          },
-        ]}
-      >
-        <UploadImage MAX_COUNT={5} uploadType={"picture-card"}/>
-      </Form.Item>
+        <Form.Item label="Thông tin" name="description">
+          <TextArea
+            showCount
+            maxLength={300}
+            placeholder="Thông tin thêm"
+            style={{
+              height: 120,
+              resize: "none",
+            }}
+          />
+        </Form.Item>
 
-      <Form.Item style={{ textAlign: "right" }}>
-        <Space>
-          <Button htmlType="button" onClick={cancelForm}>
-            Hủy bỏ
-          </Button>
-          <Button htmlType="submit" type="primary">
-            Tạo mới
-          </Button>
-        </Space>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          className="upload-image-section"
+          label="Hình ảnh"
+          name="images"
+          style={{ width: "100%" }}
+          rules={[
+            {
+              required: true,
+              message: "Vui lòng chọn ít nhất một ảnh!",
+              validator: (_, value) =>
+                value && value.length > 0
+                  ? Promise.resolve()
+                  : Promise.reject(new Error("Vui lòng chọn ít nhất một ảnh!")),
+            },
+          ]}
+        >
+          <UploadImage data={[]} MAX_COUNT={5} uploadType={"picture-card"} />
+        </Form.Item>
+
+        <Form.Item style={{ textAlign: "right" }}>
+          <Space>
+            <Button htmlType="button" onClick={cancelForm}>
+              Hủy bỏ
+            </Button>
+            <Button htmlType="submit" type="primary">
+              Tạo mới
+            </Button>
+          </Space>
+        </Form.Item>
+      </Form>
+    </>
   );
 };
 

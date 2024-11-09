@@ -1,0 +1,115 @@
+@import url("https://fonts.googleapis.com/css2?family=Arima:wght@100..700&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap");
+
+#sec1-my-ads {
+  background-image: url("../assets/images/—Pngtree—image\ of\ mount\ fuji\ by_3629200.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  margin: 1rem 5rem;
+  border-radius: 5rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
+    z-index: 1;
+    border-radius: 5rem;
+    pointer-events: none; /* ko cho phép lớp phủ chặn click */
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 2rem rgb(255, 255, 255);
+    font-family: "Hubot Sans", sans-serif;
+  }
+
+  h2 {
+    color: white;
+    font-family: "Hubot Sans", sans-serif;
+    font-weight: bold;
+    text-shadow: 2px 2px 2rem black;
+  }
+}
+
+#sec2-ad {
+  .my-ads-filters {
+    height: 7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .ba-cuc {
+      margin-left: 2rem;
+      display: flex;
+      gap: 2rem;
+      background-color: none !important;
+
+      .custom-check-button {
+        background-color: rgb(0, 0, 0);
+        border-color: rgb(0, 0, 0);
+        color: white;
+        font-size: 1rem;
+        padding: 1em 1em;
+        width: 10em;
+        height: 4rem;
+        transition: transform 0.5s ease;
+
+        &:hover {
+          transform: translateY(-0.3rem);
+          background-color: white !important;
+          border-color: rgb(0, 0, 0) !important;
+          color: rgb(0, 0, 0) !important;
+          cursor: pointer;
+        }
+      }
+
+      .icon {
+        font-size: 1rem;
+        color: #000;
+      }
+    }
+  }
+
+  .ads-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 2rem 2rem;
+    gap: 4rem 1.5rem;
+
+    .card-history {
+      width: calc(100% / 5 - 1.5rem);
+      border-radius: 0.5rem;
+      text-align: center;
+      box-shadow: 0px 0px 5rem rgba(0, 0, 0, 0.1);
+      transition: transform 0.4s ease;
+
+      &:hover {
+        transform: translateY(-1rem);
+      }
+
+      @media (max-width: 1200px) {
+        width: calc(100% / 4 - 1.5rem);
+      }
+
+      @media (max-width: 992px) {
+        width: calc(100% / 3 - 1.5rem);
+      }
+    }
+  }
+
+  .pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+}

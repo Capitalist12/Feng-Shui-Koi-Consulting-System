@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
-import InputForm from './InputForm';
-import { IoMdAdd } from 'react-icons/io';
-import '../../../styles/FormModalStyle.scss';
-
+import React, { useState } from "react";
+import { Button, Modal } from "antd";
+import InputForm from "./InputForm";
+import { IoMdAdd } from "react-icons/io";
+import "../../../styles/FormModalStyle.scss";
+import { useSelector } from "react-redux";
 
 //Modal for input new KOI fish
 const FormModal = (props) => {
@@ -21,18 +21,25 @@ const FormModal = (props) => {
     setIsModalOpen(false);
   };
 
+  const userName = useSelector((state) => state.user);
+
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button
+        style={{ fontSize: "1.2rem", padding: "1.2rem" }}
+        className="custom-button-black-white"
+        onClick={showModal}
+      >
         <IoMdAdd />
         Thêm cá Koi
       </Button>
+
       <Modal
-        className='modal-comp'
+        className="modal-comp"
         title="Thông tin cá Koi"
-        width='100%'
+        width="100%"
         style={{
-          maxWidth: 800
+          maxWidth: 800,
         }}
         open={isModalOpen}
         okText="Create"
@@ -40,7 +47,7 @@ const FormModal = (props) => {
         onCancel={handleCancel}
         centered
         maskClosable={false}
-        footer={null}  // Hide default footer to use custom buttons in InputForm
+        footer={null} // Hide default footer to use custom buttons in InputForm
       >
         <InputForm
           close={handleCancel}

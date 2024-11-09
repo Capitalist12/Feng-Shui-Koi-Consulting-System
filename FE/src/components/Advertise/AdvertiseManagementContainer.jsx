@@ -45,9 +45,6 @@ const AdvertiseManagementContainer = () => {
         fetchAPI();
     }, [])
 
-    useEffect(() => {
-        fetchAPI();
-    }, [])
 
     return (
         <div>
@@ -79,7 +76,7 @@ const AdvertiseManagementContainer = () => {
                 </Space>
             </div>
             <div>
-                <TableAdvertise data={advertise} fetchAPI={fetchAPI} />
+                <TableAdvertise data={advertise} handleChange={handleChange} filter={filter}/>
             </div>
             {/* {!isPaginate && <BackToTopBtn />} */}
         </div>

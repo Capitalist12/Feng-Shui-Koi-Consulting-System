@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import TankTable from "./TankTable";
 import TankForm from "./TankForm";
 import uploadFile from "../../utils/file";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const { Title } = Typography;
@@ -82,16 +82,26 @@ function TankManagement() {
     }
   };
 
-  const userName = useSelector((state) => state.user);
 
   return (
     <div>
-      <Title level={2}>
-        Chào {userName}, chào mừng tới với Tank Management{" "}
-      </Title>
-      <Button type="primary" onClick={handleAddNew}>
-        + Add
-      </Button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginRight: "2rem",
+        }}
+      >
+        <Button
+          style={{ fontSize: "1.2rem", padding: "1.2rem" }}
+          className="custom-button-black-white"
+          type="primary"
+          onClick={handleAddNew}
+        >
+          + Thêm
+        </Button>
+      </div>
       <TankTable
         datas={datas}
         handleEdit={handleEdit}

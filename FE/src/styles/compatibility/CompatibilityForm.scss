@@ -1,0 +1,47 @@
+.comp-element-container {
+
+  img {
+    cursor: pointer;
+  }
+
+  .active {
+    position: relative;
+    overflow: hidden;
+    transform: scale(1.2);
+
+    transition: all 0.4s ease;
+
+    img {
+      filter: saturate(1.2);
+    }
+
+    h3 {
+      color: white;
+    }
+  }
+
+  .default {
+    transition: all 0.4s ease;
+
+    img {
+      opacity: 0.8;
+      filter: grayscale(30%);
+      transition: all 0.3s ease;
+    }
+
+    h3 {
+      color: rgb(190, 190, 190);
+    }
+
+    &:hover {
+      img {
+        opacity: 0.9;
+        filter: grayscale(10%);
+      }
+
+      h3 {
+        color: rgb(199, 199, 199);
+      }
+    }
+  }
+}

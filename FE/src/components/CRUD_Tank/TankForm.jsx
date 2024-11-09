@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Col, Form, Input, Modal, Row, Select } from "antd";
+import { Col, Form, Input, Modal, Row, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import ImageUploader from "./ImageUploader";
 import { OPTIONS } from "../../utils/constant";
@@ -47,7 +47,19 @@ function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
     <Modal
       open={visible}
       onCancel={onClose}
-      title="Thông tin hồ"
+      width={"40rem"}
+      title={
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: "2rem",
+            fontWeight: "bold",
+            marginBottom: "2rem",
+          }}
+        >
+          Thông tin hồ cá
+        </div>
+      }
       onOk={() => form.submit()}
       confirmLoading={loading}
     >
@@ -118,11 +130,26 @@ function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={16}>
-          <Col span={12}>
-            <ImageUploader fileList={fileList} setFileList={setFileList} />
-          </Col>
-        </Row>
+        <Form.Item
+          label="Hình ảnh"
+          name="imagesAd"
+          rules={[
+            {
+              required: true,
+              message: "Hãy chọn hình ảnh!",
+              validator: (_, value) => {
+                if (!value || value.length === 0) {
+                  return Promise.reject(
+                    new Error("Hãy chọn ít nhất một hình ảnh!")
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
+          <ImageUploader fileList={fileList} setFileList={setFileList} />
+        </Form.Item>
       </Form>
     </Modal>
   );
