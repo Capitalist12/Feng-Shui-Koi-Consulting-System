@@ -38,4 +38,13 @@ const deleteBlog = async (id) => {
     }
 }
 
-export { getAllBlogs, createNewBlog, getBlogById, deleteBlog };
+const updateBlog = async (id, payload) => {
+    try {
+        const response = await axios.put(`/blog/${id}`, payload);
+        return response;
+    } catch (err) {
+       toast.error(err.response.data.message);
+    }
+}
+
+export { getAllBlogs, createNewBlog, getBlogById, deleteBlog, updateBlog };

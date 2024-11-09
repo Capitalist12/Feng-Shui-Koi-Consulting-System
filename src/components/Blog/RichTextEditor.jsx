@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
-function RichTextEditor({setValue, clearEditor}) {
+function RichTextEditor({value, setValue, clearEditor}) {
   const editorRef = useRef(null);
 
 
@@ -16,6 +16,7 @@ function RichTextEditor({setValue, clearEditor}) {
       <Editor
         apiKey="3yye04t73aozbs17skptxa1tshzkkotynxyill2cssgfruqk" // Replace with your API key or remove this line if not needed
         onInit={(evt, editor) => editorRef.current = editor}
+        value={value || <p>Soạn nội dung tại đây!</p>}
         init={{
             selector: 'textarea#open-source-plugins',
             plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion',

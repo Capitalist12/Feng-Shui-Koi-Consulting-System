@@ -3,7 +3,6 @@ import { Button, Modal } from "antd";
 import InputForm from "./InputForm";
 import { IoMdAdd } from "react-icons/io";
 import "../../../styles/FormModalStyle.scss";
-import Title from "antd/es/typography/Title";
 import { useSelector } from "react-redux";
 
 //Modal for input new KOI fish

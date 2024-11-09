@@ -1,4 +1,4 @@
-import { Carousel, Col, Popover, Row, Space } from "antd";
+import { Col, Popover, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import imageTest from "../../assets/images/compatibility.jpg"
@@ -6,7 +6,7 @@ import { deleteBlog, getAllBlogs } from "../../services/blogAPIService";
 import { FaCommentAlt } from "react-icons/fa";
 import { getUserRole } from "../../config/accessTokenConfig";
 import { IoIosCreate } from "react-icons/io";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDots } from "react-icons/bs";
 import { toast } from "react-toastify";
 
 const Blogs = () => {
@@ -30,7 +30,7 @@ const Blogs = () => {
 
     const handleDeleteBlog = async (id) => {
         const response = await deleteBlog(id);
-        if(response.status === 200){
+        if (response.status === 200) {
             getBlogs();
             toast.success("Xóa thành công!");
         };
@@ -56,14 +56,21 @@ const Blogs = () => {
                     <Col md={24} xl={16} className="blogs-col-row-col">
                         {randomBlogs.length > 0 &&
                             <div className="blog-item" key={randomBlogs[0].blogID}>
-                                <Popover
-                                    content={(
-                                        <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
-                                    )}
-                                    title="Tùy chỉnh"
-                                >
-                                    <span className="blog-action"><BsThreeDotsVertical /></span>
-                                </Popover>
+                                {role === "ADMIN" &&
+                                    <Popover
+                                        content={(
+                                            <>
+                                                <p onClick={() => handleDeleteBlog(randomBlogs[0].blogID)}>Xóa</p>
+                                                <p>
+                                                    <Link style={{ color: 'white' }} to={`/editor/${randomBlogs[0].blogID}`}>Chỉnh sửa</Link>
+                                                </p>
+                                            </>
+                                        )}
+                                        title="Tùy chỉnh"
+                                    >
+                                        <span className="blog-action"><BsThreeDots /></span>
+                                    </Popover>
+                                }
                                 <span className="blog-tag">Nổi bật</span>
                                 <img src={randomBlogs[0].imageURL} />
                                 <Link to={randomBlogs[0].blogID}>
@@ -80,14 +87,21 @@ const Blogs = () => {
                             randomBlogs.slice(1).map((blog) => (
                                 <Row className="blogs-col-row-col-row" key={blog.blogID}>
                                     <div className="blog-item">
-                                        <Popover
-                                            content={(
-                                                <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
-                                            )}
-                                            title="Tùy chỉnh"
-                                        >
-                                            <span className="blog-action"><BsThreeDotsVertical /></span>
-                                        </Popover>
+                                        {role === "ADMIN" &&
+                                            <Popover
+                                                content={(
+                                                    <>
+                                                        <p onClick={() => handleDeleteBlog(blog.blogID)}>Xóa</p>
+                                                        <p>
+                                                            <Link style={{ color: 'white' }} to={`/editor/${blog.blogID}`}>Chỉnh sửa</Link>
+                                                        </p>
+                                                    </>
+                                                )}
+                                                title="Tùy chỉnh"
+                                            >
+                                                <span className="blog-action"><BsThreeDots /></span>
+                                            </Popover>
+                                        }
                                         <img src={blog.imageURL || imageTest} alt={blog.title} />
                                         <div>
                                             <Link to={blog.blogID}>
@@ -118,14 +132,21 @@ const Blogs = () => {
                                 .filter((item) => !randomBlogs.some((randomBlog) => randomBlog.blogID === item.blogID))
                                 .map((filteredBlog) => (
                                     <div className="blog-item" key={filteredBlog.blogID}>
-                                        <Popover
-                                            content={(
-                                                <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
-                                            )}
-                                            title="Tùy chỉnh"
-                                        >
-                                            <span className="blog-action"><BsThreeDotsVertical /></span>
-                                        </Popover>
+                                        {role === "ADMIN" &&
+                                            <Popover
+                                                content={(
+                                                    <>
+                                                        <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
+                                                        <p>
+                                                            <Link style={{ color: 'white' }} to={`/editor/${filteredBlog.blogID}`}>Chỉnh sửa</Link>
+                                                        </p>
+                                                    </>
+                                                )}
+                                                title="Tùy chỉnh"
+                                            >
+                                                <span className="blog-action"><BsThreeDots /></span>
+                                            </Popover>
+                                        }
                                         <img src={filteredBlog.imageURL} />
                                         <div className="blog-info">
                                             <Link to={filteredBlog.blogID}>
