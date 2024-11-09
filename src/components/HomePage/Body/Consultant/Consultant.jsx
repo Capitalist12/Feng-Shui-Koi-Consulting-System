@@ -13,6 +13,7 @@ import WaterElementImage from "../../../../assets/images/elements-image/water.pn
 import EarthElementImage from "../../../../assets/images/elements-image/earth.png";
 import WoodElementImage from "../../../../assets/images/elements-image/wood.png";
 import ConsultantAdsSlider from "./Koi-Tank/ConsultantAdsSlider";
+import { handleScroll } from "../../../../utils/helper";
 
 const Consultant = (props) => {
   const [consultantKoiData, setConsultantKoiData] = useState([]);
@@ -38,11 +39,11 @@ const Consultant = (props) => {
 
   useEffect(() => {
     getConsultantKoi();
-    window.location.href = "#consultant-section";
+    handleScroll('consultant-section');
   }, [dob]);
 
   useEffect(() => {
-    switch (element) {
+    switch (element.elementName) {
       case "Hỏa":
         setDisplayElementTitle("Hỏa");
         setDisplayElementImage(FireElementImage);
@@ -71,7 +72,7 @@ const Consultant = (props) => {
       default:
         break;
     }
-    window.location.href = "#consultant-section";
+    handleScroll('consultant-section');
   }, [element]);
 
   return (

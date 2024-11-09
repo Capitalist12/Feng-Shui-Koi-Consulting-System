@@ -19,4 +19,22 @@ const createNewKoiType = async (payload) => {
     }
 }
 
-export {getAllKoiType, createNewKoiType};
+const deleteKoiType = async (id) => {
+    try {
+        const response = await axios.delete(`koiType/${id}`);
+        return response;
+    } catch (err) {
+        toast.error(err.response.data.message);
+    }
+}
+
+const updateKoiType = async (id, payload) => {
+    try {
+        const response = await axios.put(`koiType/${id}`, payload);
+        return response;
+    } catch (err) {
+        toast.error(err.response.data.message);
+    }
+}
+
+export {getAllKoiType, createNewKoiType, deleteKoiType, updateKoiType};

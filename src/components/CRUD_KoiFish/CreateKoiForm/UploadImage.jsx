@@ -28,7 +28,6 @@ const UploadImage = ({ data, setKoiImage, onChange, MAX_COUNT, uploadType }) => 
   };
 
   const handleChange = ({ fileList: newFileList }) => {
-    // console.log(">>> check list: ", newFileList)
     setImage(newFileList);
     setKoiImage && setKoiImage(newFileList);
     onChange?.(newFileList.filter((file) => file.size <= MAX_SIZE)); // Use `onChange` to update form state

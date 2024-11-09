@@ -4,11 +4,12 @@ import Title from "antd/es/typography/Title";
 import React, { useEffect, useState } from "react";
 import { PiChatCenteredDotsLight } from "react-icons/pi";
 import Comments from "./Comments";
-import { createNewComment, getBlogComments } from "../../services/CommentAPIService";
+import { createNewComment, deleteComment, getBlogComments, updateComment } from "../../services/commentAPIService.js";
 import { useForm } from "antd/es/form/Form";
 import { FaPaperPlane } from "react-icons/fa";
 import AdvertiseCardItem from "../HomePage/Body/Advertise-Blog/Advertise/AdvertiseCardItem.jsx";
 import { getVerifiedAdvertise } from "../../services/advertiseAPIService.js";
+import { useSelector } from "react-redux";
 
 const BlogComment = ({ id }) => {
     const [comments, setComments] = useState([]);
@@ -17,20 +18,39 @@ const BlogComment = ({ id }) => {
     const [topThreeAds, setTopThreeAds] = useState([]);
     const [form] = useForm();
     const [isDisable, setIsDisable] = useState(true);
+    const userName = useSelector((store) => store?.user);
 
     const handleSubmitComment = async (blogId, value) => {
         if (content) {
             const response = await createNewComment(blogId, { content: value });
             if (response.status === 200 && response.data.code === 1000) {
                 form.resetFields();
+                setContent("");
+                setIsDisable(true);
                 getAllComments(id);
             }
         }
     }
 
+    const handleDeleteComment = async (commentID) => {
+        const response = await deleteComment(id, commentID);
+        response.status === 200 && getAllComments(id);
+    }
+
+    const handleUpdateComment = async (commentID, newContent) => {
+        try {
+            const response = await updateComment(id, commentID, {
+                content: newContent
+            })
+            return response;
+        } finally {
+            getAllComments(id);
+        }
+    }
+
     const getRandomThreeAdvertise = (array, count = 3) => {
-            const shuffled = [...array].sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, count);
+        const shuffled = [...array].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
     }
 
     const getAdvertises = async () => {
@@ -80,14 +100,21 @@ const BlogComment = ({ id }) => {
                     </Form.Item>
                 </Form>
                 <div>
-                    {comments && <Comments data={comments} />}
+                    {comments &&
+                        <Comments
+                            data={comments}
+                            userName={userName}
+                            handleDeleteComment={handleDeleteComment}
+                            handleUpdateComment={handleUpdateComment}
+                        />
+                    }
                 </div>
             </Col>
             <Col xl={8} className="advertise-container">
                 {topThreeAds && topThreeAds.length > 0 &&
                     topThreeAds.map((item, index) => (
-                        <div key={index} style={{ width: '95%'}}>
-                            <AdvertiseCardItem data={item}/>
+                        <div key={index} style={{ width: '95%' }}>
+                            <AdvertiseCardItem data={item} />
                         </div>
                     ))
                 }

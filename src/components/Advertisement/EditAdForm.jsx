@@ -11,7 +11,7 @@ import {
   Col,
   Select,
   notification,
-  Popconfirm, // Thêm Popconfirm từ Ant Design
+  Popconfirm,
 } from "antd";
 import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
@@ -76,7 +76,7 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, onDelete, loading }) => {
 
   const handleDelete = () => {
     if (ad && ad.adID) {
-      onDelete(ad.adID); // Gọi hàm xóa và truyền adID
+      onDelete(ad.adID);
     }
   };
 

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, Drawer, Form, Input, message, Popconfirm, Select, Space } from "antd";
+import { Button, Flex, Form, Input, message, Select, Space } from "antd";
 import MultiSelectElement from "./MultiSelectElement";
 import UploadImage from "./UploadImage";
 import uploadFile from "../../../utils/file";
 import { useForm } from "antd/es/form/Form.js";
 import { createKoiFish } from "../../../services/koiAPIService";
 import { toast } from "react-toastify";
+import KoiTypePopover from "../../CRUD_KoiType/KoiTypePopover.jsx";
 import { PlusOutlined, CloseOutlined, CheckOutlined } from "@ant-design/icons";
 import { FiTrash } from "react-icons/fi";
 import {
   getAllKoiType,
-  createNewKoiType,
 } from "../../../services/koiTypeService";
 import {
   SIZE_OPTIONS,
@@ -21,21 +21,11 @@ import TextArea from "antd/es/input/TextArea";
 
 const InputForm = (props) => {
   const { close, save, fetchAPI, setIsLoading } = props;
-  const [addType, setAddType] = useState(false);
   const [koiType, setKoiType] = useState([]);
-  const [isConfirmDeleteKoiType, setIsConfirmDeleteKoiType] = useState(false);
   const [selectedElement, setSelectedElement] = useState([]);
-  const [typeInput, setTypeInput] = useState("");
-  const [open, setOpen] = useState(false);
   const [form] = useForm();
 
-  const onClose = () => {
-    setOpen(false);
-  };
 
-  const showDrawer = () => {
-    setOpen(true);
-  };
 
   const getAllTypes = async () => {
     const response = await getAllKoiType();
@@ -72,14 +62,12 @@ const InputForm = (props) => {
             : [selectedElement],
         });
 
-        console.log(">>> check response", response);
-        toast.success("Successfully!");
+        toast.success("Tạo thành công!");
       } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data.message);
       } finally {
         setIsLoading(false);
         // clear old data
-        setTypeInput("");
         setSelectedElement([]);
         form.resetFields();
         await fetchAPI();
@@ -89,70 +77,13 @@ const InputForm = (props) => {
   };
 
   const cancelForm = () => {
-    setAddType(false);
     setSelectedElement([]);
-    setTypeInput("");
     form.resetFields();
     save();
   };
 
-  const cancelCreateKoiType = () => {
-    setAddType(false);
-    setTypeInput("");
-    setSelectedElement([]);
-  };
-
-  const createKoiType = async (newType) => {
-    if (!newType) {
-      message.error("Không được để trống!");
-      return;
-    }
-    const response = await createNewKoiType({
-      typeName: newType,
-      description: "",
-    });
-
-    if (response.status === 200 && response.data.code === 1000) {
-      getAllTypes();
-      setAddType(false);
-    }
-  };
-
-  const handleInputNewType = (event) => {
-    setTypeInput(event.target.value);
-  };
-
   return (
     <>
-      <Drawer
-      className="input-koi-type-drawer"
-        title="Thêm giống cá mới"
-        placement="right"
-        footer="Footer"
-        closable={false}
-        onClose={onClose}
-        open={open}
-        getContainer={false}
-      >
-        <Form>
-          <p>Tên giống</p>
-          <Form.Item>
-            <Input />
-          </Form.Item>
-          <p>Mô tả</p>
-          <Form.Item>
-          <TextArea
-            showCount
-            maxLength={300}
-            placeholder="Thông tin thêm"
-            style={{
-              height: 400,
-              resize: "none",
-            }}
-          />
-          </Form.Item>
-        </Form>
-      </Drawer>
       <Form
         form={form}
         labelCol={{ span: 4 }}
@@ -222,67 +153,31 @@ const InputForm = (props) => {
           />
         </Form.Item>
 
-        <Form.Item
-          label="Giống"
-          name="type"
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng chọn giống cá!",
-            },
-          ]}
-        >
-          {addType ? (
-            <Input
-              autoComplete="off"
-              autoFocus
-              value={typeInput}
-              placeholder="Nhập giống cá mới"
-              onChange={(event) => handleInputNewType(event)}
-              suffix={
-                <Space>
-                  <CheckOutlined
-                    style={{ color: "#49ca3e" }}
-                    onClick={() => createKoiType(typeInput)}
-                  />
-                  <CloseOutlined
-                    style={{ color: "#d33726" }}
-                    onClick={() => cancelCreateKoiType()}
-                  />
-                </Space>
-              }
-            />
-          ) : (
-            <Select showSearch placeholder="Chọn giống cá">
-              <Select.Option disabled value="them">
-                <Button
-                  type="dashed"
-                  onClick={(event) => {
-                    setAddType(!addType);
-                    showDrawer();
-                  }}
-                  style={{
-                    width: "100%",
-                  }}
-                  icon={<PlusOutlined />}
-                >
-                  Thêm giống cá mới
-                </Button>
-              </Select.Option>
-
-              {koiType &&
-                koiType.length > 0 &&
-                koiType.map((item, index) => (
-                  <Select.Option disabled={isConfirmDeleteKoiType} className="koi-type-option" key={index + 1} value={item.typeName}>
-                    {item.typeName}
-
-                    {/* <span className="hide">
-                      <FiTrash />
-                    </span> */}
-                  </Select.Option>
-                ))}
-            </Select>
-          )}
+        <Form.Item label="Giống">
+          <Flex>
+            <Form.Item
+              style={{ width: '100%' }}
+              name="type"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng chọn giống cá!",
+                },
+              ]}
+            >
+              <Select showSearch placeholder="Chọn giống cá">
+                {
+                  (koiType && koiType.length) > 0 &&
+                  koiType.map((item, index) => (
+                    <Select.Option key={index + 1} value={item.typeName}>
+                      {item.typeName}
+                    </Select.Option>
+                  ))
+                }
+              </Select>
+            </Form.Item>
+            <KoiTypePopover data={koiType} fetchData={getAllTypes} />
+          </Flex>
         </Form.Item>
 
         <Form.Item

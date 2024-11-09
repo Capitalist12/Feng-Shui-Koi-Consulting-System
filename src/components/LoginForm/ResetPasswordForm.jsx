@@ -56,10 +56,12 @@ const ResetPasswordForm = ({
       resetPassData.newPassword = values.password;
       const response = await resetPassword(resetPassData);
       console.log(response);
-      if (response.status === 200) {
+      if (response.status === 200 && response.data === "Password has been successfully changed.") {
         toast.success("Đổi mật khẩu thành công!");
         navigate("/login");
         setIsForgetPassword(false);
+      } else {
+        toast.error(response.data);
       }
     } finally {
       setIsLoading(false);

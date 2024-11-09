@@ -5,7 +5,7 @@ import { MONTHS } from "../../utils/constant";
 import { countAllKoiFish } from "../../services/koiAPIService";
 import { countAllTank } from "../../services/tankAPIService";
 import PieChartUser from "./PieChartUser";
-import LineChartRevenue from "./BarChartRevenue";
+import BarChartRevenue from "./BarChartRevenue";
 
 const Statistics = () => {
   const [revenue, setRevenue] = useState(null);
@@ -18,6 +18,7 @@ const Statistics = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
     const fetchRevenue = async () => {
       try {
         const response = await api.get("revenue/monthly");
@@ -26,12 +27,15 @@ const Statistics = () => {
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const key = `${year}-${month}`;
         const monthlyRevenue = response.data.result[key];
-        setRevenue(monthlyRevenue);
+
+        // 2 chữ số thập phân
+        const formattedRevenue = Number(monthlyRevenue).toFixed(2);
+        setRevenue(formattedRevenue);
 
         const displayMonth = `${MONTHS[date.getMonth()]}, ${year}`;
         setDisplayMonth(displayMonth);
       } catch (err) {
-        setError("Không thể tải doanh thu.");
+        setError(err.message);
       }
     };
 
@@ -69,14 +73,18 @@ const Statistics = () => {
       </StyledWrapper>
       <StyledWrapper
         style={{
-          marginTop: "-1rem",
+          display: "grid",
+          gridTemplateRows: "auto 1fr", // 1 trên 1 dưới
+          justifyItems: "center",
+          alignItems: "center",
+          marginTop: "2rem",
           boxShadow: "0 0 0.5rem grey",
-          padding: "5rem",
+          padding: "2rem",
         }}
       >
-        <div style={{ flex: "0 1 30rem" }} className="card-das ">
+        <div className="card-das">
           <div className="title-das">
-            <span>
+            <span className="icon-title">
               <svg
                 width={20}
                 fill="currentColor"
@@ -91,9 +99,11 @@ const Statistics = () => {
           </div>
           <div className="data">
             {error ? (
-              <p>{error}</p>
+              <p className="error-text">{error}</p>
             ) : (
-              <p>{revenue !== null ? `${revenue} USD` : "Đang tải..."}</p>
+              <p className="text">
+                {revenue !== null ? `~ ${revenue} USD` : "Đang tải..."}
+              </p>
             )}
             <div className="range">
               <div className="fill"></div>
@@ -101,13 +111,13 @@ const Statistics = () => {
           </div>
         </div>
         <StyledWrapper>
-          <LineChartRevenue />
+          <BarChartRevenue />
         </StyledWrapper>
       </StyledWrapper>
 
       <StyledWrapper>
         <StyledWrapper style={{ fontSize: "3rem", fontWeight: "bold" }}>
-          Phần Người Dùng
+          Người Dùng
         </StyledWrapper>
         <StyledWrapper
           style={{
@@ -116,9 +126,9 @@ const Statistics = () => {
             padding: "5rem",
           }}
         >
-          <div style={{ flex: "0 1 30rem" }} className="card-das">
+          <div style={{ flex: "0 1 30rem" }} className="card-user">
             <div className="title-das">
-              <span>
+              <span className="icon-title">
                 <svg
                   width={20}
                   fill="currentColor"
@@ -133,19 +143,21 @@ const Statistics = () => {
             </div>
             <div className="data">
               {error ? (
-                <p>{error}</p>
+                <p className="error-text">{error}</p>
               ) : (
-                <p>{userCount !== null ? userCount : "Đang tải..."}</p>
+                <p className="text">
+                  {userCount !== null ? userCount : "Đang tải..."}
+                </p>
               )}
-              <div className="range">
+              <div className="range2">
                 <div className="fill"></div>
               </div>
             </div>
           </div>
 
-          <div style={{ flex: "0 1 30rem" }} className="card-das">
+          <div style={{ flex: "0 1 30rem" }} className="card-user">
             <div className="title-das">
-              <span>
+              <span className="icon-title">
                 <svg
                   width={20}
                   fill="currentColor"
@@ -160,23 +172,26 @@ const Statistics = () => {
             </div>
             <div className="data">
               {error ? (
-                <p>{error}</p>
+                <p className="error-text">{error}</p>
               ) : (
-                <p>{memberCount !== null ? memberCount : "Đang tải..."}</p>
+                <p className="text">
+                  {memberCount !== null ? memberCount : "Đang tải..."}
+                </p>
               )}
-              <div className="range">
+              <div className="range2">
                 <div className="fill"></div>
               </div>
             </div>
           </div>
-          <StyledWrapper>
+
+          <StyledWrapper className="pie-chart-wrapper">
             <PieChartUser />
           </StyledWrapper>
         </StyledWrapper>
       </StyledWrapper>
 
       <StyledWrapper style={{ fontSize: "3rem", fontWeight: "bold" }}>
-        Phần Dữ Liệu
+        Dữ Liệu
       </StyledWrapper>
 
       <StyledWrapper
@@ -186,9 +201,9 @@ const Statistics = () => {
           padding: "5rem",
         }}
       >
-        <div style={{ flex: "0 1 30rem" }} className="card-das">
+        <div style={{ flex: "0 1 30rem" }} className="card-user">
           <div className="title-das">
-            <span>
+            <span className="icon-title">
               <svg
                 width={20}
                 fill="currentColor"
@@ -203,19 +218,21 @@ const Statistics = () => {
           </div>
           <div className="data">
             {error ? (
-              <p>{error}</p>
+              <p className="error-text">{error}</p>
             ) : (
-              <p>{fishCount !== null ? fishCount : "Đang tải..."}</p>
+              <p className="text">
+                {fishCount !== null ? fishCount : "Đang tải..."}
+              </p>
             )}
-            <div className="range">
+            <div className="range2">
               <div className="fill"></div>
             </div>
           </div>
         </div>
 
-        <div style={{ flex: "0 1 30rem" }} className="card-das">
+        <div style={{ flex: "0 1 30rem" }} className="card-user">
           <div className="title-das">
-            <span>
+            <span className="icon-title">
               <svg
                 width={20}
                 fill="currentColor"
@@ -230,11 +247,13 @@ const Statistics = () => {
           </div>
           <div className="data">
             {error ? (
-              <p>{error}</p>
+              <p className="error-text">{error}</p>
             ) : (
-              <p>{tankCount !== null ? tankCount : "Đang tải..."}</p>
+              <p className="text">
+                {tankCount !== null ? tankCount : "Đang tải..."}
+              </p>
             )}
-            <div className="range">
+            <div className="range2">
               <div className="fill"></div>
             </div>
           </div>
@@ -243,48 +262,115 @@ const Statistics = () => {
     </div>
   );
 };
-
 const StyledWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
-  margin: 5rem 0;
+  margin: 2rem 0;
   gap: 1rem;
 
   .card-das {
-    width: 20rem;
+    width: 40rem;
     padding: 10px;
-    background-color: #82ca9d;
+    background-color: #eaeaea;
     border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* Đặt hướng các phần tử theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều dọc */
+    align-items: center; /* Căn giữa theo chiều ngang */
+    text-align: center; /* Căn giữa chữ */
     transition: transform 1s ease, background-color 0.5s ease;
 
     &:hover {
-      background-color: lightgrey;
+      background-color: #e5f7ff;
       transform: scale(1.1);
     }
   }
+  .card-user {
+    padding: 10px;
+    background-color: #eaeaea;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* Đặt hướng các phần tử theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều dọc */
+    align-items: center; /* Căn giữa theo chiều ngang */
+    text-align: center; /* Căn giữa chữ */
+    transition: transform 1s ease, background-color 0.5s ease;
+
+    &:hover {
+      background-color: #e5f7ff;
+      transform: scale(1.1);
+    }
+
+    .range2 {
+      border-radius: 5px;
+      height: 10px;
+      margin-top: 5px;
+      position: relative;
+      width: 25rem;
+      background-color: lightgrey; /* Màu nền của thanh tiến trình */
+    }
+  }
+  .title-das {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .icon-title {
+    position: relative;
+    background-color: #10b981;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    margin-right: 0.5rem;
+  }
+
+  .icon-title svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    height: 1rem;
+  }
 
   .title-text {
-    margin-left: 0.5rem;
-    font-size: 1rem;
+    font-size: 1.5rem; /* Tăng kích thước chữ */
     font-weight: bold;
+    color: #374151; /* Màu chữ */
   }
 
   .data {
-    font-size: 2rem;
+    font-size: 3rem; /* Tăng kích thước chữ */
     font-weight: 600;
+    color: #1f2937; /* Màu chữ */
+    margin-top: -3rem;
+    margin-bottom: 1rem;
+  }
+
+  .error-text {
+    color: red;
+    font-weight: bold;
+  }
+
+  .text {
+    color: #10b981;
   }
 
   .range {
-    border-radius: 05px;
+    border-radius: 5px;
     height: 10px;
     margin-top: 5px;
     position: relative;
+    width: 30rem;
+    background-color: lightgrey; /* Màu nền của thanh tiến trình */
   }
 
   .fill {
-    background: #8884d8;
+    background: #10b981; /* Màu xanh cho phần đã điền */
     height: 100%;
+    width: 70%;
     border-radius: 5px;
   }
 `;

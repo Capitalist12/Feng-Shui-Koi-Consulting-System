@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Divider, Form, Input, Row, Switch } from "antd";
+import { Button, Col, Divider, Form, Input, Row, Space, Switch } from "antd";
 import { storage } from "../../config/firebase.js";
-import "../../styles/blog/BlogEditorPage.scss";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import Title from "antd/es/typography/Title.js";
 import UploadImage from "../../components/CRUD_KoiFish/CreateKoiForm/UploadImage.jsx";
 import uploadFile from "../../utils/file.js";
-import { createNewBlog } from "../../services/blogAPIService.js";
+import { createNewBlog, getBlogById, updateBlog } from "../../services/blogAPIService.js";
 import { toast } from "react-toastify";
 import { useForm } from "antd/es/form/Form.js";
 import { IoSunny } from "react-icons/io5";
 import { FaMoon } from "react-icons/fa";
 import Navbar from "../../components/Utils/Navbar.jsx";
 import RichTextEditor from "../../components/Blog/RichTextEditor.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
+import "../../styles/blog/BlogEditorPage.scss";
 
 const BlogEditorPage = () => {
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("Tiêu đề");
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [form] = useForm();
+    const location = useLocation();
+    const navigate = useNavigate();
     const [clearEditor, setClearEditor] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const [blogData, setBlogData] = useState({});
 
     const handleSubmit = async (values) => {
         try {
@@ -56,13 +61,74 @@ const BlogEditorPage = () => {
 
     useEffect(() => {
         if (clearEditor) {
-            setClearEditor(false); 
+            setClearEditor(false);
         }
-      }, [clearEditor]);
+    }, [clearEditor]);
+
+    useEffect(() => {
+        const blogID = location.pathname.split('/').pop(); // Lấy endpoint cuối cùng
+
+        const regex = /^BL\d{9}$/;
+        if (regex.test(blogID)) {
+            getBlogData(blogID);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (blogData) {
+            setIsEdit(true);
+            // Fetch nội dung từ Firebase
+            fetch(blogData?.description)
+                .then((response) => response.text())
+                .then((encodedContent) => {
+                    // Giải mã nội dung HTML đã mã hóa
+                    const decodedContent = decodeURIComponent(encodedContent);
+                    setValue(decodedContent);
+                })
+                .catch((error) => {
+                    console.error("Lỗi khi tải nội dung blog:", error);
+                });
+            setTitle(blogData.title);
+        }
+    }, [blogData])
+
+    const getBlogData = async (id) => {
+        const response = await getBlogById(id);
+        (response.status === 200 && response.data.code === 1000) ? setBlogData(response.data.result) : setBlogData({})
+    }
 
     const handleInputTitle = (event) => {
         setTitle(event.target.value);
     };
+
+    const handleUpdateBlog = async (values) => {
+        try {
+            if (value && value.length > 10) {
+                const urls = await Promise.all(
+                    values.image.map(async (element) => uploadFile(element.originFileObj))
+                );
+
+                const blogRef = ref(storage, `blogs/${Date.now()}.html`);
+                const encodedValue = encodeURIComponent(value);
+                await uploadString(blogRef, encodedValue, "raw", { contentType: "text/html" });
+                const blogUrl = await getDownloadURL(blogRef);
+
+                const payload = {
+                    title: values.title,
+                    imageURL: urls[0],
+                    description: blogUrl,
+                };
+
+                const response = await updateBlog(blogData.blogID, payload);
+                if (response.status === 200 && response.data.code === 1000) {
+                    toast.success("Cập nhật bài viết thành công!");
+                    navigate("/blog");
+                }
+            }
+        } catch (error) {
+            toast.error("Lỗi khi tạo bài viết.");
+        }
+    }
 
     return (
         <section id="blog-editor-section">
@@ -70,13 +136,14 @@ const BlogEditorPage = () => {
             <Row className="container">
                 <Col className="editor" span={12}>
                     <Title level={2}>Chỉnh sửa</Title>
-                    <Form onFinish={handleSubmit} form={form}>
+                    <Form onFinish={isEdit ? handleUpdateBlog : handleSubmit} form={form}>
                         <Form.Item
                             label="Tiêu đề"
                             name="title"
                             rules={[{ required: true, message: "Tiêu đề không được để trống!" }]}
                         >
                             <Input
+                                value={blogData && blogData.title}
                                 placeholder="Nhập tiêu đề"
                                 showCount
                                 minLength={10}
@@ -98,10 +165,17 @@ const BlogEditorPage = () => {
                                 },
                             ]}
                         >
-                            <UploadImage data={[]} MAX_COUNT={1} uploadType={"picture"} />
+                            <UploadImage data={blogData ? [{ url: blogData.imageURL }] : []} MAX_COUNT={1} uploadType={"picture"} />
                         </Form.Item>
-                        <RichTextEditor setValue={setValue} clearEditor={clearEditor}/>
+                        <RichTextEditor value={value} setValue={setValue} clearEditor={clearEditor} />
+                        {(isEdit && blogData) ?
+                        <Space>
+                            <Button className="submit-btn" type="text" variant="filled" onClick={() => navigate("/blog")}>Hủy</Button>
+                            <Button className="submit-btn" type="primary" htmlType="submit">Cập nhật</Button>
+                        </Space>
+                        :
                         <Button className="submit-btn" type="primary" htmlType="submit">Tạo mới</Button>
+                        }
                     </Form>
                 </Col>
                 <Col className="preview" span={12}>

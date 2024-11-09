@@ -11,10 +11,14 @@ import {
 import React, { useEffect, useState } from "react";
 import api from "../../config/axiosConfig";
 
-const BarChartUser = () => {
+const BarChartRevenue = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  // Tìm giá trị lớn nhất trong data
+  const maxValue = Math.max(...data.map((item) => item.value));
 
+  // Tính khoảng chia phù hợp cho trục tung (vd: làm tròn lên thành bội số của 10)
+  const tickInterval = Math.ceil(maxValue / 10) * 2; // hoặc tùy chọn giá trị bội số khác
   const ferchRevenue = async () => {
     try {
       const response = await api.get("revenue/monthly");
@@ -22,22 +26,20 @@ const BarChartUser = () => {
       if (response.data.code === 1000) {
         const { result } = response.data;
 
-        // Chuyển đổi dữ liệu từ object sang mảng và sắp xếp theo thứ tự tháng
+        //  object sang mảng
         const formattedData = Object.keys(result).map((key) => ({
-          name: key, // Tháng
-          value: result[key], // Doanh thu
+          name: key, // month
+          value: parseFloat(result[key]).toFixed(2), // rev dc làm tròn 2 số thập phan
         }));
-
-        // Sắp xếp dữ liệu theo tháng từ 1 đến 12
         const sortedData = formattedData.sort((a, b) => {
           const monthA = parseInt(a.name.split("-")[1], 10);
           const monthB = parseInt(b.name.split("-")[1], 10);
-          return monthA - monthB; // Sắp xếp theo tháng (1-12)
+          return monthA - monthB; // sort theo tháng (1-12)
         });
 
         setData(sortedData);
       } else {
-        setError("Không thể lấy dữ liệu người dùng.");
+        setError("Không thể lấy dữ liệu doanh thu.");
       }
     } catch (err) {
       setError("Đã xảy ra lỗi.");
@@ -56,9 +58,9 @@ const BarChartUser = () => {
           <BarChart
             data={data}
             margin={{
-              top: 30, // Khoảng cách trên cùng
-              bottom: 20, // Khoảng cách dưới cùng
-              left: 30, // Khoảng cách bên trái để tạo không gian cho nhãn
+              top: 30,
+              bottom: 20,
+              left: 30,
             }}
           >
             <CartesianGrid />
@@ -69,6 +71,8 @@ const BarChartUser = () => {
                 position: "top",
                 offset: 20,
               }}
+              domain={[0, Math.ceil(maxValue / tickInterval) * tickInterval]} // Tự động điều chỉnh domain
+              tickCount={Math.ceil(maxValue / tickInterval) + 1} // Số tick động dựa trên maxValue
             />
             <Tooltip
               labelFormatter={(label) => `Tháng: ${label}`}
@@ -83,4 +87,4 @@ const BarChartUser = () => {
   );
 };
 
-export default BarChartUser;
+export default BarChartRevenue;

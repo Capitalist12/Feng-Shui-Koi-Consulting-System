@@ -40,7 +40,7 @@ const AdvertiseBlogContainer = () => {
           style={{ backgroundColor: "black" }}
         >
           <Row>
-            <h2>CÁC BÀI ĐĂNG BÁN LIÊN QUAN</h2>
+            <h2>CÁC BÀI ĐĂNG BÁN ĐỀ XUẤT</h2>
           </Row>
           <Row
             style={{
