@@ -3,7 +3,7 @@ import { Comment } from "@ant-design/compatible"
 import React, { useEffect, useState } from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import { BsThreeDots } from 'react-icons/bs';
-import { getUserRole } from '../../config/accessTokenConfig';
+import { getUserRole } from '../../config/accessTokenConfig.js';
 import { FaPaperPlane } from 'react-icons/fa';
 
 const Comments = ({ data, userName, handleDeleteComment, handleUpdateComment }) => {
