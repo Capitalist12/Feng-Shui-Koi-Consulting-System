@@ -71,12 +71,12 @@ public class UserService {
     }
 
 
-//@PreAuthorize("hasRole('ADMIN')")
+//Method to get list of user
     public List<UserResponse> geUsers(){
         return userRepository.findAll().stream()
                 .map(userMapper :: toUserResponse).collect(Collectors.toList());
     }
-
+//Method to get user by id
     public UserResponse getUserById(String id) {
         User user =  userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
@@ -99,30 +99,35 @@ public class UserService {
         userRepository.deleteById(userID);
     }
 
+//Method to get infomation of user logined
     public UserResponse getMyInfo() {
+        //Get user's infomation in context
         var context = SecurityContextHolder.getContext();
         String email = context.getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
-
         var userResponse = userMapper.toUserResponse(user);
+        // Set the noPassword to true if the user's password is empty or null
         userResponse.setNoPassword(!StringUtils.hasText(user.getPassword()));
+        // Set the noDob to true if the user's date of birth is null
         userResponse.setNoDob(user.getDateOfBirth() == null);
 
-        return userResponse;  // Return the modified response
+        return userResponse;
     }
-
+//Method to user update profile
     public UpdateProfileResponse updateMyInfo(UpdateProfileRequest request) {
+        //Get user's infomation in context
         var context = SecurityContextHolder.getContext();
         String email = context.getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        //Check new password match current password
             if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
                 throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
 
         }
-
+//Caculate user's element when user update DOB
         if (!request.getDateOfBirth().equals(user.getDateOfBirth())) {
             int elementId = elementCalculationService
                     .calculateElementId(request.getDateOfBirth());
@@ -130,13 +135,14 @@ public class UserService {
                     .orElseThrow(()-> new AppException(ErrorCode.ELEMENT_NOT_EXIST));
             user.setElement(element);
         }
+        //use mapstruct to update
         userMapper.updateUserProfile(user, request);
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
 
         return userMapper.toUpdateProfileResponse(userRepository.save(user));  // Return the modified response
     }
-
+//Method to reset password when user forgot password
     public void createPassword( PasswordCreationRequest request) {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
