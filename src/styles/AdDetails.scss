@@ -51,60 +51,29 @@
   }
 
   // Bài đăng liên quan
-  .moreAds-list {
+  .ads-list {
     display: flex;
     flex-wrap: wrap;
     padding: 2rem 2rem;
-    gap: 1.5rem;
+    gap: 4rem 1.5rem;
 
-    .moreAdvertisement {
-      position: relative;
+    .card-history {
       width: calc(100% / 5 - 1.5rem);
-      height: 50vh;
-      background-color: white;
-      padding: 10px;
-      box-shadow: 0px 0px 1rem rgb(96, 96, 96);
-      border-radius: 8px;
+      border-radius: 0.5rem;
       text-align: center;
+      box-shadow: 0px 0px 5rem rgba(0, 0, 0, 0.1);
       transition: transform 0.4s ease;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
 
       &:hover {
         transform: translateY(-1rem);
       }
 
-      h1,
-      h3 {
-        margin: 0;
+      @media (max-width: 1200px) {
+        width: calc(100% / 4 - 1.5rem);
       }
 
-      h1 {
-        margin-bottom: 10px;
-      }
-
-      img {
-        border-radius: 1rem;
-        margin-top: 1rem;
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-      }
-
-      .price-container {
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
-        right: 10px;
-        margin-top: auto;
-        text-align: center;
-
-        h2 {
-          font-size: 1rem;
-          color: green;
-          margin: 0;
-        }
+      @media (max-width: 992px) {
+        width: calc(100% / 3 - 1.5rem);
       }
     }
   }

@@ -2,11 +2,20 @@ import React, { useEffect, useMemo, useState } from "react";
 import api from "../../config/axiosConfig";
 import "../../styles/Advertisement.scss";
 import Navbar from "../../components/Utils/Navbar";
-import { Layout, Button, Pagination, Select, Modal, Card, message } from "antd";
+import {
+  Layout,
+  Button,
+  Pagination,
+  Select,
+  Modal,
+  Card,
+  message,
+  notification,
+} from "antd";
 import CreateAdForm from "../../components/Advertisement/CreateAdForm";
 import SearchBar from "../../components/Advertisement/SearchBar";
 import Title from "antd/es/typography/Title";
-import { IoFishOutline, IoWater, IoWaterOutline } from "react-icons/io5";
+import { IoFishOutline, IoWaterOutline } from "react-icons/io5";
 import { GiAquarium, GiMetalBar } from "react-icons/gi";
 import { RiAlignItemLeftLine } from "react-icons/ri";
 import EmblaCarousel from "../../components/Advertisement/embla/EmblaCarousel";
@@ -24,6 +33,7 @@ import AdDetails from "../../components/Advertisement/AdDetails";
 import { PiPlantFill } from "react-icons/pi";
 import CustomeFooter from "../../components/HomePage/Footer/CustomeFooter";
 import { postAd } from "../../services/advertiseAPIService";
+import { toast } from "react-toastify";
 
 function AdvertisementPage() {
   const [form] = useForm();
@@ -133,14 +143,21 @@ function AdvertisementPage() {
   };
 
   const handleAdSubmit = async (values) => {
+    setLoading(true);
     try {
       await postAd(values);
+      notification.success({
+        message: "Đăng bài thành công !",
+        description: "Bạn đã đăng bài thành công, hãy chờ phê duyệt nhé!",
+      });
       setIsCreateAd(false);
       await fetchAds();
       form.resetFields();
     } catch (error) {
       message.error(error.message);
       navigate("/errorMem");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -314,26 +331,65 @@ function AdvertisementPage() {
         <div className="ads-list">
           {currentAds.map((ad) => (
             <Card
-              style={{ height: "50vh" }}
+              className="card-history"
+              // an scss userads
               key={ad.adID}
-              className="advertisement"
               onClick={() => handleAdClick(ad.adID)}
             >
-              <h1 style={{ textShadow: "2px 2px 1rem gray" }}>
+              <h1
+                style={{ textShadow: "2px 2px 1rem gray", fontSize: "1.2rem" }}
+              >
                 Mệnh: {ad.element}
               </h1>
-              <h3>{truncateTitle(ad.title, 30)}</h3>
-              <img src={ad.imagesAd[0]?.imageURL || ""} alt={ad.title} />
-              {ad.imagesAd.length > 1 && (
-                <span style={{ fontStyle: "italic" }}>
-                  +{ad.imagesAd.length - 1} hình ảnh
-                </span>
-              )}
-
-              <div className="price-cate">
-                <h2>Giá: {ad.price.toLocaleString()} VNĐ</h2>
-                <p>Danh mục: {ad.category.categoryName}</p>
+              <h3
+                style={{
+                  margin: "0.5rem 0",
+                  fontWeight: "bold",
+                  height: "45px",
+                }}
+              >
+                {truncateTitle(ad.title, 30)}
+              </h3>
+              <div style={{ position: "relative", marginBottom: "1rem" }}>
+                <img
+                  src={ad.imagesAd[0]?.imageURL || ""}
+                  alt={ad.title}
+                  style={{
+                    width: "100%",
+                    height: "300px",
+                    objectFit: "cover",
+                    borderRadius: "1rem",
+                  }}
+                />
+                {ad.imagesAd.length > 1 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: "10px",
+                      right: "10px",
+                      backgroundColor: "rgba(0, 0, 0, 0.5)",
+                      color: "white",
+                      padding: "0.2rem 0.5rem",
+                      borderRadius: "0.5rem",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    +{ad.imagesAd.length - 1} hình ảnh
+                  </span>
+                )}
               </div>
+              <h2
+                style={{
+                  color: "green",
+                  fontSize: "1.2rem",
+                  margin: "0.5rem 0",
+                }}
+              >
+                Giá: {ad.price.toLocaleString()} VNĐ
+              </h2>
+              <p style={{ margin: "0", fontSize: "1rem", color: "#555" }}>
+                Danh mục: {ad.category.categoryName}
+              </p>
             </Card>
           ))}
           <div className="pagination">

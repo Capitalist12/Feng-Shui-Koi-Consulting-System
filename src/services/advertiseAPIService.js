@@ -73,10 +73,31 @@ const postAd = async (values) => {
       categoryName: values.categoryName,
       imagesURL: values.imagesURL || [],
     });
-    return response; // Trả về phản hồi thành công
+    return response;
   } catch (err) {
     if (err.response && err.response.data) {
-      // Trả về lỗi từ backend để xử lý trong handleAdSubmit
+      throw new Error(
+        err.response.data.message || "Có lỗi xảy ra. Vui lòng thử lại."
+      );
+    } else {
+      throw new Error("Không thể kết nối đến máy chủ.");
+    }
+  }
+};
+
+const editAd = async (id) => {
+  try {
+    const response = await axios.put(`ad/${id}`,{
+      title: values.title,
+      description: values.description,
+      price: values.price,
+      element: values.element,
+      categoryName: values.categoryName,
+      imagesURL: values.imagesURL || [],
+    });
+    return response;
+  } catch (err) {
+    if (err.response && err.response.data) {
       throw new Error(
         err.response.data.message || "Có lỗi xảy ra. Vui lòng thử lại."
       );
@@ -95,4 +116,5 @@ export {
   getUserAds,
   getAdsByID,
   postAd,
+  editAd,
 };
