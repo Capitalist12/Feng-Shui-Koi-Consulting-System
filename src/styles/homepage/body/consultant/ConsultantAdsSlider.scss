@@ -12,7 +12,6 @@
 }
 
 #consultant-slider-wrapper {
-  height: 70vh;
 
   #ad-info-column {
     display: flex;
@@ -25,8 +24,7 @@
       color: white;
       border-radius: 20px;
       width: 70%;
-      height: 95%;
-      margin-bottom: 20px;
+      height: 90%;
       display: flex;
       flex-direction: column;
 
@@ -50,9 +48,11 @@
         }
 
         .ad-info-text {
-          margin-top: 2rem;
+          margin-top: 10px;
           font-size: 1.5rem;
           width: 100%;
+          box-sizing: border-box;
+          padding: 15px;
           text-align: center;
 
           label {

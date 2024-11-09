@@ -36,14 +36,12 @@ const HomePage = () => {
   const containerRef = useRef(null); // Ref cho lớp input-yearOfBirth-container
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     if (consultantElementData) {
       setIsRotate(true);
     }
   }, [consultantElementData]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     if (isRotate) {
       setIsShowConsultant(false);
       rotateTimeout = setTimeout(() => {
@@ -66,7 +64,6 @@ const HomePage = () => {
   }, [isRotate, isSpinning]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     const handleScroll = () => {
       const container = containerRef.current;
       if (container) {
@@ -182,7 +179,10 @@ const HomePage = () => {
       </section>
 
       {consultantElementData && isShowConsultant && (
+        <>
+        {console.log(consultantElementData)}
         <Consultant userElement={consultantElementData} />
+        </>
       )}
 
       <AboutElement />

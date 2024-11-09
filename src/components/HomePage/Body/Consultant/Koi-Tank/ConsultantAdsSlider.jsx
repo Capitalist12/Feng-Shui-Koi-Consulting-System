@@ -50,8 +50,8 @@ export default function ConsultantAdsSlider({ data }) {
 
               <div className="ad-info-text">
                 <label>Mô tả: </label>
-                {selectedAd?.description?.substring(0, 50) +
-                  (selectedAd?.description?.length > 50 ? "..." : "")}
+                {selectedAd?.description?.substring(0, 100) +
+                  (selectedAd?.description?.length > 100 ? "..." : "")}
               </div>
 
               <div className="ad-info-text">
@@ -73,8 +73,6 @@ export default function ConsultantAdsSlider({ data }) {
                   : "Chưa có ngày đăng"}
               </div>
             </Row>
-
-            {/*  Nút chi tiết */}
             <Button
               style={{ fontSize: "1.5rem", height: "5rem", margin: "0" }}
               className="custom-button-black-white "
@@ -82,6 +80,7 @@ export default function ConsultantAdsSlider({ data }) {
             >
               Xem chi tiết
             </Button>
+
           </div>
         </Col>
       </Row>
