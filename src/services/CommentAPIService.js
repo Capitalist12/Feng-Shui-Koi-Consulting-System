@@ -28,4 +28,13 @@ const deleteComment = async (blogId, commentID) => {
     }
 }
 
-export { getBlogComments, createNewComment, deleteComment };
+const updateComment = async (blogId, commentID, payload) => {
+    try {
+        const response = await axios.put(`blog/${blogId}/comments/${commentID}`, payload);
+        return response;
+    } catch (err) {
+        toast.error(err.response.data.message);
+    }
+}
+
+export { getBlogComments, createNewComment, deleteComment, updateComment };

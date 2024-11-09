@@ -4,7 +4,7 @@ import Title from "antd/es/typography/Title";
 import React, { useEffect, useState } from "react";
 import { PiChatCenteredDotsLight } from "react-icons/pi";
 import Comments from "./Comments";
-import { createNewComment, deleteComment, getBlogComments } from "../../services/commentAPIService.js";
+import { createNewComment, deleteComment, getBlogComments, updateComment } from "../../services/commentAPIService.js";
 import { useForm } from "antd/es/form/Form";
 import { FaPaperPlane } from "react-icons/fa";
 import AdvertiseCardItem from "../HomePage/Body/Advertise-Blog/Advertise/AdvertiseCardItem.jsx";
@@ -37,9 +37,20 @@ const BlogComment = ({ id }) => {
         response.status === 200 && getAllComments(id);
     }
 
+    const handleUpdateComment = async (commentID, newContent) => {
+        try {
+            const response = await updateComment(id, commentID, {
+                content: newContent
+            })
+            return response;
+        } finally {
+            getAllComments(id);
+        }
+    }
+
     const getRandomThreeAdvertise = (array, count = 3) => {
-            const shuffled = [...array].sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, count);
+        const shuffled = [...array].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
     }
 
     const getAdvertises = async () => {
@@ -89,14 +100,21 @@ const BlogComment = ({ id }) => {
                     </Form.Item>
                 </Form>
                 <div>
-                    {comments && <Comments data={comments} userName={userName} handleDeleteComment={handleDeleteComment}/>}
+                    {comments &&
+                        <Comments
+                            data={comments}
+                            userName={userName}
+                            handleDeleteComment={handleDeleteComment}
+                            handleUpdateComment={handleUpdateComment}
+                        />
+                    }
                 </div>
             </Col>
             <Col xl={8} className="advertise-container">
                 {topThreeAds && topThreeAds.length > 0 &&
                     topThreeAds.map((item, index) => (
-                        <div key={index} style={{ width: '95%'}}>
-                            <AdvertiseCardItem data={item}/>
+                        <div key={index} style={{ width: '95%' }}>
+                            <AdvertiseCardItem data={item} />
                         </div>
                     ))
                 }
