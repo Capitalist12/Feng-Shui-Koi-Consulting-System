@@ -62,8 +62,7 @@ const InputForm = (props) => {
             : [selectedElement],
         });
 
-        console.log(">>> check response", response);
-        toast.success("Successfully!");
+        toast.success("Tạo thành công!");
       } catch (err) {
         toast.error(err.response.data.message);
       } finally {

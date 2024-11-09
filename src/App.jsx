@@ -77,6 +77,11 @@ const App = () => {
           <BlogEditorPage />
         </Admin>
       ),
+      children: [
+        {
+          path: ":blogId",
+        },
+      ],
     },
     {
       path: "ad",

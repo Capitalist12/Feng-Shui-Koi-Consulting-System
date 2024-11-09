@@ -1,4 +1,4 @@
-import { Carousel, Col, Popover, Row, Space } from "antd";
+import { Col, Popover, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import imageTest from "../../assets/images/compatibility.jpg"
@@ -59,7 +59,12 @@ const Blogs = () => {
                                 {role === "ADMIN" &&
                                     <Popover
                                         content={(
-                                            <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
+                                            <>
+                                                <p onClick={() => handleDeleteBlog(randomBlogs[0].blogID)}>Xóa</p>
+                                                <p>
+                                                    <Link style={{ color: 'white' }} to={`/editor/${randomBlogs[0].blogID}`}>Chỉnh sửa</Link>
+                                                </p>
+                                            </>
                                         )}
                                         title="Tùy chỉnh"
                                     >
@@ -85,7 +90,12 @@ const Blogs = () => {
                                         {role === "ADMIN" &&
                                             <Popover
                                                 content={(
-                                                    <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
+                                                    <>
+                                                        <p onClick={() => handleDeleteBlog(blog.blogID)}>Xóa</p>
+                                                        <p>
+                                                            <Link style={{ color: 'white' }} to={`/editor/${blog.blogID}`}>Chỉnh sửa</Link>
+                                                        </p>
+                                                    </>
                                                 )}
                                                 title="Tùy chỉnh"
                                             >
@@ -125,7 +135,12 @@ const Blogs = () => {
                                         {role === "ADMIN" &&
                                             <Popover
                                                 content={(
-                                                    <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
+                                                    <>
+                                                        <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
+                                                        <p>
+                                                            <Link style={{ color: 'white' }} to={`/editor/${filteredBlog.blogID}`}>Chỉnh sửa</Link>
+                                                        </p>
+                                                    </>
                                                 )}
                                                 title="Tùy chỉnh"
                                             >
