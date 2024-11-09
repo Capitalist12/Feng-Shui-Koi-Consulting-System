@@ -1,62 +1,55 @@
-import React from 'react';
-import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import { Avatar, Badge, Button, List, Space, Tag, Tooltip } from 'antd';
-import { timeDifference } from '../../utils/helper';
-import { OPTIONS } from '../../utils/constant';
-import AdvertiseImage from './AdvertiseImage';
-import { updateAdvertiseStatus } from '../../services/advertiseAPIService';
+import React from "react";
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
+import { Avatar, Badge, Button, List, Space, Tag, Tooltip } from "antd";
+import { timeDifference } from "../../utils/helper";
+import { OPTIONS } from "../../utils/constant";
+import AdvertiseImage from "./AdvertiseImage";
+import { updateAdvertiseStatus } from "../../services/advertiseAPIService";
 
 const renderStatus = (status) => {
   switch (status) {
-    case 'Rejected':
-      return <Tag icon={<CloseCircleOutlined />} color="error">Từ chối</Tag>;
-      case 'Pending':
-      return <Tag icon={<ClockCircleOutlined />} color="warning">Đang chờ</Tag>;
-    case 'Verified':
-      return <Tag icon={<CheckCircleOutlined />} color="success">Chấp nhận</Tag>;
+    case "Rejected":
+      return (
+        <Tag icon={<CloseCircleOutlined />} color="error">
+          Từ chối
+        </Tag>
+      );
+    case "Pending":
+      return (
+        <Tag icon={<ClockCircleOutlined />} color="warning">
+          Đang chờ
+        </Tag>
+      );
+    case "Verified":
+      return (
+        <Tag icon={<CheckCircleOutlined />} color="success">
+          Chấp nhận
+        </Tag>
+      );
   }
-}
-
-const IconText = ({ icon, text }) => (
-  <Space>
-    {React.createElement(icon)}
-    {text}
-  </Space>
-);
-
-const items = [
-  {
-    title: 'Từ chối',
-    description: 'This is a Step 1.',
-  },
-  {
-    title: 'Đang đợi',
-    description: 'This is a Step 2.',
-  },
-  {
-    title: 'Chấp nhận',
-    description: 'This is a Step 3.',
-  },
-];
+};
 
 const TableAdvertise = (props) => {
-  const { data, fetchAPI } = props;
+  const { data, handleChange, filter } = props;
 
   const rejectAd = async (status, id) => {
-    try{
+    try {
       const response = await updateAdvertiseStatus({
         adID: id,
-        newStatus: status
-      })
+        newStatus: status,
+      });
     } finally {
-      fetchAPI()
+      handleChange(filter);
     }
-  }
+  };
 
   return (
-
     <List
-      id='advertise-list'
+      id="advertise-list"
       itemLayout="vertical"
       size="large"
       pagination={{
@@ -71,41 +64,50 @@ const TableAdvertise = (props) => {
             // <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
             // <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
 
-            item.status === 'Pending' && (
+            item.status === "Pending" && (
               <Space>
-                <Button color="danger" variant="outlined" onClick={() => rejectAd("Rejected", item.adID)}>Từ chối</Button>
-                <Button type="primary" onClick={() => rejectAd("Verified", item.adID)}>Chấp nhận</Button>
+                <Button
+                  color="danger"
+                  variant="outlined"
+                  onClick={() => rejectAd("Rejected", item.adID)}
+                >
+                  Từ chối
+                </Button>
+                <Button
+                  type="primary"
+                  onClick={() => rejectAd("Verified", item.adID)}
+                >
+                  Chấp nhận
+                </Button>
               </Space>
-            )
+            ),
           ]}
           extra={
-            <div className='advertise-info'>
-              <Badge status='default' text={item.category.categoryName} />
-              {
-                OPTIONS
-                  .filter(option => option.value === item.element)
-                  .map((filteredOption, index) => (
-                    <Tag
-                      key={index}
-                      color={filteredOption.color || 'default'}
+            <div className="advertise-info">
+              <Badge status="default" text={item.category.categoryName} />
+              {OPTIONS.filter((option) => option.value === item.element).map(
+                (filteredOption, index) => (
+                  <Tag
+                    key={index}
+                    color={filteredOption.color || "default"}
+                    style={{
+                      marginInlineEnd: 4,
+                      minWidth: "60px",
+                    }}
+                  >
+                    <div
                       style={{
-                        marginInlineEnd: 4,
-                        minWidth: "60px"
+                        display: "flex",
+                        justifyContent: "space-around",
+                        alignItems: "center",
                       }}
                     >
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-around',
-                          alignItems: 'center'
-                        }}
-                      >
-                        {filteredOption.emoji}
-                        {filteredOption.label}
-                      </div>
-                    </Tag>
-                  ))
-              }
+                      {filteredOption.emoji}
+                      {filteredOption.label}
+                    </div>
+                  </Tag>
+                )
+              )}
               <p>{item.price}</p>
               <AdvertiseImage imageList={item.imagesAd} />
             </div>
@@ -113,27 +115,32 @@ const TableAdvertise = (props) => {
         >
           <List.Item.Meta
             avatar={
-              <div className='advertise-user-info'>
-                <Avatar src={item.avatar || `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />
+              <div className="advertise-user-info">
+                <Avatar
+                  src={
+                    item.avatar ||
+                    `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                  }
+                />
                 <p style={{ marginTop: 0 }}>{item.user}</p>
               </div>
             }
-            title={(
-              <Space className='advertise-title'>
+            title={
+              <Space className="advertise-title">
                 <a href={item.href}>{item.title}</a>
                 {renderStatus(item.status)}
               </Space>
-            )}
-            description={(
+            }
+            description={
               <Tooltip placement="right" title={item.createdDate}>
                 {timeDifference(item.createdDate)}
               </Tooltip>
-            )}
+            }
           />
           {item.description}
         </List.Item>
       )}
     />
-  )
+  );
 };
 export default TableAdvertise;

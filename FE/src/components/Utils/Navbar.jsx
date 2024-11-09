@@ -16,72 +16,74 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const path = location.pathname.split("/");
     setCurrent(path[1] || "");
-  }, [location.pathname]); // Theo dõi sự thay đổi của đường dẫn
+  }, [location.pathname]);
 
   const items = [
-    { label: 'TRANG CHỦ', key: '' },
-    { label: 'MUA / BÁN', key: 'ad' },
-    { label: 'BLOG & TIN TỨC', key: 'blog' },
-    { label: 'ĐỘ TƯƠNG HỢP', key: 'compatibility' },
+    { label: "TRANG CHỦ", key: "" },
+    { label: "MUA / BÁN", key: "ad" },
+    { label: "BLOG & TIN TỨC", key: "blog" },
+    { label: "ĐỘ TƯƠNG HỢP", key: "compatibility" },
     ...(role && role?.toUpperCase() === "USER"
       ? [
-        {
-          label: (
-            <Link to="/pricing" className="pricing-btn">
-              <FaCrown /> &nbsp; Nâng cấp
-            </Link>
-          ),
-          key: "pricing",
-          style: { marginLeft: "auto" },
-          disabled: true,
-        }
-      ]
-      : role?.toUpperCase() === "ADMIN" ?
-      [
-        {
-          label: (
-            <Link to="/dashboard" className="admin-btn">
-              <GrUserAdmin />
-              &nbsp; Quản lý
-            </Link>
-          ),
-          key: "admin",
-          style: { marginLeft: "auto" },
-          disabled: true,
-        }
-      ]
-      :
-      []
-    ),
+          {
+            label: (
+              <Link to="/pricing" className="pricing-btn">
+                <FaCrown /> &nbsp; Nâng cấp
+              </Link>
+            ),
+            key: "pricing",
+            style: { marginLeft: "auto" },
+            disabled: true,
+          },
+        ]
+      : role?.toUpperCase() === "ADMIN"
+      ? [
+          {
+            label: (
+              <Link to="/dashboard/statistic" className="admin-btn">
+                <GrUserAdmin />
+                &nbsp; Quản lý
+              </Link>
+            ),
+            key: "admin",
+            style: { marginLeft: "auto" },
+            disabled: true,
+          },
+        ]
+      : []),
     ...(token
       ? [
-        {
-          label: <DropdownAvatar />,
-          key: 'avatar',
-          disabled: true,
-          style: {
-            marginRight: '2em',
-            marginLeft: role?.toUpperCase() === "USER" || role?.toUpperCase() === "ADMIN" ? '0.2em' : 'auto'
-          }
-        },
-      ]
+          {
+            label: <DropdownAvatar />,
+            key: "avatar",
+            disabled: true,
+            style: {
+              marginRight: "2em",
+              marginLeft:
+                role?.toUpperCase() === "USER" ||
+                role?.toUpperCase() === "ADMIN"
+                  ? "0.2em"
+                  : "auto",
+            },
+          },
+        ]
       : [
-        {
-          label: <Link to="/login">Đăng nhập</Link>,
-          key: 'login',
-          disabled: true,
-          className: 'login'
-        },
-        {
-          label: <Link to="/signup">Đăng ký</Link>,
-          key: 'register',
-          disabled: true,
-          className: 'register'
-        },
-      ]
-    )
+          {
+            label: <Link to="/login">Đăng nhập</Link>,
+            key: "login",
+            disabled: true,
+            className: "login",
+          },
+          {
+            label: <Link to="/signup">Đăng ký</Link>,
+            key: "register",
+            disabled: true,
+            className: "register",
+          },
+        ]),
   ];
 
   const onClick = (e) => {

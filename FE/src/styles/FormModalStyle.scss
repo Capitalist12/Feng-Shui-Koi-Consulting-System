@@ -1,17 +1,25 @@
-
 @media only screen and (min-width: 600px) {
     .upload-image-section {
         width: 100%;
     }
-    .modal-comp{
+
+    .modal-comp {
         width: 100%;
     }
+
 }
 
 .ant-upload-list-item.ant-upload-list-item-error {
     border-color: #4089ff !important;
 }
 
-.ant-upload-list-item-name{
+.ant-upload-list-item-name {
     color: #353535 !important;
+}
+
+div#popup-crud-koitype{
+    width: 400px;
+    min-height: 500px;
+    background-color: white;
+
 }

@@ -1,11 +1,13 @@
-import { Carousel, Col, Row, Space } from "antd";
+import { Col, Popover, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import imageTest from "../../assets/images/compatibility.jpg"
-import { getAllBlogs } from "../../services/blogAPIService";
+import { deleteBlog, getAllBlogs } from "../../services/blogAPIService";
 import { FaCommentAlt } from "react-icons/fa";
 import { getUserRole } from "../../config/accessTokenConfig";
 import { IoIosCreate } from "react-icons/io";
+import { BsThreeDots } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
@@ -25,6 +27,14 @@ const Blogs = () => {
     useEffect(() => {
         getBlogs();
     }, [])
+
+    const handleDeleteBlog = async (id) => {
+        const response = await deleteBlog(id);
+        if (response.status === 200) {
+            getBlogs();
+            toast.success("Xóa thành công!");
+        };
+    }
 
     useEffect(() => {
         if (blogs.length > 0) {
@@ -46,6 +56,22 @@ const Blogs = () => {
                     <Col md={24} xl={16} className="blogs-col-row-col">
                         {randomBlogs.length > 0 &&
                             <div className="blog-item" key={randomBlogs[0].blogID}>
+                                {role === "ADMIN" &&
+                                    <Popover
+                                        content={(
+                                            <>
+                                                <p onClick={() => handleDeleteBlog(randomBlogs[0].blogID)}>Xóa</p>
+                                                <p>
+                                                    <Link style={{ color: 'white' }} to={`/editor/${randomBlogs[0].blogID}`}>Chỉnh sửa</Link>
+                                                </p>
+                                            </>
+                                        )}
+                                        title="Tùy chỉnh"
+                                    >
+                                        <span className="blog-action"><BsThreeDots /></span>
+                                    </Popover>
+                                }
+                                <span className="blog-tag">Nổi bật</span>
                                 <img src={randomBlogs[0].imageURL} />
                                 <Link to={randomBlogs[0].blogID}>
                                     {randomBlogs[0].title}
@@ -61,6 +87,21 @@ const Blogs = () => {
                             randomBlogs.slice(1).map((blog) => (
                                 <Row className="blogs-col-row-col-row" key={blog.blogID}>
                                     <div className="blog-item">
+                                        {role === "ADMIN" &&
+                                            <Popover
+                                                content={(
+                                                    <>
+                                                        <p onClick={() => handleDeleteBlog(blog.blogID)}>Xóa</p>
+                                                        <p>
+                                                            <Link style={{ color: 'white' }} to={`/editor/${blog.blogID}`}>Chỉnh sửa</Link>
+                                                        </p>
+                                                    </>
+                                                )}
+                                                title="Tùy chỉnh"
+                                            >
+                                                <span className="blog-action"><BsThreeDots /></span>
+                                            </Popover>
+                                        }
                                         <img src={blog.imageURL || imageTest} alt={blog.title} />
                                         <div>
                                             <Link to={blog.blogID}>
@@ -84,53 +125,45 @@ const Blogs = () => {
                     </Col>
                 </Row>
                 <Row className="blogs-col-row">
-                    <Col span={24}>
-                        {/* <BlogsCarousel/> */}
-                        {/* <div className="blog-item">
-                        <img src={imageTest} />
-                        <Link to="">
-                            Link test
-                        </Link>
-                        <p>
-                            20-10-2004
-                        </p>
-                    </div>
-                    <div className="blog-item">
-                        <img src={imageTest} />
-                        <Link to="">
-                            Link test
-                        </Link>
-                        <p>
-                            20-10-2004
-                        </p>
-                    </div>
-                    <div className="blog-item">
-                        <img src={imageTest} />
-                        <Link to="">
-                            Link test
-                        </Link>
-                        <p>
-                            20-10-2004
-                        </p>
-                    </div>
-                    <div className="blog-item">
-                        <img src={imageTest} />
-                        <Link to="">
-                            Link test
-                        </Link>
-                        <p>
-                            20-10-2004
-                        </p>
-                    </div>
-                    <div className="blog-item">
-                        <img src={imageTest} />
-                        <Link to="">
-                            Link test
-                        </Link>
-                        <p>
-                            20-10-2004
-                        </p>
-                    </div> */}
+                    <Col span={24} className="blogs-col-row-container">
+                        {blogs && blogs.length > 5
+                            &&
+                            blogs
+                                .filter((item) => !randomBlogs.some((randomBlog) => randomBlog.blogID === item.blogID))
+                                .map((filteredBlog) => (
+                                    <div className="blog-item" key={filteredBlog.blogID}>
+                                        {role === "ADMIN" &&
+                                            <Popover
+                                                content={(
+                                                    <>
+                                                        <p onClick={() => handleDeleteBlog(filteredBlog.blogID)}>Xóa</p>
+                                                        <p>
+                                                            <Link style={{ color: 'white' }} to={`/editor/${filteredBlog.blogID}`}>Chỉnh sửa</Link>
+                                                        </p>
+                                                    </>
+                                                )}
+                                                title="Tùy chỉnh"
+                                            >
+                                                <span className="blog-action"><BsThreeDots /></span>
+                                            </Popover>
+                                        }
+                                        <img src={filteredBlog.imageURL} />
+                                        <div className="blog-info">
+                                            <Link to={filteredBlog.blogID}>
+                                                {filteredBlog.title}
+                                            </Link>
+
+                                            <p>
+                                                <FaCommentAlt />
+                                                &nbsp;
+                                                {filteredBlog.comments.length}
+                                                &emsp;
+                                                {filteredBlog.createdDate}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                        }
                     </Col>
                 </Row>
             </Col>

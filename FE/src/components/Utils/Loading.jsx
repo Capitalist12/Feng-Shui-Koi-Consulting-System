@@ -15,16 +15,16 @@ const Loading = () => {
 
     return (
         <div id="loading-container">
-            <div class="loader">
+            <div className="loader">
                 <div className="type-writer">
                     <span className="type-writer-text">{morphText}</span>
                 </div>
-                <div class="words">
-                    <span class="word">Thủy</span>
-                    <span class="word">Hỏa</span>
-                    <span class="word">Thổ</span>
-                    <span class="word">Mộc</span>
-                    <span class="word">Kim</span>
+                <div className="words">
+                    <span className="word">Thủy</span>
+                    <span className="word">Hỏa</span>
+                    <span className="word">Thổ</span>
+                    <span className="word">Mộc</span>
+                    <span className="word">Kim</span>
                 </div>
             </div>
         </div>

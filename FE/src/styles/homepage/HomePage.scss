@@ -88,7 +88,7 @@ body {
     min-height: 100vh;
     background-color: black;
     position: relative;
-    overflow: hidden;
+    // overflow: hidden;
 
     .element-image-container {
       display: inline-block;
@@ -175,6 +175,7 @@ body {
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        width: 100%;
       }
     }
 

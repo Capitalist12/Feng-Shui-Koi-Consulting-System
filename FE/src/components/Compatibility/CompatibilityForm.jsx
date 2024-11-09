@@ -1,83 +1,49 @@
-import { Button, Select, Row, Col, Card } from "antd";
-import { OPTIONS } from "../../utils/constant";
-import "../../styles/CompatibilityForm.scss";
+import React from "react";
+import { Flex } from "antd";
+import Title from "antd/es/typography/Title";
+import CustomeButton from "../Utils/CustomeButton.jsx"
 
-const { Option } = Select;
+import Water from "../../assets/images/elements-image/water.png";
+import Fire from "../../assets/images/elements-image/fire.png";
+import Metal from "../../assets/images/elements-image/metal.png";
+import Wood from "../../assets/images/elements-image/wood.png";
+import Earth from "../../assets/images/elements-image/earth.png";
+
+import "../../styles/compatibility/CompatibilityForm.scss";
+
 
 const CompatibilityForm = ({
   selectedElement,
   setSelectedElement,
   handleCalculateCompatibility,
 }) => {
+
   return (
-    <Card
-      className="card2"
-      style={{
-        marginBottom: "3rem",
-        marginTop: "2rem",
-        border: "2px solid  rgb(118, 18, 105)",
-        boxShadow: "0 0 30px darkgrey",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Row
-        gutter={16}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Col span={24}>
-          <Select
-            value={selectedElement}
-            onChange={setSelectedElement}
-            style={{
-              width: "7rem",
-              height: "2.5rem",
-              marginBottom: "1rem",
-            }}
-          >
-            {OPTIONS.map((option) => (
-              <Option
-                key={option.value}
-                value={option.value}
-                label={option.label}
-              >
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <span style={{ marginRight: "0.6em" }}>{option.emoji}</span>
-                  <span
-                    style={{
-                      backgroundColor: option.color,
-                      color: "white",
-                      padding: "2px 8px",
-                      borderRadius: "50%",
-                    }}
-                  >
-                    {option.desc}
-                  </span>
-                </div>
-              </Option>
-            ))}
-          </Select>
-        </Col>
-        <Button
-          className="custom-button"
-          type="primary"
-          size="large"
-          onClick={handleCalculateCompatibility}
-          style={{
-            marginTop: "0.5em",
-            justifyItems: "center",
-          }}
-        >
-          Tính toán độ tương hợp
-        </Button>
-      </Row>
-    </Card>
+    <Flex vertical gap={50} align="center" style={{padding: '100px 0'}}>
+      <Flex justify="center" align="center" gap={20} className="comp-element-container">
+        <Flex vertical align="center" className={selectedElement === "Kim" ? "active" : "default"}>
+          <img src={Metal} onClick={() => setSelectedElement("Kim")} />
+          <Title level={3} >KIM</Title>
+        </Flex>
+        <Flex vertical align="center" className={selectedElement === "Mộc" ? "active" : "default"}>
+          <img src={Wood} onClick={() => setSelectedElement("Mộc")} />
+          <Title level={3} >MỘC</Title>
+        </Flex>
+        <Flex vertical align="center" className={selectedElement === "Thủy" ? "active" : "default"}>
+          <img src={Water} onClick={() => setSelectedElement("Thủy")} />
+          <Title level={3} >THỦY</Title>
+        </Flex>
+        <Flex vertical align="center" className={selectedElement === "Hỏa" ? "active" : "default"}>
+          <img src={Fire} onClick={() => setSelectedElement("Hỏa")} />
+          <Title level={3} >HỎA</Title>
+        </Flex>
+        <Flex vertical align="center" className={selectedElement === "Thổ" ? "active" : "default"}>
+          <img src={Earth} onClick={() => setSelectedElement("Thổ")} />
+          <Title level={3} >THỔ</Title>
+        </Flex>
+      </Flex>
+      <CustomeButton handleCalculateCompatibility={handleCalculateCompatibility} />
+    </Flex>
   );
 };
 
