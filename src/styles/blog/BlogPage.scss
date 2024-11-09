@@ -512,6 +512,16 @@
                             .ant-avatar {
                                 background-color: var(--border-color);
                             }
+
+                            span.comment-more-action{
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                padding: 5px;
+                                border-radius: 50%;
+                                cursor: pointer;
+                                background-color: var(--border-color);
+                            }
                         }
                     }
 

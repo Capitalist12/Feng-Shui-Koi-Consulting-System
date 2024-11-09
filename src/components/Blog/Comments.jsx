@@ -1,30 +1,12 @@
-import { Avatar, List, Tooltip } from 'antd';
+import { Avatar, Flex, List, Popover, Tooltip } from 'antd';
 import { Comment } from "@ant-design/compatible"
 import React, { createElement, useState } from 'react';
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined, UserOutlined } from '@ant-design/icons';
+import { BsThreeDots } from 'react-icons/bs';
+import { getUserRole } from '../../config/accessTokenConfig';
 
-const datas = [
-    {
-        // actions: ,
-        author: 'Han Solo',
-        // avatar: ,
-        content: (
-            <p>
-                We supply a series of design principles, practical patterns and high quality design
-                resources (Sketch and Axure), to help people create their product prototypes beautifully and
-                efficiently.
-            </p>
-        ),
-        datetime: (
-            <Tooltip title="2016-11-22 11:22:33">
-                <span>8 hours ago</span>
-            </Tooltip>
-        ),
-    },
-];
+const Comments = ({ data, userName, handleDeleteComment }) => {
 
-const Comments = ({ data }) => {
-    
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
     const [action, setAction] = useState(null);
@@ -51,10 +33,10 @@ const Comments = ({ data }) => {
                 <span className="comment-action">{dislikes}</span>
             </span>
         </Tooltip>,
-        <span key="comment-basic-reply-to">Reply to</span>,
+        // <span key="comment-basic-reply-to">Reply to</span>,
     ];
 
-    
+
     return (
         <List
             className="comment-list"
@@ -69,7 +51,24 @@ const Comments = ({ data }) => {
                         author={item.username}
                         avatar={item.avatar || <Avatar icon={<UserOutlined />} />}
                         content={item.content}
-                        datetime={item.commentDate}
+                        datetime={(
+                            <Flex justify='space-between' gap={20}>
+                                {item.commentDate}
+                                {
+                                    (userName === item.username || getUserRole() === "ADMIN") &&
+                                    <Popover
+                                        content={(
+                                            <p onClick={() => handleDeleteComment(item.commentID)}>Xóa</p>
+                                        )}
+                                    >
+
+                                        <span className='comment-more-action'>
+                                            <BsThreeDots />
+                                        </span>
+                                    </Popover>
+                                }
+                            </Flex>
+                        )}
                     />
                 </li>
             )}
