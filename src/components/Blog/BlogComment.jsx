@@ -4,7 +4,7 @@ import Title from "antd/es/typography/Title";
 import React, { useEffect, useState } from "react";
 import { PiChatCenteredDotsLight } from "react-icons/pi";
 import Comments from "./Comments.jsx";
-import { createNewComment, deleteComment, getBlogComments, updateComment } from "../../services/commentAPIService.js";
+import { createNewComment, deleteComment, getBlogComments, updateComment } from "../../services/CommentAPIService.js";
 import { useForm } from "antd/es/form/Form";
 import { FaPaperPlane } from "react-icons/fa";
 import AdvertiseCardItem from "../HomePage/Body/Advertise-Blog/Advertise/AdvertiseCardItem.jsx";
