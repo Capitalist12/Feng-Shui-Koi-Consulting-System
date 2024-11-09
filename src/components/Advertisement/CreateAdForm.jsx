@@ -18,11 +18,34 @@ import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
 
 const CreateAdForm = ({ form, onSubmit, loading }) => {
+  const [role, setRole] = useState("");
+  const navigate = useNavigate();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
 
+  // useEffect(() => {
+  //   const accessToken = localStorage.getItem("accessToken");
+  //   if (accessToken) {
+  //     try {
+  //       const role = JSON.parse(accessToken);
+  //       setRole(role.toUpperCase());
+  //     } catch (error) {
+  //       console.error("Invalid token format", error);
+  //       localStorage.removeItem("accessToken");
+  //     }
+  //   }
+  // }, []);
+
   const handleFinish = async (values) => {
+    // if (role === "USER") {
+    //   message.error(
+    //     "Bạn phải là thành viên aaaaaaaaaaaaaaaaaaađể đăng quảng cáo."
+    //   );
+    //   navigate("/errorMem");
+    //   return;
+    // }
+
     try {
       if (fileList.length > 0) {
         const uploadImage = fileList.map((file) =>
@@ -31,18 +54,10 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
         const urls = await Promise.all(uploadImage);
         values.imagesURL = urls;
       }
-      await onSubmit(values);
-      notification.success({
-        message: "Đăng bài thành công",
-        description:
-          "Bài đăng của bạn đã được đăng thành công, hãy chờ phê duyệt nhé!",
-      });
 
-      // Reset form và fileList sau khi đăng thành công
-      form.resetFields();
-      setFileList([]); // Reset lại danh sách file đã upload
+      await onSubmit(values);
     } catch (error) {
-      message.error(error.message);
+      message.error(error + " Vui lòng thử lại.");
     }
   };
 
@@ -68,7 +83,6 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
   };
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-
   const uploadButton = (
     <button
       style={{
@@ -125,6 +139,7 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
           rules={[
             { required: true, message: "Vui lòng nhập tiêu đề!" },
             {
+              // ko vượt quá 100 ký tự
               validator: (_, value) => {
                 if (value && value.length > 100) {
                   return Promise.reject(
@@ -147,6 +162,7 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
           rules={[
             { required: true, message: "Vui lòng nhập mô tả!" },
             {
+              // ko vượt quá 100 ký tự
               validator: (_, value) => {
                 if (value && value.length > 1000) {
                   return Promise.reject(
@@ -157,10 +173,10 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
               },
             },
           ]}
-          style={{ width: "100%" }}
+          style={{ width: "100%" }} // chieu rong max
         >
           <Input.TextArea
-            style={{ minHeight: "8rem", width: "100%" }}
+            style={{ minHeight: "8rem", width: "100%" }} // chieu rong max
             placeholder="Thông tin chi tiết, liên lạc, số điện thoại,..."
             autoSize={{ minRows: 4, maxRows: 10 }}
           />
@@ -208,15 +224,15 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
           }}
         >
           <Button
-            style={{ marginRight: "2rem" }}
+            style={{ marginRight: "3rem" }}
             size="large"
-            htmlType="submit"
-            loading={loading}
+            danger
+            onClick={handleReset}
           >
-            Đăng
-          </Button>
-          <Button size="large" danger onClick={handleReset}>
             Reset
+          </Button>
+          <Button size="large" htmlType="submit" loading={loading}>
+            Đăng
           </Button>
         </div>
       </Form>

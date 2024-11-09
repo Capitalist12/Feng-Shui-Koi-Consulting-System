@@ -5,7 +5,7 @@ import api from "../../../config/axiosConfig";
 import SearchBar from "../../../components/Advertisement/SearchBar";
 import Navbar from "../../../components/Utils/Navbar";
 import EditAdForm from "../../../components/Advertisement/EditAdForm";
-import { getUserAds } from "../../../services/advertiseAPIService";
+import { editAd, getUserAds } from "../../../services/advertiseAPIService";
 import {
   MdOutlineAutoDelete,
   MdOutlinePending,
@@ -74,34 +74,31 @@ const UserAds = () => {
     setIsEditing(false);
   };
 
+  // const accessToken = localStorage.getItem("accessToken");
+  // const isVIP =
+  //   (accessToken &&
+  //     JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
+  //   (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
+
+  // if (!isVIP) {
+  //   message.error("Mua VIP");
+  //   navigate("/errorMem"); // Điều hướng tới trang lỗi
+  //   return;
+  // }
+
   const handleEditSubmit = async (values) => {
-    // const accessToken = localStorage.getItem("accessToken");
-    // const isVIP =
-    //   (accessToken &&
-    //     JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
-    //   (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
-
-    // if (!isVIP) {
-    //   message.error("Mua VIP");
-    //   navigate("/errorMem"); // Điều hướng tới trang lỗi
-    //   return;
-    // }
+    setLoading(true); // Bắt đầu quá trình tải
     try {
-      const response = await api.put(`/ad/${selectedAd.adID}`, {
-        title: values.title || selectedAd.title,
-        description: values.description || selectedAd.description,
-        price: values.price || selectedAd.price,
-        element: values.element || selectedAd.element,
-        categoryName: values.categoryName || selectedAd.category.categoryName,
-        imagesURL:
-          values.imagesURL || selectedAd.imagesAd.map((img) => img.imageURL), // truyền URL hình ảnh
+      await editAd(selectedAd.adID, values);
+      notification.success({
+        message: "Chỉnh sửa bài đăng thành công!",
+        description: "Bạn đã chỉnh sửa bài đăng thành công.",
       });
-
-      console.log("Response from API:", response);
       handleCloseEditModal();
       await fetchAds();
     } catch (error) {
-      console.error("Lỗi khi chỉnh sửa quảng cáo:", error);
+      message.error(error.message);
+      navigate("/errorMem");
     } finally {
       setLoading(false);
     }

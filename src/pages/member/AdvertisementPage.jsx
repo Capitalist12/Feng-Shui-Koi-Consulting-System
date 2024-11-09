@@ -2,11 +2,20 @@ import React, { useEffect, useMemo, useState } from "react";
 import api from "../../config/axiosConfig";
 import "../../styles/Advertisement.scss";
 import Navbar from "../../components/Utils/Navbar";
-import { Layout, Button, Pagination, Select, Modal, Card, message } from "antd";
+import {
+  Layout,
+  Button,
+  Pagination,
+  Select,
+  Modal,
+  Card,
+  message,
+  notification,
+} from "antd";
 import CreateAdForm from "../../components/Advertisement/CreateAdForm";
 import SearchBar from "../../components/Advertisement/SearchBar";
 import Title from "antd/es/typography/Title";
-import { IoFishOutline, IoWater, IoWaterOutline } from "react-icons/io5";
+import { IoFishOutline, IoWaterOutline } from "react-icons/io5";
 import { GiAquarium, GiMetalBar } from "react-icons/gi";
 import { RiAlignItemLeftLine } from "react-icons/ri";
 import EmblaCarousel from "../../components/Advertisement/embla/EmblaCarousel";
@@ -24,6 +33,7 @@ import AdDetails from "../../components/Advertisement/AdDetails";
 import { PiPlantFill } from "react-icons/pi";
 import CustomeFooter from "../../components/HomePage/Footer/CustomeFooter";
 import { postAd } from "../../services/advertiseAPIService";
+import { toast } from "react-toastify";
 
 function AdvertisementPage() {
   const [form] = useForm();
@@ -133,14 +143,21 @@ function AdvertisementPage() {
   };
 
   const handleAdSubmit = async (values) => {
+    setLoading(true);
     try {
       await postAd(values);
+      notification.success({
+        message: "Đăng bài thành công !",
+        description: "Bạn đã đăng bài thành công, hãy chờ phê duyệt nhé!",
+      });
       setIsCreateAd(false);
       await fetchAds();
       form.resetFields();
     } catch (error) {
       message.error(error.message);
       navigate("/errorMem");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -314,7 +331,7 @@ function AdvertisementPage() {
         <div className="ads-list">
           {currentAds.map((ad) => (
             <Card
-              style={{ height: "50vh" }}
+              style={{ height: "55vh" }}
               key={ad.adID}
               className="advertisement"
               onClick={() => handleAdClick(ad.adID)}
