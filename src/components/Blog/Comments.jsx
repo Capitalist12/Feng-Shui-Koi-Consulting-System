@@ -1,11 +1,10 @@
-import { Avatar, Button, Flex, Input, List, Popover, Space, Tooltip } from 'antd';
+import { Avatar, Button, Flex, Input, List, Popover, Space } from 'antd';
 import { Comment } from "@ant-design/compatible"
-import React, { createElement, useEffect, useState } from 'react';
-import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined, UserOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import { UserOutlined } from '@ant-design/icons';
 import { BsThreeDots } from 'react-icons/bs';
 import { getUserRole } from '../../config/accessTokenConfig';
 import { FaPaperPlane } from 'react-icons/fa';
-import { updateComment } from '../../services/commentAPIService';
 
 const Comments = ({ data, userName, handleDeleteComment, handleUpdateComment }) => {
     const [isEdit, setIsEdit] = useState(false);
@@ -24,8 +23,6 @@ const Comments = ({ data, userName, handleDeleteComment, handleUpdateComment }) 
         setIsEdit(false);
         setSelectedComment({});
     }
-
-
 
     const submitButton = (
         <Button
