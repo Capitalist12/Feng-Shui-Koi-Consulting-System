@@ -5,33 +5,11 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import { Avatar, Badge, Button, List, Space, Tag, Tooltip } from "antd";
-import { timeDifference } from "../../utils/helper";
+import { formatCurrencyVND, timeDifference } from "../../utils/helper";
 import { OPTIONS } from "../../utils/constant";
 import AdvertiseImage from "./AdvertiseImage";
-import { updateAdvertiseStatus } from "../../services/advertiseAPIService";
+import { deleteAds, updateAdvertiseStatus } from "../../services/advertiseAPIService";
 
-const renderStatus = (status) => {
-  switch (status) {
-    case "Rejected":
-      return (
-        <Tag icon={<CloseCircleOutlined />} color="error">
-          Từ chối
-        </Tag>
-      );
-    case "Pending":
-      return (
-        <Tag icon={<ClockCircleOutlined />} color="warning">
-          Đang chờ
-        </Tag>
-      );
-    case "Verified":
-      return (
-        <Tag icon={<CheckCircleOutlined />} color="success">
-          Chấp nhận
-        </Tag>
-      );
-  }
-};
 
 const TableAdvertise = (props) => {
   const { data, handleChange, filter } = props;
@@ -44,6 +22,37 @@ const TableAdvertise = (props) => {
       });
     } finally {
       handleChange(filter);
+    }
+  };
+
+  const handleDeleteAds = async(id) => {
+    const response = await deleteAds(id);
+    response.status === 200 && handleChange(filter);
+  }
+
+  const renderStatus = (status, id) => {
+    switch (status) {
+      case "Rejected":
+        return (
+          <Tag icon={<CloseCircleOutlined />} color="error">
+            Từ chối
+          </Tag>
+        );
+      case "Pending":
+        return (
+          <Tag icon={<ClockCircleOutlined />} color="warning">
+            Đang chờ
+          </Tag>
+        );
+      case "Verified":
+        return (
+          <Space>
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              Chấp nhận
+            </Tag>
+            <Button color="danger" variant="filled" onClick={() => handleDeleteAds(id)}>Xóa</Button>
+          </Space>
+        );
     }
   };
 
@@ -60,10 +69,6 @@ const TableAdvertise = (props) => {
         <List.Item
           key={item.title}
           actions={[
-            // <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-            // <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-            // <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
-
             item.status === "Pending" && (
               <Space>
                 <Button
@@ -108,7 +113,7 @@ const TableAdvertise = (props) => {
                   </Tag>
                 )
               )}
-              <p>{item.price}</p>
+              <p>{formatCurrencyVND(item.price)}</p>
               <AdvertiseImage imageList={item.imagesAd} />
             </div>
           }
@@ -128,7 +133,7 @@ const TableAdvertise = (props) => {
             title={
               <Space className="advertise-title">
                 <a href={item.href}>{item.title}</a>
-                {renderStatus(item.status)}
+                {renderStatus(item.status, item.adID)}
               </Space>
             }
             description={

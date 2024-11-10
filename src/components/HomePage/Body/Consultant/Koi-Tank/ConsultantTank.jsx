@@ -2,6 +2,7 @@ import { Col, Image, Row } from "antd";
 import React, { useEffect } from "react";
 import Title from "antd/es/typography/Title";
 import "../../../../../styles/homepage/body/consultant/ConsultantTank.scss";
+import { getTankConsultant } from "../../../../../utils/consultantElementHelper";
 
 const ConsultantTank = ({ data }) => {
   const { tankList } = data;
@@ -23,22 +24,13 @@ const ConsultantTank = ({ data }) => {
           }}
         >
           <div className="content">
-            <div className="text">
+            <div className="text" style={{textTransform: 'uppercase', fontWeight: '500'}}>
               <label htmlFor="">Hình dạng:</label>
               &nbsp;
               {tankList[0].shape}
             </div>
             <div className="text">
-              <label htmlFor="">Hello:</label>
-              &nbsp; Hello
-            </div>
-            <div className="text">
-              <label htmlFor="">Hello:</label>
-              &nbsp; Hello
-            </div>
-            <div className="text">
-              <label htmlFor="">Hello:</label>
-              &nbsp;
+              {getTankConsultant(tankList[0].shape).info}
             </div>
           </div>
         </Col>

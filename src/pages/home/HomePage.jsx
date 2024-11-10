@@ -179,10 +179,7 @@ const HomePage = () => {
       </section>
 
       {consultantElementData && isShowConsultant && (
-        <>
-        {console.log(consultantElementData)}
         <Consultant userElement={consultantElementData} />
-        </>
       )}
 
       <AboutElement />

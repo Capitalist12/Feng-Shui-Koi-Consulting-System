@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Col, Divider, Drawer, Input, Row, Select, Tag, Upload } from "antd";
-import { OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS } from "../../../utils/constant";
+import { KOI_COLOR_OPTIONS, OPTIONS, SIZE_OPTIONS, WEIGHT_OPTIONS } from "../../../utils/constant";
 import "../../../styles/KoiDrawer.scss";
 import { DeleteOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import ImageCarousel from "./ImageCarousel";
@@ -33,7 +33,7 @@ const KoiDrawer = (props) => {
   const [koiWeight, setKoiWeight] = useState(data.weight ? data.weight : "");
   const [koiElements, setKoiElements] = useState(data.elements.map((item) => { return item.elementName }));
 
-  const [koiColor, setKoiColor] = useState(data.color);
+  const [koiColor, setKoiColor] = useState(data.color.split(','));
   const [koiType, setKoiType] = useState(data.koiTypes.typeName);
   const [koiDescription, setKoiDescription] = useState(data.description);
   const [koiImage, setKoiImage] = useState(data.imagesFish?.map((item, index) => ({
@@ -63,7 +63,7 @@ const KoiDrawer = (props) => {
     const url = await Promise.all(
       koiImage?.map(async (image) => {
         if (image?.url) return image.url;
-        if (image?.originFileObj) return await uploadFile(image?.originFileObj);        
+        if (image?.originFileObj) return await uploadFile(image?.originFileObj);
       })
     );
 
@@ -71,7 +71,7 @@ const KoiDrawer = (props) => {
       name: koiName,
       size: koiSize,
       weight: koiWeight,
-      color: koiColor,
+      color: koiColor.join(', '),
       description: koiDescription,
       imagesURL: Array.isArray(url) ? url : [url],
       koiTypeName: koiType,
@@ -95,6 +95,12 @@ const KoiDrawer = (props) => {
     setKoiImage(data.imagesFish?.map((item, index) => ({
       url: item.imageURL
     })));
+    setKoiName(data.name);
+    setKoiType(data.koiTypes.typeName);
+    setKoiSize(data.size);
+    setKoiWeight(data.weight);
+    setKoiColor(data.color.split(','));
+    setKoiElements(data.elements.map((item) => { return item.elementName }));
     setIsEdit(!isEdit);
   };
 
@@ -119,7 +125,7 @@ const KoiDrawer = (props) => {
   };
 
   const handleInputKoiColor = (event) => {
-    setKoiColor(event.target.value);
+    setKoiColor(event);
   };
 
   return (
@@ -325,15 +331,17 @@ const KoiDrawer = (props) => {
               <DescriptionItem
                 title="Màu sắc"
                 content={
-                  <Input
-                    size="middle"
-                    value={koiColor}
+                  <Select
+                    mode="multiple"
                     style={{
                       minWidth: data.color
                         ? Math.min(drawerSize, data.color.length * charWidth)
                         : "100px",
-                      maxWidth: "150px",
+                      maxWidth: "250px",
                     }}
+                    defaultValue={koiColor}
+                    placeholder="Chọn màu sắc"
+                    options={KOI_COLOR_OPTIONS}
                     onChange={(event) => handleInputKoiColor(event)}
                   />
                 }

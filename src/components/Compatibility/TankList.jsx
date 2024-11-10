@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, Flex, Popover } from "antd";
-import "../../styles/compatibility/TankList.scss";
 import Title from "antd/es/typography/Title";
 import { FaQuestionCircle } from "react-icons/fa";
+import "../../styles/compatibility/TankList.scss";
 
 const TankList = ({ tankData, handleSelectTank, isTankSelected }) => {
   const [shapeStyle, setShapeStyle] = useState({
@@ -45,7 +45,7 @@ const TankList = ({ tankData, handleSelectTank, isTankSelected }) => {
         break;
       case "TA004":
         setSelectedTank(tank);
-        newShapeStyle.clipPath = 'polygon(50% 25%, 50% 25%, 50% 25%, 100% 100%, 100% 100%, 0 100%, 0 100%, 50% 25%)';
+        newShapeStyle.clipPath = 'polygon(50% 0, 50% 0, 100% 40%, 100% 40%, 80% 100%, 20% 100%, 0 40%, 0 40%)';
         break;
       case "TA005":
         setSelectedTank(tank);
@@ -74,8 +74,15 @@ const TankList = ({ tankData, handleSelectTank, isTankSelected }) => {
         <Title level={3}>Hướng đặt phù hợp: {selectedTank.elementTank.direction}</Title>
         <p>Số lượng cá nuôi đề xuất: {selectedTank.elementTank.quantity}</p>
       </Flex>
-      <Flex>
+      <Flex justify="space-around" align="center" className="shape-image-container">
+        <Flex style={{width: '50%'}} vertical align="center" gap={10}>
+          <h3>Hình ảnh</h3>
+          <img style={{width: '100%', maxHeight: '300px'}} src={selectedTank.imageURL}/>
+        </Flex>
+        <Flex vertical align="center" gap={10}>
+        <Title level={4}>Mặt cắt</Title>
         <div className="shape-transform" style={shapeStyle}></div>
+        </Flex>
       </Flex>
       <Flex wrap gap="middle" align="center" className="tank-selection">
         {tankData.map((item, index) => (

@@ -52,11 +52,9 @@ const UserProfilePage = () => {
       if (response.status === 200) {
         setUserInfo((prev) => ({ ...prev, ...otherData }));
         toast.success("Cập nhật thông tin thành công !");
-      } else {
-        message.error("Có lỗi xảy ra khi cập nhật thông tin.");
       }
     } catch (error) {
-      message.error("Có lỗi xảy ra khi cập nhật thông tin.");
+      console.log(error);
     }
   };
 

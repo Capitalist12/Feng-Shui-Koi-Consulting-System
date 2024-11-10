@@ -10,7 +10,6 @@ import {
   Col,
   Upload,
   Image,
-  notification,
 } from "antd";
 import { CATEGORY, OPTIONS } from "../../utils/constant";
 import { useNavigate } from "react-router-dom";
@@ -18,32 +17,9 @@ import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
 
 const CreateAdForm = ({ form, onSubmit, loading }) => {
-  const [role, setRole] = useState("");
-  const navigate = useNavigate();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
-
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem("accessToken");
-  //   if (accessToken) {
-  //     try {
-  //       const role = JSON.parse(accessToken);
-  //       setRole(role.toUpperCase());
-  //     } catch (error) {
-  //       console.error("Invalid token format", error);
-  //       localStorage.removeItem("accessToken");
-  //     }
-  //   }
-  // }, []);
-
-  // if (role === "USER") {
-  //   message.error(
-  //     "Bạn phải là thành viên aaaaaaaaaaaaaaaaaaađể đăng quảng cáo."
-  //   );
-  //   navigate("/errorMem");
-  //   return;
-  // }
 
   const handleFinish = async (values) => {
     try {
