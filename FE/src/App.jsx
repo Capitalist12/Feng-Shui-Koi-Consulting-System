@@ -30,6 +30,8 @@ import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
 import UserAds from "./pages/user/history/UserAds";
 import AdDetails from "./components/Advertisement/AdDetails";
 import BlogEditorPage from "./pages/blog/BlogEditorPage";
+import PaymentFailPage from "./pages/payment/PaymentFailPage";
+
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -55,6 +57,10 @@ const App = () => {
     {
       path: "success-subscription",
       element: <PaymentSuccessPage />,
+    },
+    {
+      path: "failure",
+      element: <PaymentFailPage />,
     },
     {
       path: "blog",

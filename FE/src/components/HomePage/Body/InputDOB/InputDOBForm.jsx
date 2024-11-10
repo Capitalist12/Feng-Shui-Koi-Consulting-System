@@ -3,10 +3,10 @@ import DOBCarousel from "./DOBCarousel/DOBCarousel";
 import { Form } from "antd";
 import { IoSearch } from "react-icons/io5";
 import { calculateElement } from "../../../../services/consultingAPIService";
+import { toast } from "react-toastify";
 import '../../../../styles/homepage/body/InputDOB/DOBCarousel/embla.scss';
 import '../../../../styles/homepage/body/InputDOB/InputDOBForm.scss';
 import '../../../../styles/homepage/body/InputDOB/DOBCarousel/base.css';
-import { toast } from "react-toastify";
 
 const START_YEAR = 1950
 const END_YEAR = 2025

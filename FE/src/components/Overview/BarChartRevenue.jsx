@@ -22,7 +22,7 @@ const BarChartRevenue = () => {
   const ferchRevenue = async () => {
     try {
       const response = await api.get("revenue/monthly");
-      console.log(response);
+      
       if (response.data.code === 1000) {
         const { result } = response.data;
 

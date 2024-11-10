@@ -10,7 +10,7 @@ const PieChartUser = () => {
   const fetchUserCount = async () => {
     try {
       const response = await api.get("user/dashboard");
-      console.log(response);
+      
       if (response.data.code === 1000) {
         const { userCount, memberCount } = response.data.result;
         setData([

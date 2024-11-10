@@ -2,8 +2,12 @@ import React from "react";
 import { Col, Row } from "antd";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
-import "../../../styles/homepage/header/HomePageBanner.scss";
 import { handleScroll } from "../../../utils/helper";
+import "../../../styles/homepage/header/HomePageBanner.scss";
+
+import FengShui from "../../../assets/images/feng-shui.png";
+import Compatibility from "../../../assets/images/compapitility-icon.png";
+import UserIcon from "../../../assets/images/user-icon.png";
 
 const HomePageBanner = () => {
 
@@ -22,21 +26,27 @@ const HomePageBanner = () => {
                         <Row>
                             <Col span={8} className='statistics-item' >
                                 <div>
-                                    <h2 id=''>999+</h2>
-                                    <p>GIỐNG CÁ VÀ HỒ CÁ</p>
+                                <span className="statistics-img-container">
+                                        <img src={UserIcon} alt="advertise"/>
+                                    </span>
+                                    <p>BÀI ĐĂNG BÁN</p>
                                 </div>
                             </Col>
                             <Col span={8} className='statistics-item'>
                                 <div>
-                                    <h2>999+</h2>
-                                    <p>BÀI ĐĂNG MUA BÁN</p>
+                                    <span className="statistics-img-container">
+                                        <img src={FengShui} alt="feng-shui"/>
+                                    </span>
+                                    <p>TƯ VẤN MỆNH NGŨ HÀNH</p>
                                 </div>
                             </Col>
                             <Col span={8} className='statistics-item'>
                                 <div>
-                                    <h2>999+</h2>
-                                    <p>BÀI BLOG, KIẾN THỨC<br />
-                                        CHIA SẼ KINH NGHIỆM</p>
+                                <span className="statistics-img-container">
+                                        <img src={Compatibility} alt="compatibility"/>
+                                    </span>
+                                    <p>TÍNH ĐỘ TƯƠNG HỢP <br/>
+                                    CÁ KOI & HỒ CÁ</p>
                                 </div>
                             </Col>
                         </Row>

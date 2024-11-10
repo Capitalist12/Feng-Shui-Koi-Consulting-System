@@ -10,7 +10,6 @@ import {
   Col,
   Upload,
   Image,
-  notification,
 } from "antd";
 import { CATEGORY, OPTIONS } from "../../utils/constant";
 import { useNavigate } from "react-router-dom";
@@ -18,34 +17,11 @@ import uploadFile from "../../utils/file";
 import { PlusOutlined } from "@ant-design/icons";
 
 const CreateAdForm = ({ form, onSubmit, loading }) => {
-  const [role, setRole] = useState("");
-  const navigate = useNavigate();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
 
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem("accessToken");
-  //   if (accessToken) {
-  //     try {
-  //       const role = JSON.parse(accessToken);
-  //       setRole(role.toUpperCase());
-  //     } catch (error) {
-  //       console.error("Invalid token format", error);
-  //       localStorage.removeItem("accessToken");
-  //     }
-  //   }
-  // }, []);
-
   const handleFinish = async (values) => {
-    // if (role === "USER") {
-    //   message.error(
-    //     "Bạn phải là thành viên aaaaaaaaaaaaaaaaaaađể đăng quảng cáo."
-    //   );
-    //   navigate("/errorMem");
-    //   return;
-    // }
-
     try {
       if (fileList.length > 0) {
         const uploadImage = fileList.map((file) =>
@@ -56,6 +32,7 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
       }
 
       await onSubmit(values);
+      handleReset();
     } catch (error) {
       message.error(error + " Vui lòng thử lại.");
     }
@@ -77,11 +54,6 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
     setPreviewOpen(true);
   };
 
-  const handleReset = () => {
-    form.resetFields();
-    setFileList([]); // Reset lại danh sách file khi hủy
-  };
-
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
   const uploadButton = (
     <button
@@ -101,6 +73,11 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
       </div>
     </button>
   );
+
+  const handleReset = () => {
+    form.resetFields();
+    setFileList([]); // Reset lại danh sách file
+  };
 
   return (
     <div>
@@ -162,7 +139,6 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
           rules={[
             { required: true, message: "Vui lòng nhập mô tả!" },
             {
-              // ko vượt quá 100 ký tự
               validator: (_, value) => {
                 if (value && value.length > 1000) {
                   return Promise.reject(

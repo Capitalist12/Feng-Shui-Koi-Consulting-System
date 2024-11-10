@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Col, Form, Input, Modal, Row, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
-import ImageUploader from "./ImageUploader";
+import ImageUpload from "./ImageUpload";
 import { OPTIONS } from "../../utils/constant";
 
 function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
@@ -132,23 +132,15 @@ function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
         </Row>
         <Form.Item
           label="Hình ảnh"
-          name="imagesAd"
-          rules={[
-            {
-              required: true,
-              message: "Hãy chọn hình ảnh!",
-              validator: (_, value) => {
-                if (!value || value.length === 0) {
-                  return Promise.reject(
-                    new Error("Hãy chọn ít nhất một hình ảnh!")
-                  );
-                }
-                return Promise.resolve();
-              },
-            },
-          ]}
+          name="imageURL"
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Hãy chọn hình ảnh!",
+          //   },
+          // ]}
         >
-          <ImageUploader fileList={fileList} setFileList={setFileList} />
+          <ImageUpload fileList={fileList} setFileList={setFileList} />
         </Form.Item>
       </Form>
     </Modal>

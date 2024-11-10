@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, Typography, message, Spin, Flex } from "antd";
+import { Layout, Row, Typography, message, Flex } from "antd";
 import Navbar from "../../components/Utils/Navbar";
 import { getAllKoiFish } from "../../services/koiAPIService";
 import { fetchTank } from "../../services/tankAPIService";
@@ -10,14 +10,17 @@ import SelectedItems from "../../components/Compatibility/SelectedItems";
 import Result from "../../components/Compatibility/Result.jsx";
 import api from "../../config/axiosConfig";
 import { Link, useNavigate } from "react-router-dom";
-import "../../styles/compatibility/CompatibilityPage.scss";
-import { Loading } from "../../components/Utils/Loading";
+import { CircleLoading, Loading } from "../../components/Utils/Loading";
 import { FaCrown, FaQuestionCircle } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { handleErrorMessage } from "../../utils/helper.js";
+import "../../styles/compatibility/CompatibilityPage.scss";
+import { getToken } from "../../config/accessTokenConfig.js";
+import QuickLoginForm from "../../components/LoginForm/QuickLoginForm.jsx";
 
 const { Title } = Typography;
 
 function CompatibilityPage() {
-  const navigate = useNavigate();
   const [load, setLoading] = useState(false);
   const [koiData, setKoiData] = useState([]);
   const [tankData, setTankData] = useState([]);
@@ -44,6 +47,10 @@ function CompatibilityPage() {
   const [selectedElement, setSelectedElement] = useState("");
   const [resultData, setResultData] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const [isLoggedin, setIsLoggedin] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchData = async () => {
     await Promise.all([fetchFishData(), fetchTankData()]);
@@ -94,18 +101,11 @@ function CompatibilityPage() {
   };
 
   const handleCalculateCompatibility = async () => {
-    //  access token từ lS và kiểm tra role
-    // const accessToken = localStorage.getItem("accessToken");
-    // const isVIP =
-    //   (accessToken &&
-    //     JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
-    //   (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
-
-    // if (!isVIP) {
-    //   message.error("Bạn phải là thành viên để tính toán độ tương thích.");
-    //   navigate("/errorMem"); // Điều hướng tới trang lỗi
-    //   return;
-    // }
+    if (getToken() == null) {
+      setIsLoggedin(true);
+      setIsModalOpen(true);
+      return;
+    }
 
     if (selectedFish.length === 0 || !selectedTank || !selectedElement) {
       message.warning("Vui lòng chọn cá, hồ và yếu tố trước khi tính toán!");
@@ -154,12 +154,12 @@ function CompatibilityPage() {
 
         setResultData(formattedResult);
         setIsModalVisible(true);
-        message.success("Tính điểm tương thích thành công!");
+        toast.success("Tính điểm tương thích thành công!");
       } else {
         throw new Error("Không có dữ liệu tương thích từ phản hồi.");
       }
     } catch (error) {
-      message.error("Lỗi khi tính điểm tương thích: " + error.message);
+      toast.error(handleErrorMessage(error.response.data.code));
     } finally {
       setLoading(false);
     }
@@ -168,6 +168,7 @@ function CompatibilityPage() {
   return (
     <>
       {load && <Loading />}
+      {isLoginLoading && <CircleLoading />}
       <Layout className="layout-comp">
         <Navbar />
         <Row className="comp-info-container">
@@ -235,6 +236,15 @@ function CompatibilityPage() {
             isVisible={isModalVisible}
             resultData={resultData}
             onClose={() => setIsModalVisible(false)}
+          />
+        )}
+
+        {isLoggedin && (
+          <QuickLoginForm
+            setIsLoading={setIsLoginLoading}
+            setIsModalOpen={setIsModalOpen}
+            isModalOpen={isModalOpen}
+            setIsLoggedin={setIsLoggedin}
           />
         )}
       </Layout>

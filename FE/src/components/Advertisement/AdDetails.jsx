@@ -6,6 +6,7 @@ import "../../styles/AdDetails.scss";
 import {
   getAdsByID,
   getVerifiedAdvertise,
+  translateCategoryName,
 } from "../../services/advertiseAPIService";
 import Navbar from "../Utils/Navbar";
 import CustomeFooter from "../HomePage/Footer/CustomeFooter";
@@ -85,7 +86,6 @@ const AdDetails = () => {
     return description;
   };
 
-  // Xác định vị trí bắt đầu và kết thúc của các quảng cáo hiện tại dựa trên trang
   const indexOfLastAd = currentPage * adsPerPage;
   const indexOfFirstAd = indexOfLastAd - adsPerPage;
   const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd, [
@@ -96,7 +96,7 @@ const AdDetails = () => {
 
   if (loading) return <div>Loading...</div>;
   if (!ad || !ad.imagesAd || ad.imagesAd.length === 0)
-    return <div>Ad not found or no images available.</div>; // Hiển thị thông báo nếu không có quảng cáo hoặc không có ảnh
+    return <div>Ad not found or no images available.</div>;
 
   return (
     <Layout>
@@ -109,7 +109,7 @@ const AdDetails = () => {
               src={ad.imagesAd[currentImage]?.imageURL}
               height={"70vh"}
             />
-            {/* Hiện các nút chuyển ảnh nếu có nhiều hơn 1 ảnh */}
+            {/* các nút chuyển ảnh nếu có nhiều hơn 1 ảnh */}
             {ad.imagesAd.length > 1 && (
               <div className="navigation-buttons">
                 <Button
@@ -128,19 +128,21 @@ const AdDetails = () => {
 
           <div className="ad-detail-info">
             <h1>Mệnh: {ad.element}</h1>
-            <h2>Danh mục: {ad.category.categoryName}</h2>
+            <h2>Danh mục: {translateCategoryName(ad.category.categoryName)}</h2>
 
-            <h1 style={{ margin: "2rem " }}>{ad.title}</h1>
+            <h1>{ad.title}</h1>
 
             <h3>Thông tin chi tiết</h3>
-            <p style={{ padding: "0 8rem" }}>{ad.description}</p>
+            <p style={{ padding: "0 2rem", whiteSpace: "pre-line" }}>
+              {ad.description}
+            </p>
 
             <h2 style={{ color: "green" }}>
               Giá: {ad.price.toLocaleString()} VNĐ
             </h2>
             <div
               style={{
-                marginTop: "4rem",
+                marginTop: "2rem",
                 display: "flex",
                 justifyContent: "center",
                 gap: "7rem",
@@ -156,7 +158,6 @@ const AdDetails = () => {
           Các bài đăng khác về mệnh {ad.element}
         </h2>
         <div className="ads-list">
-          {/* Hiển thị danh sách các quảng cáo liên quan theo trang */}
           {currentAds.map((relatedAd) => (
             <Card
               className="card-history"
@@ -216,27 +217,26 @@ const AdDetails = () => {
                 Giá: {relatedAd.price.toLocaleString()} VNĐ
               </h2>
               <p style={{ margin: "0", fontSize: "1rem", color: "#555" }}>
-                Danh mục: {relatedAd.category.categoryName}
+                Danh mục:{" "}
+                {translateCategoryName(relatedAd.category.categoryName)}
               </p>
             </Card>
           ))}
         </div>
+        <Pagination
+          current={currentPage}
+          total={displayAds.length}
+          pageSize={adsPerPage}
+          onChange={(page) => setCurrentPage(page)}
+          style={{
+            justifyContent: "center",
+            marginTop: "5rem",
+            marginBottom: "5em",
+          }}
+        />
       </div>
-      {/* Phân trang cho các quảng cáo liên quan */}
-      <Pagination
-        current={currentPage}
-        total={displayAds.length}
-        pageSize={adsPerPage}
-        onChange={(page) => setCurrentPage(page)}
-        style={{
-          justifyContent: "center",
-          marginTop: "5rem",
-          marginBottom: "4rem",
-        }}
-      />
-      <div style={{ marginTop: "-10rem" }}>
-        <CustomeFooter />
-      </div>
+
+      <CustomeFooter />
     </Layout>
   );
 };

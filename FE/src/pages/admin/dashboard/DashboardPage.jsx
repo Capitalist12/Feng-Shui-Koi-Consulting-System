@@ -32,7 +32,6 @@ const DashboardPage = () => {
       "/dashboard/advertise": "5",
     };
 
-    console.log(pathKeyMap[location.pathname] )
     setSelectedKey(pathKeyMap[location.pathname]);
   }, [][location.pathname]);
 

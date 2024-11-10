@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Layout, message, notification, Pagination } from "antd";
 import "../../../styles/UserAds.scss";
-import api from "../../../config/axiosConfig";
+import { deleteAds } from "../../../services/advertiseAPIService";
 import SearchBar from "../../../components/Advertisement/SearchBar";
 import Navbar from "../../../components/Utils/Navbar";
 import EditAdForm from "../../../components/Advertisement/EditAdForm";
-import { editAd, getUserAds } from "../../../services/advertiseAPIService";
+import {
+  editAd,
+  getUserAds,
+  translateCategoryName,
+} from "../../../services/advertiseAPIService";
 import {
   MdOutlineAutoDelete,
   MdOutlinePending,
@@ -44,9 +48,8 @@ const UserAds = () => {
   }, []);
 
   const handleSearch = async (keyword) => {
-    // format input
     if (!keyword || keyword.trim() === "") {
-      await fetchAds(); // hien all ads
+      await fetchAds();
       return;
     }
     const lowerCaseKeyword = keyword.toLowerCase();
@@ -69,31 +72,32 @@ const UserAds = () => {
     setIsEditing(false);
   };
 
-  // const accessToken = localStorage.getItem("accessToken");
-  // const isVIP =
-  //   (accessToken &&
-  //     JSON.parse(accessToken).role.toUpperCase() === "MEMBER") ||
-  //   (accessToken && JSON.parse(accessToken).role.toUpperCase() === "ADMIN");
-
-  // if (!isVIP) {
-  //   message.error("Mua VIP");
-  //   navigate("/errorMem"); // Điều hướng tới trang lỗi
-  //   return;
-  // }
-
   const handleEditSubmit = async (values) => {
-    setLoading(true); // Bắt đầu quá trình tải
+    setLoading(true);
     try {
-      await editAd(selectedAd.adID, values);
-      notification.success({
-        message: "Chỉnh sửa bài đăng thành công!",
-        description: "Bạn đã chỉnh sửa bài đăng thành công.",
+      const response = await editAd(selectedAd.adID, {
+        title: values.title,
+        description: values.description,
+        price: values.price,
+        element: values.element,
+        categoryName: values.categoryName,
+        imagesURL: values.imagesURL || [],
       });
+      if (response.status === 200) {
+        notification.success({
+          message: "Chỉnh sửa thành công!",
+          description: "Bạn vui lòng chờ duyệt bài nhé !",
+        });
+      } else {
+        notification.error({
+          message: "Chỉnh sửa thất bại!",
+          description: "Đã có lỗi xảy ra, vui lòng thử lại sau !",
+        });
+      }
       handleCloseEditModal();
       await fetchAds();
     } catch (error) {
-      message.error(error.message);
-      navigate("/errorMem");
+      // message.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -103,21 +107,27 @@ const UserAds = () => {
     setSelectedAd(ad);
     setIsEditing(true);
   };
-
   const handleDeleteAd = async (adID) => {
     setLoading(true);
     try {
-      const response = await api.delete(`/ad/${adID}`);
-      const mess =
-        response?.data?.message || "Bài đăng đã được xóa thành công.";
+      const response = await deleteAds(`ad/${adID}`);
+      if (response?.status === 200) {
+        const mess =
+          response?.data?.message || "Bài đăng đã được xóa thành công.";
 
-      await fetchAds();
-      handleCloseEditModal();
+        await fetchAds();
+        handleCloseEditModal();
 
-      notification.success({
-        message: "Thành công!",
-        description: mess,
-      });
+        notification.success({
+          message: "Thành công!",
+          description: mess,
+        });
+      } else {
+        notification.error({
+          message: "Lỗi!",
+          description: "Đã xảy ra lỗi khi xóa bài đăng.",
+        });
+      }
     } catch (error) {
       notification.error({
         message: "Lỗi!",
@@ -253,7 +263,7 @@ const UserAds = () => {
                 Giá: {ad.price.toLocaleString()} VNĐ
               </h2>
               <p style={{ margin: "0", fontSize: "1rem", color: "#555" }}>
-                Danh mục: {ad.category.categoryName}
+                Danh mục: {translateCategoryName(ad.category.categoryName)}
               </p>
             </Card>
           ))}

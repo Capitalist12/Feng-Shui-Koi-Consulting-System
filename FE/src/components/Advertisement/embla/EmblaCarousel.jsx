@@ -28,11 +28,11 @@ const EmblaCarousel = ({ ads }) => {
     }
   }, [emblaApi, sortedAds.length]);
 
-  const truncateDescription = (description, maxLength) => {
-    if (description.length > maxLength) {
-      return description.slice(0, maxLength) + "...";
+  const truncate = (data, maxLength) => {
+    if (data.length > maxLength) {
+      return data.slice(0, maxLength) + "...";
     }
-    return description;
+    return data;
   };
 
   return (
@@ -49,9 +49,9 @@ const EmblaCarousel = ({ ads }) => {
                 />
                 <div className="embla-ad__slide__info">
                   <h2>Mệnh: {ad.element}</h2>
-                  <h2>{truncateDescription(ad.title, 30)}</h2>
+                  <h2>{truncate(ad.title, 30)}</h2>
                   <p className="ad-description">
-                    {truncateDescription(ad.description, 100)}
+                    {truncate(ad.description, 40)}
                   </p>
                   <h4 style={{ color: "green" }}>
                     Giá: {ad.price.toLocaleString()} đồng
@@ -65,14 +65,6 @@ const EmblaCarousel = ({ ads }) => {
             </div>
           ))}
         </div>
-      </div>
-      <div className="embla-ad__buttons">
-        <button className="embla-ad__button" onClick={scrollPrev}>
-          <FaAngleLeft />
-        </button>
-        <button className="embla-ad__button" onClick={scrollNext}>
-          <FaAngleRight />
-        </button>
       </div>
     </div>
   );

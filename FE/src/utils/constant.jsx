@@ -10,7 +10,7 @@ import { NavLink } from "react-router-dom";
 import { IoFishOutline } from "react-icons/io5";
 import { RiAlignItemLeftLine } from "react-icons/ri";
 import React from "react";
-const TOKEN_EXPIRY_TIME_IN_MINUTE = 60;
+const TOKEN_EXPIRY_TIME_IN_MINUTE = 60*2;
 
 const KOI_ELEMENT_MAX_COUNT = 3;
 
@@ -36,21 +36,52 @@ const ROLE_OPTIONS = [
 
 const CATEGORY = [
   {
-    label: "Koi Fish",
+    label: "Cá Koi",
     value: "Koi Fish",
     emoji: <IoFishOutline />,
   },
   {
-    label: "Aquarium Supplies",
+    label: "Trang trí bể cá",
     value: "Aquarium Supplies",
     emoji: <GiAquarium />,
   },
   {
-    label: "Feng Shui Items",
+    label: "Mặt hàng phong thủy",
     value: "Feng Shui Items",
     emoji: <RiAlignItemLeftLine />,
   },
 ];
+
+const KOI_COLOR_OPTIONS = [
+  {
+    label: "Đỏ",
+    value: "Đỏ",
+  },
+  {
+    label: "Trắng",
+    value: "Trắng",
+  },
+  {
+    label: "Đen",
+    value: "Đen",
+  },
+  {
+    label: "Xanh",
+    value: "Xanh",
+  },
+  {
+    label: "Vàng",
+    value: "Vàng",
+  },
+  {
+    label: "Bạc",
+    value: "Bạc",
+  },
+  {
+    label: "Nâu",
+    value: "Nâu",
+  },
+]
 
 const OPTIONS = [
   {
@@ -183,4 +214,5 @@ export {
   TOKEN_EXPIRY_TIME_IN_MINUTE,
   CATEGORY,
   MONTHS,
+  KOI_COLOR_OPTIONS
 };

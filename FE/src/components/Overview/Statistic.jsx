@@ -55,7 +55,7 @@ const Statistics = () => {
         const totalTanks = await countAllTank();
         setFishCount(totalFish);
         setTankCount(totalTanks);
-        console.log(totalFish);
+        
       } catch (err) {
         setError("Không thể tải số lượng cá và hồ.");
       }

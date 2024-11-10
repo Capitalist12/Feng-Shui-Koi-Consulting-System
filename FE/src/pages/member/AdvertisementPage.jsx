@@ -32,8 +32,12 @@ import { useNavigate } from "react-router-dom";
 import AdDetails from "../../components/Advertisement/AdDetails";
 import { PiPlantFill } from "react-icons/pi";
 import CustomeFooter from "../../components/HomePage/Footer/CustomeFooter";
-import { postAd } from "../../services/advertiseAPIService";
+import {
+  postAd,
+  translateCategoryName,
+} from "../../services/advertiseAPIService";
 import { toast } from "react-toastify";
+import ErrorMember from "../error/ErrorMember";
 
 function AdvertisementPage() {
   const [form] = useForm();
@@ -136,26 +140,27 @@ function AdvertisementPage() {
   );
 
   const handleAdClick = (adID) => {
-    // tìm quảng cáo được chọn từ danh sách ads
     const selectedAd = displayAds.find((ad) => ad.adID === adID);
     setSelectedAd(selectedAd);
-    navigate(`/ad/${adID}`); // Chuyển đến trang chi tiết quảng cáo
+    navigate(`/ad/${adID}`);
   };
 
+  // navigate("/errorMem");
   const handleAdSubmit = async (values) => {
     setLoading(true);
     try {
-      await postAd(values);
-      notification.success({
-        message: "Đăng bài thành công !",
-        description: "Bạn đã đăng bài thành công, hãy chờ phê duyệt nhé!",
-      });
+      const response = await postAd(values);
       setIsCreateAd(false);
       await fetchAds();
       form.resetFields();
+      if (response.status === 200) {
+        notification.success({
+          message: "Đăng bài thành công!",
+          description: "Bạn vui lòng chờ duyệt bài nhé !",
+        });
+      }
     } catch (error) {
-      message.error(error.message);
-      navigate("/errorMem");
+      // console.log(error.message);
     } finally {
       setLoading(false);
     }
@@ -289,15 +294,15 @@ function AdvertisementPage() {
           <Option value="">Tất cả</Option>
           <Option value="Koi Fish">
             <IoFishOutline style={{ marginRight: "0.5rem" }} />
-            Koi Fish
+            Cá Koi
           </Option>
           <Option value="Aquarium Supplies">
             <GiAquarium style={{ marginRight: "0.5rem" }} />
-            Aquarium Supplies
+            Trang trí bể cá
           </Option>
           <Option value="Feng Shui Items">
             <RiAlignItemLeftLine style={{ marginRight: "0.5rem" }} />
-            Feng Shui Items
+            Mặt hàng phong thủy
           </Option>
         </Select>
 
@@ -388,7 +393,7 @@ function AdvertisementPage() {
                 Giá: {ad.price.toLocaleString()} VNĐ
               </h2>
               <p style={{ margin: "0", fontSize: "1rem", color: "#555" }}>
-                Danh mục: {ad.category.categoryName}
+                Danh mục: {translateCategoryName(ad.category.categoryName)}
               </p>
             </Card>
           ))}
