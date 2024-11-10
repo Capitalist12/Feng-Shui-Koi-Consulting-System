@@ -133,7 +133,7 @@ const handleErrorMessage = (code) => {
         case 1042:
             return "Định dạng hoặc nội dung yêu cầu của API ChatGPT không hợp lệ!";
         case 1043:
-            return "Tiêu đề không thể để trống!";
+            return "Gói của bạn vẫn còn hạn!";
         case 1044:
             return "Thiếu API key của ChatGPT!";
         case 1045:

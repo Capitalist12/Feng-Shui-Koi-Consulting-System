@@ -78,11 +78,6 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
     setPreviewOpen(true);
   };
 
-  const handleReset = () => {
-    form.resetFields();
-    setFileList([]); // Reset lại danh sách file
-  };
-
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
   const uploadButton = (
     <button
@@ -102,6 +97,11 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
       </div>
     </button>
   );
+
+  const handleReset = () => {
+    form.resetFields();
+    setFileList([]); // Reset lại danh sách file
+  };
 
   return (
     <div>
@@ -163,7 +163,6 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
           rules={[
             { required: true, message: "Vui lòng nhập mô tả!" },
             {
-              // ko vượt quá 100 ký tự
               validator: (_, value) => {
                 if (value && value.length > 1000) {
                   return Promise.reject(

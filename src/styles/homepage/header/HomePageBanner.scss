@@ -29,10 +29,10 @@
             width: 100%;
             height: 25vh;
             position: absolute;
-            bottom: 25%;
+            bottom: 27%;
             
             .statistics-item {
-                height: 25vh;
+                height: 27vh;
                 width: 100%;
                 
                 div {
@@ -40,26 +40,29 @@
                     height: 100%;
                     margin: auto;
                     color: white;
-                    font-size: 2em;
                     background-color: rgba(255, 255, 255, 0.1);
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    justify-content: center;
                     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
                     border-radius: 15px;
                     backdrop-filter: blur(5px);
                     -webkit-backdrop-filter: blur(5px);
 
-                    h2 {
-                        margin: 0;
-                        text-align: center;
+                    .statistics-img-container{
+                        box-sizing: border-box;
+                        padding-top: 10px;
                         width: 100%;
-                        height: 100%;
-                        font-size: 4vw;
+                        height: 50%;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: contain;
+                        }
                     }
 
                     p {
+                        height: 40%;
                         font-size: 1.5vw;
                         text-align: center;
                         width: 100%;

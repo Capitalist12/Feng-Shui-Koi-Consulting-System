@@ -16,7 +16,7 @@ import Title from "antd/es/typography/Title";
 //scss
 import "../../styles/homepage/HomePage.scss";
 import { handleScroll } from "../../utils/helper.js";
-import QuickLoginForm from "../../components/HomePage/Body/InputDOB/QuickLoginForm.jsx";
+import QuickLoginForm from "../../components/LoginForm/QuickLoginForm.jsx";
 import { CircleLoading } from "../../components/Utils/Loading.jsx";
 
 const HomePage = () => {
