@@ -37,15 +37,15 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
   //   }
   // }, []);
 
-  const handleFinish = async (values) => {
-    // if (role === "USER") {
-    //   message.error(
-    //     "Bạn phải là thành viên aaaaaaaaaaaaaaaaaaađể đăng quảng cáo."
-    //   );
-    //   navigate("/errorMem");
-    //   return;
-    // }
+  // if (role === "USER") {
+  //   message.error(
+  //     "Bạn phải là thành viên aaaaaaaaaaaaaaaaaaađể đăng quảng cáo."
+  //   );
+  //   navigate("/errorMem");
+  //   return;
+  // }
 
+  const handleFinish = async (values) => {
     try {
       if (fileList.length > 0) {
         const uploadImage = fileList.map((file) =>
@@ -56,6 +56,7 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
       }
 
       await onSubmit(values);
+      handleReset();
     } catch (error) {
       message.error(error + " Vui lòng thử lại.");
     }
@@ -79,7 +80,7 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
 
   const handleReset = () => {
     form.resetFields();
-    setFileList([]); // Reset lại danh sách file khi hủy
+    setFileList([]); // Reset lại danh sách file
   };
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
