@@ -76,37 +76,40 @@ const postAd = async (values) => {
     });
     return response;
   } catch (err) {
-    if (err.response && err.response.data) {
-      throw new Error(
-        err.response.data.message || "Có lỗi xảy ra. Vui lòng thử lại."
-      );
-    } else {
-      throw new Error("Không thể kết nối đến máy chủ.");
-    }
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
-const editAd = async (id) => {
+
+const editAd = async (adID, payload) => {
   try {
-    const response = await axios.put(`ad/${id}`,{
-      title: values.title,
-      description: values.description,
-      price: values.price,
-      element: values.element,
-      categoryName: values.categoryName,
-      imagesURL: values.imagesURL || [],
-    });
+    const response = await axios.put(`ad/${adID}`, payload);
     return response;
   } catch (err) {
-    if (err.response && err.response.data) {
-      throw new Error(
-        err.response.data.message || "Có lỗi xảy ra. Vui lòng thử lại."
-      );
-    } else {
-      throw new Error("Không thể kết nối đến máy chủ.");
-    }
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
+
+const deleteAds = async (adID) => {
+  try {
+    const response = await axios.delete(`ad/${adID}`);
+    return response;
+  } catch (err) {
+    toast.error(handleErrorMessage(err.response.data.code));
+  }
+};
+
+
+export const categoryNameMap = {
+  "Koi Fish": "Cá Koi",
+  "Aquarium Supplies": "Trang trí bể cá",
+  "Feng Shui Items": "Mặt hàng phong thủy",
+};
+
+export const translateCategoryName = (categoryName) => {
+  return categoryNameMap[categoryName] || categoryName;
+};
+
 
 export {
   getAllAdvertises,
@@ -118,4 +121,5 @@ export {
   getAdsByID,
   postAd,
   editAd,
+  deleteAds
 };

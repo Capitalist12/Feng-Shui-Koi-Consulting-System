@@ -32,7 +32,6 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, onDelete, loading }) => {
         element: ad.element,
         categoryName: ad.category.categoryName,
       });
-      // fileList với các hình ảnh hiện có
       const existingImages = ad.imagesAd.map((image) => ({
         url: image.imageURL,
       }));
@@ -67,11 +66,6 @@ const EditAdForm = ({ open, ad, onClose, onSubmit, onDelete, loading }) => {
     values.imagesURL = imagesAd;
 
     await onSubmit(values);
-    notification.success({
-      message: "Sửa bài đăng thành công",
-      description:
-        "Bài đăng của bạn đã được sửa thành công, hãy chờ phê duyệt nhé!",
-    });
   };
 
   const handleDelete = () => {

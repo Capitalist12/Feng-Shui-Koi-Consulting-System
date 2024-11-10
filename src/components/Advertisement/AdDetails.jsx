@@ -6,6 +6,7 @@ import "../../styles/AdDetails.scss";
 import {
   getAdsByID,
   getVerifiedAdvertise,
+  translateCategoryName,
 } from "../../services/advertiseAPIService";
 import Navbar from "../Utils/Navbar";
 import CustomeFooter from "../HomePage/Footer/CustomeFooter";
@@ -127,7 +128,7 @@ const AdDetails = () => {
 
           <div className="ad-detail-info">
             <h1>Mệnh: {ad.element}</h1>
-            <h2>Danh mục: {ad.category.categoryName}</h2>
+            <h2>Danh mục: {translateCategoryName(ad.category.categoryName)}</h2>
 
             <h1>{ad.title}</h1>
 
@@ -216,7 +217,8 @@ const AdDetails = () => {
                 Giá: {relatedAd.price.toLocaleString()} VNĐ
               </h2>
               <p style={{ margin: "0", fontSize: "1rem", color: "#555" }}>
-                Danh mục: {relatedAd.category.categoryName}
+                Danh mục:{" "}
+                {translateCategoryName(relatedAd.category.categoryName)}
               </p>
             </Card>
           ))}

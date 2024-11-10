@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Col, Form, Image, Input, Modal, Row, Select, Upload } from "antd";
+import { Col, Form, Input, Modal, Row, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
+import ImageUpload from "./ImageUpload";
 import { OPTIONS } from "../../utils/constant";
-import { PlusOutlined } from "@ant-design/icons";
 
 function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
   const [form] = useForm();
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
@@ -36,15 +34,6 @@ function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
   }, [visible, selectedTank, form]);
 
   const handleFormSubmit = async (values) => {
-    if (fileList.length === 0) {
-      form.setFields([
-        {
-          name: "imageURL",
-          errors: ["Vui lòng chọn ít nhất một ảnh!"],
-        },
-      ]);
-      return;
-    }
     onSubmit(values, fileList);
     setFileList([]);
   };
@@ -53,41 +42,7 @@ function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
     const selectedElement = OPTIONS.find((option) => option.value === value);
     form.setFieldsValue({ elementName: selectedElement?.label || "" });
   };
-  const getBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
 
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-  };
-
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </button>
-  );
   return (
     <Modal
       open={visible}
@@ -175,30 +130,19 @@ function TankForm({ visible, onClose, onSubmit, selectedTank, loading }) {
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item label="Hình ảnh" name="imageURL">
-          <Upload
-            listType="picture-card"
-            fileList={fileList}
-            onPreview={handlePreview}
-            onChange={handleChange}
-          >
-            {fileList.length >= 1 ? null : uploadButton}
-          </Upload>{" "}
+        <Form.Item
+          label="Hình ảnh"
+          name="imageURL"
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: "Hãy chọn hình ảnh!",
+          //   },
+          // ]}
+        >
+          <ImageUpload fileList={fileList} setFileList={setFileList} />
         </Form.Item>
       </Form>
-      {previewImage && (
-        <Image
-          wrapperStyle={{
-            display: "none",
-          }}
-          preview={{
-            visible: previewOpen,
-            onVisibleChange: (visible) => setPreviewOpen(visible),
-            afterOpenChange: (visible) => !visible && setPreviewImage(""),
-          }}
-          src={previewImage}
-        />
-      )}
     </Modal>
   );
 }

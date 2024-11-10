@@ -9,6 +9,7 @@ import {
   Col,
   Upload,
   Image,
+  Button,
 } from "antd";
 import moment from "moment";
 import uploadFile from "../../../utils/file";
@@ -33,15 +34,12 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
         imageLink: userInfo.imageLink || "",
       });
       if (userInfo.imageLink) {
-        setFileList([
-          {
-            url: userInfo.imageLink,
-          },
-        ]);
+        setFileList([{ url: userInfo.imageLink }]);
       }
     }
     setIsChangePassword(false);
   }, [visible, userInfo, form]);
+
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
@@ -54,6 +52,7 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
         message.error("Mật khẩu mới và xác nhận mật khẩu không khớp.");
         return;
       }
+
       const payload = {
         username: values.username,
         dateOfBirth: values.dateOfBirth
@@ -64,15 +63,9 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
         imageLink: values.imageLink,
       };
 
-      // Kiểm tra nếu có file mới cần upload
       if (fileList.length > 0 && fileList[0].originFileObj) {
-        // Chỉ upload nếu có file mới
         const file = fileList[0];
-        const url = await uploadFile(file.originFileObj);
-        payload.imageLink = url;
-      } else {
-        // Nếu không có file mới, giữ nguyên liên kết ảnh cũ
-        payload.imageLink = userInfo.imageLink;
+        payload.imageLink = await uploadFile(file.originFileObj);
       }
 
       setSubmitting(true);
@@ -80,19 +73,16 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
       onClose();
       form.resetFields();
     } catch (err) {
-      {
-        ("");
-      }
+      console.log(err);
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleChangePassword = (value) => {
-    // ẩn trường xác nhận mật khẩu
-    setIsChangePassword(value ? true : false);
+    setIsChangePassword(!!value);
     if (!value) {
-      form.setFieldsValue({ confirmPassword: "" }); // xóa xác nhận
+      form.setFieldsValue({ confirmPassword: "" });
     }
   };
 
@@ -114,150 +104,107 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
 
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    // xóa ava thì gửi đi null
     if (newFileList.length === 0) {
       form.setFieldsValue({ imageLink: null });
     }
   };
 
   const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </button>
+    <Button icon={<PlusOutlined />} type="link" style={{ padding: 0 }}>
+      Upload
+    </Button>
   );
 
   return (
-    <div>
-      <Modal
-        width={"40rem"}
-        title={
-          <div
-            style={{
-              textAlign: "center",
-              fontSize: "2rem",
-              fontWeight: "bold",
-              marginBottom: "2rem",
-            }}
-          >
-            Chỉnh sửa thông tin
-          </div>
-        }
-        visible={visible}
-        onCancel={onClose}
-        onOk={handleSave}
-        okText="Lưu"
-        cancelText="Hủy"
-        okButtonProps={{ loading: submitting }}
-      >
-        <Form form={form} layout="vertical">
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="username"
-                label="Username"
-                rules={[
-                  { required: true, message: "Vui lòng nhập tên người dùng" },
-                ]}
+    <Modal
+      width="40rem"
+      title="Chỉnh sửa thông tin"
+      visible={visible}
+      onCancel={onClose}
+      onOk={handleSave}
+      okText="Lưu"
+      cancelText="Hủy"
+      okButtonProps={{ loading: submitting }}
+    >
+      <Form form={form} layout="vertical">
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="username"
+              label="Tên người dùng"
+              rules={[
+                { required: true, message: "Vui lòng nhập tên người dùng" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="dateOfBirth"
+              label="Sinh nhật"
+              rules={[{ required: true, message: "Vui lòng nhập ngày sinh" }]}
+            >
+              <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row justify="center">
+          <Col>
+            <Form.Item name="imageLink" label="Ảnh đại diện">
+              <Upload
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={handleChange}
               >
-                <Input />
-              </Form.Item>
-            </Col>
-
-            <Col span={12}>
-              <Form.Item
-                name="dateOfBirth"
-                label="Sinh nhật"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng nhập ngày sinh người dùng",
-                  },
-                ]}
-              >
-                <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col>
-              <Form.Item name="imageLink" label="Ảnh Đại Diện">
-                <Upload
-                  listType="picture-card"
-                  fileList={fileList}
-                  onPreview={handlePreview}
-                  onChange={handleChange}
-                  style={{ width: "10rem", height: "10rem" }}
-                >
-                  {fileList.length >= 1 ? null : uploadButton}
-                </Upload>
-              </Form.Item>
-            </Col>
-          </Row>
+                {fileList.length >= 1 ? null : uploadButton}
+              </Upload>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item
+          name="currentPassword"
+          label="Mật khẩu hiện tại"
+          rules={[
+            { required: true, message: "Vui lòng nhập mật khẩu hiện tại" },
+          ]}
+        >
+          <Input.Password placeholder="Nhập mật khẩu hiện tại" />
+        </Form.Item>
+        <Form.Item name="newPassword" label="Mật khẩu mới (tùy chọn)">
+          <Input.Password
+            placeholder="Nhập mật khẩu mới"
+            onChange={(e) => handleChangePassword(e.target.value)}
+          />
+        </Form.Item>
+        {isChangePassword && (
           <Form.Item
-            name="currentPassword"
-            label="Mật khẩu hiện tại"
+            name="confirmPassword"
+            label="Xác nhận mật khẩu mới"
+            dependencies={["newPassword"]}
+            hasFeedback
             rules={[
-              { required: true, message: "Vui lòng nhập mật khẩu hiện tại" },
+              { required: true, message: "Vui lòng xác nhận mật khẩu mới!" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("newPassword") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("Mật khẩu không trùng khớp!")
+                  );
+                },
+              }),
             ]}
           >
-            <Input.Password placeholder="Nhập mật khẩu hiện tại" />
+            <Input.Password placeholder="Xác nhận mật khẩu mới" />
           </Form.Item>
-
-          <div style={{ marginTop: "2rem" }}>
-            <Form.Item name="newPassword" label="Mật khẩu mới (TÙY CHỌN)">
-              <Input.Password
-                placeholder="Nhập mật khẩu mới"
-                onChange={(e) => handleChangePassword(e.target.value)}
-              />
-            </Form.Item>
-
-            {isChangePassword && (
-              <Form.Item
-                name="confirmPassword"
-                label="Xác nhận mật khẩu mới"
-                dependencies={["newPassword"]}
-                hasFeedback
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng xác nhận mật khẩu!",
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue("newPassword") === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(
-                        new Error("Mật khẩu không trùng khớp!")
-                      );
-                    },
-                  }),
-                ]}
-              >
-                <Input.Password placeholder="Xác nhận mật khẩu mới" />
-              </Form.Item>
-            )}
-          </div>
-        </Form>
-      </Modal>
+        )}
+      </Form>
       {previewImage && (
         <Image
-          wrapperStyle={{
-            display: "none",
-          }}
+          wrapperStyle={{ display: "none" }}
           preview={{
             visible: previewOpen,
             onVisibleChange: (visible) => setPreviewOpen(visible),
@@ -266,7 +213,7 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
           src={previewImage}
         />
       )}
-    </div>
+    </Modal>
   );
 };
 

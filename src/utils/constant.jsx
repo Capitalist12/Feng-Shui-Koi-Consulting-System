@@ -36,17 +36,17 @@ const ROLE_OPTIONS = [
 
 const CATEGORY = [
   {
-    label: "Koi Fish",
+    label: "Cá Koi",
     value: "Koi Fish",
     emoji: <IoFishOutline />,
   },
   {
-    label: "Aquarium Supplies",
+    label: "Trang trí bể cá",
     value: "Aquarium Supplies",
     emoji: <GiAquarium />,
   },
   {
-    label: "Feng Shui Items",
+    label: "Mặt hàng phong thủy",
     value: "Feng Shui Items",
     emoji: <RiAlignItemLeftLine />,
   },
