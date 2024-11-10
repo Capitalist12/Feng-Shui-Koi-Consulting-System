@@ -29,7 +29,6 @@ public class CommentController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @GetMapping
     public ApiResponse<List<CommentResponse>> getCommentsByBlogID(
             @PathVariable String blogID) {
@@ -49,7 +48,7 @@ public class CommentController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER')")
     @DeleteMapping("/{commentID}")
     public ApiResponse<String> deleteComment(
             @PathVariable String blogID,

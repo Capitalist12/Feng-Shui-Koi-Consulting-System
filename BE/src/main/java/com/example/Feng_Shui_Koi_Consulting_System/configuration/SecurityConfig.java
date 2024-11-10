@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,13 +23,19 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINT = {"/auth/login","/auth/signup","/auth/introspect"
-    ,"/auth/outbound/authentication", "/auth/verify-email", "/auth/logout"
-    , "/auth/reset-password", "/ad", "/blog", "/ad/verified", "/blog/{blogID}"};
+    , "/auth/outbound/authentication", "/auth/verify-email", "/auth/logout", "/auth/reset-password"
+    , "/ad/verified",  "/ad/filter", "/ad/{adID}"
+    , "/fish", "/tank"
+    , "/blog", "/blog/{blogID}", "/blog/{blogID}/comments"
+    };
     private final String[] SWAGGER = {
             "/koifish-docs/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-resources/**"
     };
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
@@ -75,7 +82,7 @@ public class SecurityConfig {
 
         // Allow your frontend origin specifically for security purposes
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
-        corsConfiguration.addAllowedOrigin("http://localhost:5173");
+        corsConfiguration.addAllowedOrigin(frontendUrl);
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowCredentials(true);  // Enable credentials if needed (e.g., with JWTs)

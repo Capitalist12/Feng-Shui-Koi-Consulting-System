@@ -1,5 +1,6 @@
 package com.example.Feng_Shui_Koi_Consulting_System.service;
 
+import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentSuccessfulRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.SessionDTO;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.payment.PaymentlResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.Roles;
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @Service
@@ -41,6 +43,8 @@ public class StripeService {
 
     @Value("${api.stripe.key}")
     private String stripeApiKey;
+    @Value("${frontend.url}")
+    private String frontendUrl;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -49,6 +53,7 @@ public class StripeService {
     private SubscriptionRepo subscriptionRepo;
     @Autowired
     private TransactionRepo transactionRepo;
+
 
 
     @PostConstruct
@@ -78,12 +83,27 @@ public class StripeService {
 
     }
 
+    public boolean checkUserSubcription() {
+        AtomicBoolean valid = new AtomicBoolean(true);
+        User user = getUserLogin();
+         subscriptionRepo.findByUser_UserID(user.getUserID())
+                 .ifPresent(subscriptions -> {
+                     boolean isActive = authenticationServices.checkSubscription(subscriptions
+                             .getSubscriptionID());
+                     if(isActive) {
+                         valid.set(false);
+                     }
+                 });
+        return valid.get();
+    }
+
     public SessionDTO createSubscriptionSession(SessionDTO request) {
         try {
 
             User user = getUserLogin();
+            if(!checkUserSubcription()) throw new AppException(ErrorCode.SUBSCRIPTION_EXIST);
             Customer customer = findOrCreateCustomer(user.getEmail(),user.getUsername());
-            String clientURL = "http://localhost:8080";
+            String clientURL = frontendUrl;
 
             SessionCreateParams.Builder  sessionCreateParamsBuilder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
@@ -150,14 +170,14 @@ public class StripeService {
         return null;
     }
 
-    public PaymentlResponse handleSubscriptionCompletion(String userID, String sessionID) {
+    public PaymentlResponse handleSubscriptionCompletion(PaymentSuccessfulRequest request) {
         try {
-            if(sessionID == null) throw new AppException(ErrorCode.SESSION_ID_NULL);
-            Session fetchedSession = Session.retrieve(sessionID);
+            if(request.getSessionID() == null) throw new AppException(ErrorCode.SESSION_ID_NULL);
+            Session fetchedSession = Session.retrieve(request.getSessionID());
             String subscriptionId = fetchedSession.getSubscription();
             cancelSubscription(subscriptionId);
 
-            User user = userRepository.findById(userID)
+            User user = userRepository.findById(request.getUserID())
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
             user.setRoleName(String.valueOf(Roles.MEMBER));
             userRepository.save(user);

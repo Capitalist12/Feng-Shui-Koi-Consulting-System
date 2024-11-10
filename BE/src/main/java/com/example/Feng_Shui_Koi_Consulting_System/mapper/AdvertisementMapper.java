@@ -5,7 +5,6 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.CategoryRes
 import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementCreationRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.advertisement.AdvertisementUpdateRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.user.ElementResponse;
-import com.example.Feng_Shui_Koi_Consulting_System.dto.user.UserResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.entity.*;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.AppException;
 import com.example.Feng_Shui_Koi_Consulting_System.exception.ErrorCode;
@@ -18,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface AdvertisementMapper {
+
     @Mapping(source = "element", target = "element", qualifiedByName = "mapToElement")
     @Mapping(target = "category", source = "categoryName", qualifiedByName = "mapToCategory")
     @Mapping(target = "imagesAd", ignore = true)
@@ -64,19 +64,6 @@ public interface AdvertisementMapper {
     default CategoryResponse mapToCategoryResponse(Category category) {
         return CategoryResponse.builder()
                 .categoryName(category.getCategoryName())
-                .build();
-    }
-//    @Named("mapToUser")
-//    default User mapToUser(String username, @Context UserService userService) {
-//        return userService.findByUsername(username);
-//
-//    }
-
-    @Named("mapToUserResponse")
-    default UserResponse mapToUserResponse(User user) {
-        return UserResponse.builder()
-                .username(user.getUsername())
-                .roleName(user.getRoleName())
                 .build();
     }
 

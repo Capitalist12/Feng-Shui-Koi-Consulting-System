@@ -4,6 +4,7 @@ import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.fish.KoiTypeRequest;
 import com.example.Feng_Shui_Koi_Consulting_System.dto.fish.KTResponse;
 import com.example.Feng_Shui_Koi_Consulting_System.service.KoiTypeService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class KoiTypeController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    ApiResponse<KTResponse> createKoiType(@RequestBody KoiTypeRequest request){
+    ApiResponse<KTResponse> createKoiType(@Valid @RequestBody KoiTypeRequest request){
         return ApiResponse.<KTResponse>builder()
                 .result(koiTypeService.createKoiType(request))
                 .build();
@@ -42,7 +43,7 @@ public class KoiTypeController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{koiTypeId}")
-    ApiResponse<KTResponse> updateKoiType(@PathVariable String koiTypeId, @RequestBody KoiTypeRequest request){
+    ApiResponse<KTResponse> updateKoiType(@PathVariable String koiTypeId, @Valid @RequestBody KoiTypeRequest request){
         return ApiResponse.<KTResponse>builder()
                 .result(koiTypeService.updateKoiType(koiTypeId, request))
                 .build();

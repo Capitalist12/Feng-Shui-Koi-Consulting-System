@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,10 +48,15 @@ public class AdvertisementService {
         User user = userRepository.findByUsername(userService.getMyInfo().getUsername())
                 .orElseThrow(() -> new AppException((ErrorCode.USER_NOT_EXIST)));
         ad.setUser(user);
-        ad.setAdID(generateAdID());
+        String adID;
+        do{
+            adID = generateAdID();
+        }while(advertisementRepo.existsByAdID(adID));
+        ad.setAdID(adID);
         ad.setStatus("Pending");
         ad.setCreatedDate(LocalDateTime.now());
 
+    // Get advertisement's images
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
             Set<Ads_Image> imagesAd = request.getImagesURL().stream()
                     .map(imageUrl -> {
@@ -65,76 +72,130 @@ public class AdvertisementService {
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(ad));
     }
 
-    public List<AdvertisementResponse> getAllAdvertisements(){
+    //Get list of all advertisement
+    public List<AdvertisementResponse> getAllAdvertisements() {
         return advertisementRepo.findAll().stream()
-                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+                .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
-    public List<AdvertisementResponse> getAdByID(String adID){
+    //Get list of advertisements that have the id require
+    public List<AdvertisementResponse> getAdByID(String adID) {
         return advertisementRepo.findById(adID).stream()
+                .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
+    }
+
+    //Get list of advertisements of user
+    public List<AdvertisementResponse> getAdByUser() {
+        String userID = userService.getMyInfo().getUserID();
+        return advertisementRepo.findAdsOfUser(userID).stream()
                 .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
     }
 
-    public List<AdvertisementResponse> getListAdvertisements(){
+    //Get list of verified ads
+    public List<AdvertisementResponse> getListAdvertisements() {
         return advertisementRepo.findAdsVerified().stream()
-                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+                .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
-    public List<AdvertisementResponse> getListAdvertisementsPending(){
+
+    //Get list of pending ads
+    public List<AdvertisementResponse> getListAdvertisementsPending() {
         return advertisementRepo.findAdsPending().stream()
-                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+                .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
-    public List<AdvertisementResponse> getListAdvertisementsRejected(){
+
+    //Get list of rejected ads of user
+    public List<AdvertisementResponse> getListAdvertisementsRejectedOfUser() {
+        return advertisementRepo.findAdsRejectedOfUser(userService.getMyInfo().getUserID()).stream()
+                .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
+    }
+
+    //Get list of rejected ads
+    public List<AdvertisementResponse> getListAdvertisementsRejected() {
         return advertisementRepo.findAdsRejected().stream()
-                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+                .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
-    public List<AdvertisementResponse> getAdvertisementByFilter(String categoryName, String username, String elementName){
+    //Get list by filter like category, username and element
+    public List<AdvertisementResponse> getAdvertisementByFilter(String categoryName, String username, String elementName) {
         return advertisementRepo.filterAdvertisements(categoryName, username, elementName).stream()
-                .map(advertisementMapper :: toAdvertisementResponse).collect(Collectors.toList());
+                .map(advertisementMapper::toAdvertisementResponse).collect(Collectors.toList());
     }
 
-    public AdvertisementResponse verifyAd(VerifyAdRequest request){
+    //Let admin verify if the pending ads
+    public AdvertisementResponse verifyAd(VerifyAdRequest request) {
         Advertisement advertisement = advertisementRepo.findById(request.getAdID())
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
-        if(!request.getNewStatus().equals("Verified") && !request.getNewStatus().equals("Rejected")){
+        if(!userService.getMyInfo().getRoleName().equals("ADMIN")){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+        if (!request.getNewStatus().equals("Verified") && !request.getNewStatus().equals("Rejected")) {
             throw new AppException(ErrorCode.STATUS_INVALID);
         }
         advertisement.setStatus(request.getNewStatus());
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 
-    @Scheduled(fixedRate = 120000)  // Run every 2 minutes
+    //delete ads has been rejected for 5 minutes
+    @Scheduled(fixedRate = 300000)  // Run every 5 minutes
     public void deleteOldRejectedAdvertisements() {
-        // Get the timestamp of 2 minutes ago
-        LocalDateTime twoMinutesAgo = LocalDateTime.now().minusMinutes(2);
+        // Get the timestamp of 5 minutes ago
+        LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);
 
-        // Retrieve rejected advertisements older than 2 minutes
-        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(twoMinutesAgo);
+        // Retrieve rejected advertisements older than 5 minutes
+        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan5Mins(fiveMinutesAgo);
 
         // Delete all old rejected ads from the database
         advertisementRepo.deleteAll(oldRejectedAds);
     }
 
-//    @Scheduled(fixedRate = 86400000)
+//    @Scheduled(cron = "0 0 0 */7 * *") run every 7 days at 0:00 at the morning
 //    public void deleteOldRejectedAdvertisements() {
 //        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
 //
-//        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan(sevenDaysAgo);
+//        List<Advertisement> oldRejectedAds = advertisementRepo.findRejectedAdvertisementsOlderThan7Days(sevenDaysAgo);
 //
 //        advertisementRepo.deleteAll(oldRejectedAds);
 //    }
 
-    public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request){
+    //Let user update advertisement
+    public AdvertisementResponse updateAdvertisement(String adID, AdvertisementUpdateRequest request) {
         Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
-        advertisementMapper
-                .updateAdvertisement(advertisement, request, elementRepo, categoryService);
+        if(!userService.getMyInfo().getUserID().equals(advertisement.getUser().getUserID())){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+        advertisementMapper.updateAdvertisement(advertisement, request, elementRepo, categoryService);
+        advertisement.setStatus("Pending");
+        Set<Ads_Image> currentImages = advertisement.getImagesAd();
+        Map<String, Ads_Image> existingImagesMap = currentImages.stream()
+                .collect(Collectors.toMap(Ads_Image::getImageURL, image -> image));
+        List<String> newImageIds = new ArrayList<>();
+        if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
+            // Remove images not in the updated list
+            currentImages.removeIf(image -> !request.getImagesURL().contains(image.getImageURL()));
+            // Add new images that are not already in the current collection
+            for (String imageUrl : request.getImagesURL()) {
+                if (!existingImagesMap.containsKey(imageUrl)) {
+                    Ads_Image newImage = new Ads_Image();
+                    String newImageId = generateImage_Ads();
+                    newImage.setAdImageId(newImageId);
+                    newImage.setImageURL(imageUrl);
+                    newImage.setAdvertisement(advertisement);
+                    currentImages.add(newImage);
+                    newImageIds.add(newImageId);
+                }
+            }
+        }
         return advertisementMapper.toAdvertisementResponse(advertisementRepo.save(advertisement));
     }
 
-    public void deleteAdvertisement(String adID){
+    public void deleteAdvertisement(String adID) {
         Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
+        if(!userService.getMyInfo().getUserID().equals(advertisement.getUser().getUserID())
+                || !userService.getMyInfo().getRoleName().equals("ADMIN")){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
         advertisementRepo.delete(advertisement);
     }
 
