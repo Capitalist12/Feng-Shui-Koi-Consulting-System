@@ -82,7 +82,6 @@ function TankManagement() {
     }
   };
 
-
   return (
     <div>
       <div

@@ -66,14 +66,6 @@ const EmblaCarousel = ({ ads }) => {
           ))}
         </div>
       </div>
-      <div className="embla-ad__buttons">
-        <button className="embla-ad__button" onClick={scrollPrev}>
-          <FaAngleLeft />
-        </button>
-        <button className="embla-ad__button" onClick={scrollNext}>
-          <FaAngleRight />
-        </button>
-      </div>
     </div>
   );
 };

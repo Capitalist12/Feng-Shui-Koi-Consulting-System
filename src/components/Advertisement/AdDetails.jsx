@@ -129,17 +129,19 @@ const AdDetails = () => {
             <h1>Mệnh: {ad.element}</h1>
             <h2>Danh mục: {ad.category.categoryName}</h2>
 
-            <h1 style={{ margin: "2rem " }}>{ad.title}</h1>
+            <h1>{ad.title}</h1>
 
             <h3>Thông tin chi tiết</h3>
-            <p style={{ padding: "0 8rem" }}>{ad.description}</p>
+            <p style={{ padding: "0 2rem", whiteSpace: "pre-line" }}>
+              {ad.description}
+            </p>
 
             <h2 style={{ color: "green" }}>
               Giá: {ad.price.toLocaleString()} VNĐ
             </h2>
             <div
               style={{
-                marginTop: "4rem",
+                marginTop: "2rem",
                 display: "flex",
                 justifyContent: "center",
                 gap: "7rem",
@@ -187,7 +189,7 @@ const AdDetails = () => {
                     borderRadius: "1rem",
                   }}
                 />
-                {ad.imagesAd.length > 1 && (
+                {relatedAd.imagesAd.length > 1 && (
                   <span
                     style={{
                       position: "absolute",
