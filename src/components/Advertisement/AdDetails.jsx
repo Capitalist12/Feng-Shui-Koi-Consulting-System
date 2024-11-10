@@ -189,7 +189,7 @@ const AdDetails = () => {
                     borderRadius: "1rem",
                   }}
                 />
-                {ad.imagesAd.length > 1 && (
+                {relatedAd.imagesAd.length > 1 && (
                   <span
                     style={{
                       position: "absolute",
