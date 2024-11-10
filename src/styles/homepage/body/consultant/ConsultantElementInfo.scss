@@ -1,0 +1,45 @@
+.consultant-element-info{
+    width: 100%;
+
+    .inhibition-element{
+        position: relative;
+
+        .inhibition-arrow{
+            position: absolute;
+            top: 5%;
+            right: 0;
+            rotate: 90deg;
+            font-size: 5em;
+            color: red;
+        }
+    }
+
+    .generation-element{
+        position: relative;
+
+        .generation-arrow{
+            position: absolute;
+            top: 5%;
+            right: 0;
+            rotate: -90deg;
+            font-size: 5em;
+            color: #5cb85c;
+        }
+    }
+
+
+    .info-container{
+        box-sizing: border-box;
+        padding: 3em;
+
+        h1, h2, h3 {
+            color: white;
+        }
+
+        p{
+            font-size: 1.25em;
+            color: white;
+        }
+    }
+
+}

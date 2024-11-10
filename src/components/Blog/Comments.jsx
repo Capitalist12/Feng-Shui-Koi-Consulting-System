@@ -85,7 +85,7 @@ const Comments = ({ data, userName, handleDeleteComment, handleUpdateComment }) 
                                                 <p onClick={() => handleDeleteComment(item.commentID)}>Xóa</p>
                                                 {userName === item.username &&
                                                     <p
-                                                        style={{ color: 'white' }}
+                                                        style={{ color: 'black' }}
                                                         onClick={() => {
                                                             setIsEdit(true);
                                                             setSelectedComment(item);

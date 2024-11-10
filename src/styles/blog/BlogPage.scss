@@ -703,12 +703,13 @@
     }
 }
 
+
+
 .ant-popover .ant-popover-inner {
     width: 100px;
-    background-color: #505050;
 
     .ant-popover-title, .ant-popover-inner-content{
-        color: white;
+        color: black;
 
         p{
             color: rgb(250, 84, 55);
@@ -720,12 +721,8 @@
             transition: all 0.2s ease;
 
             &:hover{
-                background-color: #616161;
+                background-color: #d6d6d6;
             }
         }
     }
-}
-
-.ant-popover-arrow {
-    --antd-arrow-background-color: #505050;
 }
