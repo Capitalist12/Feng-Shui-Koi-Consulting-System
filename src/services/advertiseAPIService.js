@@ -99,16 +99,6 @@ const editAd = async (adID, payload) => {
   }
 };
 
-const deleteAds = async (adID) => {
-  try {
-    const response = await axios.delete(`ad/${adID}`);
-    return response;
-  } catch (err) {
-    toast.error(handleErrorMessage(err.response.data.code));
-  }
-};
-
-
 export const categoryNameMap = {
   "Koi Fish": "Cá Koi",
   "Aquarium Supplies": "Trang trí bể cá",
@@ -118,7 +108,6 @@ export const categoryNameMap = {
 export const translateCategoryName = (categoryName) => {
   return categoryNameMap[categoryName] || categoryName;
 };
-
 
 export {
   getAllAdvertises,
