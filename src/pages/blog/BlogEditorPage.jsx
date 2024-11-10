@@ -24,7 +24,7 @@ const BlogEditorPage = () => {
     const navigate = useNavigate();
     const [clearEditor, setClearEditor] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [blogData, setBlogData] = useState({});
+    const [blogData, setBlogData] = useState(null);
 
     const handleSubmit = async (values) => {
         try {
@@ -70,13 +70,13 @@ const BlogEditorPage = () => {
 
         const regex = /^BL\d{9}$/;
         if (regex.test(blogID)) {
+            setIsEdit(true);
             getBlogData(blogID);
         }
     }, []);
 
     useEffect(() => {
         if (blogData) {
-            setIsEdit(true);
             // Fetch nội dung từ Firebase
             fetch(blogData?.description)
                 .then((response) => response.text())
@@ -165,16 +165,16 @@ const BlogEditorPage = () => {
                                 },
                             ]}
                         >
-                            <UploadImage data={blogData ? [{ url: blogData.imageURL }] : []} MAX_COUNT={1} uploadType={"picture"} />
+                            <UploadImage data={(blogData && isEdit) ? [{ url: blogData.imageURL }] : []} MAX_COUNT={1} uploadType={"picture"} />
                         </Form.Item>
                         <RichTextEditor value={value} setValue={setValue} clearEditor={clearEditor} />
                         {(isEdit && blogData) ?
-                        <Space>
-                            <Button className="submit-btn" type="text" variant="filled" onClick={() => navigate("/blog")}>Hủy</Button>
-                            <Button className="submit-btn" type="primary" htmlType="submit">Cập nhật</Button>
-                        </Space>
-                        :
-                        <Button className="submit-btn" type="primary" htmlType="submit">Tạo mới</Button>
+                            <Space>
+                                <Button className="submit-btn" type="text" variant="filled" onClick={() => navigate("/blog")}>Hủy</Button>
+                                <Button className="submit-btn" type="primary" htmlType="submit">Cập nhật</Button>
+                            </Space>
+                            :
+                            <Button className="submit-btn" type="primary" htmlType="submit">Tạo mới</Button>
                         }
                     </Form>
                 </Col>

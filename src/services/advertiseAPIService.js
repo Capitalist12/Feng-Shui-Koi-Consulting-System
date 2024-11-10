@@ -1,12 +1,13 @@
 import { toast } from "react-toastify";
 import axios from "../config/axiosConfig";
+import { handleErrorMessage } from "../utils/helper";
 
 const getAllAdvertises = async () => {
   try {
     const response = await axios.get("ad");
     return response;
   } catch (err) {
-    toast.error(err.response.data.message);
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 const getVerifiedAdvertise = async () => {
@@ -14,7 +15,7 @@ const getVerifiedAdvertise = async () => {
     const response = await axios.get("ad/verified");
     return response;
   } catch (err) {
-    toast.error(err.response.data.message);
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
@@ -23,7 +24,7 @@ const getRejectedAdvertise = async () => {
     const response = await axios.get("ad/rejected");
     return response;
   } catch (err) {
-    toast.error(err.response.data.message);
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
@@ -32,7 +33,7 @@ const getPendingAdvertises = async () => {
     const response = await axios.get("ad/pending");
     return response;
   } catch (err) {
-    toast.error(err.response.data.message);
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
@@ -41,7 +42,7 @@ const updateAdvertiseStatus = async (payload) => {
     const response = await axios.post("ad/updateAdStatus", payload);
     return response;
   } catch (err) {
-    toast.error(err.response.data.message);
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
@@ -50,7 +51,7 @@ const getUserAds = async () => {
     const response = await axios.get("ad/get-my-ads");
     return response;
   } catch (err) {
-    toast.error(err.response.data.message);
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
@@ -59,7 +60,7 @@ const getAdsByID = async (adID) => {
     const response = await axios.get(`ad/${adID}`);
     return response;
   } catch (err) {
-    toast.error(err.response.data.message);
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 

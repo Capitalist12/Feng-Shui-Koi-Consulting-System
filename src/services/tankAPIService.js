@@ -1,12 +1,13 @@
 import { toast } from "react-toastify";
 import api from "../config/axiosConfig";  
+import { handleErrorMessage } from "../utils/helper";
 
 const fetchTank = async () => {
     try {
         const response = await api.get('tank');
         return response;
     } catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 }
 
@@ -20,7 +21,7 @@ const updateTank = async (id, payload) => {
         const response = await api.put(`tank/${id}`, payload);  
         return response;
     } catch (err) {  
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }  
 
 }  
@@ -29,7 +30,7 @@ const deleteTank = async (id) => {
         const response = await api.delete(`tank/${id}`);  
         return response;  
     } catch (err) {  
-        toast.error(err.response.data.message); 
+        toast.error(handleErrorMessage(err.response.data.code)); 
     }  
 }  
 

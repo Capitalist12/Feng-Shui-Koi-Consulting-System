@@ -1,21 +1,13 @@
 import { toast } from "react-toastify";
 import axios from "../config/axiosConfig";
+import { handleErrorMessage } from "../utils/helper";
 
 const loginAuth = async (payload) => {
   try {
     const response = await axios.post("auth/login", payload);
     return response;
   } catch (err) {
-    if (err.response && err.response.data) {
-      const { code, message } = err.response.data;
-      if (code) {
-        toast.error(message);
-      } else {
-        toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
-      }
-    } else {
-      toast.error("Không thể kết nối đến máy chủ.");
-    }
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
@@ -26,16 +18,7 @@ const googleLogin = async (authToken) => {
     );
     return response;
   } catch (err) {
-    if (err.response && err.response.data) {
-      const { code, message } = err.response.data;
-      if (code) {
-        toast.error(message);
-      } else {
-        toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
-      }
-    } else {
-      toast.error("Không thể kết nối đến máy chủ.");
-    }
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
@@ -44,16 +27,7 @@ const verifyEmail = async (email) => {
     const response = await axios.post("auth/verify-email", { email: email });
     return response;
   } catch (err) {
-    if (err.response && err.response.data) {
-      const { code, message } = err.response.data;
-      if (code) {
-        toast.error(message);
-      } else {
-        toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
-      }
-    } else {
-      toast.error("Không thể kết nối đến máy chủ.");
-    }
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
@@ -62,16 +36,7 @@ const signup = async (payload) => {
     const response = await axios.post("auth/signup", payload);
     return response;
   } catch (err) {
-    if (err.response && err.response.data) {
-      const { code, message } = err.response.data;
-      if (code) {
-        toast.error(message);
-      } else {
-        toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
-      }
-    } else {
-      toast.error("Không thể kết nối đến máy chủ.");
-    }
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
@@ -80,16 +45,7 @@ const resetPassword = async (payload) => {
     const response = await axios.post("auth/reset-password", payload);
     return response;
   } catch (err) {
-    if (err.response && err.response.data) {
-      const { code, message } = err.response.data;
-      if (code) {
-        toast.error(message);
-      } else {
-        toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
-      }
-    } else {
-      toast.error("Không thể kết nối đến máy chủ.");
-    }
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 
@@ -98,16 +54,7 @@ const logoutAuth = async (payload) => {
     const response = await axios.post("auth/logout", payload);
     return response;
   } catch (err) {
-    if (err.response && err.response.data) {
-      const { code, message } = err.response.data;
-      if (code) {
-        toast.error(message);
-      } else {
-        toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
-      }
-    } else {
-      toast.error("Không thể kết nối đến máy chủ.");
-    }
+    toast.error(handleErrorMessage(err.response.data.code));
   }
 };
 

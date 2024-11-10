@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import axios from "../config/axiosConfig";
+import { handleErrorMessage } from "../utils/helper";
 
 const buyPackage = async (time) => {
     try {
@@ -10,11 +11,7 @@ const buyPackage = async (time) => {
         });
         return response;
     } catch (err) {
-        if (err.response && err.response.data && err.response.data.message) {
-            toast.error(err.response.data.message);
-        } else {
-            toast.error("Lỗi kế nối !");
-        }
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 };
 
@@ -27,7 +24,7 @@ const buyPackageSuccess = async (uid, sessId) => {
         });
         return response;
     } catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 }
 

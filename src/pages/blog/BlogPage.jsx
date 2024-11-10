@@ -10,6 +10,7 @@ const BlogPage = () => {
         <Row id="blog-section">
             <Row className="banner">
                 <Col></Col>
+                <div className="blog-banner-overlay"></div>
             </Row>
             <Navbar />
             <Row className="blogs-row">
