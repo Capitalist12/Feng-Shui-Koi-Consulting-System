@@ -1,12 +1,13 @@
 import { toast } from "react-toastify";
 import axios from "../config/axiosConfig";
+import { handleErrorMessage } from "../utils/helper";
 
 const getInfo = async () => {
     try{
         const response = await axios.get('users/my-info');
         return response;
     } catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 } 
 
@@ -17,7 +18,7 @@ const updateDob = async (newDob) => {
          })
          return response;
     } catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 }
 
@@ -28,7 +29,7 @@ const updatePassword = async (newPassword) => {
          })
          return response;
     } catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 }
 const updateUserInfo = async (userInfo) => {
@@ -36,7 +37,7 @@ const updateUserInfo = async (userInfo) => {
         const response = await axios.put('users/update-info', userInfo);
         return response;
     } catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 }
 

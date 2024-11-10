@@ -5,7 +5,7 @@ import { handleScroll } from "../../utils/helper";
 import "../../styles/compatibility/Result.scss";
 const { Title, Paragraph } = Typography;
 
-const Result = ({ isVisible, resultData, onClose }) => {
+const Result = ({ resultData }) => {
   const fishScore = parseFloat(resultData.fishCompatibilityScore).toFixed(1);
   const tankScore = parseFloat(resultData.tankCompatibilityScore).toFixed(1);
   const totalScore = parseFloat(resultData.calculateCompatibilityScore).toFixed(1);

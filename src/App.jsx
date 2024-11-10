@@ -29,7 +29,12 @@ import AdvertiseManagementContainer from "./components/Advertise/AdvertiseManage
 import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
 import UserAds from "./pages/user/history/UserAds";
 import AdDetails from "./components/Advertisement/AdDetails";
+<<<<<<< HEAD
 import BlogEditorPage from "./pages/blog/BlogEditorPage";
+=======
+import PaymentFailPage from "./pages/payment/PaymentFailPage";
+
+>>>>>>> b4df0d31f9a9e3bbdf70a84428469a6c614d37c5
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -55,6 +60,10 @@ const App = () => {
     {
       path: "success-subscription",
       element: <PaymentSuccessPage />,
+    },
+    {
+      path: "failure",
+      element: <PaymentFailPage />,
     },
     {
       path: "blog",

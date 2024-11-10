@@ -6,23 +6,17 @@ import { consultingKoi } from "../../../../services/consultingAPIService";
 import { store } from "../../../../redux/store";
 import ConsultantTank from "./Koi-Tank/ConsultantTank";
 
-// Images
-import FireElementImage from "../../../../assets/images/elements-image/fire.png";
-import MetalElementImage from "../../../../assets/images/elements-image/metal.png";
-import WaterElementImage from "../../../../assets/images/elements-image/water.png";
-import EarthElementImage from "../../../../assets/images/elements-image/earth.png";
-import WoodElementImage from "../../../../assets/images/elements-image/wood.png";
 import ConsultantAdsSlider from "./Koi-Tank/ConsultantAdsSlider";
 import { handleScroll } from "../../../../utils/helper";
+import { getElement } from "../../../../utils/consultantElementHelper";
+import ConsultantInfo from "./Information/ConsultantInfo";
 
 const Consultant = (props) => {
   const [consultantKoiData, setConsultantKoiData] = useState([]);
   const { userElement } = props;
   const { dob, element } = userElement;
 
-  const [displayElementTitle, setDisplayElementTitle] = useState(null);
-  const [displayElementImage, setDisplayElementImage] = useState(null);
-  const [displayElementStyle, setDisplayElementStyle] = useState({});
+  const [displayElement, setDisplayElement] = useState(null);
 
   const getConsultantKoi = async () => {
     const response = await consultingKoi({
@@ -43,35 +37,7 @@ const Consultant = (props) => {
   }, [dob]);
 
   useEffect(() => {
-    switch (element.elementName) {
-      case "Hỏa":
-        setDisplayElementTitle("Hỏa");
-        setDisplayElementImage(FireElementImage);
-        setDisplayElementStyle({ boxShadow: "0 0 25px tomato" });
-        break;
-      case "Mộc":
-        setDisplayElementTitle("Mộc");
-        setDisplayElementImage(WoodElementImage);
-        setDisplayElementStyle({ boxShadow: "0 0 25px #69db58" });
-        break;
-      case "Thủy":
-        setDisplayElementTitle("Thủy");
-        setDisplayElementImage(WaterElementImage);
-        setDisplayElementStyle({ boxShadow: "0 0 25px #699dd5" });
-        break;
-      case "Kim":
-        setDisplayElementTitle("Kim");
-        setDisplayElementImage(MetalElementImage);
-        setDisplayElementStyle({ boxShadow: "0 0 25px gray" });
-        break;
-      case "Thổ":
-        setDisplayElementTitle("Thổ");
-        setDisplayElementImage(EarthElementImage);
-        setDisplayElementStyle({ boxShadow: "0 0 25px #e8ca49" });
-        break;
-      default:
-        break;
-    }
+    setDisplayElement(getElement(element.elementName));
     handleScroll('consultant-section');
   }, [element]);
 
@@ -80,21 +46,23 @@ const Consultant = (props) => {
       <Row>
         <Row className="consultant-item-row1">
           <Col className="col" span={24}>
-            {displayElementImage && displayElementTitle && (
+            {displayElement  && (
               <>
                 <div
                   className="element-image-container"
-                  style={displayElementStyle}
+                  style={displayElement.style}
                 >
-                  <img src={displayElementImage} alt={displayElementTitle} />
+                  <img src={displayElement.image} alt={displayElement.title} />
                 </div>
                 <Title level={2} style={{ color: "white" }}>
-                  MỆNH {displayElementTitle?.toUpperCase()}
+                  MỆNH {displayElement.title?.toUpperCase()}
                 </Title>
               </>
             )}
           </Col>
         </Row>
+
+        <ConsultantInfo generation={element.generation} inhibition={element.inhibition} mainElementInfo={displayElement} mainElementData={element}/>
 
         <ConsultantKoiSlider data={consultantKoiData} />
 

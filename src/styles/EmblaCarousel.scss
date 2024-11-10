@@ -1,7 +1,7 @@
 .embla-ad {
   position: relative;
-  margin-top: 3rem;
-  margin-bottom: 5rem;
+  margin-top: 5rem;
+  margin-bottom: 1.5rem;
   width: 60%;
   height: 60%;
   overflow: hidden;
@@ -39,12 +39,12 @@
     }
 
     &__info {
+      padding: 2em 0;
       font-size: 1.2rem;
       flex-basis: 40%;
       text-align: center;
       background-color: rgba(224, 208, 208, 0.5);
       color: black;
-      padding: 1rem;
       box-sizing: border-box;
     }
 

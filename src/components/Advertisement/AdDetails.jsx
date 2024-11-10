@@ -85,7 +85,6 @@ const AdDetails = () => {
     return description;
   };
 
-  // Xác định vị trí bắt đầu và kết thúc của các quảng cáo hiện tại dựa trên trang
   const indexOfLastAd = currentPage * adsPerPage;
   const indexOfFirstAd = indexOfLastAd - adsPerPage;
   const currentAds = displayAds.slice(indexOfFirstAd, indexOfLastAd, [
@@ -96,7 +95,7 @@ const AdDetails = () => {
 
   if (loading) return <div>Loading...</div>;
   if (!ad || !ad.imagesAd || ad.imagesAd.length === 0)
-    return <div>Ad not found or no images available.</div>; // Hiển thị thông báo nếu không có quảng cáo hoặc không có ảnh
+    return <div>Ad not found or no images available.</div>;
 
   return (
     <Layout>
@@ -109,7 +108,7 @@ const AdDetails = () => {
               src={ad.imagesAd[currentImage]?.imageURL}
               height={"70vh"}
             />
-            {/* Hiện các nút chuyển ảnh nếu có nhiều hơn 1 ảnh */}
+            {/* các nút chuyển ảnh nếu có nhiều hơn 1 ảnh */}
             {ad.imagesAd.length > 1 && (
               <div className="navigation-buttons">
                 <Button
@@ -156,7 +155,6 @@ const AdDetails = () => {
           Các bài đăng khác về mệnh {ad.element}
         </h2>
         <div className="ads-list">
-          {/* Hiển thị danh sách các quảng cáo liên quan theo trang */}
           {currentAds.map((relatedAd) => (
             <Card
               className="card-history"
@@ -221,22 +219,20 @@ const AdDetails = () => {
             </Card>
           ))}
         </div>
+        <Pagination
+          current={currentPage}
+          total={displayAds.length}
+          pageSize={adsPerPage}
+          onChange={(page) => setCurrentPage(page)}
+          style={{
+            justifyContent: "center",
+            marginTop: "5rem",
+            marginBottom: "5em",
+          }}
+        />
       </div>
-      {/* Phân trang cho các quảng cáo liên quan */}
-      <Pagination
-        current={currentPage}
-        total={displayAds.length}
-        pageSize={adsPerPage}
-        onChange={(page) => setCurrentPage(page)}
-        style={{
-          justifyContent: "center",
-          marginTop: "5rem",
-          marginBottom: "4rem",
-        }}
-      />
-      <div style={{ marginTop: "-10rem" }}>
-        <CustomeFooter />
-      </div>
+
+      <CustomeFooter />
     </Layout>
   );
 };
