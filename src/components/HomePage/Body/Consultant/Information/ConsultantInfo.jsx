@@ -13,7 +13,6 @@ const ConsultantInfo = ({ generation, inhibition, mainElementInfo, mainElementDa
     useEffect(() => {
         if (mainElementInfo) {
             setElementInfoLine(mainElementInfo.fengshui.split("\n"));
-            console.log(elementInfoLine)
         }
     }, [mainElementInfo])
 

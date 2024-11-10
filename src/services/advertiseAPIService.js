@@ -64,6 +64,15 @@ const getAdsByID = async (adID) => {
   }
 };
 
+const deleteAds = async (adID) => {
+  try {
+    const response = await axios.delete(`ad/${adID}`);
+    return response;
+  } catch (err) {
+    toast.error(handleErrorMessage(err.response.data.code));
+  }
+};
+
 const postAd = async (values) => {
   try {
     const response = await axios.post("/ad", {
@@ -118,4 +127,5 @@ export {
   getAdsByID,
   postAd,
   editAd,
+  deleteAds
 };

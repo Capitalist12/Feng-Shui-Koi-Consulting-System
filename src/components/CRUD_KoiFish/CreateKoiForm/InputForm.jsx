@@ -5,10 +5,7 @@ import UploadImage from "./UploadImage";
 import uploadFile from "../../../utils/file";
 import { useForm } from "antd/es/form/Form.js";
 import { createKoiFish } from "../../../services/koiAPIService";
-import { toast } from "react-toastify";
 import KoiTypePopover from "../../CRUD_KoiType/KoiTypePopover.jsx";
-import { PlusOutlined, CloseOutlined, CheckOutlined } from "@ant-design/icons";
-import { FiTrash } from "react-icons/fi";
 import {
   getAllKoiType,
 } from "../../../services/koiTypeService";
@@ -16,6 +13,7 @@ import {
   SIZE_OPTIONS,
   WEIGHT_OPTIONS,
   KOI_ELEMENT_MAX_COUNT,
+  KOI_COLOR_OPTIONS,
 } from "../../../utils/constant";
 import TextArea from "antd/es/input/TextArea";
 
@@ -40,40 +38,41 @@ const InputForm = (props) => {
 
   const onFinish = async (values) => {
     setIsLoading(true);
+    console.log(values);
 
-    if (values && values.images.length > 0) {
-      const url = await Promise.all(
-        values.images.map(async (image) => {
-          return await uploadFile(image.originFileObj); // Upload từng hình ảnh
-        })
-      );
+      if (values && values.images.length > 0) {
+        const url = await Promise.all(
+          values.images.map(async (image) => {
+            return await uploadFile(image.originFileObj); // Upload từng hình ảnh
+          })
+        );
 
-      try {
-        const response = await createKoiFish({
-          name: values.name,
-          size: values.size,
-          weight: values.weight,
-          color: values.color,
-          description: values.description,
-          imagesURL: Array.isArray(url) ? url : [url],
-          koiTypeName: values.type,
-          elements: Array.isArray(selectedElement)
-            ? selectedElement
-            : [selectedElement],
-        });
+        try {
+          const response = await createKoiFish({
+            name: values.name,
+            size: values.size,
+            weight: values.weight,
+            color: values.color.join(', '),
+            description: values.description,
+            imagesURL: Array.isArray(url) ? url : [url],
+            koiTypeName: values.type,
+            elements: Array.isArray(selectedElement)
+              ? selectedElement
+              : [selectedElement],
+          });
 
-        toast.success("Tạo thành công!");
-      } catch (err) {
-        toast.error(err.response.data.message);
-      } finally {
-        setIsLoading(false);
-        // clear old data
-        setSelectedElement([]);
-        form.resetFields();
-        await fetchAPI();
-        save();
+          toast.success("Tạo thành công!");
+        } catch (err) {
+          toast.error(err.response.data.message);
+        } finally {
+          setIsLoading(false);
+          // clear old data
+          setSelectedElement([]);
+          form.resetFields();
+          await fetchAPI();
+          save();
+        }
       }
-    }
   };
 
   const cancelForm = () => {
@@ -112,11 +111,19 @@ const InputForm = (props) => {
           rules={[
             {
               required: true,
-              message: "Vui lòng nhập màu sắc!",
+              message: "Vui lòng chọn màu sắc!",
             },
           ]}
         >
-          <Input />
+          <Select
+            mode="multiple"
+            allowClear
+            style={{
+              width: '100%',
+            }}
+            placeholder="Chọn màu sắc"
+            options={KOI_COLOR_OPTIONS}
+          />
         </Form.Item>
 
         <Form.Item

@@ -4,17 +4,26 @@
     color: white;
     background-color: #131518;
 
-    h3 {
+    h3, h4 {
         margin: 0;
         color: white;
     }
 
-    .shape-transform {
-        width: 250px;
-        height: 250px;
-        background: red;
-        transition: all 0.3s ease;
+    .shape-image-container{
+        width: 100%;
+
+        img {
+            object-fit: contain;
+        }
+
+        .shape-transform {
+            width: 250px;
+            height: 250px;
+            background: red;
+            transition: all 0.3s ease;
+        }
     }
+
 
     button {
         transition: all 0.2s ease;

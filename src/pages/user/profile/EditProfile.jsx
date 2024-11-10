@@ -42,6 +42,7 @@ const EditProfile = ({ visible, onClose, userInfo, onSave }) => {
     }
     setIsChangePassword(false);
   }, [visible, userInfo, form]);
+  
   const handleSave = async () => {
     try {
       const values = await form.validateFields();

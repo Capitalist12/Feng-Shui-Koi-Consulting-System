@@ -52,6 +52,37 @@ const CATEGORY = [
   },
 ];
 
+const KOI_COLOR_OPTIONS = [
+  {
+    label: "Đỏ",
+    value: "Đỏ",
+  },
+  {
+    label: "Trắng",
+    value: "Trắng",
+  },
+  {
+    label: "Đen",
+    value: "Đen",
+  },
+  {
+    label: "Xanh",
+    value: "Xanh",
+  },
+  {
+    label: "Vàng",
+    value: "Vàng",
+  },
+  {
+    label: "Bạc",
+    value: "Bạc",
+  },
+  {
+    label: "Nâu",
+    value: "Nâu",
+  },
+]
+
 const OPTIONS = [
   {
     label: "Hỏa",
@@ -183,4 +214,5 @@ export {
   TOKEN_EXPIRY_TIME_IN_MINUTE,
   CATEGORY,
   MONTHS,
+  KOI_COLOR_OPTIONS
 };

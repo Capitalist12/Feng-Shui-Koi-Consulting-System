@@ -143,5 +143,10 @@ const handleErrorMessage = (code) => {
     }
 }
 
+function formatCurrencyVND(number) {
+    return number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+  }
+  
 
-export { handleScroll, timeDifference, compareWithCurrentTime, handleErrorMessage };
+
+export { handleScroll, timeDifference, compareWithCurrentTime, handleErrorMessage, formatCurrencyVND };
