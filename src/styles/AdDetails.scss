@@ -8,11 +8,13 @@
     justify-content: center;
     border-radius: 8px;
     box-shadow: 0 0 2rem black;
-    padding: 1rem 0.5rem;
+    padding: 0rem 0.5rem;
 
     .ad-detail-image {
-      position: relative;
+      height: 100%;
       width: 45%;
+      padding: 1rem 0;
+      position: relative;
 
       .ad-image {
         width: 100%;
@@ -22,13 +24,12 @@
       }
 
       .navigation-buttons {
-        display: flex;
-        justify-content: center;
-        position: relative;
+        position: absolute;
+        bottom: 1rem;
         left: 50%;
         transform: translateX(-50%);
-        gap: 3rem;
-        bottom: -0.5rem;
+        display: flex;
+        gap: 1.5rem;
       }
 
       .navigation-button {
@@ -37,11 +38,17 @@
         font-size: 2rem;
         border-radius: 50%;
         cursor: pointer;
+        padding: 0.5rem;
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
 
     .ad-detail-info {
-      padding: 2rem;
+      padding: 0 1rem 2rem;
       width: 55%;
       margin-top: 2rem;
       color: black;

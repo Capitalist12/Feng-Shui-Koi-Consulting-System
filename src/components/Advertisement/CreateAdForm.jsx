@@ -163,7 +163,6 @@ const CreateAdForm = ({ form, onSubmit, loading }) => {
           rules={[
             { required: true, message: "Vui lòng nhập mô tả!" },
             {
-              // ko vượt quá 100 ký tự
               validator: (_, value) => {
                 if (value && value.length > 1000) {
                   return Promise.reject(
