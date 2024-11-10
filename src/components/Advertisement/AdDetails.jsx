@@ -219,19 +219,18 @@ const AdDetails = () => {
             </Card>
           ))}
         </div>
+        <Pagination
+          current={currentPage}
+          total={displayAds.length}
+          pageSize={adsPerPage}
+          onChange={(page) => setCurrentPage(page)}
+          style={{
+            justifyContent: "center",
+            marginTop: "5rem",
+            marginBottom: "5em",
+          }}
+        />
       </div>
-      {/* Phân trang cho các quảng cáo liên quan */}
-      <Pagination
-        current={currentPage}
-        total={displayAds.length}
-        pageSize={adsPerPage}
-        onChange={(page) => setCurrentPage(page)}
-        style={{
-          justifyContent: "center",
-          marginTop: "5rem",
-          marginBottom: "10rem",
-        }}
-      />
 
       <CustomeFooter />
     </Layout>
