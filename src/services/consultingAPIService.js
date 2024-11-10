@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import axios from "../config/axiosConfig";
+import { handleErrorMessage } from "../utils/helper";
 
 const calculateElement = async (dob) => {
     try {
@@ -15,7 +16,7 @@ const consultingKoi = async (payload) => {
         const response = await axios.post('consulting', payload);
         return response;
     } catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 }
 

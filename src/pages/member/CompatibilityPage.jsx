@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, Typography, message, Spin, Flex } from "antd";
+import { Layout, Row, Typography, message, Flex } from "antd";
 import Navbar from "../../components/Utils/Navbar";
 import { getAllKoiFish } from "../../services/koiAPIService";
 import { fetchTank } from "../../services/tankAPIService";
@@ -10,9 +10,11 @@ import SelectedItems from "../../components/Compatibility/SelectedItems";
 import Result from "../../components/Compatibility/Result.jsx";
 import api from "../../config/axiosConfig";
 import { Link, useNavigate } from "react-router-dom";
-import "../../styles/compatibility/CompatibilityPage.scss";
 import { Loading } from "../../components/Utils/Loading";
 import { FaCrown, FaQuestionCircle } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { handleErrorMessage } from "../../utils/helper.js";
+import "../../styles/compatibility/CompatibilityPage.scss";
 
 const { Title } = Typography;
 
@@ -154,12 +156,12 @@ function CompatibilityPage() {
 
         setResultData(formattedResult);
         setIsModalVisible(true);
-        message.success("Tính điểm tương thích thành công!");
+        toast.success("Tính điểm tương thích thành công!");
       } else {
         throw new Error("Không có dữ liệu tương thích từ phản hồi.");
       }
     } catch (error) {
-      message.error("Lỗi khi tính điểm tương thích: " + error.message);
+      toast.error(handleErrorMessage(error.response.data.code));
     } finally {
       setLoading(false);
     }

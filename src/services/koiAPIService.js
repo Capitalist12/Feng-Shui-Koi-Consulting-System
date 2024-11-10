@@ -1,12 +1,13 @@
 import { toast } from "react-toastify";  
 import axios from "../config/axiosConfig";  
+import { handleErrorMessage } from "../utils/helper";
 
 const getAllKoiFish = async () => {
     try {
         const response = await axios.get('fish');
         return response;
     } catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 }
 
@@ -20,7 +21,7 @@ const updateKoiFish = async (id, payload) => {
         const response = await axios.put(`fish/${id}`, payload);  
         return response;  
     } catch (err) {  
-        toast.error(err.response.data.message);  
+        toast.error(handleErrorMessage(err.response.data.code));  
     }  
 }  
 
@@ -29,7 +30,7 @@ const deleteKoiFish = async (id) => {
         const response = await axios.delete(`fish/${id}`);
         return response;
     } catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 }
 
@@ -38,7 +39,7 @@ const getKoiFish = async (id) => {
         const response = await axios.get(`fish/${id}`);
         return response;
     }catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(handleErrorMessage(err.response.data.code));
     }
 }
 

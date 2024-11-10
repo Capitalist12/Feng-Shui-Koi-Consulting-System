@@ -25,10 +25,16 @@
 
     .banner {
         height: 250px;
-        background-image: url("../assets/images/banner1.png");
-        background-size: contain;
-        background-position: center;
+        background-image: url("../../assets/images/banner2.png");
+        background-size: cover;
+        background-position: bottom;
         width: 100%;
+
+        .blog-banner-overlay{
+            opacity: 0.7;
+            width: 100%;
+            background-color: #131518;
+        }
     }
 
     .blogs-row {
@@ -73,6 +79,10 @@
                                 background-color: #353535;
                                 position: relative;
                                 max-height: 600px;
+                                 
+                                a{
+                                    padding: 10px;
+                                }
 
                                 .blog-action {
                                     display: flex;
@@ -206,6 +216,7 @@
 
 
                                         a {
+                                            padding-left: 8px;
                                             display: -webkit-box;
                                             -webkit-line-clamp: 2; // Giới hạn tối đa 2 dòng
                                             -webkit-box-orient: vertical;
@@ -323,6 +334,7 @@
                             }
 
                             a {
+                                padding-left: 8px;
                                 display: -webkit-box;
                                 -webkit-box-orient: vertical;
                                 overflow: hidden;
