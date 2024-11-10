@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TankUpdateRequest {
-    @Size(min = 4, max = 12, message = "TANK_INVALID")
+    @Size(min = 4, max = 70, message = "TANK_INVALID")
     @Pattern(regexp = "^[^~!@#$%^&*()_+={}\\[\\]:;\"'<>,.?/\\d]+$", message = "NAME_INVALID")
     String shape;
     @Size(min = 1, max = 12, message = "ELEMENT_INVALID")
