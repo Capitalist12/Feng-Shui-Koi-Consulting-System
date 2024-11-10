@@ -1,11 +1,12 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Divider, Dropdown, Space, theme } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/Slices/userSlice";
-import { getToken } from "../../config/accessTokenConfig";
+import { getToken, getUserRole } from "../../config/accessTokenConfig";
 import { logoutAuth } from "../../services/AuthAPIService";
+import { FaCrown } from "react-icons/fa";
 
 const { useToken } = theme;
 
@@ -14,7 +15,12 @@ const DropdownAvatar = (props) => {
   const dispatch = useDispatch();
   const { token } = useToken();
   const navigate = useNavigate();
-  // console.log(user);
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    setRole(getUserRole());
+  }, [])
+
   const contentStyle = {
     backgroundColor: token.colorBgElevated,
     borderRadius: token.borderRadiusLG,
@@ -71,9 +77,21 @@ const DropdownAvatar = (props) => {
       )}
     >
       <a onClick={(e) => e.preventDefault()}>
-        <Space style={{ color: "black" }}>
+        <Space style={{ color: "black", position: 'relative' }}>
+          {role === "MEMBER" &&
+            <FaCrown
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                color: '#ffc045',
+                rotate: '30deg'
+              }}
+            />
+          }
           <Avatar
             size="default"
+            style={{border: role === "MEMBER" ? '2px solid #ffc045' : 'none' }}
             icon={
               user && user.imageLink ? (
                 <img src={user.imageLink} />

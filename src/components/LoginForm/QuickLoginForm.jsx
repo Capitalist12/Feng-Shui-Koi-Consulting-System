@@ -3,12 +3,12 @@ import Title from "antd/es/typography/Title";
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
-import { GoogleURL } from "../../../../config/googleConfig";
+import { GoogleURL } from "../../config/googleConfig";
 import { useDispatch } from "react-redux";
-import { saveToken } from "../../../../config/accessTokenConfig";
-import { login } from "../../../../redux/Slices/userSlice";
-import { loginAuth } from "../../../../services/AuthAPIService";
-import { TOKEN_EXPIRY_TIME_IN_MINUTE } from "../../../../utils/constant";
+import { saveToken } from "../../config/accessTokenConfig";
+import { login } from "../../redux/Slices/userSlice";
+import { loginAuth } from "../../services/AuthAPIService";
+import { TOKEN_EXPIRY_TIME_IN_MINUTE } from "../../utils/constant";
 import { toast } from "react-toastify";
 
 const QuickLoginForm = ({setIsLoading, isModalOpen, setIsModalOpen, setIsLoggedin }) => {

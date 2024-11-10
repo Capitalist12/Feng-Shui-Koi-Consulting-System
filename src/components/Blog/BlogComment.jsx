@@ -10,6 +10,9 @@ import { FaPaperPlane } from "react-icons/fa";
 import AdvertiseCardItem from "../HomePage/Body/Advertise-Blog/Advertise/AdvertiseCardItem.jsx";
 import { getVerifiedAdvertise } from "../../services/advertiseAPIService.js";
 import { useSelector } from "react-redux";
+import QuickLoginForm from "../LoginForm/QuickLoginForm.jsx";
+import { getToken } from "../../config/accessTokenConfig.js";
+import { CircleLoading } from "../Utils/Loading.jsx";
 
 const BlogComment = ({ id }) => {
     const [comments, setComments] = useState([]);
@@ -18,10 +21,15 @@ const BlogComment = ({ id }) => {
     const [topThreeAds, setTopThreeAds] = useState([]);
     const [form] = useForm();
     const [isDisable, setIsDisable] = useState(true);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoggedin, setIsLoggedin] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const userName = useSelector((store) => store?.user);
 
     const handleSubmitComment = async (blogId, value) => {
-        if (content) {
+        if (content && getToken()) {
             const response = await createNewComment(blogId, { content: value });
             if (response.status === 200 && response.data.code === 1000) {
                 form.resetFields();
@@ -29,6 +37,9 @@ const BlogComment = ({ id }) => {
                 setIsDisable(true);
                 getAllComments(id);
             }
+        } else if (getToken() == null) {
+            setIsLoggedin(true);
+            setIsModalOpen(true);
         }
     }
 
@@ -79,7 +90,18 @@ const BlogComment = ({ id }) => {
     )
 
     return (
+        <>
+        {isLoading && <CircleLoading/>}
         <Row id="comment-section">
+            {isLoggedin && (
+                <QuickLoginForm
+                    setIsLoading={setIsLoading}
+                    setIsModalOpen={setIsModalOpen}
+                    isModalOpen={isModalOpen}
+                    setIsLoggedin={setIsLoggedin}
+                />
+            )}
+
             <Col xl={16} className="comment-container">
                 <Title level={3}>Bình luận / Trao đổi</Title>
                 <Form
@@ -120,6 +142,7 @@ const BlogComment = ({ id }) => {
                 }
             </Col>
         </Row>
+        </>
     )
 }
 

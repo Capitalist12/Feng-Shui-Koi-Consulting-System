@@ -10,7 +10,7 @@ import { NavLink } from "react-router-dom";
 import { IoFishOutline } from "react-icons/io5";
 import { RiAlignItemLeftLine } from "react-icons/ri";
 import React from "react";
-const TOKEN_EXPIRY_TIME_IN_MINUTE = 60;
+const TOKEN_EXPIRY_TIME_IN_MINUTE = 60*2;
 
 const KOI_ELEMENT_MAX_COUNT = 3;
 
