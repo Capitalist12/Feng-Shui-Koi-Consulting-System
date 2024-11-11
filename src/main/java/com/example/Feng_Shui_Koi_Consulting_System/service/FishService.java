@@ -34,7 +34,7 @@ public class FishService {
     //Constant for generating FishID
     private static final String FISH_ID_PREFIX = "KF";
     private final SecureRandom secureRandom = new SecureRandom();
-
+//Method to add fish to data
     public KoiFishResponse createFish(FishCreationRequest request) {
         // Check if the fish with the given name already exists
         if (fishRepo.existsByName(request.getName())) {
@@ -43,23 +43,24 @@ public class FishService {
         // Convert the request to a KoiFish entity
         KoiFish fish =  koiFishMapper.toKoiFish(request, koiTypeService, elementRepo);
         fish.setId(generateKoiID());
+
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
+            // Convert each image URL from the request into a Koi_Image entity
             Set<Koi_Image> koiImageEntities = request.getImagesURL().stream()
                     .map(imageUrl -> {
-                        // Create new Image entities, linking them to the koiFish
                         Koi_Image koiImage = new Koi_Image();
                         koiImage.setKoiImageId(generateImage_Koi());
-                        koiImage.setImageURL(imageUrl);  // Set the image link from the request
-                        koiImage.setKoiFish(fish);        // Set the association to the koiFish
+                        koiImage.setImageURL(imageUrl);
+                        koiImage.setKoiFish(fish);
                         return koiImage;
                     })
                     .collect(Collectors.toSet());
-            fish.setImagesFish(koiImageEntities); // Set the images in the KoiFish entity
+            fish.setImagesFish(koiImageEntities);
         }
         return koiFishMapper.toKoiFishResponse(fishRepo.save(fish));
     }
 
-
+//Method to get list of fish
     public List<KoiFishResponse> getFish() {
         return fishRepo.findAll().stream()
                 .map(koiFishMapper :: toKoiFishResponse).collect(Collectors.toList());
@@ -72,20 +73,20 @@ public class FishService {
 
     }
 
-
+//Method to upadte infomation of fish
     public KoiFishResponse updateFish(String fishId, FishUpdateRequest request) {
-        // Find existing fish or throw an exception
+
         KoiFish fish = fishRepo.findById(fishId)
                 .orElseThrow(() -> new AppException(ErrorCode.FISH_NOT_FOUND));
 
-        // Update basic fields
+        // Use mapstruct to update infomation of fish
         koiFishMapper.updateKoiFish(fish, request,
                 koiTypeService, elementRepo);
 
         // Handle koi images
         if (request.getImagesURL() != null && !request.getImagesURL().isEmpty()) {
             Set<String> newImageUrls = new HashSet<>(request.getImagesURL());
-            // Get existing images
+
             Set<Koi_Image> existingImages = fish.getImagesFish();
             // Remove images that are no longer in the request
             existingImages.removeIf(existingImage -> !newImageUrls
@@ -95,41 +96,40 @@ public class FishService {
                 boolean exists = existingImages.stream()
                         .anyMatch(existingImage -> existingImage.getImageURL().equals(imageUrl));
                 if (!exists) {
-                    // Create new image entity
+
                     Koi_Image koiImage = new Koi_Image();
-                    koiImage.setKoiImageId(generateImage_Koi());  // You may want to ensure this generates unique IDs
+                    koiImage.setKoiImageId(generateImage_Koi());
                     koiImage.setImageURL(imageUrl);
-                    koiImage.setKoiFish(fish);  // Maintain bidirectional relationship
+                    koiImage.setKoiFish(fish);
                     // Add new image to existing images
                     existingImages.add(koiImage);
                 }
             });
-            // Set updated images back to the fish entity
             fish.setImagesFish(existingImages);
         }
 
-        // Return the response
         return koiFishMapper.toKoiFishResponse(fishRepo.save(fish));
     }
 
+//Method to delete koi fish
     public void deleteFish(String fishId) {
-        // Find the KoiFish by its ID
+
         KoiFish fish = fishRepo.findById(fishId).orElseThrow(() ->
                 new AppException(ErrorCode.FISH_NOT_FOUND));
 
-        // Remove the KoiFish from all associated Elements
+        // Remove the KoiFish have relationship with Elements
         if (fish.getElements() != null) {
             for (Element element : fish.getElements()) {
                 // Remove this KoiFish from the Element's KoiFish set
-                element.getKoiFishSet().remove(fish); // Assuming getKoiFishSet() is defined in Element
+                element.getKoiFishSet().remove(fish);
             }
         }
         // Clear the association in the KoiFish (optional)
-        fish.getElements().clear(); // Clear the set of Elements in the KoiFish
-        // Now you can safely delete the KoiFish
-        fishRepo.delete(fish); // Use the entity to delete
-    }
+        fish.getElements().clear();
 
+        fishRepo.delete(fish);
+    }
+//Method  auto generate Id for fish
     public String generateKoiID(){
         String fishID;
         int maxAttempts = 10; // Prevent infinite loop
@@ -149,7 +149,7 @@ public class FishService {
 
         return fishID;
     }
-
+//Method auto generate id for image
     public String generateImage_Koi(){
         return "I" + String.format("%05d", System.nanoTime() % 100000);
     }

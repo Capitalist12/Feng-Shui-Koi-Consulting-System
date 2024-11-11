@@ -107,7 +107,7 @@ public class AuthenticationServices {
         User user = userMapper.toUser(request);
 
         user.setUserID(generateUserID());
-
+        //Encrypted password when save to data for security
         user.setPassword(passwordEncoder.encode(request.getPassword())); //encode the password to save to database
         user.setRoleName(String.valueOf(Roles.USER));
         user.setElement(element);
@@ -182,7 +182,7 @@ public class AuthenticationServices {
                 .valid(isValid)
                 .build();
     }
-
+    //token is invalidated when logout
     public void logout(LogoutResquest request) throws ParseException, JOSEException {
         var signToken = verifyToken(request.getToken());
 
@@ -198,13 +198,15 @@ public class AuthenticationServices {
 
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
 
+//Check that JWT's signature matches the payload and header
         JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
+        //Transfer token to signedJWT
         SignedJWT signedJWT = SignedJWT.parse(token);
         Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
         var verifier = signedJWT.verify(jwsVerifier);
         if(!(expiryTime.after(new Date()) && verifier))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
-
+//Check if token is invalidated due to logout
         if(invalidatedTokenRepository.existsById(signedJWT
                 .getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -280,7 +282,9 @@ public class AuthenticationServices {
         otpExpiry.remove(email);
     }
 
+//Generate jwt token
     public String generateToken(User user) {
+        //Create header for jwt token
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
@@ -292,11 +296,13 @@ public class AuthenticationServices {
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
+        //Create payload for jwt token
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
-
+        //Create signature for jwt token
         JWSObject jwsObject = new JWSObject(header, payload);
         try {
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+            //transfer to string
             return jwsObject.serialize();
         } catch (JOSEException e) {
             log.error("Can create token", e);
@@ -344,11 +350,11 @@ public class AuthenticationServices {
                 .token(token)
                 .build();
     }
-
+//Build scope for user
     private String buildScope(User user) {
         return user.getRoleName() != null ? user.getRoleName() : "";
     }
-
+//auto generate  userID
     private String generateUserID() {
         String userID;
         int maxAttempts = 10; // Prevent infinite loop
@@ -367,11 +373,12 @@ public class AuthenticationServices {
 
         return userID;
     }
-
+//Check subscription is expired
     public boolean checkSubscription(String subscriptionId) {
         try {
             Subscription subscription = Subscription.retrieve(subscriptionId);
             if ("active".equals(subscription.getStatus())) {
+                //tranfer currentTime from millisecond to second
                 long currentTime = System.currentTimeMillis() / 1000L;
                 long subscriptionEndTime = subscription.getCurrentPeriodEnd();
                 if (subscriptionEndTime > currentTime) {
@@ -383,8 +390,9 @@ public class AuthenticationServices {
         }
         return false;
     }
-
+    //from 00:00 every 5 hours
     @Scheduled(cron = "0 0 */5 * * ?")
+    //auto delete invalid token in data
     public void deleteInvalidatedToken() {
         List<InvalidatedToken> invalidToken= invalidatedTokenRepository.findAll();
         if(invalidToken.size() == 30) {

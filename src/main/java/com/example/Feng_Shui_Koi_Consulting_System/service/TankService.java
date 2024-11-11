@@ -30,42 +30,47 @@ public class TankService {
     private static final String ID_PREFIX = "TA";
     private final SecureRandom secureRandom = new SecureRandom();
 
+    //Method add tank to data
     public TankResponse createTank(TankCreationRequest request){
 
         if(tankRepo.existsByShape(request.getShape()))
             throw new AppException(ErrorCode.TANK_EXISTED);
+
         Tank tank = tankMapper.toTank(request,
                 elementRepo);
         tank.setTankId(generateTankID());
+        //Use mapstruct to convert to response
         return tankMapper.toTankResponse(tankRepo.save(tank));
     }
-
+//Method to get list of tanks
     public List<TankResponse> getTank()
     {
         return tankRepo.findAll().stream().map(
                 tankMapper :: toTankResponse).collect(Collectors.toList());
     }
 
+//Method to get tank by ID
     public TankResponse getTankByID(String id){
         Tank tank =  tankRepo.findById(id).orElseThrow(()
                 -> new AppException(ErrorCode.TANK_NOT_FOUND));
         return tankMapper.toTankResponse(tank);
     }
-
+//Method update information of tanks
     public TankResponse updateTank(String tankId, TankUpdateRequest request){
         Tank tank = tankRepo.findById(tankId).orElseThrow(()
                 -> new AppException(ErrorCode.TANK_NOT_FOUND));
+        //use mapstruct to update
         tankMapper.updateTank(tank, request,
                 elementRepo);
         return tankMapper.toTankResponse(tankRepo.save(tank));
     }
-
+//Method delete tank in data
     public void deleteTank(String tankId){
         Tank tank = tankRepo.findById(tankId).orElseThrow(
                 () -> new AppException(ErrorCode.TANK_NOT_FOUND));
         tankRepo.deleteById(tankId);
     }
-
+//Method auto generate tank id
     public String generateTankID(){
         String tankID;
         int maxAttempts = 10; // Prevent infinite loop

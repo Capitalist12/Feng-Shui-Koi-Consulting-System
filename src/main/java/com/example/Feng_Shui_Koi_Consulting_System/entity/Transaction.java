@@ -1,10 +1,14 @@
 package com.example.Feng_Shui_Koi_Consulting_System.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
+
+import java.util.Date;
 import java.util.Objects;
 
 
@@ -27,8 +31,13 @@ public class Transaction {
     @Column(name = "Price")
     double price;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "CreatedDay")
-    LocalDateTime createdDay;
+    Date createdDay;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "EndDay")
+    Date endDay;
 
     @Column(name = "Status")
     String status;

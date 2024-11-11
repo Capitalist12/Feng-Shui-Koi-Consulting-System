@@ -1,6 +1,7 @@
 package com.example.Feng_Shui_Koi_Consulting_System.controller;
 
 import com.example.Feng_Shui_Koi_Consulting_System.dto.ApiResponse;
+import com.example.Feng_Shui_Koi_Consulting_System.entity.Transaction;
 import com.example.Feng_Shui_Koi_Consulting_System.service.DashBoardService;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -35,6 +37,13 @@ public class DashBoardController {
     public ApiResponse<Map<String, Object>> getUserDashBoard() {
         return ApiResponse.<Map<String, Object>>builder()
                 .result(dashBoardService.getUserDashBoard())
+                .build();
+    }
+
+    @GetMapping("/user/transactions")
+    public ApiResponse<List<Transaction>> userTransactions() {
+        return ApiResponse.<List<Transaction>>builder()
+                .result(dashBoardService.userTransactions())
                 .build();
     }
 }
