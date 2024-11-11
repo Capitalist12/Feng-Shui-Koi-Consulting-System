@@ -12,7 +12,7 @@ const TankList = ({ tankData, handleSelectTank, isTankSelected }) => {
   const [selectedTank, setSelectedTank] = useState({
     tankId: "TA001",
     shape: "Hình Chữ Nhật",
-    imageURL: "/images/tanks/rectangle.jpg",
+    imageURL: "https://firebasestorage.googleapis.com/v0/b/fengshui-koi-consulting-system.appspot.com/o/z6019496977612_3a26280675ee432efb71498d9e2974b7.jpg?alt=media&token=a048a6eb-52c7-4429-bcda-671981e14b07",
     elementTank: {
       elementId: 4,
       elementName: "Thổ",
