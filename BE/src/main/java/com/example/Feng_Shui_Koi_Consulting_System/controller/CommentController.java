@@ -48,7 +48,7 @@ public class CommentController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'MEMBER')")
+    @PreAuthorize("hasAnyRole('USER', 'MEMBER', 'ADMIN')")
     @DeleteMapping("/{commentID}")
     public ApiResponse<String> deleteComment(
             @PathVariable String blogID,

@@ -192,11 +192,13 @@ public class AdvertisementService {
     public void deleteAdvertisement(String adID) {
         Advertisement advertisement = advertisementRepo.findById(adID)
                 .orElseThrow(() -> new AppException(ErrorCode.AD_NOT_EXIST));
-        if(!userService.getMyInfo().getUserID().equals(advertisement.getUser().getUserID())
-                || !userService.getMyInfo().getRoleName().equals("ADMIN")){
+        if(userService.getMyInfo().getUserID().equals(advertisement.getUser().getUserID())
+                || userService.getMyInfo().getRoleName().equals("ADMIN")){
+            advertisementRepo.delete(advertisement);
+        }else{
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
-        advertisementRepo.delete(advertisement);
+
     }
 
     public String generateAdID(){

@@ -39,6 +39,9 @@ spring:
       hibernate:
         globally_quoted_identifiers: true
 
+frontend:
+  url: ${FRONTEND_URL}
+
 outbound:
   client-id: ${OUTBOUND_CLIENT_ID}
   client-secret: ${OUTBOUND_CLIENT_SECRET}

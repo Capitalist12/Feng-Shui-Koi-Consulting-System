@@ -27,6 +27,7 @@ public class KoiTypeService {
     private static final String FISHTYPE_ID_PREFIX = "KT";
     private final SecureRandom secureRandom = new SecureRandom();
 
+    //Method to add koi type in data
     public KTResponse createKoiType(KoiTypeRequest request) {
 
         if (koiTypeRepo.existsByTypeName(request.getTypeName()))
@@ -34,34 +35,38 @@ public class KoiTypeService {
 
         KoiTypes koiTypes = koiTypeMapper.toKoiType(request);
         koiTypes.setKoiTypeId(generateKoiTypeID());
+        //use mapstruct to convert to response
         return koiTypeMapper.toKTResponse(koiTypeRepo.save(koiTypes));
     }
 
 
-
+//Method get list of koi types
     public List<KTResponse> getKoiTypes(){
         return koiTypeRepo.findAll().stream()
                 .map(koiTypeMapper :: toKTResponse).collect(Collectors.toList());
     }
 
-
+//Method to update information of koi types
     public KTResponse updateKoiType(String koiTypeId ,KoiTypeRequest request) {
 
         KoiTypes koiTypes = koiTypeRepo.findById(koiTypeId)
                 .orElseThrow(() -> new AppException(ErrorCode.KOI_TYPE_NOT_EXIST));
+        //use mapstruct to update
         koiTypeMapper.updateKoiType(koiTypes, request);
+        //use mapstruct to convert to response
         return koiTypeMapper.toKTResponse(koiTypeRepo.save(koiTypes));
     }
-
+//Method find koi type by name
     public KoiTypes findByTypeName(String typeName) {
         return koiTypeRepo.findByTypeName(typeName)
                 .orElseThrow(() -> new AppException(ErrorCode.KOI_TYPE_NOT_EXIST));
     }
-
+//Method to delete koi type
     public void deleteKoiType(String koiTypeId){
         koiTypeRepo.deleteById(koiTypeId);
     }
 
+    //Method to auto generate koi type ID
     public String generateKoiTypeID(){
         String fishTypeID;
         int maxAttempts = 10; // Prevent infinite loop

@@ -136,21 +136,21 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(Integer commentId) {
-            // Lấy user đang xóa cmt
-            var context = SecurityContextHolder.getContext();
-            String email = context.getAuthentication().getName();
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
+        // Get the user trying to delete the comment
+        var context = SecurityContextHolder.getContext();
+        String email = context.getAuthentication().getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
 
-            // Tìm comment cần xóa
-            Comment comment = commentRepo.findById(commentId)
-                    .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
+        // Find the comment to delete
+        Comment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
 
-            // Xác thực user là người comment
-            if (!comment.getUser().equals(user) || !comment.getBlog().getUser().equals(user)) {
-                throw new AppException(ErrorCode.UNAUTHORIZED);
-            }
+        // Kiểm tra có phải chủ comment hoặc chủ blog
+        boolean isCommentAuthor = comment.getUser().getUserID().equals(user.getUserID());  // Use ID comparison instead of equals()
+        boolean isBlogOwner = comment.getBlog().getUser().getUserID().equals(user.getUserID());  // Use ID comparison instead of equals()
 
+        if (isCommentAuthor || isBlogOwner) {
             // Xóa comment khỏi blog
             Blog blog = comment.getBlog();
             blog.getComments().remove(comment);
@@ -158,6 +158,10 @@ public class CommentService {
 
             // Xóa comment
             commentRepo.delete(comment);
+        }else {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+
     }
 
     private Integer generateCommentID() {
